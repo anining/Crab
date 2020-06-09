@@ -1,8 +1,9 @@
 class router {
-  constructor(navigation, filterRouters, authRouterName) {
+  constructor(navigation, filterRouters, authRouterName, authorization) {
     this.filterRouters = filterRouters;
     this.navigation = navigation;
     this.authRouterName = authRouterName;
+    this.authorization = authorization;
     this.navigate = this.navigate.bind(this);
   }
 
@@ -22,48 +23,48 @@ class router {
   // dangerouslyGetState
   // setOptions
 
-  // static popToTop() {
-  // const navigation = Route.navigation;
-  // (!navigation || routerName) && alert('404');
-  // Router.navigation.navigate(routerName, {...params});
-  // }
+  popToTop() {
+    if (this.authorization) {
+      this.navigation.popToTop();
+    } else {
+      this.navigation.replace(this.authRouterName);
+    }
+  }
 
-  // static replace() {
-  // const navigation = Route.navigation;
-  // (!navigation || routerName) && alert('404');
-  // Router.navigation.navigate(routerName, {...params});
-  // }
+  replace(routeName, params = {}) {
+    if (this.filterRouteName(routeName) || this.authorization) {
+      this.navigation.replace(routeName, {...params});
+    } else {
+      this.navigation.replace(this.authRouterName);
+    }
+  }
 
-  // static push(name, params = {}) {
-  // const navigation = Route.navigation;
-  // (!navigation || !filterRouteName(name)) && alert('404');
-  // Router.navigation.navigate(routerName, {...params});
-  // }
+  push(routeName, params = {}) {
+    if (this.filterRouteName(routeName) || this.authorization) {
+      this.navigation.push(routeName, {...params});
+    } else {
+      this.navigation.replace(this.authRouterName);
+    }
+  }
 
   navigate(routeName, params = {}) {
-    //false 从store中获取的token值
-    if (this.filterRouteName(routeName) || true) {
+    if (this.filterRouteName(routeName) || this.authorization) {
       this.navigation.navigate(routeName, {...params});
     } else {
       this.navigation.replace(this.authRouterName);
     }
   }
 
-  // static goBack() {
-  //     const navigation = NavigationUtil.navigation;
-  //     if (!navigation) {
-  //         console.log('navigation undefined');
-  //         return false;
-  //     }
-  //     navigation.goBack(key || null);
-  // }
+  goBack(key) {
+    this.navigation.goBack(key);
+  }
 }
 
 let N = null;
 const proxyRouter = (() => {
-  return (navigation, filterRouters, authRouterName) => {
+  return (navigation, filterRouters, authRouterName, authorization) => {
     if (!N && navigation && filterRouters && authRouterName) {
-      N = new router(navigation, filterRouters, authRouterName);
+      N = new router(navigation, filterRouters, authRouterName, authorization);
     }
     return N;
   };

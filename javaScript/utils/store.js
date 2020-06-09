@@ -5,6 +5,7 @@ const store = {
   userNickname: 'Ryan',
   userAvatar: 'https://ali.rn.libragx.com/avatar21.png',
   userInviteCode: '4sada54da',
+  authorization: '4sada54dasdasdasdasdasdasdasdasdasd',
 };
 
 export default U.atom(store);
