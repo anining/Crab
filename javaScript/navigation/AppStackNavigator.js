@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import {SafeAreaView} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import codePush from 'react-native-code-push';
@@ -29,6 +30,9 @@ import DailyRedPackagePage from '../view/activityView/DailyRedPackagePage';
 import NoticePage from '../view/homeView/NoticePage';
 import NewbiePage from '../view/homeView/NewbiePage';
 import TaskDetailPage from '../view/homeView/TaskDetailPage';
+import {generalStyle} from '../assets/style/generalStyle';
+import asyncStorage from '../utils/asyncStorage';
+import {initializationStore} from '../utils/util';
 
 const Stack = createStackNavigator();
 
@@ -156,41 +160,41 @@ const stackScreens = [
 ];
 
 function AppStackNavigator() {
+  const [keys, setKeys] = useState();
   const GenerateScreen = stackScreens.map(screen =>
     <Stack.Screen name={screen.name} component={screen.component} options={{title: screen.title}} key={screen.name} />);
-  // const [keys, setKeys] = useState();
-  // useEffect(() => {
-  //   asyncStorage.getAllKeys()
-  //     .then(response => {
-  //       asyncStorage.multiGet(response)
-  //         .then(res => {
-  //           seStore(res);
-  //           setKeys([]);
-  //         });
-  //     })
-  //     .catch(() => {
-  //       setKeys([]);
-  //     });
-  //   return () => {
-  //     asyncStorage.flushGetRequests();
-  //   };
-  // }, []);
-  // if (keys) {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{
-        header: ({scene, previous, navigation}) => <Header scene={scene} previous={previous}
-                                                           navigation={navigation} />,
-      }}>
-        <Stack.Screen name="MaterialTopTabNavigator" options={{headerShown: false}}
-                      component={MaterialTopTabNavigator} />
-        <Stack.Screen name="VerificationStackNavigator" component={VerificationStackNavigator} />
-        {GenerateScreen}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-  // }
-  // return <SafeAreaView style={[generalStyle.safeAreaView, {backgroundColor: 'blue'}]}/>;
+  useEffect(() => {
+    asyncStorage.getAllKeys()
+      .then(response => {
+        asyncStorage.multiGet(response)
+          .then(r => {
+            initializationStore(r);
+            setKeys([]);
+          });
+      })
+      .catch(() => {
+        setKeys([]);
+      });
+    return () => {
+      asyncStorage.flushGetRequests();
+    };
+  }, []);
+  if (keys) {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{
+          header: ({scene, previous, navigation}) => <Header scene={scene} previous={previous}
+                                                             navigation={navigation} />,
+        }}>
+          <Stack.Screen name="MaterialTopTabNavigator" options={{headerShown: false}}
+                        component={MaterialTopTabNavigator} />
+          <Stack.Screen name="VerificationStackNavigator" component={VerificationStackNavigator} />
+          {GenerateScreen}
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+  return <SafeAreaView style={[generalStyle.safeAreaView, {backgroundColor: 'blue'}]} />;
 }
 
 export default codePush(AppStackNavigator);
