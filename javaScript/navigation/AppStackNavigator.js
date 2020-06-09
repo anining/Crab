@@ -155,17 +155,9 @@ const stackScreens = [
   },
 ];
 
-function GenerateScreen() {
-  let screens = [];
-  stackScreens.forEach(screen => {
-    screens.push(
-      <Stack.Screen name={screen.name} component={screen.component} options={{title: screen.title}} />,
-    );
-  });
-  return screens;
-}
-
 function AppStackNavigator() {
+  const GenerateScreen = stackScreens.map(screen =>
+    <Stack.Screen name={screen.name} component={screen.component} options={{title: screen.title}} key={screen.name} />);
   // const [keys, setKeys] = useState();
   // useEffect(() => {
   //   asyncStorage.getAllKeys()
@@ -186,7 +178,10 @@ function AppStackNavigator() {
   // if (keys) {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{header: e => <Header e={e} />}}>
+      <Stack.Navigator screenOptions={{
+        header: ({scene, previous, navigation}) => <Header scene={scene} previous={previous}
+                                                           navigation={navigation} />,
+      }}>
         <Stack.Screen name="MaterialTopTabNavigator" options={{headerShown: false}}
                       component={MaterialTopTabNavigator} />
         <Stack.Screen name="VerificationStackNavigator" component={VerificationStackNavigator} />
