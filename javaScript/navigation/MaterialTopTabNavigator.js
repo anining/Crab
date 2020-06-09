@@ -4,10 +4,12 @@ import HomePage from '../view/tabView/HomePage';
 import UserPage from '../view/tabView/UserPage';
 import ActivityPage from '../view/tabView/ActivityPage';
 import SharePage from '../view/tabView/SharePage';
+import {proxyRouter} from '../utils/router';
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function MaterialTopTabNavigator() {
+export default function MaterialTopTabNavigator({navigation}) {
+  proxyRouter(navigation, [], 'VerificationStackNavigator');
   return (
     <Tab.Navigator tabBarPosition="bottom">
       <Tab.Screen name="HomePage" component={HomePage} />

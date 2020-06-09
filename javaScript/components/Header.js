@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dimensions, Text, Image, TouchableOpacity, StyleSheet, View} from 'react-native';
 
-const {height, width} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 export default function Header({scene, previous, navigation}) {
   const {options} = scene.descriptor;
@@ -12,11 +12,11 @@ export default function Header({scene, previous, navigation}) {
         <TouchableOpacity onPress={() => {
           navigation.goBack();
         }} style={styles.returnBtn}>
-          <Image source={require('../assets/icon/header/header-return.png')} style={styles.return}/>
+          <Image source={require('../assets/icon/header/header-return.png')} style={styles.return} />
         </TouchableOpacity>
       </View>
       <Text style={styles.headerCenter}>{options.title || scene.route.name}</Text>
-      <View style={styles.headerRight}/>
+      <View style={styles.headerRight} />
     </View>
   );
 }
