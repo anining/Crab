@@ -155,7 +155,7 @@ const stackScreens = [
   },
 ];
 
-function generateScreen() {
+function GenerateScreen() {
   let screens = [];
   stackScreens.forEach(screen => {
     screens.push(
@@ -190,7 +190,7 @@ function AppStackNavigator() {
         <Stack.Screen name="MaterialTopTabNavigator" options={{headerShown: false}}
                       component={MaterialTopTabNavigator} />
         <Stack.Screen name="VerificationStackNavigator" component={VerificationStackNavigator} />
-        {generateScreen}
+        {GenerateScreen}
       </Stack.Navigator>
     </NavigationContainer>
   );
