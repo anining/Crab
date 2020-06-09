@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RnCrab</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">mh8So3cFB9LGSG9zTIP3Qf0QeYR34ksvOXqog</string>
+    <string moduleConfig="true" name="CodePushServerUrl">https://code-push.librags.com</string>
 </resources>
