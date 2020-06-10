@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, Text, TouchableOpacity} from 'react-native';
+import {DeviceEventEmitter, SafeAreaView, Text, TouchableOpacity} from 'react-native';
 import {generalStyle} from '../../assets/style/generalStyle';
 import {N} from '../../utils/router';
 import * as U from 'karet.util';
@@ -9,6 +9,16 @@ export default function UserPage() {
   return (
     <SafeAreaView style={generalStyle.safeAreaView}>
       <Text>UserPage</Text>
+      <TouchableOpacity onPress={() => {
+        DeviceEventEmitter.emit('loadingShow');
+      }}>
+        <Text>btn</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => {
+        DeviceEventEmitter.emit('loadingHidden');
+      }}>
+        <Text>btn2</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={() => {
         const authorization = U.view(['authorization'], store);
         N.navigate('TaskDetailPage');

@@ -34,6 +34,7 @@ import {generalStyle} from '../assets/style/generalStyle';
 import asyncStorage from '../utils/asyncStorage';
 import {initializationStore} from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
+import Loading from '../components/Loading';
 
 const Stack = createStackNavigator();
 
@@ -193,6 +194,7 @@ function AppStackNavigator() {
           <Stack.Screen name="VerificationStackNavigator" component={VerificationStackNavigator} />
           {GenerateScreen}
         </Stack.Navigator>
+        <Loading />
       </NavigationContainer>
     );
   }

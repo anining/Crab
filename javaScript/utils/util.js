@@ -1,3 +1,4 @@
+import {DeviceEventEmitter} from 'react-native';
 import store from './store';
 import * as U from 'karet.util';
 import CryptoJS from 'crypto-js';
@@ -13,7 +14,7 @@ const initializationStore = keys => {
 };
 
 const transformFetch = async (method, url, data, showError = true) => {
-  // DeviceEventEmitter.emit('loadShow');
+  DeviceEventEmitter.emit('loadingShow');
   const TIME_STAMP = Math.round(Date.now() / 1000).toString();
   const POST_DATA = JSON.stringify(data);
   const HEADER = new Headers({
@@ -37,13 +38,13 @@ const transformFetch = async (method, url, data, showError = true) => {
     ])
       .then(response => {
         if (showError && response && response.error) {
-          // DeviceEventEmitter.emit('loadHide');
+          DeviceEventEmitter.emit('loadingHidden');
           toast(response.msg || '请求失败!');
         }
         return response;
       });
   } catch (e) {
-    // DeviceEventEmitter.emit('loadHide');
+    DeviceEventEmitter.emit('loadingHidden');
     toast('请求失败!');
     return {error: 999, msg: '请求失败'};
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, Text} from 'react-native';
+import {DeviceEventEmitter, SafeAreaView, Text, TouchableOpacity} from 'react-native';
 import {generalStyle} from '../../assets/style/generalStyle';
 
 export default function HomePage() {
