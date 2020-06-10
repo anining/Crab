@@ -12,7 +12,7 @@ import store from '../utils/store';
 const Tab = createMaterialTopTabNavigator();
 
 export default function MaterialTopTabNavigator({navigation}) {
-  proxyRouter(navigation, [], 'VerificationStackNavigator', U.view(['authorization'], store).get());
+  proxyRouter(navigation, [], 'VerificationStackNavigator');
   return (
     <Tab.Navigator
       tabBarPosition="bottom"

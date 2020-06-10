@@ -1,10 +1,16 @@
+import * as U from 'karet.util';
+import store from './store';
+
 class router {
-  constructor(navigation, filterRouters, authRouterName, authorization) {
+  constructor(navigation, filterRouters, authRouterName) {
     this.filterRouters = filterRouters;
     this.navigation = navigation;
     this.authRouterName = authRouterName;
-    this.authorization = authorization;
     this.navigate = this.navigate.bind(this);
+    this.goBack = this.goBack.bind(this);
+    this.push = this.push.bind(this);
+    this.replace = this.replace.bind(this);
+    this.popToTop = this.popToTop.bind(this);
   }
 
   filterRouteName(routeName) {
@@ -23,32 +29,32 @@ class router {
   // dangerouslyGetState
   // setOptions
 
-  popToTop() {
-    if (this.authorization) {
+  popToTop(authorization = U.view(['authorization'], store).get()) {
+    if (authorization) {
       this.navigation.popToTop();
     } else {
       this.navigation.replace(this.authRouterName);
     }
   }
 
-  replace(routeName, params = {}) {
-    if (this.filterRouteName(routeName) || this.authorization) {
+  replace(routeName, params = {}, authorization = U.view(['authorization'], store).get()) {
+    if (this.filterRouteName(routeName) || authorization) {
       this.navigation.replace(routeName, {...params});
     } else {
       this.navigation.replace(this.authRouterName);
     }
   }
 
-  push(routeName, params = {}) {
-    if (this.filterRouteName(routeName) || this.authorization) {
+  push(routeName, params = {}, authorization = U.view(['authorization'], store).get()) {
+    if (this.filterRouteName(routeName) || authorization) {
       this.navigation.push(routeName, {...params});
     } else {
       this.navigation.replace(this.authRouterName);
     }
   }
 
-  navigate(routeName, params = {}) {
-    if (this.filterRouteName(routeName) || this.authorization) {
+  navigate(routeName, params = {}, authorization = U.view(['authorization'], store).get()) {
+    if (this.filterRouteName(routeName) || authorization) {
       this.navigation.navigate(routeName, {...params});
     } else {
       this.navigation.replace(this.authRouterName);
@@ -62,9 +68,9 @@ class router {
 
 let N = null;
 const proxyRouter = (() => {
-  return (navigation, filterRouters, authRouterName, authorization) => {
+  return (navigation, filterRouters, authRouterName) => {
     if (!N && navigation && filterRouters && authRouterName) {
-      N = new router(navigation, filterRouters, authRouterName, authorization);
+      N = new router(navigation, filterRouters, authRouterName);
     }
     return N;
   };

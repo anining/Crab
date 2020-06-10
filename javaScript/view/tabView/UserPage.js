@@ -11,10 +11,10 @@ export default function UserPage() {
       <Text>UserPage</Text>
       <TouchableOpacity onPress={() => {
         const authorization = U.view(['authorization'], store);
-        U.set(authorization, 'sdhasdhajsdhalshjalsdhasd');
+        N.navigate('TaskDetailPage');
+        U.set(authorization, Math.random());
         console.log(authorization.get());
-        console.log(N);
-        // N.navigate('TaskDetailPage');
+        N.navigate('TaskDetailPage');
       }} style={{height: 50, width: 100, backgroundColor: 'blue'}} />
     </SafeAreaView>
   );
