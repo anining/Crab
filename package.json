@@ -15,6 +15,7 @@
     "@react-navigation/material-top-tabs": "^5.2.10",
     "@react-navigation/native": "^5.5.1",
     "@react-navigation/stack": "^5.5.1",
+    "crypto-js": "^4.0.0",
     "karet": "^4.1.0",
     "karet.util": "^0.19.2",
     "kefir": "^3.8.7",
