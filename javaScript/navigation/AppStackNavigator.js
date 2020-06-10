@@ -33,6 +33,7 @@ import TaskDetailPage from '../view/homeView/TaskDetailPage';
 import {generalStyle} from '../assets/style/generalStyle';
 import asyncStorage from '../utils/asyncStorage';
 import {initializationStore} from '../utils/util';
+import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createStackNavigator();
 
@@ -170,6 +171,7 @@ function AppStackNavigator() {
           .then(r => {
             initializationStore(r);
             setKeys([]);
+            SplashScreen.hide();
           });
       })
       .catch(() => {
@@ -194,7 +196,7 @@ function AppStackNavigator() {
       </NavigationContainer>
     );
   }
-  return <SafeAreaView style={[generalStyle.safeAreaView, {backgroundColor: 'blue'}]} />;
+  return <SafeAreaView style={generalStyle.safeAreaView} />;
 }
 
 export default codePush(AppStackNavigator);

@@ -2,3 +2,4 @@
 
 @react-navigation/native
 react-native-code-push
+react-native-splash-screen
