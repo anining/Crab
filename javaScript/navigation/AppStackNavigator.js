@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView} from 'react-native';
+import * as U from 'karet.util';
+import {NativeModules, SafeAreaView} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import codePush from 'react-native-code-push';
@@ -35,6 +36,7 @@ import asyncStorage from '../utils/asyncStorage';
 import {initializationStore} from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
 import Loading from '../components/Loading';
+import store from '../utils/store';
 
 const Stack = createStackNavigator();
 
@@ -162,9 +164,12 @@ const stackScreens = [
 ];
 
 function AppStackNavigator() {
+
   const [keys, setKeys] = useState();
   const GenerateScreen = stackScreens.map(screen =>
     <Stack.Screen name={screen.name} component={screen.component} options={{title: screen.title}} key={screen.name} />);
+  const channel = U.view(['channel'], store);
+  U.set(channel, NativeModules.ChannelModule.getChannel());
   useEffect(() => {
     asyncStorage.getAllKeys()
       .then(response => {

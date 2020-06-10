@@ -33,7 +33,7 @@ export default function Loading() {
       <View style={styles.view}>
         <Spinner isVisible={isVisible}
                  size={35}
-                 type={['9CubeGrid']}
+                 type='9CubeGrid'
                  color="#fff" />
       </View>
     </Modal>
