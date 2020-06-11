@@ -6,7 +6,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.rncrab.utils.CommonUtils;
-import com.rncrab.captchanitice.NoticeJs;
+import com.rncrab.notice.NoticeJs;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -14,6 +14,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javax.annotation.Nonnull;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ChannelModule extends ReactContextBaseJavaModule {
 
@@ -33,9 +36,12 @@ public class ChannelModule extends ReactContextBaseJavaModule {
 
     //获取Android渠道
     @ReactMethod
-    public void getChannel() {
+    public void getChannel() throws JSONException {
         if (channel != null) {
-            new NoticeJs().sendMsg("channel", CommonUtils.getVersionName(context) + " - " + channel);
+            JSONObject channelJson = new JSONObject();
+            channelJson.put("versionName", CommonUtils.getVersionName(context));
+            channelJson.put("channel", channel);
+            new NoticeJs().sendMsg("channel", channelJson);
         }
         final String start_flag = "META-INF/channel_";
         ApplicationInfo appinfo = context.getApplicationInfo();
@@ -67,7 +73,10 @@ public class ChannelModule extends ReactContextBaseJavaModule {
         if (channel == null || channel.length() <= 0) {
             channel = "master";//读不到渠道号就默认是官方渠道
         }
-        new NoticeJs().sendMsg("channel", CommonUtils.getVersionName(context) + " - " + channel);
+        JSONObject channelJson = new JSONObject();
+        channelJson.put("versionName", CommonUtils.getVersionName(context));
+        channelJson.put("channel", channel);
+        new NoticeJs().sendMsg("channel", channelJson);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.rncrab.captchanitice;
+package com.rncrab.notice;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;

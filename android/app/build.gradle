@@ -1,7 +1,13 @@
 apply plugin: "com.android.application"
-
-import com.android.build.OutputFile
 apply plugin: 'com.mob.sdk'
+import com.android.build.OutputFile
+// 注册SecVerify的相关信息
+MobSDK {
+    appKey "2fa09aadf5f30"
+    appSecret "9776e7ee141c0408e353df23ff7ad19a"
+    SecVerify {}
+}
+
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
  * and bundleReleaseJsAndAssets).
@@ -222,6 +228,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation files('src/main/libs/json.jar')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group: 'com.facebook.fbjni'
@@ -249,10 +256,5 @@ dependencies {
 task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
-}
-MobSDK {
-    appKey "2fa09aadf5f30"
-    appSecret "9776e7ee141c0408e353df23ff7ad19a"
-    SecVerify {}
 }
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
