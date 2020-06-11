@@ -6,8 +6,6 @@ import UserPage from '../view/tabView/UserPage';
 import ActivityPage from '../view/tabView/ActivityPage';
 import SharePage from '../view/tabView/SharePage';
 import {proxyRouter} from '../utils/router';
-import * as U from 'karet.util';
-import store from '../utils/store';
 
 const Tab = createMaterialTopTabNavigator();
 

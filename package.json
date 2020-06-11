@@ -15,6 +15,7 @@
     "@react-navigation/material-top-tabs": "^5.2.10",
     "@react-navigation/native": "^5.5.1",
     "@react-navigation/stack": "^5.5.1",
+    "crypto-js": "3.3.0",
     "karet": "^4.1.0",
     "karet.util": "^0.19.2",
     "kefir": "^3.8.7",
@@ -26,6 +27,7 @@
     "react-native-safe-area-context": "^3.0.2",
     "react-native-screens": "^2.8.0",
     "react-native-snap-carousel": "^3.9.1",
+    "react-native-spinkit": "^1.5.0",
     "react-native-splash-screen": "^3.2.0",
     "react-native-swiper": "^1.6.0-rc.3",
     "react-native-tab-view": "^2.14.4"

@@ -6,6 +6,7 @@ const store = {
   userAvatar: 'https://ali.rn.libragx.com/avatar21.png',
   userInviteCode: '4sada54da',
   authorization: '4sada54dasdasdasdasdasdasdasdasdasd',
+  channel: 'master',
 };
 
 export default U.atom(store);

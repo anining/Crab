@@ -26,6 +26,7 @@ import ApprenticeInformationPage from '../view/shareView/ApprenticeInformationPa
 import ApprenticeSettingPage from '../view/shareView/ApprenticeSettingPage';
 import DailyMoneyPage from '../view/activityView/DailyMoneyPage';
 import SignPage from '../view/activityView/SignPage';
+import ErrorPage from '../view/otherView/ErrorPage';
 import DailyRedPackagePage from '../view/activityView/DailyRedPackagePage';
 import NoticePage from '../view/homeView/NoticePage';
 import NewbiePage from '../view/homeView/NewbiePage';
@@ -34,6 +35,7 @@ import {generalStyle} from '../assets/style/generalStyle';
 import asyncStorage from '../utils/asyncStorage';
 import {initializationStore} from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
+import Loading from '../components/Loading';
 
 const Stack = createStackNavigator();
 
@@ -158,6 +160,11 @@ const stackScreens = [
     component: TaskDetailPage,
     title: '任务信息',
   },
+  {
+    name: 'ErrorPage',
+    component: ErrorPage,
+    title: '错误',
+  },
 ];
 
 function AppStackNavigator() {
@@ -193,6 +200,7 @@ function AppStackNavigator() {
           <Stack.Screen name="VerificationStackNavigator" component={VerificationStackNavigator} />
           {GenerateScreen}
         </Stack.Navigator>
+        <Loading />
       </NavigationContainer>
     );
   }
