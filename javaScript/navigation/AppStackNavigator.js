@@ -31,7 +31,7 @@ import DailyRedPackagePage from '../view/activityView/DailyRedPackagePage';
 import NoticePage from '../view/homeView/NoticePage';
 import NewbiePage from '../view/homeView/NewbiePage';
 import TaskDetailPage from '../view/homeView/TaskDetailPage';
-import {generalStyle} from '../assets/style/generalStyle';
+import {css} from '../assets/style/css';
 import asyncStorage from '../utils/asyncStorage';
 import {initializationStore} from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
@@ -204,7 +204,7 @@ function AppStackNavigator() {
       </NavigationContainer>
     );
   }
-  return <SafeAreaView style={generalStyle.safeAreaView} />;
+  return <SafeAreaView style={css.safeAreaView} />;
 }
 
 export default codePush(AppStackNavigator);

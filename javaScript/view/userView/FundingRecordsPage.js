@@ -1,10 +1,10 @@
 import React from 'react';
 import {SafeAreaView, Text} from 'react-native';
-import {generalStyle} from '../../assets/style/generalStyle';
+import {css} from '../../assets/style/css';
 
 export default function FundingRecordsPage() {
   return (
-    <SafeAreaView style={generalStyle.safeAreaView}>
+    <SafeAreaView style={css.safeAreaView}>
       <Text>FundingRecordsPage</Text>
     </SafeAreaView>
   );

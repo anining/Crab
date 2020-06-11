@@ -1,4 +1,4 @@
-package com.rncrab.notice;
+package com.rncrab.transmit;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
@@ -11,16 +11,15 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by Administrator on 2016/10/30.
+ * Created by luoyukun on 2020/06/12.
  */
 
-public class NoticeJsPackage implements ReactPackage {
+public class TransmitPackage implements ReactPackage {
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new NoticeJsModule(reactContext));
-
+        modules.add(new TransmitModule(reactContext));
         return modules;
     }
 

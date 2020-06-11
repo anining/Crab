@@ -6,7 +6,7 @@ import {API_URL, PRIVATE_KEY} from './config';
 
 const initializationStore = keys => {
   const localStore = store.get();
-  keys = [...keys, [{channel: NativeModules.ChannelModule.getChannel()}]];
+  keys = [...keys, [{channel: '??'}]];
   keys.forEach(key => {
     localStore[key[0]] = key[1];
   });
@@ -28,7 +28,7 @@ const parameterTransform = (method, key, parameter) => {
   let parameterString = API_URL + key + '?';
   for (let param in parameter) {
     if (parameter.hasOwnProperty(param)) {
-      parameterString += param + '=' + parameter[param] + '&';
+      parameterString += param + '=' + parameter[param] + '&';``
     }
   }
   return parameterString.slice(0, -1);
