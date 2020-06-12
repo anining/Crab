@@ -3,12 +3,16 @@ package com.rncrab;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.react.BuildConfig;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.mob.MobSDK;
+import com.mob.moblink.MobLink;
+import com.mob.moblink.RestoreSceneListener;
 import com.rncrab.captchanitice.NoticeJsPackage;
 import com.rncrab.channel.ChannelPackage;
 
@@ -16,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import com.microsoft.codepush.react.CodePush;
+
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -56,6 +61,11 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        MobSDK.init(this,"","");
+        MobSDK.submitPolicyGrantResult(true, null);
+        MobLink.setRestoreSceneListener(new SceneListener());
+
+
         SoLoader.init(this, /* native exopackage */ false);
         initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
     }

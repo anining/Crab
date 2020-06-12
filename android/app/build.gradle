@@ -138,7 +138,7 @@ MobSDK {
         }
     }
     MobLink {
-        uriScheme "您后台配置的scheme"
+        uriScheme "ssdk53453423f8c8://cn.rncrab.loop"
         appLinkHost "ba4s.t4m.cn"
     }
 }
