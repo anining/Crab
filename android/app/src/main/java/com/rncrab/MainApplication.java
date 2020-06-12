@@ -3,13 +3,14 @@ package com.rncrab;
 import android.app.Application;
 import android.content.Context;
 
-import com.facebook.react.BuildConfig;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.rncrab.notice.NoticeJs;
+import com.rncrab.notice.NoticeJsPackage;
 import com.mob.MobSDK;
 import com.mob.moblink.MobLink;
 import com.mob.moblink.RestoreSceneListener;
@@ -20,7 +21,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import com.microsoft.codepush.react.CodePush;
+import com.rncrab.transmit.TransmitPackage;
+import com.rncrab.utils.CommonUtils;
+import com.rncrab.verify.SecVerifyPackage;
 
+import org.json.JSONException;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -41,9 +46,9 @@ public class MainApplication extends Application implements ReactApplication {
                     @SuppressWarnings("UnnecessaryLocalVariable")
                     List<ReactPackage> packages = new PackageList(this).getPackages();
                     // Packages that cannot be autolinked yet can be added manually here, for example:
-                    // packages.add(new MyReactNativePackage());
+                    packages.add(new TransmitPackage());
                     packages.add(new NoticeJsPackage());
-                    packages.add(new ChannelPackage());
+                    packages.add(new SecVerifyPackage());
                     return packages;
                 }
 
@@ -69,7 +74,6 @@ public class MainApplication extends Application implements ReactApplication {
         SoLoader.init(this, /* native exopackage */ false);
         initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
     }
-
     /**
      * Loads Flipper in React Native templates. Call this in the onCreate method with something like
      * initializeFlipper(this, getReactNativeHost().getReactInstanceManager());

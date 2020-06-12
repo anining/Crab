@@ -1,11 +1,11 @@
 import React from 'react';
-import {SafeAreaView, Text} from 'react-native';
-import {generalStyle} from '../../assets/style/generalStyle';
+import { SafeAreaView, Text } from 'react-native';
+import { css } from '../../assets/style/css';
 
-export default function AcceptQRCodePage() {
-  return (
-    <SafeAreaView style={generalStyle.safeAreaView}>
-      <Text>AcceptQRCodePage</Text>
-    </SafeAreaView>
-  );
+export default function AcceptQRCodePage () {
+    return (
+        <SafeAreaView style={css.safeAreaView}>
+            <Text>AcceptQRCodePage</Text>
+        </SafeAreaView>
+    );
 }

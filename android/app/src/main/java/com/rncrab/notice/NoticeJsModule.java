@@ -1,4 +1,4 @@
-package com.rncrab.captchanitice;
+package com.rncrab.notice;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -13,6 +13,7 @@ public class NoticeJsModule extends ReactContextBaseJavaModule {
     public NoticeJsModule(ReactApplicationContext reactContext) {
 
         super(reactContext);
+        System.out.println("111reactContext=" + reactContext);
         NoticeJs.myContext = reactContext;
     }
 

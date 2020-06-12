@@ -1,4 +1,4 @@
-package com.rncrab.captchanitice;
+package com.rncrab.notice;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
@@ -15,9 +15,9 @@ import java.util.List;
  */
 
 public class NoticeJsPackage implements ReactPackage {
+
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-
         List<NativeModule> modules = new ArrayList<>();
         modules.add(new NoticeJsModule(reactContext));
 

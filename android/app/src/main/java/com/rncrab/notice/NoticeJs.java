@@ -1,4 +1,6 @@
-package com.rncrab.captchanitice;
+package com.rncrab.notice;
+
+import android.content.Context;
 
 import androidx.annotation.Nullable;
 
@@ -6,6 +8,8 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+
+import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2016/10/30.
@@ -24,13 +28,13 @@ public class NoticeJs {
                 .emit(eventName, params);
     }
 
-    public void sendMsg(final String msgType, final String msg) {
+    public void sendMsg(final String msgType, final JSONObject msg) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 WritableMap et = Arguments.createMap();
-                et.putString(msgType, msg);
-                sendEvent(myContext, "native_notice", et);
+                et.putString(msgType, String.valueOf(msg));
+                sendEvent(myContext, "nativeNotice", et);
             }
         }).start();
     }

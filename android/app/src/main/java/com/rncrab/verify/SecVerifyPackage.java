@@ -1,5 +1,4 @@
-package com.rncrab.channel;
-
+package com.rncrab.verify;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -10,13 +9,12 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-
-public class ChannelPackage implements ReactPackage {
+public class SecVerifyPackage implements ReactPackage {
     @Nonnull
     @Override
     public List<NativeModule> createNativeModules(@Nonnull ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new ChannelModule(reactContext));
+        modules.add(new SecVerifyModule(reactContext));
         return modules;
     }
 
