@@ -62,7 +62,7 @@ export default function HomePage () {
                     top: 20,
                 }]}>
                     {/* 参考文档https://github.com/oblador/react-native-animatable */}
-                    <Animatable.Text useNativeDriver={true} iterationCount={50} animation="tada" style={{
+                    <Animatable.Text useNativeDriver={true} iterationCount="infinite" animation="tada" style={{
                         width: 100,
                         height: 40,
                         color: '#fff',
