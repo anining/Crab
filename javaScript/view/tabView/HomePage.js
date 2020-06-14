@@ -35,7 +35,7 @@ export default function HomePage () {
                 speed={1}
             />
             <LottieView
-                style={{ width: '100%', height: 'auto', backgroundColor: '#fff' }}
+                style={{ width: '100%', height: 'auto', backgroundColor: '#5d6fff' }}
                 imageAssetsFolder={'lottie1'}
                 source={data1}
                 loop={true}
