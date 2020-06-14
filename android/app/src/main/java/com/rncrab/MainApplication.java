@@ -9,6 +9,7 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.mob.MobSDK;
 import com.rncrab.notice.NoticeJs;
 import com.rncrab.notice.NoticeJsPackage;
 
@@ -63,6 +64,8 @@ public class MainApplication extends Application implements ReactApplication {
         super.onCreate();
         SoLoader.init(this, /* native exopackage */ false);
         initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+        MobSDK.init(this, "2fa09aadf5f30", "9776e7ee141c0408e353df23ff7ad19a");
+//        LottieAnimationView lottieAnimationView = (LottieAnimationView)
     }
     /**
      * Loads Flipper in React Native templates. Call this in the onCreate method with something like

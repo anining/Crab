@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "node ./modify.js;cd ./android;./gradlew assembleRelease;",
+    "clear": "sudo react-native clean-project-auto"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.11.0",
@@ -19,6 +21,8 @@
     "karet": "^4.1.0",
     "karet.util": "^0.19.2",
     "kefir": "^3.8.7",
+    "lottie-ios": "3.1.3",
+    "lottie-react-native": "^3.4.0",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-code-push": "^6.2.1",
@@ -33,6 +37,7 @@
     "react-native-tab-view": "^2.14.4"
   },
   "devDependencies": {
+    "react-native-clean-project": "^3.3.0",
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
     "@react-native-community/eslint-config": "^0.0.5",
