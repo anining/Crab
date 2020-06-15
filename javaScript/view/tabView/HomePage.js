@@ -13,7 +13,7 @@ export default function HomePage () {
         // );
         // NativeModules.SecVerifyModule && NativeModules.SecVerifyModule.isVerifySupport();
         (async () => {
-            const ret = await Android.promiseGetChannel();
+            const ret = await Android.promiseGetMobId();
             console.log(ret);
         })();
     } catch (e) {

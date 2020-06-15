@@ -1,12 +1,6 @@
-apply plugin: "com.android.application"
-apply plugin: 'com.mob.sdk'
 import com.android.build.OutputFile
-// 注册SecVerify的相关信息
-MobSDK {
-    appKey "2fa09aadf5f30"
-    appSecret "9776e7ee141c0408e353df23ff7ad19a"
-    SecVerify {}
-}
+
+apply plugin: "com.android.application"
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -131,7 +125,8 @@ apply plugin: 'com.mob.sdk'
 MobSDK {
     appKey "2fa09aadf5f30"
     appSecret "9776e7ee141c0408e353df23ff7ad19a"
-
+    // 注册SecVerify的相关信息
+    SecVerify {}
     // 调用MobPush
     MobPush {
         //集成其他推送通道（可选）
@@ -144,7 +139,7 @@ MobSDK {
         }
     }
     MobLink {
-        uriScheme "ssdk53453423f8c8://cn.rncrab.loop"
+        uriScheme "mlink://com.rncrab"
         appLinkHost "ba4s.t4m.cn"
     }
 }

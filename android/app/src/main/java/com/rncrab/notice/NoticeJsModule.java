@@ -13,7 +13,6 @@ public class NoticeJsModule extends ReactContextBaseJavaModule {
     public NoticeJsModule(ReactApplicationContext reactContext) {
 
         super(reactContext);
-        System.out.println("111reactContext=" + reactContext);
         NoticeJs.myContext = reactContext;
     }
 

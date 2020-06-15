@@ -9,23 +9,18 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.rncrab.notice.NoticeJs;
+import com.mob.moblink.Scene;
 import com.rncrab.notice.NoticeJsPackage;
 import com.mob.MobSDK;
 import com.mob.moblink.MobLink;
-import com.mob.moblink.RestoreSceneListener;
-import com.rncrab.captchanitice.NoticeJsPackage;
-import com.rncrab.channel.ChannelPackage;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import com.microsoft.codepush.react.CodePush;
+import com.rncrab.sceneListener.SceneListener;
 import com.rncrab.transmit.TransmitPackage;
-import com.rncrab.utils.CommonUtils;
 import com.rncrab.verify.SecVerifyPackage;
-
-import org.json.JSONException;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -66,14 +61,14 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        MobSDK.init(this,"","");
+        MobSDK.init(this, "2fa09aadf5f30", "9776e7ee141c0408e353df23ff7ad19a");
         MobSDK.submitPolicyGrantResult(true, null);
         MobLink.setRestoreSceneListener(new SceneListener());
-
-
+        new SceneListener().notFoundScene(new Scene());
         SoLoader.init(this, /* native exopackage */ false);
         initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
     }
+
     /**
      * Loads Flipper in React Native templates. Call this in the onCreate method with something like
      * initializeFlipper(this, getReactNativeHost().getReactInstanceManager());

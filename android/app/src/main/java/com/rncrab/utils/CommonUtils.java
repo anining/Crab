@@ -5,8 +5,14 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.facebook.react.bridge.Promise;
+import com.mob.moblink.ActionListener;
+import com.mob.moblink.MobLink;
+import com.mob.moblink.Scene;
+
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -63,5 +69,35 @@ public class CommonUtils {
             channel = "master";//读不到渠道号就默认是官方渠道
         }
         return channel;
+    }
+
+
+    public void getMobId(Promise promise) {
+        // 设置场景参数
+        HashMap<String, Object> senceParams = new HashMap<String, Object>();
+        senceParams.put("key1", "apk");
+        senceParams.put("key2", "apk");
+        senceParams.put("key3", "apk");
+        // 新建场景
+        Scene s = new Scene();
+        s.path = "/demo/a";
+        s.params = senceParams;
+        // 请求场景ID
+        MobLink.getMobID(s, new ActionListener() {
+            public void onResult(String mobID) {
+                // TODO 根据mobID进行分享等操作
+                promise.resolve(mobID);
+            }
+
+            @Override
+            public void onResult(Object o) {
+
+            }
+
+            public void onError(Throwable throwable) {
+                // TODO 处理错误结果
+                promise.reject("error", throwable);
+            }
+        });
     }
 }
