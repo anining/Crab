@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {SafeAreaView} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
 import codePush from 'react-native-code-push';
 import MaterialTopTabNavigator from './MaterialTopTabNavigator';
 import VerificationStackNavigator from './VerificationStackNavigator';
@@ -12,6 +12,7 @@ import WithdrawAliPayPage from '../view/userView/WithdrawAliPayPage';
 import WeChatBindPage from '../view/userView/WeChatBindPage';
 import MyTaskPage from '../view/userView/MyTaskPage';
 import HelpCenterPage from '../view/userView/HelpCenterPage';
+import AnswerDetailPage from '../view/answerView/AnswerDetailPage';
 import FundingRecordsPage from '../view/userView/FundingRecordsPage';
 import FeedBackRecordsPage from '../view/userView/FeedBackRecordsPage';
 import FeedBackPage from '../view/userView/FeedBackPage';
@@ -31,180 +32,185 @@ import DailyRedPackagePage from '../view/activityView/DailyRedPackagePage';
 import NoticePage from '../view/homeView/NoticePage';
 import NewbiePage from '../view/homeView/NewbiePage';
 import TaskDetailPage from '../view/homeView/TaskDetailPage';
-import {css} from '../assets/style/css';
+import { css } from '../assets/style/css';
 import asyncStorage from '../utils/asyncStorage';
-import {initializationStore} from '../utils/util';
+import { initializationStore } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
 import Loading from '../components/Loading';
 
 const Stack = createStackNavigator();
 
 const stackScreens = [
-  {
-    name: 'WithdrawRecordsPage',
-    component: WithdrawRecordsPage,
-    title: '提现记录',
-  },
-  {
-    name: 'WithdrawPage',
-    component: WithdrawPage,
-    title: '我的收益',
-  },
-  {
-    name: 'WithdrawAliPayPage',
-    component: WithdrawAliPayPage,
-    title: '提现到支付宝',
-  },
-  {
-    name: 'WeChatBindPage',
-    component: WeChatBindPage,
-    title: '绑定微信',
-  },
-  {
-    name: 'MyTaskPage',
-    component: MyTaskPage,
-    title: '我的任务',
-  },
-  {
-    name: 'HelpCenterPage',
-    component: HelpCenterPage,
-    title: '帮助中心',
-  },
-  {
-    name: 'FundingRecordsPage',
-    component: FundingRecordsPage,
-    title: '资金记录',
-  },
-  {
-    name: 'FeedBackRecordsPage',
-    component: FeedBackRecordsPage,
-    title: '反馈记录',
-  },
-  {
-    name: 'FeedBackPage',
-    component: FeedBackPage,
-    title: '意见反馈',
-  },
-  {
-    name: 'CardPackageRecordsPage',
-    component: CardPackageRecordsPage,
-    title: '消耗记录',
-  },
-  {
-    name: 'CardPackagePage',
-    component: CardPackagePage,
-    title: '道具背包',
-  },
-  {
-    name: 'BlackHousePage',
-    component: BlackHousePage,
-    title: '小黑屋',
-  },
-  {
-    name: 'AccountHomePage',
-    component: AccountHomePage,
-    title: '绑定账号',
-  },
-  {
-    name: 'AccountBindPage',
-    component: AccountBindPage,
-    title: '账号绑定',
-  },
-  {
-    name: 'AcceptQRCodePage',
-    component: AcceptQRCodePage,
-    title: '二维码收徒',
-  },
-  {
-    name: 'AcceptUrlPage',
-    component: AcceptUrlPage,
-    title: '链接收徒',
-  },
-  {
-    name: 'ApprenticeInformationPage',
-    component: ApprenticeInformationPage,
-    title: '师徒信息',
-  },
-  {
-    name: 'ApprenticeSettingPage',
-    component: ApprenticeSettingPage,
-    title: '师徒设置',
-  },
-  {
-    name: 'DailyMoneyPage',
-    component: DailyMoneyPage,
-    title: '每日现金',
-  },
-  {
-    name: 'DailyRedPackagePage',
-    component: DailyRedPackagePage,
-    title: '每日红包',
-  },
-  {
-    name: 'SignPage',
-    component: SignPage,
-    title: '签到',
-  },
-  {
-    name: 'NewbiePage',
-    component: NewbiePage,
-    title: '新人福利',
-  },
-  {
-    name: 'NoticePage',
-    component: NoticePage,
-    title: '公告通知',
-  },
-  {
-    name: 'TaskDetailPage',
-    component: TaskDetailPage,
-    title: '任务信息',
-  },
-  {
-    name: 'ErrorPage',
-    component: ErrorPage,
-    title: '错误',
-  },
+    {
+        name: 'WithdrawRecordsPage',
+        component: WithdrawRecordsPage,
+        title: '提现记录',
+    },
+    {
+        name: 'WithdrawPage',
+        component: WithdrawPage,
+        title: '我的收益',
+    },
+    {
+        name: 'AnswerDetailPage',
+        component: AnswerDetailPage,
+        title: '关卡',
+    },
+    {
+        name: 'WithdrawAliPayPage',
+        component: WithdrawAliPayPage,
+        title: '提现到支付宝',
+    },
+    {
+        name: 'WeChatBindPage',
+        component: WeChatBindPage,
+        title: '绑定微信',
+    },
+    {
+        name: 'MyTaskPage',
+        component: MyTaskPage,
+        title: '我的任务',
+    },
+    {
+        name: 'HelpCenterPage',
+        component: HelpCenterPage,
+        title: '帮助中心',
+    },
+    {
+        name: 'FundingRecordsPage',
+        component: FundingRecordsPage,
+        title: '资金记录',
+    },
+    {
+        name: 'FeedBackRecordsPage',
+        component: FeedBackRecordsPage,
+        title: '反馈记录',
+    },
+    {
+        name: 'FeedBackPage',
+        component: FeedBackPage,
+        title: '意见反馈',
+    },
+    {
+        name: 'CardPackageRecordsPage',
+        component: CardPackageRecordsPage,
+        title: '消耗记录',
+    },
+    {
+        name: 'CardPackagePage',
+        component: CardPackagePage,
+        title: '道具背包',
+    },
+    {
+        name: 'BlackHousePage',
+        component: BlackHousePage,
+        title: '小黑屋',
+    },
+    {
+        name: 'AccountHomePage',
+        component: AccountHomePage,
+        title: '绑定账号',
+    },
+    {
+        name: 'AccountBindPage',
+        component: AccountBindPage,
+        title: '账号绑定',
+    },
+    {
+        name: 'AcceptQRCodePage',
+        component: AcceptQRCodePage,
+        title: '二维码收徒',
+    },
+    {
+        name: 'AcceptUrlPage',
+        component: AcceptUrlPage,
+        title: '链接收徒',
+    },
+    {
+        name: 'ApprenticeInformationPage',
+        component: ApprenticeInformationPage,
+        title: '师徒信息',
+    },
+    {
+        name: 'ApprenticeSettingPage',
+        component: ApprenticeSettingPage,
+        title: '师徒设置',
+    },
+    {
+        name: 'DailyMoneyPage',
+        component: DailyMoneyPage,
+        title: '每日现金',
+    },
+    {
+        name: 'DailyRedPackagePage',
+        component: DailyRedPackagePage,
+        title: '每日红包',
+    },
+    {
+        name: 'SignPage',
+        component: SignPage,
+        title: '签到',
+    },
+    {
+        name: 'NewbiePage',
+        component: NewbiePage,
+        title: '新人福利',
+    },
+    {
+        name: 'NoticePage',
+        component: NoticePage,
+        title: '公告通知',
+    },
+    {
+        name: 'TaskDetailPage',
+        component: TaskDetailPage,
+        title: '任务信息',
+    },
+    {
+        name: 'ErrorPage',
+        component: ErrorPage,
+        title: '错误',
+    },
 ];
 
-function AppStackNavigator() {
-  const [keys, setKeys] = useState();
-  const GenerateScreen = stackScreens.map(screen =>
-    <Stack.Screen name={screen.name} component={screen.component} options={{title: screen.title}} key={screen.name} />);
-  useEffect(() => {
-    asyncStorage.getAllKeys()
-      .then(response => {
-        asyncStorage.multiGet(response)
-          .then(r => {
-            initializationStore(r);
-            setKeys([]);
-            SplashScreen.hide();
-          });
-      })
-      .catch(() => {
-        setKeys([]);
-      });
-    return () => {
-      asyncStorage.flushGetRequests();
-    };
-  }, []);
-  if (keys) {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{
-          header: ({scene, previous, navigation}) => <Header scene={scene} previous={previous}
-                                                             navigation={navigation} />,
-        }}>
-          <Stack.Screen name="MaterialTopTabNavigator" options={{headerShown: false}}
+function AppStackNavigator () {
+    const [keys, setKeys] = useState();
+    const GenerateScreen = stackScreens.map(screen =>
+        <Stack.Screen name={screen.name} component={screen.component} options={{ title: screen.title }} key={screen.name} />);
+    useEffect(() => {
+        asyncStorage.getAllKeys()
+            .then(response => {
+                asyncStorage.multiGet(response)
+                    .then(r => {
+                        initializationStore(r);
+                        setKeys([]);
+                        SplashScreen.hide();
+                    });
+            })
+            .catch(() => {
+                setKeys([]);
+            });
+        return () => {
+            asyncStorage.flushGetRequests();
+        };
+    }, []);
+    if (keys) {
+        return (
+            <NavigationContainer>
+                <Stack.Navigator screenOptions={{
+                    header: ({ scene, previous, navigation }) => <Header scene={scene} previous={previous}
+                        navigation={navigation} />,
+                }}>
+                    <Stack.Screen name="MaterialTopTabNavigator" options={{ headerShown: false }}
                         component={MaterialTopTabNavigator} />
-          <Stack.Screen name="VerificationStackNavigator" component={VerificationStackNavigator} />
-          {GenerateScreen}
-        </Stack.Navigator>
-        <Loading />
-      </NavigationContainer>
-    );
-  }
-  return <SafeAreaView style={css.safeAreaView} />;
+                    <Stack.Screen name="VerificationStackNavigator" component={VerificationStackNavigator} />
+                    {GenerateScreen}
+                </Stack.Navigator>
+                <Loading />
+            </NavigationContainer>
+        );
+    }
+    return <SafeAreaView style={css.safeAreaView} />;
 }
 
 export default codePush(AppStackNavigator);
