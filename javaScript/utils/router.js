@@ -55,11 +55,12 @@ class router {
     }
 
     navigate (routeName, params = {}, authorization = U.view(['authorization'], store).get()) {
-        if (this.filterRouteName(routeName) || authorization) {
-            this.navigation.navigate(routeName, { ...params });
-        } else {
-            this.navigation.replace(this.authRouterName);
-        }
+        this.navigation.navigate(routeName, { ...params });
+        // if (this.filterRouteName(routeName) || authorization) {
+        //     this.navigation.navigate(routeName, { ...params });
+        // } else {
+        //     this.navigation.replace(this.authRouterName);
+        // }
     }
 
     goBack (key) {

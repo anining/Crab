@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, SafeAreaView, StyleSheet, ImageBackground, Image, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { View, SafeAreaView, StyleSheet, ScrollView, ImageBackground, Image, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import userWeChatPng from '../../assets/icon/userPage/user-weChat.png';
@@ -14,6 +14,7 @@ import userPage7 from '../../assets/icon/userPage/userPage7.png';
 import userPage8 from '../../assets/icon/userPage/userPage8.png';
 import userPage9 from '../../assets/icon/userPage/userPage9.png';
 import userPage10 from '../../assets/icon/userPage/userPage10.png';
+import userPage11 from '../../assets/icon/userPage/userPage11.png';
 
 const { width } = Dimensions.get('window');
 const menuList = [
@@ -51,87 +52,90 @@ const menuList = [
 export default function UserPage () {
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
-            <View style={styles.userDetailView}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image source={{ uri: 'https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=360292469,3749990901&fm=173&app=49&f=JPEG?w=312&h=208&s=6AB35FC94EB3CAC6440DE0310300C051' }} style={styles.avatarIcon}/>
-                    <View style={styles.userCard}>
-                        <View style={styles.userCardTop}>
-                            <Text style={styles.userPhone}>188****1451</Text>
-                            <Text style={styles.userId}>ID:159 1231 1333</Text>
-                        </View>
-                        <View style={styles.userCardBottom}>
-                            <Text style={styles.inviteCode}>邀请码:A23345643</Text>
-                            <TouchableOpacity onPress={() => {
+            <ScrollView>
+                <View style={styles.userDetailView}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image source={{ uri: 'https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=360292469,3749990901&fm=173&app=49&f=JPEG?w=312&h=208&s=6AB35FC94EB3CAC6440DE0310300C051' }} style={styles.avatarIcon}/>
+                        <View style={styles.userCard}>
+                            <View style={styles.userCardTop}>
+                                <Text style={styles.userPhone}>188****1451</Text>
+                                <Text style={styles.userId}>ID:159 1231 1333</Text>
+                            </View>
+                            <View style={styles.userCardBottom}>
+                                <Text style={styles.inviteCode}>邀请码:A23345643</Text>
+                                <TouchableOpacity onPress={() => {
 
-                            }} style={styles.copyBtn}>
-                                <Text style={styles.copyText}>复制</Text>
+                                }} style={styles.copyBtn}>
+                                    <Text style={styles.copyText}>复制</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                    <TouchableOpacity onPress={() => {
+
+                    }} style={styles.bindBtn}>
+                        <Image source={userWeChatPng} style={{ width: 16, height: 13, marginRight: 5 }}/>
+                        <Text style={styles.bindText}>绑定微信</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.moneyView}>
+                    <ImageBackground source={moneyBackground} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
+                        <View style={styles.moneyViewTop}>
+                            <Text style={{ color: '#222', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
+                            <TouchableOpacity onPress={() => {
+                                N.navigate('WithdrawPage');
+                            }} style={styles.withDrawBtn}>
+                                <Text style={{ lineHeight: 30, textAlign: 'center', color: '#fff' }}>立即提现</Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
+                        <View style={styles.moneyViewBottom}>
+                            <View style={styles.moneyViewItem}>
+                                <Text style={styles.moneyText}>500</Text>
+                                <Text style={styles.moneyTitle}>可提现(金币)</Text>
+                            </View>
+                            <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
+                                <Text style={styles.moneyText}>500</Text>
+                                <Text style={styles.moneyTitle}>今日收益(金币)</Text>
+                            </View>
+                            <View style={styles.moneyViewItem}>
+                                <Text style={styles.moneyText}>500</Text>
+                                <Text style={styles.moneyTitle}>总收益(金币)</Text>
+                            </View>
+                        </View>
+                    </ImageBackground>
                 </View>
-                <TouchableOpacity onPress={() => {
-
-                }} style={styles.bindBtn}>
-                    <Image source={userWeChatPng} style={{ width: 16, height: 13, marginRight: 5 }}/>
-                    <Text style={styles.bindText}>绑定微信</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.moneyView}>
-                <ImageBackground source={moneyBackground} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
-                    <View style={styles.moneyViewTop}>
-                        <Text style={{ color: '#222', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
+                <View style={styles.myTask}>
+                    <Text style={styles.myTaskTitle}>我的任务</Text>
+                    <View style={styles.myTaskViewBottom}>
                         <TouchableOpacity onPress={() => {
 
-                        }} style={styles.withDrawBtn}>
-                            <Text style={{ lineHeight: 30, textAlign: 'center', color: '#fff' }}>立即提现</Text>
+                        }} style={styles.myTaskBtn}>
+                            <Image source={userPage1} style={styles.myTaskBtnIcon}/>
+                            <Text style={styles.myTaskBtnText}>进行中<Text style={{ color: '#FF7751' }}> 1</Text></Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+
+                        }} style={styles.myTaskBtn}>
+                            <Image source={userPage2} style={styles.myTaskBtnIcon}/>
+                            <Text style={styles.myTaskBtnText}>审核中<Text style={{ color: '#FF7751' }}> 1</Text></Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+
+                        }} style={styles.myTaskBtn}>
+                            <Image source={userPage4} style={styles.myTaskBtnIcon}/>
+                            <Text style={styles.myTaskBtnText}>已通过<Text style={{ color: '#FF7751' }}> 1</Text></Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+
+                        }} style={styles.myTaskBtn}>
+                            <Image source={userPage3} style={styles.myTaskBtnIcon}/>
+                            <Text style={styles.myTaskBtnText}>未通过<Text style={{ color: '#FF7751' }}> 1</Text></Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.moneyViewBottom}>
-                        <View style={styles.moneyViewItem}>
-                            <Text style={styles.moneyText}>500</Text>
-                            <Text style={styles.moneyTitle}>可提现(金币)</Text>
-                        </View>
-                        <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
-                            <Text style={styles.moneyText}>500</Text>
-                            <Text style={styles.moneyTitle}>今日收益(金币)</Text>
-                        </View>
-                        <View style={styles.moneyViewItem}>
-                            <Text style={styles.moneyText}>500</Text>
-                            <Text style={styles.moneyTitle}>总收益(金币)</Text>
-                        </View>
-                    </View>
-                </ImageBackground>
-            </View>
-            <View style={styles.myTask}>
-                <Text style={styles.myTaskTitle}>我的任务</Text>
-                <View style={styles.myTaskViewBottom}>
-                    <TouchableOpacity onPress={() => {
-
-                    }} style={styles.myTaskBtn}>
-                        <Image source={userPage1} style={styles.myTaskBtnIcon}/>
-                        <Text style={styles.myTaskBtnText}>进行中<Text style={{ color: '#FF7751' }}> 1</Text></Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {
-
-                    }} style={styles.myTaskBtn}>
-                        <Image source={userPage2} style={styles.myTaskBtnIcon}/>
-                        <Text style={styles.myTaskBtnText}>审核中<Text style={{ color: '#FF7751' }}> 1</Text></Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {
-
-                    }} style={styles.myTaskBtn}>
-                        <Image source={userPage4} style={styles.myTaskBtnIcon}/>
-                        <Text style={styles.myTaskBtnText}>已通过<Text style={{ color: '#FF7751' }}> 1</Text></Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {
-
-                    }} style={styles.myTaskBtn}>
-                        <Image source={userPage3} style={styles.myTaskBtnIcon}/>
-                        <Text style={styles.myTaskBtnText}>未通过<Text style={{ color: '#FF7751' }}> 1</Text></Text>
-                    </TouchableOpacity>
                 </View>
-            </View>
-            <RenderMenu menuList={menuList}/>
+                <RenderMenu menuList={menuList}/>
+            </ScrollView>
+
         </SafeAreaView>
     );
 }
@@ -144,18 +148,18 @@ function RenderMenu ({ menuList }) {
 
             }} style={styles.btn} key={menu.title}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image source={menu.icon} style={{ height: 30, width: 30 }}/>
+                    <Image source={menu.icon} style={{ height: 20, width: 20, marginRight: 5, fontSize: 15 }}/>
                     <Text>{menu.title}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text>{menu.remark}</Text>
-                    <Image source={userPage3} style={{ height: 30, width: 30 }}/>
+                    <Text style={{ fontSize: 13, color: '#999', marginRight: 5 }}>{menu.remark}</Text>
+                    <Image source={userPage11} style={{ height: 13, width: 6 }}/>
                 </View>
             </TouchableOpacity>
         );
     });
     return (
-        <View style={{ backgroundColor: 'red' }}>
+        <View style={{ backgroundColor: '#fff' }}>
             {components}
         </View>
     );
@@ -192,7 +196,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 50,
         justifyContent: 'space-between',
-        marginLeft: 10,
+        marginLeft: 15,
+        paddingRight: 15,
         width: width - 10
 
     },
@@ -268,8 +273,8 @@ const styles = StyleSheet.create({
         width: '25%'
     },
     myTaskBtnIcon: {
-        height: 45,
-        width: 48 / 51 * 45
+        height: 28.5,
+        width: 24 / 25.5 * 28.5
     },
     myTaskBtnText: {
         fontSize: 12
