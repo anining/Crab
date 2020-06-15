@@ -8,6 +8,7 @@ import com.facebook.react.ReactActivity;
 import com.mob.moblink.MobLink;
 import com.mob.moblink.Scene;
 import com.mob.moblink.SceneRestorable;
+import com.mob.MobSDK;
 
 import org.devio.rn.splashscreen.SplashScreen;
 

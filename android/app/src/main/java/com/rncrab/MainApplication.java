@@ -10,6 +10,8 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.mob.moblink.Scene;
+import com.mob.MobSDK;
+import com.rncrab.notice.NoticeJs;
 import com.rncrab.notice.NoticeJsPackage;
 import com.mob.MobSDK;
 import com.mob.moblink.MobLink;
