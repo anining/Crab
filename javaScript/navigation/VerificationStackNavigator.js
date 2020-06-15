@@ -1,13 +1,17 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import LoginPage from '../view/authView/LoginPage';
+import Header from '../components/Header';
 
 const Stack = createStackNavigator();
 
-export default function VerificationStackNavigator() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="LoginPage" component={LoginPage} />
-    </Stack.Navigator>
-  );
+export default function VerificationStackNavigator () {
+    return (
+        <Stack.Navigator screenOptions={{
+            header: ({ scene, previous, navigation }) => <Header scene={scene} previous={previous}
+                navigation={navigation} replace={true}/>,
+        }}>
+            <Stack.Screen name="LoginPage" options={{ title: '登录' }} component={LoginPage} />
+        </Stack.Navigator>
+    );
 }

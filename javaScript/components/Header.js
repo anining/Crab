@@ -1,57 +1,60 @@
 import React from 'react';
-import {Dimensions, Text, Image, TouchableOpacity, StyleSheet, View} from 'react-native';
+import { Dimensions, Text, Image, TouchableOpacity, StyleSheet, View } from 'react-native';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-export default function Header({scene, previous, navigation}) {
-  const {options} = scene.descriptor;
+export default function Header ({ scene, previous, navigation, replace }) {
+    const { options } = scene.descriptor;
 
-  return (
-    <View style={styles.header}>
-      <View style={styles.headerLeft}>
-        <TouchableOpacity onPress={() => {
-          navigation.goBack();
-        }} style={styles.returnBtn}>
-          <Image source={require('../assets/icon/header/header-return.png')} style={styles.return} />
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.headerCenter}>{options.title || scene.route.name}</Text>
-      <View style={styles.headerRight} />
-    </View>
-  );
+    return (
+        <View style={styles.header}>
+            <View style={styles.headerLeft}>
+                <TouchableOpacity onPress={() => {
+                    replace ? navigation.replace('MaterialTopTabNavigator') : navigation.goBack();
+                }} style={styles.returnBtn}>
+                    <Image source={replace ? require('../assets/icon/header/header-esc.png') : require('../assets/icon/header/header-return.png')} style={{
+                        width: replace ? 17 : 20,
+                        height: replace ? 17 : 40
+                    }} />
+                </TouchableOpacity>
+            </View>
+            <Text style={styles.headerCenter}>{options.title || scene.route.name}</Text>
+            <View style={styles.headerRight} />
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  header: {
-    width,
-    height: 50,
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-  },
-  headerLeft: {
-    height: 50,
-    width: 70,
-  },
-  returnBtn: {
-    height: 50,
-    width: 70,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerRight: {
-    height: 50,
-    width: 70,
-    lineHeight: 50,
-    textAlign: 'center',
-  },
-  headerCenter: {
-    height: 50,
-    width: width - 140,
-    lineHeight: 50,
-    textAlign: 'center',
-  },
-  return: {
-    height: 20,
-    width: 20,
-  },
+    header: {
+        backgroundColor: '#fff',
+        borderBottomColor: 'rgba(221,221,221,1)',
+        borderBottomWidth: 1,
+        flexDirection: 'row',
+        height: 63,
+        width
+    },
+    headerCenter: {
+        fontSize: 16,
+        fontWeight: '500',
+        height: 63,
+        lineHeight: 63,
+        textAlign: 'center',
+        width: width - 140
+    },
+    headerLeft: {
+        height: 63,
+        width: 70,
+    },
+    headerRight: {
+        height: 63,
+        lineHeight: 63,
+        textAlign: 'center',
+        width: 70,
+    },
+    returnBtn: {
+        alignItems: 'center',
+        height: 63,
+        justifyContent: 'center',
+        width: 70,
+    },
 });

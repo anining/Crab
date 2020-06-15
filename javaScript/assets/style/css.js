@@ -16,6 +16,11 @@ export const css = StyleSheet.create({
         flexWrap: 'nowrap',
         justifyContent: 'center',
     },
+    flexRowCenterStart: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'flex-start'
+    },
     pa: {
         position: 'absolute',
         zIndex: 10
@@ -24,7 +29,7 @@ export const css = StyleSheet.create({
         position: 'relative'
     },
     safeAreaView: {
-        backgroundColor: '#f3f3f3',
-        flex: 1, // 主题颜色
+        backgroundColor: '#fff', // 主题颜色
+        flex: 1,
     }
 });

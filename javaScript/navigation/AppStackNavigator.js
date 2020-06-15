@@ -203,7 +203,7 @@ function AppStackNavigator () {
                 }}>
                     <Stack.Screen name="MaterialTopTabNavigator" options={{ headerShown: false }}
                         component={MaterialTopTabNavigator} />
-                    <Stack.Screen name="VerificationStackNavigator" component={VerificationStackNavigator} />
+                    <Stack.Screen name="VerificationStackNavigator" component={VerificationStackNavigator} options={{ headerShown: false }}/>
                     {GenerateScreen}
                 </Stack.Navigator>
                 <Loading />
