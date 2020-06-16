@@ -21,32 +21,38 @@ const menuList = [
     {
         icon: userPage5,
         title: '绑定账号',
-        remark: '绑定做单账号'
+        remark: '绑定做单账号',
+        path: 'AccountHomePage'
     },
     {
         icon: userPage6,
         title: '道具背包',
-        remark: '1个道具'
+        remark: '1个道具',
+        path: 'CardPackagePage'
     },
     {
         icon: userPage7,
         title: '意见反馈',
-        remark: '建议和反馈'
+        remark: '建议和反馈',
+        path: 'FeedBackPage'
     },
     {
         icon: userPage8,
         title: '帮助中心',
-        remark: '常见问题&加群求助'
+        remark: '常见问题&加群求助',
+        path: 'HelpCenterPage'
     },
     {
         icon: userPage9,
         title: '小黑屋',
-        remark: ''
+        remark: '',
+        path: 'BlackHousePage'
     },
     {
         icon: userPage10,
-        title: '帮助中心',
-        remark: ''
+        title: '绑定微信',
+        remark: '',
+        path: 'WeChatBindPage'
     },
 ];
 export default function UserPage () {
@@ -145,7 +151,7 @@ function RenderMenu ({ menuList }) {
     menuList.forEach(menu => {
         components.push(
             <TouchableOpacity onPress={() => {
-
+                N.navigate(menu.path);
             }} style={styles.btn} key={menu.title}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image source={menu.icon} style={{ height: 20, width: 20, marginRight: 5, fontSize: 15 }}/>
