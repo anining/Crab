@@ -5,6 +5,7 @@ import withdrawPage1 from '../../assets/icon/withdrawPage/withdrawPage1.png';
 import withdrawPage2 from '../../assets/icon/withdrawPage/withdrawPage2.png';
 import withdrawPage3 from '../../assets/icon/withdrawPage/withdrawPage3.png';
 import withdrawPage4 from '../../assets/icon/withdrawPage/withdrawPage4.png';
+import withdrawPage5 from '../../assets/icon/withdrawPage/withdrawPage5.png';
 import { N } from '../../utils/router';
 
 const { width } = Dimensions.get('window');
@@ -91,12 +92,14 @@ export default function WithdrawPage () {
                         <TouchableOpacity onPress={() => {
                             setPayType('ali');
                         }} style={[styles.withDrawTypeItem, { borderColor: payType === 'ali' ? '#FF6C00' : '#D0D0D0' }]}>
+                            <RenderWithDrawTypeSelectView select={payType === 'ali'}/>
                             <Image source={withdrawPage3} style={{ width: 26, height: 26, marginRight: 7 }} />
                             <Text style={{ fontSize: 16, color: '#222' }}>支付宝账户</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
                             setPayType('wx');
                         }} style={[styles.withDrawTypeItem, { borderColor: payType === 'wx' ? '#FF6C00' : '#D0D0D0' }]}>
+                            <RenderWithDrawTypeSelectView select={payType === 'wx'}/>
                             <Image source={withdrawPage4} style={{ width: 26, height: 26, marginRight: 7 }} />
                             <Text style={{ fontSize: 16, color: '#222' }}>微信账户</Text>
                         </TouchableOpacity>
@@ -147,6 +150,17 @@ function RenderGoodOnceView ({ once }) {
             <ImageBackground source={withdrawPage2} style={{ height: 24, width: 59, position: 'absolute', top: '-18%', left: '-3%' }}>
                 <Text style={{ lineHeight: 21, textAlign: 'center', fontSize: 12, color: '#fff' }}>仅一次</Text>
             </ImageBackground>
+        );
+    }
+    return <View/>;
+}
+
+function RenderWithDrawTypeSelectView ({ select }) {
+    if (select) {
+        return (
+            <View style={styles.selectView}>
+                <Image source={withdrawPage5} style={{ height: 7, width: 9, bottom: -20, position: 'absolute', right: 2 }} />
+            </View>
         );
     }
     return <View/>;
@@ -217,6 +231,17 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         paddingTop: 10,
     },
+    selectView: {
+        borderBottomColor: '#FF3E00',
+        borderBottomWidth: 23,
+        borderLeftColor: 'transparent',
+        borderLeftWidth: 27,
+        bottom: 0,
+        height: 0,
+        position: 'absolute',
+        right: 0,
+        width: 0,
+    },
     text: {
         color: '#999',
         fontSize: 12,
@@ -254,6 +279,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginLeft: '1%',
         marginRight: '1%',
+        position: 'relative',
         width: '48%'
     },
     withDrawView: {
