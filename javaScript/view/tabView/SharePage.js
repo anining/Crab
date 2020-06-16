@@ -12,7 +12,6 @@ const SHARE_ITEM_WIDTH = width * 0.9;
 const SHARE_ITEM_RADIUS = 10; // welfare
 const WALFARE_ONE_height = 160;
 export default function SharePage () {
-    console.log(Image.resolveAssetSource(share1), '??');
     return (
         <SafeAreaView style={css.safeAreaView}>
             <ScrollView style={styles.scrollWrap}>

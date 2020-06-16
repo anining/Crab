@@ -11,6 +11,7 @@ export default class ImageAuto extends Component {
         this.source = this.props.source;
         this.style = this.formatStyle(this.props.style);
         this.file = Image.resolveAssetSource(this.source);
+        this.url = null;
     }
 
     componentDidMount () {
@@ -43,7 +44,12 @@ export default class ImageAuto extends Component {
     }
 
     _getSize (source) {
-        Image.getSize(source, (width, height) => {
+        if (source && source.uri) {
+            this.url = source.uri;
+        } else {
+            this.url = source;
+        }
+        Image.getSize(this.url, (width, height) => {
             this.setState({
                 height: (this.style.width || width) * (height / width)
             });
@@ -56,7 +62,7 @@ export default class ImageAuto extends Component {
                 if (this.file) {
                     return <Image source={this.source} style={{ ...this.style, height: this.state.height }}/>;
                 } else {
-                    return <Image resizeMode={'cover'} source={{ uri: this.source }} style={{ ...this.style, height: this.state.height }}/>;
+                    return <Image resizeMode={'cover'} source={{ uri: this.url }} style={{ ...this.style, height: this.state.height }}/>;
                 }
             } else {
                 return null;
