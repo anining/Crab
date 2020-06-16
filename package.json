@@ -3,13 +3,16 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "node ./modify.js;react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "node ./modify.js;react-native start",
     "test": "jest",
     "lint": "eslint .",
     "build": "node ./modify.js;cd ./android;./gradlew assembleRelease;",
-    "clear": "sudo react-native clean-project-auto"
+    "clear": "sudo react-native clean-project-auto",
+    "modify": "node ./modify.js",
+    "codepush": "code-push release-react rnCrab android -d dev --des '全面升级' -m true",
+    "bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res  "
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.11.0",
@@ -34,10 +37,12 @@
     "react-native-render-html": "^4.2.0",
     "react-native-safe-area-context": "^3.0.2",
     "react-native-screens": "^2.8.0",
+    "react-native-scrollable-tab-view": "^1.0.0",
     "react-native-shadow": "^1.2.2",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-spinkit": "^1.5.0",
     "react-native-splash-screen": "^3.2.0",
+    "react-native-spring-scrollview": "^2.0.23",
     "react-native-svg": "^12.1.0",
     "react-native-swiper": "^1.6.0-rc.3",
     "react-native-tab-view": "^2.14.4"

@@ -26,7 +26,7 @@ export default function SharePage () {
                         <Text style={styles.copyBtn}>复制</Text>
                     </View>
                     <View style={[styles.inviteWrap, css.auto]}>
-                        <Animatable.View useNativeDriver={true} iterationDelay={8000} iterationCount="infinite" animation="tada" style={[css.auto]}>
+                        <Animatable.View useNativeDriver={true} iterationDelay={6000} iterationCount="infinite" animation="tada" style={[css.auto]}>
                             <Shadow style={[styles.shareBtn]}>
                                 <LinearGradient colors={['#FEE581', '#FDC34A']} start={{ x: 1, y: 0 }} end={{ x: 1, y: 1 }} style={[styles.shareBtnTextWrap]}>
                                     <Text style={styles.shareBtnText} onPress={() => {
