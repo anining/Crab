@@ -129,3 +129,4 @@ export function getValue (obj, key) {
 }
 
 export { getRequestParameter, initializationStore, buildStr, parameterTransform, AesDecrypt };
+
