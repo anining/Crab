@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dimensions, Modal, View, StyleSheet, DeviceEventEmitter } from 'react-native';
+import { Dimensions, Modal, View, StyleSheet, DeviceEventEmitter, Text } from 'react-native';
 import Spinner from 'react-native-spinkit';
 
 const { width, height } = Dimensions.get('window');
@@ -28,15 +28,17 @@ export default function Loading () {
     }
 
     return (
-        <Modal visible={isVisible} transparent={true} animationType='fade' onRequestClose={hidden}
-            hardwareAccelerated={true} presentationStyle='overFullScreen' style={styles.modal}>
-            <View style={styles.view}>
-                <Spinner isVisible={isVisible}
-                    size={35}
-                    type='9CubeGrid'
-                    color="#fff" />
-            </View>
-        </Modal>
+        <View>
+            <Modal visible={isVisible} transparent={true} animationType='fade' onRequestClose={hidden}
+                hardwareAccelerated={true} presentationStyle='overFullScreen' style={styles.modal}>
+                <View style={styles.view}>
+                    <Spinner isVisible={isVisible}
+                        size={35}
+                        type='9CubeGrid'
+                        color="#fff"/>
+                </View>
+            </Modal>
+        </View>
     );
 }
 

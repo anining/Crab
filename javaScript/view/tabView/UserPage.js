@@ -44,7 +44,7 @@ const menuList = [
     },
     {
         icon: userPage10,
-        title: '帮助中心',
+        title: '帮助中心1',
         remark: ''
     },
 ];

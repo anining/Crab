@@ -36,7 +36,8 @@ import { css } from '../assets/style/css';
 import asyncStorage from '../utils/asyncStorage';
 import { initializationStore } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
-import Loading from '../components/Loading';
+// import Loading from '../components/Loading';
+import Prompt from '../components/Prompt';
 
 const Stack = createStackNavigator();
 
@@ -176,7 +177,8 @@ const stackScreens = [
 function AppStackNavigator () {
     const [keys, setKeys] = useState();
     const GenerateScreen = stackScreens.map(screen =>
-        <Stack.Screen name={screen.name} component={screen.component} options={{ title: screen.title }} key={screen.name} />);
+        <Stack.Screen name={screen.name} component={screen.component} options={{ title: screen.title }}
+            key={screen.name}/>);
     useEffect(() => {
         asyncStorage.getAllKeys()
             .then(response => {
@@ -197,20 +199,22 @@ function AppStackNavigator () {
     if (keys) {
         return (
             <NavigationContainer>
+                {/* <Loading/> */}
+                <Prompt/>
                 <Stack.Navigator screenOptions={{
                     header: ({ scene, previous, navigation }) => <Header scene={scene} previous={previous}
-                        navigation={navigation} />,
+                        navigation={navigation}/>,
                 }}>
                     <Stack.Screen name="MaterialTopTabNavigator" options={{ headerShown: false }}
-                        component={MaterialTopTabNavigator} />
-                    <Stack.Screen name="VerificationStackNavigator" component={VerificationStackNavigator} options={{ headerShown: false }}/>
+                        component={MaterialTopTabNavigator}/>
+                    <Stack.Screen name="VerificationStackNavigator" component={VerificationStackNavigator}
+                        options={{ headerShown: false }}/>
                     {GenerateScreen}
                 </Stack.Navigator>
-                <Loading />
             </NavigationContainer>
         );
     }
-    return <SafeAreaView style={css.safeAreaView} />;
+    return <SafeAreaView style={css.safeAreaView}/>;
 }
 
 export default codePush(AppStackNavigator);

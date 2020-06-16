@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Text, BackHandler, NativeModules } from 'react-native';
+import { SafeAreaView, View, Dimensions, DeviceEventEmitter, Modal } from 'react-native';
 import { css } from '../../assets/style/css';
 import Android from '../../components/Android';
 import LottieView from 'lottie-react-native';
@@ -7,38 +7,8 @@ import data from '../../lottie/data';
 import data1 from '../../lottie/data1';
 import * as Animatable from 'react-native-animatable';
 
+const { height, width } = Dimensions.get('window');
 export default function HomePage () {
-    try {
-        // this.nativeNoticeListener = DeviceEventEmitter.addListener(
-        //     'nativeNotice',
-        //     event => {
-        //         console.log(event);
-        //     },
-        // );
-        // NativeModules.SecVerifyModule && NativeModules.SecVerifyModule.isVerifySupport();
-        // (async () => {
-        //     const ret = await Android.verifyLogin();
-        //     console.log(ret);
-        //     // const ret = await Android.verifyLogin();
-        //     // console.log(ret);ret
-        // })();
-    } catch (e) {
-        console.log(e);
-    }
-    const zoomOut = {
-        0: {
-            opacity: 1,
-            scale: 1,
-        },
-        0.5: {
-            opacity: 1,
-            scale: 0.3,
-        },
-        1: {
-            opacity: 0,
-            scale: 0,
-        },
-    };
     return (
         <SafeAreaView style={css.safeAreaView}>
             <LottieView
@@ -72,6 +42,9 @@ export default function HomePage () {
                         lineHeight: 40,
                         borderRadius: 20,
                         overflow: 'hidden',
+                    }} onPress={() => {
+                        console.log('???x');
+                        DeviceEventEmitter.emit('showPop');
                     }}>买买买！</Animatable.Text>
                 </View>
             </View>
