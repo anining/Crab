@@ -13,8 +13,8 @@ export default function Header ({ scene, previous, navigation, replace }) {
                     replace ? navigation.replace('MaterialTopTabNavigator') : navigation.goBack();
                 }} style={styles.returnBtn}>
                     <Image source={replace ? require('../assets/icon/header/header-esc.png') : require('../assets/icon/header/header-return.png')} style={{
-                        width: replace ? 17 : 20,
-                        height: replace ? 17 : 40
+                        width: replace ? 17 : 10,
+                        height: replace ? 17 : 20
                     }} />
                 </TouchableOpacity>
             </View>
