@@ -12,6 +12,7 @@ import WithdrawAliPayPage from '../view/userView/WithdrawAliPayPage';
 import WeChatBindPage from '../view/userView/WeChatBindPage';
 import MyTaskPage from '../view/userView/MyTaskPage';
 import HelpCenterPage from '../view/userView/HelpCenterPage';
+import HelpCenterDetailPage from '../view/userView/HelpCenterDetailPage';
 import AnswerDetailPage from '../view/answerView/AnswerDetailPage';
 import FundingRecordsPage from '../view/userView/FundingRecordsPage';
 import FeedBackRecordsPage from '../view/userView/FeedBackRecordsPage';
@@ -75,6 +76,11 @@ const stackScreens = [
         name: 'HelpCenterPage',
         component: HelpCenterPage,
         title: '帮助中心',
+    },
+    {
+        name: 'HelpCenterDetailPage',
+        component: HelpCenterDetailPage,
+        title: '帮助详情',
     },
     {
         name: 'FundingRecordsPage',
