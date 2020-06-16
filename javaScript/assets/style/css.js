@@ -1,5 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
+const { height, width } = Dimensions.get('window');
 export const css = StyleSheet.create({
     auto: {
         bottom: 0,
@@ -19,17 +20,26 @@ export const css = StyleSheet.create({
     flexRowCenterStart: {
         alignItems: 'center',
         flexDirection: 'row',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
+    },
+    fw: {
+        flexWrap: 'wrap'
+    },
+    js: {
+        justifyContent: 'flex-start',
     },
     pa: {
         position: 'absolute',
-        zIndex: 10
+        zIndex: 1,
     },
     pr: {
-        position: 'relative'
+        position: 'relative',
     },
     safeAreaView: {
         backgroundColor: '#fff', // 主题颜色
         flex: 1,
-    }
+    },
+    sp: {
+        justifyContent: 'space-between',
+    },
 });
