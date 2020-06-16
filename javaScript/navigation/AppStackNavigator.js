@@ -3,8 +3,8 @@ import { SafeAreaView } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import codePush from 'react-native-code-push';
-import MaterialTopTabNavigator from './MaterialTopTabNavigator';
-import VerificationStackNavigator from './VerificationStackNavigator';
+import TabNavigator from './tabNavigator';
+import StackNavigator from './stackNavigator';
 import Header from '../components/Header';
 import WithdrawRecordsPage from '../view/userView/WithdrawRecordsPage';
 import WithdrawPage from '../view/userView/WithdrawPage';
@@ -206,8 +206,8 @@ function AppStackNavigator () {
                         navigation={navigation}/>,
                 }}>
                     <Stack.Screen name="MaterialTopTabNavigator" options={{ headerShown: false }}
-                        component={MaterialTopTabNavigator}/>
-                    <Stack.Screen name="VerificationStackNavigator" component={VerificationStackNavigator}
+                        component={TabNavigator}/>
+                    <Stack.Screen name="VerificationStackNavigator" component={StackNavigator}
                         options={{ headerShown: false }}/>
                     {GenerateScreen}
                 </Stack.Navigator>

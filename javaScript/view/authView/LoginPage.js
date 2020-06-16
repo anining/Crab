@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { SafeAreaView, View, StyleSheet, TouchableOpacity, TextInput, Text, Image } from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
-
+import login1 from '../../assets/icon/login/login1.png';
+import login2 from '../../assets/icon/login/login2.png';
 export default function LoginPage () {
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('');
@@ -32,7 +33,7 @@ export default function LoginPage () {
             <View style={styles.container}>
                 <Text style={styles.title}>账号登录</Text>
                 <View style={[css.flexRowCenterStart, styles.inputTitle]}>
-                    <Image source={require('../../assets/icon/loginPage/login-phone.png')} style={{ height: 22, width: 18, marginRight: 10 }} />
+                    <Image source={login2} style={{ height: 22, width: 18, marginRight: 10 }} />
                     <Text style={{ fontSize: 15 }}>账号</Text>
                 </View>
                 <TextInput
@@ -43,7 +44,7 @@ export default function LoginPage () {
                     placeholderTextColor={'#dbdcdb'}
                     onChangeText={text => setPhone(text)}/>
                 <View style={[css.flexRowCenterStart, styles.inputTitle]}>
-                    <Image source={require('../../assets/icon/loginPage/login-code.png')} style={{ height: 22, width: 18, marginRight: 10 }} />
+                    <Image source={login1} style={{ height: 22, width: 18, marginRight: 10 }} />
                     <Text style={{ fontSize: 15 }}>验证码</Text>
                 </View>
                 <View style={[styles.codeView, css.flexRowCenterStart]}>

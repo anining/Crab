@@ -2,54 +2,54 @@ import React from 'react';
 import { View, SafeAreaView, StyleSheet, ScrollView, ImageBackground, Image, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
-import userWeChatPng from '../../assets/icon/userPage/user-weChat.png';
-import moneyBackground from '../../assets/icon/userPage/user-money-background.png';
-import userPage1 from '../../assets/icon/userPage/userPage1.png';
-import userPage2 from '../../assets/icon/userPage/userPage2.png';
-import userPage3 from '../../assets/icon/userPage/userPage3.png';
-import userPage4 from '../../assets/icon/userPage/userPage4.png';
-import userPage5 from '../../assets/icon/userPage/userPage5.png';
-import userPage6 from '../../assets/icon/userPage/userPage6.png';
-import userPage7 from '../../assets/icon/userPage/userPage7.png';
-import userPage8 from '../../assets/icon/userPage/userPage8.png';
-import userPage9 from '../../assets/icon/userPage/userPage9.png';
-import userPage10 from '../../assets/icon/userPage/userPage10.png';
-import userPage11 from '../../assets/icon/userPage/userPage11.png';
+import user1 from '../../assets/icon/user/user1.png';
+import user2 from '../../assets/icon/user/user2.png';
+import user3 from '../../assets/icon/user/user3.png';
+import user4 from '../../assets/icon/user/user4.png';
+import user5 from '../../assets/icon/user/user5.png';
+import user6 from '../../assets/icon/user/user6.png';
+import user7 from '../../assets/icon/user/user7.png';
+import user8 from '../../assets/icon/user/user8.png';
+import user9 from '../../assets/icon/user/user9.png';
+import user10 from '../../assets/icon/user/user10.png';
+import user11 from '../../assets/icon/user/user11.png';
+import user12 from '../../assets/icon/user/user12.png';
+import user13 from '../../assets/icon/user/user13.png';
 
 const { width } = Dimensions.get('window');
 const menuList = [
     {
-        icon: userPage5,
+        icon: user12,
         title: '绑定账号',
         remark: '绑定做单账号',
         path: 'AccountHomePage'
     },
     {
-        icon: userPage6,
+        icon: user8,
         title: '道具背包',
         remark: '1个道具',
         path: 'CardPackagePage'
     },
     {
-        icon: userPage7,
+        icon: user11,
         title: '意见反馈',
         remark: '建议和反馈',
         path: 'FeedBackPage'
     },
     {
-        icon: userPage8,
+        icon: user10,
         title: '帮助中心',
         remark: '常见问题&加群求助',
         path: 'HelpCenterPage'
     },
     {
-        icon: userPage9,
+        icon: user9,
         title: '小黑屋',
         remark: '',
         path: 'BlackHousePage'
     },
     {
-        icon: userPage10,
+        icon: user8,
         title: '绑定微信',
         remark: '',
         path: 'WeChatBindPage'
@@ -80,12 +80,12 @@ export default function UserPage () {
                     <TouchableOpacity onPress={() => {
 
                     }} style={styles.bindBtn}>
-                        <Image source={userWeChatPng} style={{ width: 16, height: 13, marginRight: 5 }}/>
+                        <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
                         <Text style={styles.bindText}>绑定微信</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.moneyView}>
-                    <ImageBackground source={moneyBackground} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
+                    <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
                         <View style={styles.moneyViewTop}>
                             <Text style={{ color: '#222', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
                             <TouchableOpacity onPress={() => {
@@ -116,25 +116,25 @@ export default function UserPage () {
                         <TouchableOpacity onPress={() => {
 
                         }} style={styles.myTaskBtn}>
-                            <Image source={userPage1} style={styles.myTaskBtnIcon}/>
+                            <Image source={user3} style={styles.myTaskBtnIcon}/>
                             <Text style={styles.myTaskBtnText}>进行中<Text style={{ color: '#FF7751' }}> 1</Text></Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
 
                         }} style={styles.myTaskBtn}>
-                            <Image source={userPage2} style={styles.myTaskBtnIcon}/>
+                            <Image source={user4} style={styles.myTaskBtnIcon}/>
                             <Text style={styles.myTaskBtnText}>审核中<Text style={{ color: '#FF7751' }}> 1</Text></Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
 
                         }} style={styles.myTaskBtn}>
-                            <Image source={userPage4} style={styles.myTaskBtnIcon}/>
+                            <Image source={user5} style={styles.myTaskBtnIcon}/>
                             <Text style={styles.myTaskBtnText}>已通过<Text style={{ color: '#FF7751' }}> 1</Text></Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
 
                         }} style={styles.myTaskBtn}>
-                            <Image source={userPage3} style={styles.myTaskBtnIcon}/>
+                            <Image source={user6} style={styles.myTaskBtnIcon}/>
                             <Text style={styles.myTaskBtnText}>未通过<Text style={{ color: '#FF7751' }}> 1</Text></Text>
                         </TouchableOpacity>
                     </View>
@@ -159,7 +159,7 @@ function RenderMenu ({ menuList }) {
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={{ fontSize: 13, color: '#999', marginRight: 5 }}>{menu.remark}</Text>
-                    <Image source={userPage11} style={{ height: 13, width: 6 }}/>
+                    <Image source={user13} style={{ height: 13, width: 6 }}/>
                 </View>
             </TouchableOpacity>
         );

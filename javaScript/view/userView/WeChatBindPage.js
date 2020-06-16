@@ -1,21 +1,21 @@
 import React from 'react';
 import { SafeAreaView, Image, Text, View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { css } from '../../assets/style/css';
-import weChatBindPage1 from '../../assets/icon/weChatBindPage/weChatBindPage1.png';
-import weChatBindPage2 from '../../assets/icon/weChatBindPage/weChatBindPage2.png';
+import chat1 from '../../assets/icon/chat/chat1.png';
+import chat2 from '../../assets/icon/chat/chat2.png';
 
 const { width } = Dimensions.get('window');
 export default function WeChatBindPage () {
     return (
         <SafeAreaView style={css.safeAreaView}>
-            <Image source={weChatBindPage1} style={styles.image} />
+            <Image source={chat1} style={styles.image}/>
             <TouchableOpacity onPress={() => {
 
             }} style={styles.btn}>
                 <Text style={styles.btnText}>保存图片到本地</Text>
             </TouchableOpacity>
             <View style={styles.titleView}>
-                <Image source={weChatBindPage2} style={{ height: 18, width: 22, marginRight: 5 }} />
+                <Image source={chat2} style={{ height: 18, width: 22, marginRight: 5 }}/>
                 <Text style={styles.title}>绑定说明：</Text>
             </View>
             <Text style={styles.text}>1.保存二维码到本地。</Text>
@@ -41,30 +41,30 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
         lineHeight: 44,
-        textAlign: 'center'
+        textAlign: 'center',
     },
     image: {
         height: 894 / 786 * width * 0.7,
         marginLeft: width * 0.15,
         marginTop: 20,
-        width: width * 0.7
+        width: width * 0.7,
     },
     text: {
         color: '#353535',
         fontSize: 12,
         lineHeight: 25,
         paddingLeft: 20,
-        paddingRight: 20
+        paddingRight: 20,
     },
     title: {
         fontSize: 16,
-        fontWeight: '500'
+        fontWeight: '500',
     },
     titleView: {
         alignItems: 'center',
         flexDirection: 'row',
         paddingBottom: 15,
         paddingLeft: 20,
-        paddingRight: 20
-    }
+        paddingRight: 20,
+    },
 });

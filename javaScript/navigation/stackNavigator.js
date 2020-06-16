@@ -5,7 +5,7 @@ import Header from '../components/Header';
 
 const Stack = createStackNavigator();
 
-export default function VerificationStackNavigator () {
+export default function StackNavigator () {
     return (
         <Stack.Navigator screenOptions={{
             header: ({ scene, previous, navigation }) => <Header scene={scene} previous={previous}
