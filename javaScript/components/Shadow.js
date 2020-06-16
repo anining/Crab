@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { BoxShadow } from 'react-native-shadow';
-
+import { formatStyle } from '../utils/util';
+/**
+ * 使用示例
+ <Shadow style={...}>
+    <View/>
+ </Shadow>
+ * **/
 export default class Shadow extends Component {
     constructor (props) {
         super(props);
@@ -11,10 +17,9 @@ export default class Shadow extends Component {
             opacity: 0.1,
             x: 0,
             y: 0,
-            width: this.props.style ? (this.props.style.width || 100) : 100,
-            height: this.props.style ? (this.props.style.height || 100) : 100,
-            styles: this.props.style || {},
-            radius: this.props.style ? (this.props.style.borderRadius || 0) : 0,
+            width: formatStyle(this.props.style) ? (formatStyle(this.props.style).width || 100) : 100,
+            height: formatStyle(this.props.style) ? (formatStyle(this.props.style).height || 100) : 100,
+            radius: formatStyle(this.props.style) ? (formatStyle(this.props.style).borderRadius || 0) : 0,
         };
     }
 

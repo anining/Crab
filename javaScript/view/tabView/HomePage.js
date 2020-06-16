@@ -32,7 +32,7 @@ export default function HomePage () {
                     top: 20,
                 }]}>
                     {/* 参考文档https://github.com/oblador/react-native-animatable */}
-                    <Animatable.Text useNativeDriver={true} iterationCount="infinite" animation="tada" style={{
+                    <Animatable.Text useNativeDriver={true} iterationDelay={3000} iterationCount="infinite" animation="tada" style={{
                         width: 100,
                         height: 40,
                         color: '#fff',
@@ -43,7 +43,6 @@ export default function HomePage () {
                         borderRadius: 20,
                         overflow: 'hidden',
                     }} onPress={() => {
-                        console.log('???x');
                         DeviceEventEmitter.emit('showPop');
                     }}>买买买！</Animatable.Text>
                 </View>

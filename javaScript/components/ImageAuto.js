@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import { Image, Dimensions, View } from 'react-native';
+import { formatStyle } from '../utils/util';
+import { css } from '../assets/style/css';
 
 const { width, height } = Dimensions.get('window');
+/**
+ * 使用示例
+ <ImageAuto source={...} style={...}/>
+ * **/
 export default class ImageAuto extends Component {
     constructor (props) {
         super(props);
@@ -9,22 +15,13 @@ export default class ImageAuto extends Component {
             height: 0// 图片高度，自适应
         };
         this.source = this.props.source;
-        this.style = this.formatStyle(this.props.style);
+        this.style = formatStyle(this.props.style || { width: 100, ...css.auto });
         this.file = Image.resolveAssetSource(this.source);
         this.url = null;
     }
 
     componentDidMount () {
         this._judge();
-    }
-
-    formatStyle (style) {
-        if (Array.isArray(style)) {
-            let obj = {};
-            style.forEach((item) => { obj = { ...obj, ...item }; });
-            return obj;
-        }
-        return style;
     }
 
     _judge () {
@@ -39,7 +36,7 @@ export default class ImageAuto extends Component {
                 }
             }
         } catch (e) {
-
+            console.log(e);
         }
     }
 
@@ -68,6 +65,7 @@ export default class ImageAuto extends Component {
                 return null;
             }
         } catch (e) {
+            console.log(e);
             return null;
         }
     }
