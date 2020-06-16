@@ -36,7 +36,6 @@ import { css } from '../assets/style/css';
 import asyncStorage from '../utils/asyncStorage';
 import { initializationStore } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
-// import Loading from '../components/Loading';
 import Prompt from '../components/Prompt';
 
 const Stack = createStackNavigator();
@@ -199,7 +198,6 @@ function AppStackNavigator () {
     if (keys) {
         return (
             <NavigationContainer>
-                {/* <Loading/> */}
                 <Prompt/>
                 <Stack.Navigator screenOptions={{
                     header: ({ scene, previous, navigation }) => <Header scene={scene} previous={previous}
