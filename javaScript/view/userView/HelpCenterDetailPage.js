@@ -4,7 +4,7 @@ import { css } from '../../assets/style/css';
 
 export default function HelpCenterDetailPage (props) {
     return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
+        <SafeAreaView style={[css.safeAreaView, css.RichText]}>
             <ScrollView >
                 <Text>{props.route.params.detail}</Text>
             </ScrollView>
