@@ -12,6 +12,10 @@ export default class AnswerPage extends Component {
     render () {
         return <SafeAreaView style={css.safeAreaView}>
             <Slider height={width * 0.35} autoplay={true}/>
+            <View></View>
         </SafeAreaView>;
     }
 }
+const styles = StyleSheet.create({
+
+});

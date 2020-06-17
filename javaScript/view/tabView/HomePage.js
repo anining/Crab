@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Dimensions, DeviceEventEmitter, Text } from 'react-native';
+import { SafeAreaView, View, Dimensions, DeviceEventEmitter, Text, StyleSheet } from 'react-native';
 import { css } from '../../assets/style/css';
 import Android from '../../components/Android';
 import LottieView from 'lottie-react-native';
@@ -51,3 +51,6 @@ export default function HomePage () {
         </SafeAreaView>
     );
 }
+const styles = StyleSheet.create({
+
+});
