@@ -1,4 +1,4 @@
-import { NativeModules } from 'react-native';
+import { NativeModules, PermissionsAndroid } from 'react-native';
 import store from './store';
 import * as U from 'karet.util';
 import CryptoJS from 'crypto-js';
@@ -128,5 +128,32 @@ export function getValue (obj, key) {
     }
 }
 
-export { getRequestParameter, initializationStore, buildStr, parameterTransform, AesDecrypt };
+async function requestPermission (success, fail) {
+    try {
+        if (Platform.OS === 'ios') {
+            if (success) {
+                success();
+            }
+        } else {
+            const granted = await PermissionsAndroid.requestMultiple(
+                [
+                    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                ],
+            );
+            if (granted['android.permission.READ_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED && granted['android.permission.WRITE_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED) {
+                if (success) {
+                    success();
+                }
+            } else {
+                if (fail) {
+                    fail();
+                }
+            }
+        }
+    } catch (err) {
+        console.warn(err);
+    }
+}
 
+export { getRequestParameter, requestPermission, initializationStore, buildStr, parameterTransform, AesDecrypt };
