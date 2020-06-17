@@ -54,6 +54,12 @@ const menuList = [
         remark: '',
         path: 'WeChatBindPage'
     },
+    {
+        icon: user8,
+        title: 'TaskDetailPage',
+        remark: 'TaskDetailPage',
+        path: 'TaskDetailPage'
+    },
 ];
 export default function UserPage () {
     return (

@@ -19,10 +19,14 @@ import task5 from '../../assets/icon/task/task5.png';
 import task6 from '../../assets/icon/task/task6.png';
 import task7 from '../../assets/icon/task/task7.png';
 import task8 from '../../assets/icon/task/task8.png';
+import task9 from '../../assets/icon/task/task9.png';
+import Upload from '../../components/Upload';
 
 const { width } = Dimensions.get('window');
 export default function TaskDetailPage () {
     const [name, setName] = useState('');
+    const [images, setImages] = useState([]);
+
     return (
         <SafeAreaView style={[css.safeAreaView, styles.safeAreaView]}>
             <ScrollView>
@@ -54,7 +58,7 @@ export default function TaskDetailPage () {
                     <View style={styles.taskDetailBottom}>
                         <View style={styles.taskDetailBottomView}>
                             <Text style={{ color: '#222', fontSize: 14 }}>做单账号：<Text style={{ color: '#262626', fontSize: 14, fontWeight: '500' }}>音符任务专号</Text></Text>
-                            <Text style={{ color: '#999999', fontSize: 12 }}>账号任务通过率：<Text style={{ color: '#FF6C00', fontSize: 14, fontWeight: '500' }}>20%</Text></Text>
+                            <Text style={{ color: '#999', fontSize: 12 }}>账号任务通过率：<Text style={{ color: '#FF6C00', fontSize: 14, fontWeight: '500' }}>20%</Text></Text>
                         </View>
                         <View style={styles.taskDetailBottomView}>
                             <Text style={{ color: '#999', fontSize: 12 }}>通过率低于20%时，建议切换账号做单。</Text>
@@ -68,8 +72,8 @@ export default function TaskDetailPage () {
                 </View>
                 <View style={styles.taskClaim}>
                     <View style={styles.taskClaimTop}>
-                        <Image source={task4} style={{ height: 14, width: 14, marginRight: 5 }}/>
-                        <Text style={{ color: '#222222', fontSize: 16, fontWeight: '500' }}>做单要求</Text>
+                        <Image source={task9} style={{ height: 14, width: 14, marginRight: 5 }}/>
+                        <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>做单要求</Text>
                     </View>
                     <Text style={{ lineHeight: 50, paddingLeft: 10, color: '#FF4700', fontSize: 14 }}>· <Text style={{ color: '#666' }}>请围绕商品的质量和评价。</Text></Text>
                 </View>
@@ -86,8 +90,8 @@ export default function TaskDetailPage () {
                         </TouchableOpacity>
                     </View>
                     <View style={{ padding: 10, }}>
-                        <Text style={{ color: '#222', fontSize: 13, lineHeight: 30 }}>第一步：通过链接<Text style={{ color: '#FF6C00' }}>https://www.baidu.com</Text>打开抖音</Text>
-                        <Text style={{ color: '#222', fontSize: 13, lineHeight: 30 }}>第二步：如图评论视频</Text>
+                        <Text style={styles.taskCourseText}>第一步：通过链接<Text style={{ color: '#FF6C00' }}>https://www.baidu.com</Text>打开抖音</Text>
+                        <Text style={styles.taskCourseText}>第二步：如图评论视频</Text>
                         <Image source={task1} style={{ height: 199, width: 156, marginTop: 10 }}/>
                     </View>
                 </View>
@@ -104,11 +108,8 @@ export default function TaskDetailPage () {
                         </TouchableOpacity>
                     </View>
                     <View style={{ padding: 10, }}>
-                        <Text style={{ color: '#222', fontSize: 13, lineHeight: 30 }}>第3步：截图提交</Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <Image source={task1} style={{ height: 199, width: 156, marginTop: 10 }}/>
-                            <Image source={task1} style={{ height: 199, width: 156, marginTop: 10 }}/>
-                        </View>
+                        <Text style={styles.taskCourseText}>第3步：截图提交</Text>
+                        <RenderImage images={images} setImages={setImages}/>
                         <Text style={{ color: '#222', fontSize: 14, lineHeight: 30 }}>（请按照示例上传截图）</Text>
                         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
                             <Text style={{ color: '#222', fontSize: 14 }}>你的抖音名称：</Text>
@@ -124,20 +125,46 @@ export default function TaskDetailPage () {
             </ScrollView>
             <TouchableOpacity onPress={() => {
 
-            }} style={{ position: 'absolute', bottom: '29%', right: 10 }}>
+            }} style={{ position: 'absolute', bottom: '33%', right: 10 }}>
                 <Image source={task2} style={{ height: 70, width: 84 }}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
 
-            }} style={{ position: 'absolute', bottom: '15%', right: 10 }}>
+            }} style={{ position: 'absolute', bottom: '20%', right: 10 }}>
                 <Image source={task3} style={{ height: 70, width: 84 }}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
 
-            }} style={{ backgroundColor: '#FF3E00', height: 44, width: width - 20, position: 'absolute', bottom: '15%', right: 10 }}>
-                <Text style={{ color: '#fff', fontSize: 17, lineHeight: 44, textAlign: 'center', fontWeight: '500' }}>提交任务</Text>
+            }} style={styles.submitBtn}>
+                <Text style={styles.submitBtnText}>提交任务</Text>
             </TouchableOpacity>
         </SafeAreaView>
+    );
+}
+
+function RenderImage ({ images, setImages }) {
+    const view = <Image source={task8} style={ styles.uploadImage}/>;
+    const imageView = [];
+    if (images.length) {
+        images.forEach(image => {
+            imageView.push(
+                <>
+                    <Image source={task1} style={ styles.uploadImage}/>
+                    <Upload children={view} images={images} setImages={setImages}/>
+                </>
+            );
+        });
+        return (
+            <View style={css.flexRCSB}>
+                {imageView}
+            </View>
+        );
+    }
+    return (
+        <View style={css.flexRCSB}>
+            <Image source={task1} style={ styles.uploadImage}/>
+            <Upload children={view} images={images} setImages={setImages}/>
+        </View>
     );
 }
 
@@ -184,6 +211,22 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10
     },
+    submitBtn: {
+        backgroundColor: '#FF3E00',
+        borderRadius: 22,
+        bottom: '5%',
+        height: 44,
+        position: 'absolute',
+        right: 20,
+        width: width - 40
+    },
+    submitBtnText: {
+        color: '#fff',
+        fontSize: 17,
+        fontWeight: '500',
+        lineHeight: 44,
+        textAlign: 'center'
+    },
     taskClaim: {
         backgroundColor: '#fff',
         borderRadius: 8,
@@ -207,6 +250,11 @@ const styles = StyleSheet.create({
         marginTop: 15,
         minHeight: 350,
         width: '100%'
+    },
+    taskCourseText: {
+        color: '#222',
+        fontSize: 13,
+        lineHeight: 30
     },
     taskDetail: {
         backgroundColor: '#fff',
@@ -244,9 +292,14 @@ const styles = StyleSheet.create({
     taskUpload: {
         backgroundColor: '#fff',
         borderRadius: 8,
+        marginBottom: 120,
         marginTop: 15,
         minHeight: 350,
-        paddingBottom: 50,
         width: '100%'
+    },
+    uploadImage: {
+        height: 199,
+        marginTop: 10,
+        width: 156
     }
 });

@@ -17,6 +17,11 @@ export const css = StyleSheet.create({
         flexWrap: 'nowrap',
         justifyContent: 'center',
     },
+    flexRCSB: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
     flexRowCenterStart: {
         alignItems: 'center',
         flexDirection: 'row',
