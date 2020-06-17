@@ -136,25 +136,25 @@ export default function UserPage () {
                     <Text style={styles.myTaskTitle}>我的任务</Text>
                     <View style={styles.myTaskViewBottom}>
                         <TouchableOpacity onPress={() => {
-
+                            N.navigate('MyTaskPage', { type: 1 });
                         }} style={styles.myTaskBtn}>
                             <Image source={user3} style={styles.myTaskBtnIcon}/>
                             <Text style={styles.myTaskBtnText}>进行中<Text style={{ color: '#FF7751' }}> 1</Text></Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
-
+                            N.navigate('MyTaskPage', { type: 2 });
                         }} style={styles.myTaskBtn}>
                             <Image source={user4} style={styles.myTaskBtnIcon}/>
                             <Text style={styles.myTaskBtnText}>审核中<Text style={{ color: '#FF7751' }}> 1</Text></Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
-
+                            N.navigate('MyTaskPage', { type: 3 });
                         }} style={styles.myTaskBtn}>
                             <Image source={user5} style={styles.myTaskBtnIcon}/>
                             <Text style={styles.myTaskBtnText}>已通过<Text style={{ color: '#FF7751' }}> 1</Text></Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
-
+                            N.navigate('MyTaskPage', { type: 4 });
                         }} style={styles.myTaskBtn}>
                             <Image source={user6} style={styles.myTaskBtnIcon}/>
                             <Text style={styles.myTaskBtnText}>未通过<Text style={{ color: '#FF7751' }}> 1</Text></Text>
