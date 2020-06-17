@@ -17,6 +17,7 @@ import with2 from '../../assets/icon/withdraw/withdraw2.png';
 import with3 from '../../assets/icon/withdraw/withdraw3.png';
 import with4 from '../../assets/icon/withdraw/withdraw4.png';
 import with5 from '../../assets/icon/withdraw/withdraw5.png';
+import toast from '../../utils/toast';
 
 const { width } = Dimensions.get('window');
 const GOOD_LIST = [
@@ -127,7 +128,11 @@ export default function WithdrawPage () {
                 <Text numberOflines={1} style={[styles.text, { paddingBottom: 50 }]}>8.每天每档只能提现一次。</Text>
             </ScrollView>
             <TouchableOpacity onPress={() => {
-                N.navigate('WithdrawAliPayPage');
+                if (payType === 'wx') {
+                    N.replace('MaterialTopTabNavigator');
+                } else {
+                    N.navigate('WithdrawAliPayPage');
+                }
             }} style={styles.withDrawBtn}>
                 <Text style={styles.withDrawBtnText}>立即提现</Text>
             </TouchableOpacity>
