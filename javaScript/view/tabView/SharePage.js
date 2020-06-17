@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, Text, Image, View, Dimensions, ScrollView, StyleSheet, ImageBackground, DeviceEventEmitter } from 'react-native';
+import { SafeAreaView, Text, Image, View, Dimensions, ScrollView, StyleSheet, ImageBackground, DeviceEventEmitter, TouchableOpacity } from 'react-native';
 import { css } from '../../assets/style/css';
 import share1 from '../../assets/icon/share/share1.png';
 import share2 from '../../assets/icon/share/share2.png';
@@ -10,6 +10,7 @@ import ImageAuto from '../../components/ImageAuto';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import Choice from '../../components/Choice';
+import { N } from '../../utils/router';
 
 const { height, width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
@@ -44,12 +45,14 @@ export default function SharePage () {
                                 </LinearGradient>
                             </Shadow>
                         </Animatable.View>
-                        <View style={[css.flex, css.sp, styles.tipsWrap]}>
+                        <TouchableOpacity activeOpacity={1} style={[css.flex, css.sp, styles.tipsWrap]} onPress={() => {
+                            N.navigate('PupilInfoPage');
+                        }}>
                             <Text numberOfLines={1} style={styles.shareInfoTips}>
                                 当前提现返佣：徒弟提现反10%，徒孙提现反5%
                             </Text>
                             <Text style={styles.tipsBtn}>师徒信息</Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                     <View style={[styles.welfareWrap, css.auto, css.flex, css.fw]}>
                         <View style={[styles.welfareItemWrap, css.pr, css.flex]}>

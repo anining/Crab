@@ -19,15 +19,15 @@ function RenderHeaderRight ({ headerRight, onPress }) {
     return <View style={styles.headerRight}/>;
 }
 
-export default function Header ({ scene, previous, navigation, replace, headerRight, onPress }) {
+export default function Header ({ scene, previous, navigation, replace, headerRight, onPress, style }) {
     const { options } = scene.descriptor;
 
     // 自定义导航
-    if (['FeedBackPage'].includes(scene.route.name)) {
+    if (['FeedBackPage', 'PupilInfoPage'].includes(scene.route.name)) {
         return <></>;
     }
     return (
-        <View style={styles.header}>
+        <View style={[styles.header, ...style || {}]}>
             <View style={styles.headerLeft}>
                 <TouchableOpacity onPress={() => {
                     replace ? navigation.replace('MaterialTopTabNavigator') : navigation.goBack();
