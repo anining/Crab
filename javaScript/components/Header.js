@@ -27,7 +27,7 @@ export default function Header ({ scene, previous, navigation, replace, headerRi
         return <></>;
     }
     return (
-        <View style={[styles.header, ...style || {}]}>
+        <View style={[styles.header, (style || {})]}>
             <View style={styles.headerLeft}>
                 <TouchableOpacity onPress={() => {
                     replace ? navigation.replace('MaterialTopTabNavigator') : navigation.goBack();
