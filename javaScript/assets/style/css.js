@@ -28,6 +28,9 @@ export const css = StyleSheet.create({
     js: {
         justifyContent: 'flex-start',
     },
+    oh: {
+        overflow: 'hidden'
+    },
     pa: {
         position: 'absolute',
         zIndex: 1,

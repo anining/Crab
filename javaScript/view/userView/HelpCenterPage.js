@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Dimensions, TouchableOpacity, Text, View, ScrollView, Image } from 'react-native';
 import { css } from '../../assets/style/css';
-import helpCenterPage1 from '../../assets/icon/helpCenterPage/helpCenterPage1.png';
+import help1 from '../../assets/icon/help/help1.png';
 import { N } from '../../utils/router';
 
 const { width } = Dimensions.get('window');
@@ -86,7 +86,7 @@ function RenderAnswerItem ({ answers }) {
                 N.navigate('HelpCenterDetailPage', { detail: answer.detail });
             }} style={styles.item} key={answer.title}>
                 <Text style={{ color: '#666', fontSize: 14 }}>{answer.title}</Text>
-                <Image source={helpCenterPage1} style={{ height: 13, width: 6 }}/>
+                <Image source={help1} style={{ height: 13, width: 6 }}/>
             </TouchableOpacity>
         );
     });
