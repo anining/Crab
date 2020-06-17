@@ -2,6 +2,9 @@ import { Dimensions, StyleSheet } from 'react-native';
 
 const { height, width } = Dimensions.get('window');
 export const css = StyleSheet.create({
+    RichText: {
+        padding: 15
+    },
     auto: {
         bottom: 0,
         left: 0,

@@ -4,7 +4,7 @@ import { css } from '../../assets/style/css';
 
 export default function UserAgreementPage () {
     return (
-        <SafeAreaView style={css.safeAreaView}>
+        <SafeAreaView style={[css.safeAreaView, css.RichText]}>
             <Text>UserAgreementPage</Text>
         </SafeAreaView>
     );
