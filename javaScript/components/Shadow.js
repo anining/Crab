@@ -6,15 +6,16 @@ import { formatStyle } from '../utils/util';
  <Shadow style={...}>
     <View/>
  </Shadow>
+ color选填
  * **/
 export default class Shadow extends Component {
     constructor (props) {
         super(props);
         this.state = {};
         this.shadowOpt = {
-            color: '#000',
+            color: this.props.color || '#000',
             border: 6,
-            opacity: 0.1,
+            opacity: 0.15,
             x: 0,
             y: 0,
             width: formatStyle(this.props.style) ? (formatStyle(this.props.style).width || 100) : 100,

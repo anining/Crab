@@ -54,7 +54,7 @@ export default function TabNavigator ({ navigation }) {
                 style: { // 标签栏的样式
                     height: 50,
                     borderTopWidth: 1,
-                    borderTopColor: '#D7D7D7',
+                    borderTopColor: '#efefef',
                 },
                 indicatorStyle: {
                     height: 0,
@@ -63,7 +63,7 @@ export default function TabNavigator ({ navigation }) {
             }}
         >
             <Tab.Screen name="HomePage" component={HomePage} options={{ title: '主页' }}/>
-            <Tab.Screen name="AnswerPage" component={AnswerPage} options={{ title: '答题' }}/>
+            <Tab.Screen name="AnswerPage" component={AnswerPage} options={{ title: '活动' }}/>
             <Tab.Screen name="SharePage" component={SharePage} options={{ title: '躺赚' }}/>
             <Tab.Screen name="UserPage" component={UserPage} options={{ title: '我的' }}/>
         </Tab.Navigator>
