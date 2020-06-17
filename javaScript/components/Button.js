@@ -53,10 +53,12 @@ export default class Button extends Component {
 
     btnOnPress () {
         try {
-            this.setState({ loading: true });
-            this.props.onPress && this.props.onPress(() => {
-                this.setState({ loading: false });
-            });
+            if (!this.state.loading) {
+                this.setState({ loading: true });
+                this.props.onPress && this.props.onPress(() => {
+                    this.setState({ loading: false });
+                });
+            }
         } catch (e) {
             console.log(e);
         }
