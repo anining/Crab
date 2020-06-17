@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.11.0",
+    "@react-native-community/cameraroll": "^2.0.0",
+    "@react-native-community/clipboard": "^1.2.2",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/netinfo": "^5.9.2",
     "@react-native-community/viewpager": "^4.0.1",
@@ -48,7 +50,8 @@
     "react-native-spring-scrollview": "^2.0.23",
     "react-native-svg": "^12.1.0",
     "react-native-swiper": "^1.6.0-rc.3",
-    "react-native-tab-view": "^2.14.4"
+    "react-native-tab-view": "^2.14.4",
+    "react-native-view-shot": "^3.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

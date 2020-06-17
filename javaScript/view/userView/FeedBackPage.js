@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { SafeAreaView, Text, Image, View, StyleSheet, TouchableOpacity, Dimensions, TextInput } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
 import { css } from '../../assets/style/css';
-import { N } from '../../utils/router';
 import feed1 from '../../assets/icon/feed/feed1.png';
 import feed2 from '../../assets/icon/feed/feed2.png';
-import { uploadImage } from '../../utils/api';
-import toast from '../../utils/toast';
 import Upload from '../../components/Upload';
+import Header from '../../components/Header';
+import { N } from '../../utils/router';
 
 const { width, height } = Dimensions.get('window');
 export default function FeedBackPage () {
@@ -15,56 +13,57 @@ export default function FeedBackPage () {
     const [text, setText] = useState('');
     const [phone, setPhone] = useState('');
     const [selectId, setSelectId] = useState(1);
-
     const view = <Image source={feed2} style={{ height: 50, width: 50 }}/>;
+    const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>道具记录</Text>;
 
     return (
-        <SafeAreaView style={[css.safeAreaView, { justifyContent: 'space-between', backgroundColor: '#F8F8F8', }]}>
-            <View style={styles.sfeAreaView}>
-                <View style={styles.selectView}>
-                    <TouchableOpacity onPress={() => {
-                        setSelectId(1);
-                    }} style={[styles.select, { backgroundColor: selectId === 1 ? '#FFF7F4' : '#fff', }]}>
-                        <Text style={{ color: '#353535', fontSize: 15, fontWeight: '500' }}>功能建议</Text>
-                        <RenderSelectView select={selectId === 1}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {
-                        setSelectId(2);
-                    }} style={[styles.select, { backgroundColor: selectId !== 1 ? '#FFF7F4' : '#fff', }]}>
-                        <Text style={{ color: '#353535', fontSize: 15, fontWeight: '500' }}>发现bug</Text>
-                        <RenderSelectView select={selectId !== 1}/>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.centerView}>
-                    <View style={styles.centerInputView}>
-                        <Text style={{ color: '#353535', fontSize: 14 }}>问题描述：</Text>
-                        <TextInput
-                            maxLength={50}
-                            multiline={true}
-                            numberOfLines={2}
-                            placeholder={'请详细描述您遇的建议或者遇到的问题'}
-                            placeholderTextColor={'#C0C0C0'}
-                            onChangeText={text => setText(text)}/>
-                    </View>
-                    <View style={styles.imageView}>
-                        <Upload children={view} images={images} setImages={setImages}/>
-                        <RenderImage images={images}/>
-                    </View>
-                    <Text style={{ color: '#999', fontSize: 11, lineHeight: 20 }}>添加图片或者视频</Text>
-                    <Text style={{ color: '#999', fontSize: 11, lineHeight: 20 }}>最多支持3张图片，1个10M以内的视频</Text>
-                </View>
-                <View style={styles.bottomView}>
-                    <Text>联系方式：</Text>
+        <SafeAreaView style={[css.safeAreaView, css.pr]}>
+            <Header scene={{ descriptor: { options: {} }, route: { name: '意见反馈' } }} navigation={N} onPress={() => {
+                N.navigate('FeedBackRecordsPage');
+            }} headerRight={headerRight}/>
+            <View style={styles.selectView}>
+                <TouchableOpacity onPress={() => {
+                    setSelectId(1);
+                }} style={[styles.select, { backgroundColor: selectId === 1 ? '#FFF7F4' : '#fff', }]}>
+                    <Text style={{ color: '#353535', fontSize: 15, fontWeight: '500' }}>功能建议</Text>
+                    <RenderSelectView select={selectId === 1}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
+                    setSelectId(2);
+                }} style={[styles.select, { backgroundColor: selectId !== 1 ? '#FFF7F4' : '#fff', }]}>
+                    <Text style={{ color: '#353535', fontSize: 15, fontWeight: '500' }}>发现bug</Text>
+                    <RenderSelectView select={selectId !== 1}/>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.centerView}>
+                <View style={styles.centerInputView}>
+                    <Text style={{ color: '#353535', fontSize: 14 }}>问题描述：</Text>
                     <TextInput
-                        maxLength={20}
-                        placeholder={'QQ或者微信号'}
-                        placeholderTextColor={'#999999'}
-                        onChangeText={phone => setPhone(phone)}/>
+                        maxLength={50}
+                        multiline={true}
+                        numberOfLines={2}
+                        placeholder={'请详细描述您遇的建议或者遇到的问题'}
+                        placeholderTextColor={'#C0C0C0'}
+                        onChangeText={text => setText(text)}/>
                 </View>
+                <View style={styles.imageView}>
+                    <Upload children={view} images={images} setImages={setImages}/>
+                    <RenderImage images={images}/>
+                </View>
+                <Text style={{ color: '#999', fontSize: 11, lineHeight: 20 }}>添加图片或者视频</Text>
+                <Text style={{ color: '#999', fontSize: 11, lineHeight: 20 }}>最多支持3张图片，1个10M以内的视频</Text>
+            </View>
+            <View style={styles.bottomView}>
+                <Text>联系方式：</Text>
+                <TextInput
+                    maxLength={20}
+                    placeholder={'QQ或者微信号'}
+                    placeholderTextColor={'#999999'}
+                    onChangeText={phone => setPhone(phone)}/>
             </View>
             <TouchableOpacity onPress={() => {
 
-            }} style={styles.btn}>
+            }} style={[styles.btn, css.pa, { bottom: 0 }]}>
                 <Text style={{ fontSize: 17, color: '#fff', lineHeight: 44, textAlign: 'center' }}>提交反馈</Text>
             </TouchableOpacity>
         </SafeAreaView>
@@ -181,9 +180,10 @@ const styles = StyleSheet.create({
     },
     sfeAreaView: {
         backgroundColor: '#F8F8F8',
+        flex: 1,
         paddingLeft: 15,
         paddingRight: 15,
         paddingTop: 15,
-        width
+        width,
     }
 });

@@ -15,6 +15,10 @@ import HelpCenterPage from '../view/userView/HelpCenterPage';
 import HelpCenterDetailPage from '../view/userView/HelpCenterDetailPage';
 import AnswerDetailPage from '../view/answerView/AnswerDetailPage';
 import FundingRecordsPage from '../view/userView/FundingRecordsPage';
+import GlossaryPage from '../view/userView/GlossaryPage';
+import UserAgreementPage from '../view/userView/UserAgreementPage';
+import PrivacyPolicyPage from '../view/userView/PrivacyPolicyPage';
+import ActivityCenterPage from '../view/userView/ActivityCenterPage';
 import FeedBackRecordsPage from '../view/userView/FeedBackRecordsPage';
 import FeedBackPage from '../view/userView/FeedBackPage';
 import CardPackageRecordsPage from '../view/userView/CardPackageRecordsPage';
@@ -176,6 +180,26 @@ const stackScreens = [
         name: 'ErrorPage',
         component: ErrorPage,
         title: '错误',
+    },
+    {
+        name: 'GlossaryPage',
+        component: GlossaryPage,
+        title: '生词本',
+    },
+    {
+        name: 'UserAgreementPage',
+        component: UserAgreementPage,
+        title: '用户协议',
+    },
+    {
+        name: 'PrivacyPolicyPage',
+        component: PrivacyPolicyPage,
+        title: '隐私政策',
+    },
+    {
+        name: 'ActivityCenterPage',
+        component: ActivityCenterPage,
+        title: '活动中心',
     },
 ];
 

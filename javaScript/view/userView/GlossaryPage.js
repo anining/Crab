@@ -2,10 +2,10 @@ import React from 'react';
 import { SafeAreaView, Text } from 'react-native';
 import { css } from '../../assets/style/css';
 
-export default function FundingRecordsPage () {
+export default function GlossaryPage () {
     return (
         <SafeAreaView style={css.safeAreaView}>
-            <Text>FundingRecordsPage</Text>
+            <Text>GlossaryPage</Text>
         </SafeAreaView>
     );
 }

@@ -4,10 +4,28 @@ import header1 from '../assets/icon/header/header1.png';
 import header2 from '../assets/icon/header/header2.png';
 
 const { width } = Dimensions.get('window');
+const HEIGHT = 50;
 
-export default function Header ({ scene, previous, navigation, replace }) {
+function RenderHeaderRight ({ headerRight, onPress }) {
+    if (headerRight) {
+        return (
+            <TouchableOpacity style={[styles.headerRight, { alignItems: 'center', justifyContent: 'center' }]} onPress={() => {
+                onPress();
+            }} >
+                {headerRight}
+            </TouchableOpacity>
+        );
+    }
+    return <View style={styles.headerRight}/>;
+}
+
+export default function Header ({ scene, previous, navigation, replace, headerRight, onPress }) {
     const { options } = scene.descriptor;
 
+    // 自定义导航
+    if (['FeedBackPage'].includes(scene.route.name)) {
+        return <></>;
+    }
     return (
         <View style={styles.header}>
             <View style={styles.headerLeft}>
@@ -21,7 +39,7 @@ export default function Header ({ scene, previous, navigation, replace }) {
                 </TouchableOpacity>
             </View>
             <Text style={styles.headerCenter}>{options.title || scene.route.name}</Text>
-            <View style={styles.headerRight}/>
+            <RenderHeaderRight headerRight={headerRight} onPress={onPress}/>
         </View>
     );
 }
@@ -32,30 +50,30 @@ const styles = StyleSheet.create({
         borderBottomColor: 'rgba(221,221,221,1)',
         borderBottomWidth: 1,
         flexDirection: 'row',
-        height: 63,
+        height: HEIGHT,
         width,
     },
     headerCenter: {
         fontSize: 16,
         fontWeight: '500',
-        height: 63,
-        lineHeight: 63,
+        height: HEIGHT,
+        lineHeight: HEIGHT,
         textAlign: 'center',
         width: width - 140,
     },
     headerLeft: {
-        height: 63,
+        height: HEIGHT,
         width: 70,
     },
     headerRight: {
-        height: 63,
-        lineHeight: 63,
+        height: HEIGHT,
+        lineHeight: HEIGHT,
         textAlign: 'center',
-        width: 70,
+        width: 70
     },
     returnBtn: {
         alignItems: 'center',
-        height: 63,
+        height: HEIGHT,
         justifyContent: 'center',
         width: 70,
     },

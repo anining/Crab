@@ -2,6 +2,9 @@ import { Dimensions, StyleSheet } from 'react-native';
 
 const { height, width } = Dimensions.get('window');
 export const css = StyleSheet.create({
+    RichText: {
+        padding: 15
+    },
     auto: {
         bottom: 0,
         left: 0,
@@ -16,6 +19,15 @@ export const css = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'nowrap',
         justifyContent: 'center',
+    },
+    flexCSB: {
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    flexRCSB: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     flexRowCenterStart: {
         alignItems: 'center',

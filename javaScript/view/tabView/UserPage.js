@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, SafeAreaView, StyleSheet, ScrollView, ImageBackground, Image, Text, TouchableOpacity, Dimensions } from 'react-native';
+import Clipboard from '@react-native-community/clipboard';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import user1 from '../../assets/icon/user/user1.png';
@@ -8,21 +9,24 @@ import user3 from '../../assets/icon/user/user3.png';
 import user4 from '../../assets/icon/user/user4.png';
 import user5 from '../../assets/icon/user/user5.png';
 import user6 from '../../assets/icon/user/user6.png';
-import user7 from '../../assets/icon/user/user7.png';
 import user8 from '../../assets/icon/user/user8.png';
 import user9 from '../../assets/icon/user/user9.png';
 import user10 from '../../assets/icon/user/user10.png';
 import user11 from '../../assets/icon/user/user11.png';
 import user12 from '../../assets/icon/user/user12.png';
 import user13 from '../../assets/icon/user/user13.png';
+import user14 from '../../assets/icon/user/user14.png';
+import user15 from '../../assets/icon/user/user15.png';
+import user16 from '../../assets/icon/user/user16.png';
+import user17 from '../../assets/icon/user/user17.png';
 
 const { width } = Dimensions.get('window');
 const menuList = [
     {
-        icon: user12,
-        title: '绑定账号',
-        remark: '绑定做单账号',
-        path: 'AccountHomePage'
+        icon: user17,
+        title: '活动中心',
+        remark: '超多活动等你参与',
+        path: 'ActivityCenterPage'
     },
     {
         icon: user8,
@@ -31,7 +35,13 @@ const menuList = [
         path: 'CardPackagePage'
     },
     {
-        icon: user11,
+        icon: user16,
+        title: '生词本',
+        remark: '巩固学习的成语',
+        path: 'GlossaryPage'
+    },
+    {
+        icon: user9,
         title: '意见反馈',
         remark: '建议和反馈',
         path: 'FeedBackPage'
@@ -43,16 +53,28 @@ const menuList = [
         path: 'HelpCenterPage'
     },
     {
-        icon: user9,
+        icon: user11,
         title: '小黑屋',
         remark: '',
         path: 'BlackHousePage'
     },
     {
-        icon: user8,
-        title: '绑定微信',
+        icon: user15,
+        title: '用户协议',
         remark: '',
-        path: 'WeChatBindPage'
+        path: 'UserAgreementPage'
+    },
+    {
+        icon: user14,
+        title: '隐私政策',
+        remark: '',
+        path: 'PrivacyPolicyPage'
+    },
+    {
+        icon: user12,
+        title: '切换账号',
+        remark: '',
+        path: 'VerificationStackNavigator'
     },
 ];
 export default function UserPage () {
@@ -70,7 +92,7 @@ export default function UserPage () {
                             <View style={styles.userCardBottom}>
                                 <Text style={styles.inviteCode}>邀请码:A23345643</Text>
                                 <TouchableOpacity onPress={() => {
-
+                                    Clipboard.setString('hello world');
                                 }} style={styles.copyBtn}>
                                     <Text style={styles.copyText}>复制</Text>
                                 </TouchableOpacity>
@@ -78,7 +100,7 @@ export default function UserPage () {
                         </View>
                     </View>
                     <TouchableOpacity onPress={() => {
-
+                        N.navigate('WeChatBindPage');
                     }} style={styles.bindBtn}>
                         <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
                         <Text style={styles.bindText}>绑定微信</Text>
@@ -151,7 +173,11 @@ function RenderMenu ({ menuList }) {
     menuList.forEach(menu => {
         components.push(
             <TouchableOpacity onPress={() => {
-                N.navigate(menu.path);
+                if (menu.path === 'VerificationStackNavigator') {
+                    N.replace(menu.path);
+                } else {
+                    N.navigate(menu.path);
+                }
             }} style={styles.btn} key={menu.title}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image source={menu.icon} style={{ height: 20, width: 20, marginRight: 5, fontSize: 15 }}/>
