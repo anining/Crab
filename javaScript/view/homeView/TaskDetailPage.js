@@ -122,21 +122,21 @@ export default function TaskDetailPage () {
                         </View>
                     </View>
                 </View>
+                <TouchableOpacity onPress={() => {
+
+                }} style={styles.submitBtn}>
+                    <Text style={styles.submitBtnText}>提交任务</Text>
+                </TouchableOpacity>
             </ScrollView>
             <TouchableOpacity onPress={() => {
 
-            }} style={{ position: 'absolute', bottom: '33%', right: 10 }}>
+            }} style={{ position: 'absolute', bottom: '29%', right: 10 }}>
                 <Image source={task2} style={{ height: 70, width: 84 }}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
 
-            }} style={{ position: 'absolute', bottom: '20%', right: 10 }}>
+            }} style={{ position: 'absolute', bottom: '15%', right: 10 }}>
                 <Image source={task3} style={{ height: 70, width: 84 }}/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
-
-            }} style={styles.submitBtn}>
-                <Text style={styles.submitBtnText}>提交任务</Text>
             </TouchableOpacity>
         </SafeAreaView>
     );
@@ -214,11 +214,9 @@ const styles = StyleSheet.create({
     submitBtn: {
         backgroundColor: '#FF3E00',
         borderRadius: 22,
-        bottom: '5%',
         height: 44,
-        position: 'absolute',
-        right: 20,
-        width: width - 40
+        marginBottom: 20,
+        marginTop: 20
     },
     submitBtnText: {
         color: '#fff',
@@ -292,7 +290,6 @@ const styles = StyleSheet.create({
     taskUpload: {
         backgroundColor: '#fff',
         borderRadius: 8,
-        marginBottom: 120,
         marginTop: 15,
         minHeight: 350,
         width: '100%'
