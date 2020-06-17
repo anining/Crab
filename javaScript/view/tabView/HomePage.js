@@ -8,25 +8,18 @@ import data1 from '../../lottie/data1';
 import * as Animatable from 'react-native-animatable';
 import ListGeneral from '../../components/ListGeneral';
 import ListHeader from '../../components/ListHeader';
+import Button from '../../components/Button';
 
 const { height, width } = Dimensions.get('window');
 export default function HomePage () {
     return (
         <SafeAreaView style={css.safeAreaView}>
+            <Button onPress={(callback) => {
+                setTimeout(() => {
+                    callback && callback();
+                }, 2000);
+            }}/>
             {/* <Text>homepage</Text> */}
-            <LottieView
-                style={{ width: '100%', height: 'auto', backgroundColor: '#fff' }}
-                imageAssetsFolder={'lottie'}
-                source={data}
-                loop={true}
-                autoPlay={true}
-                speed={1}
-            />
-            <ListGeneral/>
-            {/* <ListHeader label={['aaa', 'bb']}> */}
-            {/*    <View></View> */}
-            {/*    <View></View> */}
-            {/* </ListHeader> */}
             {/* <View style={[css.flex, css.pr]}> */}
             {/*    <LottieView */}
             {/*        style={{ width: '100%', height: 'auto', backgroundColor: '#5d6fff' }} */}

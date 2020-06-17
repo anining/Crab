@@ -4,7 +4,10 @@ import { StyleSheet, Text, View } from 'react-native';
 
 /**
  * 使用示例
- <ListHeader label={["页面1", "页面2"]}/>
+ <ListHeader>
+ <View tabLabel="React"></View>
+ <View tabLabel="React1"></View>
+ </ListHeader>
  * **/
 export default class ListHeader extends Component {
     constructor (props) {
@@ -12,38 +15,25 @@ export default class ListHeader extends Component {
         this.state = {};
     }
 
-    componentDidMount () {
-        console.log(this.props);
-    }
-
-    renderChild () {
-        const view = [];
-        console.log(this.props.children);
-        view.push(<View tabLabel="React">
-            <Text>321</Text>
-        </View>);
-        return view;
-    }
-
     render () {
         try {
-            if (this.props.label.length && Array.isArray(this.props.label)) {
-                return <ScrollableTabView style={{}} value={this.props.value || 0} tabBarInactiveTextColor={'#999999'}
+            if (this.props.children && Array.isArray(this.props.children)) {
+                return <ScrollableTabView style={{}} initialPage={this.props.value || 0} tabBarInactiveTextColor={'#999999'}
                     tabBarActiveTextColor={'#3E3E3E'} tabBarUnderlineStyle={styles.tabBarUnderLine} renderTabBar={() => (
                         <ScrollableTabBar style={{ borderBottomWidth: 0 }} />
                     )}>
-                    {this.renderChild.call(this)}
+                    {this.props.children}
                 </ScrollableTabView>;
             } else {
                 return (
                     <Text style={styles.error}>
-                        label not in Props ! as:  label: ["page1", "page2"]
+                        this.props.children mast isArray
                     </Text>);
             }
         } catch (e) {
             return (
                 <Text style={styles.error}>
-                    label not in Props ! as:  label: ["page1", "page2"]
+                    this.props.children mast isArray
                 </Text>);
         }
     }

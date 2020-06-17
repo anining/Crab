@@ -28,10 +28,10 @@ export default function TabNavigator ({ navigation }) {
                     let iconPath;
                     switch (route.name) {
                     case 'HomePage':
-                        iconPath = focused ? icon2 : icon1;
+                        iconPath = focused ? icon4 : icon3;
                         break;
                     case 'AnswerPage':
-                        iconPath = focused ? icon4 : icon3;
+                        iconPath = focused ? icon2 : icon1;
                         break;
                     case 'SharePage':
                         iconPath = focused ? icon6 : icon5;
