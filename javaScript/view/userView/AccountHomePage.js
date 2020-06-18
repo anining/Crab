@@ -13,6 +13,7 @@ import {
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import Header from '../../components/Header';
+import card1 from '../../assets/icon/card/card1.png';
 import Null from '../../components/Null';
 
 const { width, height } = Dimensions.get('window');
@@ -72,7 +73,6 @@ export default function AccountHomePage () {
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '绑定账号' } }} navigation={N} onPress={() => {
-                // N.navigate('AccountBindPage');
                 DeviceEventEmitter.emit('showPop', <RenderSelect />);
             }} headerRight={(numbers.length || binds.length) && headerRight}/>
             <RenderView numbers={numbers} binds={binds}/>
@@ -103,7 +103,8 @@ function RenderSelect () {
     TYPE.forEach(item => {
         components.push(
             <TouchableOpacity key={item.id} onPress={() => {
-
+                DeviceEventEmitter.emit('hidePop');
+                N.navigate('AccountBindPage', { type: item.label });
             }} style={[styles.selectViewBtn, css.flexRCSB]}>
                 <Text>{item.label}</Text>
                 <Text>{'>'}</Text>
@@ -113,6 +114,101 @@ function RenderSelect () {
     return (
         <View style={styles.selectView}>
             {components}
+        </View>
+    );
+}
+
+function RenderChange ({ id, type }) {
+    const components = [];
+    const TYPE = [
+        {
+            id: 1,
+            label: '绑定音符账号'
+        },
+        {
+            id: 2,
+            label: '绑定快摄账号'
+        },
+        {
+            id: 3,
+            label: '绑定红酥账号'
+        },
+        {
+            id: 4,
+            label: '绑定头条账号'
+        },
+    ];
+    TYPE.forEach(item => {
+        components.push(
+            <TouchableOpacity style={ {
+                height: 50,
+                width: '100%',
+                marginBottom: 10,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingLeft:15,
+                paddingRight:15
+            }} onPress={() => {
+
+            }}>
+                <View style={{ flexDirection: 'row' ,alignItems: 'center'}}>
+                    <Image source={card1} style={{ height: 32, width: 32, borderRadius: 16 ,marginRight:5}} />
+                    <Text>音符任务专号</Text>
+                </View>
+                <View style={{
+                    height: 20,
+                    width: 20,
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    borderColor: '#999999'
+                }}></View>
+            </TouchableOpacity>
+        );
+    });
+    return (
+        <View style={styles.changeView}>
+            <Text style={{ color: '#FF3B00', fontSize: 17, lineHeight: 50, textAlign: 'center', fontWeight: '600' }}>切换做单账号</Text>
+            <View style={{
+                height: 200,
+                width: '100%',
+                marginBottom: 20
+            }}>
+                <ScrollView>
+                    {components}
+                </ScrollView>
+            </View>
+            <TouchableOpacity style={styles.addBtn} onPress={() => {
+                DeviceEventEmitter.emit('hidePop');
+                N.navigate('AccountBindPage', { type: '绑定头条账号' });
+            }}>
+                <Text style={{
+                    height: 20,
+                    width: 20,
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    borderColor: '#FF3B00',
+                    lineHeight: 21,
+                    fontSize: 20,
+                    textAlign: 'center',
+                    color: '#FF3B00',
+                    marginRight: 5
+                }}>+</Text>
+                <Text style={{ color: '#FF3B00', fontSize: 15 }}>添加新账号</Text>
+            </TouchableOpacity>
+            <View style={[css.flexRCSB, { paddingLeft: 5, paddingRight: 5, paddingTop: 20, paddingBottom: 20 }]}>
+                <TouchableOpacity onPress={() => {
+                    DeviceEventEmitter.emit('hidePop');
+                }} style={styles.changeLBtn}>
+                    <Text style={{ lineHeight: 33, textAlign: 'center', color: '#FF3B00', fontSize: 15 }}>取消</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
+                    DeviceEventEmitter.emit('hidePop');
+                }} style={styles.changeRBtn}>
+                    <Text style={{ lineHeight: 33, textAlign: 'center', color: '#fff' }}>切换账号</Text>
+                </TouchableOpacity>
+            </View>
+            {/* {components} */}
         </View>
     );
 }
@@ -158,7 +254,7 @@ function RenderNumberView ({ numbers = [] }) {
                         </View>
                     </View>
                     <TouchableOpacity onPress={() => {
-
+                        DeviceEventEmitter.emit('showPop', <RenderChange id={number.id} type={number.type}/>);
                     }} style={styles.changeBindBtn}>
                         <Text numberOfLines={1} style={{ color: '#fff', lineHeight: 35, textAlign: 'center', fontSize: 13 }}>切换账号(5)</Text>
                     </TouchableOpacity>
@@ -207,6 +303,15 @@ function RenderBindView ({ binds = [] }) {
 }
 
 const styles = StyleSheet.create({
+    addBtn: {
+        alignItems: 'center',
+        backgroundColor: '#F4F4F4',
+        borderRadius: 6,
+        flexDirection: 'row',
+        height: 45,
+        justifyContent: 'center',
+        width: '100%'
+    },
     bindBtnText: {
         color: '#fff',
         fontSize: 13,
@@ -221,6 +326,27 @@ const styles = StyleSheet.create({
         borderRadius: 18,
         height: 35,
         width: 105
+    },
+    changeLBtn: {
+        borderColor: '#FF3B00',
+        borderRadius: 22,
+        borderWidth: 1,
+        height: 33,
+        width: 112
+    },
+    changeRBtn: {
+        backgroundColor: '#FF3E00',
+        borderRadius: 22,
+        height: 33,
+        width: 112
+    },
+    changeView: {
+        backgroundColor: '#fff',
+        borderRadius: 4,
+        minHeight: 100,
+        paddingLeft: 15,
+        paddingRight: 15,
+        width: '90%'
     },
     giveUpBtn: {
         backgroundColor: '#FF3E00',
@@ -242,7 +368,7 @@ const styles = StyleSheet.create({
     },
     selectView: {
         backgroundColor: '#fff',
-        bottom: 25,
+        bottom: 0,
         paddingLeft: 15,
         paddingRight: 15,
         position: 'absolute',
