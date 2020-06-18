@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, StatusBar } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import codePush from 'react-native-code-push';
@@ -203,6 +203,12 @@ const stackScreens = [
     },
 ];
 
+function setStatusBar () {
+    StatusBar.setBarStyle('dark-content');
+    StatusBar.setBackgroundColor('rgba(0,0,0,0)');
+    StatusBar.setTranslucent(true);
+}
+
 function AppStackNavigator () {
     const [keys, setKeys] = useState();
     const GenerateScreen = stackScreens.map(screen =>
@@ -215,6 +221,7 @@ function AppStackNavigator () {
                     .then(r => {
                         initializationStore(r);
                         setKeys([]);
+                        setStatusBar();
                         SplashScreen.hide();
                     });
             })

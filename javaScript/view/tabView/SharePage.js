@@ -95,7 +95,7 @@ export default class SharePage extends Component {
         try {
             const view = [];
             cashBack.forEach((item, index) => {
-                view.push(<Animatable.View useNativeDriver={true} iterationDelay={4000} delay={(index + 1) * 2000} iterationCount={3} animation="bounce" style={[css.pr, styles.cashBackItem]}>
+                view.push(<Animatable.View useNativeDriver={true} iterationDelay={4000} delay={(index + 1) * 2000} iterationCount={5} animation="bounce" style={[css.pr, styles.cashBackItem]}>
                     <ImageAuto source={share7} style={{
                         width: width * 0.9 * 0.25,
                         ...css.pa,

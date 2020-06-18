@@ -2,9 +2,10 @@ import React from 'react';
 import { Dimensions, Text, Image, TouchableOpacity, StyleSheet, View } from 'react-native';
 import header1 from '../assets/icon/header/header1.png';
 import header2 from '../assets/icon/header/header2.png';
+import { N } from '../utils/router';
 
 const { width } = Dimensions.get('window');
-const HEIGHT = 50;
+const HEIGHT = 63;
 
 function RenderHeaderRight ({ headerRight, onPress }) {
     if (headerRight) {
@@ -19,29 +20,36 @@ function RenderHeaderRight ({ headerRight, onPress }) {
     return <View style={styles.headerRight}/>;
 }
 
-export default function Header ({ scene, previous, navigation, replace, headerRight, onPress, style }) {
-    const { options } = scene.descriptor;
-
-    // 自定义导航
-    if (['FeedBackPage', 'PupilInfoPage'].includes(scene.route.name)) {
-        return <></>;
-    }
-    return (
-        <View style={[styles.header, (style || {})]}>
-            <View style={styles.headerLeft}>
-                <TouchableOpacity onPress={() => {
-                    replace ? navigation.replace('MaterialTopTabNavigator') : navigation.goBack();
-                }} style={styles.returnBtn}>
-                    <Image source={replace ? header1 : header2} style={{
-                        width: replace ? 17 : 10,
-                        height: replace ? 17 : 20,
-                    }}/>
-                </TouchableOpacity>
+/**
+ * @return {null}
+ */
+export default function Header ({ scene = { descriptor: { options: {} }, route: { name: '-' } }, previous, navigation = N, replace, headerRight, onPress, style, label }) {
+    try {
+        const { options } = scene.descriptor;
+        // 自定义导航
+        if (['FeedBackPage', 'PupilInfoPage'].includes(scene.route.name)) {
+            return <></>;
+        }
+        return (
+            <View style={[styles.header, (style || {})]}>
+                <View style={styles.headerLeft}>
+                    <TouchableOpacity onPress={() => {
+                        replace ? navigation.replace('MaterialTopTabNavigator') : navigation.goBack();
+                    }} style={styles.returnBtn}>
+                        <Image source={replace ? header1 : header2} style={{
+                            width: replace ? 17 : 10,
+                            height: replace ? 17 : 20,
+                        }}/>
+                    </TouchableOpacity>
+                </View>
+                <Text style={styles.headerCenter}>{label || options.title || scene.route.name}</Text>
+                <RenderHeaderRight headerRight={headerRight} onPress={onPress}/>
             </View>
-            <Text style={styles.headerCenter}>{options.title || scene.route.name}</Text>
-            <RenderHeaderRight headerRight={headerRight} onPress={onPress}/>
-        </View>
-    );
+        );
+    } catch (e) {
+        console.log(e);
+        return null;
+    }
 }
 
 const styles = StyleSheet.create({
@@ -51,7 +59,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         flexDirection: 'row',
         height: HEIGHT,
-        width,
+        paddingTop: 13,
+        width
     },
     headerCenter: {
         fontSize: 16,

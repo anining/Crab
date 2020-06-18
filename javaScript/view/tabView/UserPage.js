@@ -79,7 +79,7 @@ const menuList = [
 ];
 export default function UserPage () {
     return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
+        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8', paddingTop: 20 }]}>
             <ScrollView>
                 <View style={styles.userDetailView}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
