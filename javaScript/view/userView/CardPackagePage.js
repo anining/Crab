@@ -4,6 +4,7 @@ import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import Header from '../../components/Header';
 import card1 from '../../assets/icon/card/card1.png';
+import Null from '../../components/Null';
 
 const TYPE_DATA = [card1, card1, card1, card1, card1];
 export default function CardPackagePage () {
@@ -17,71 +18,34 @@ export default function CardPackagePage () {
         features: '提现免手续费一次。'
     },);
     const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>道具记录</Text>;
-    const CARDS = [
-        {
-            id: 1,
-            type: 1,
-            number: 10,
-            label: '特权卡',
-            instructions: '提现时自动使用。1',
-            scope: '提现要手续费的金额。1',
-            features: '提现免手续费一次。1'
-        },
-        {
-            id: 2,
-            type: 1,
-            number: 10,
-            label: '特权卡',
-            instructions: '提现时自动使用。2',
-            scope: '提现要手续费的金额。2',
-            features: '提现免手续费一次。2'
-        },
-        {
-            id: 3,
-            type: 1,
-            number: 10,
-            label: '特权卡',
-            instructions: '提现时自动使用。3',
-            scope: '提现要手续费的金额。3',
-            features: '提现免手续费一次。3'
-        },
-        {
-            id: 4,
-            type: 1,
-            number: 10,
-            label: '特权卡',
-            instructions: '提现时自动使用。',
-            scope: '提现要手续费的金额。',
-            features: '提现免手续费一次。'
-        },
-        {
-            id: 5,
-            type: 1,
-            number: 10,
-            label: '特权卡',
-            instructions: '提现时自动使用。',
-            scope: '提现要手续费的金额。',
-            features: '提现免手续费一次。'
-        },
-    ];
+    const CARDS = [];
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '道具背包' } }} navigation={N} onPress={() => {
                 N.navigate('CardPackageRecordsPage');
             }} headerRight={headerRight}/>
-            <ScrollView>
-                <RenderCard cards={CARDS} setItem={setItem} item={item}/>
-                <View style={styles.detail}>
-                    <Text style={styles.title} numberOfLines={1}>道具说明：</Text>
-                    <Text style={styles.text} numberOfLines={1}>道具名称：{item.label}</Text>
-                    <Text style={styles.text} numberOfLines={1}>道具数量：{item.number}</Text>
-                    <Text style={styles.text} numberOfLines={1}>使用方法：{item.instructions}</Text>
-                    <Text style={styles.text} numberOfLines={1}>适用范围：{item.scope}</Text>
-                    <Text style={styles.text} numberOfLines={1}>道具功能：{item.features}</Text>
-                </View>
-            </ScrollView>
+            <RenderView CARDS={CARDS} item={item} setItem={setItem}/>
         </SafeAreaView>
+    );
+}
+
+function RenderView ({ CARDS, setItem, item }) {
+    if (!CARDS.length) {
+        return <Null text='您还没有道具哦～'/>;
+    }
+    return (
+        <ScrollView>
+            <RenderCard cards={CARDS} setItem={setItem} item={item}/>
+            <View style={styles.detail}>
+                <Text style={styles.title} numberOfLines={1}>道具说明：</Text>
+                <Text style={styles.text} numberOfLines={1}>道具名称：{item.label}</Text>
+                <Text style={styles.text} numberOfLines={1}>道具数量：{item.number}</Text>
+                <Text style={styles.text} numberOfLines={1}>使用方法：{item.instructions}</Text>
+                <Text style={styles.text} numberOfLines={1}>适用范围：{item.scope}</Text>
+                <Text style={styles.text} numberOfLines={1}>道具功能：{item.features}</Text>
+            </View>
+        </ScrollView>
     );
 }
 
