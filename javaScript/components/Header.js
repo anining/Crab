@@ -23,7 +23,7 @@ export default function Header ({ scene, previous, navigation, replace, headerRi
     const { options } = scene.descriptor;
 
     // 自定义导航
-    if (['FeedBackPage', 'WithdrawRecordsPage', 'WithdrawPage', 'PupilInfoPage', 'CardPackagePage'].includes(scene.route.name)) {
+    if (['FeedBackPage', 'FundingRecordsPage', 'WithdrawRecordsPage', 'WithdrawPage', 'PupilInfoPage', 'CardPackagePage'].includes(scene.route.name)) {
         return <></>;
     }
     return (
