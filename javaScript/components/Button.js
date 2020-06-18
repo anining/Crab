@@ -20,18 +20,6 @@ function proxyGet (target, key) {
         return {};
     }
 }
-const typeStyle = {
-    1: {
-        width: width * 0.9,
-        borderRadius: 23,
-    },
-    2: {
-        width: width
-    }
-};
-const typeStyleProxy = new Proxy(typeStyle, {
-    get: proxyGet
-});
 export default class Button extends Component {
     constructor (props) {
         super(props);
@@ -39,6 +27,7 @@ export default class Button extends Component {
             loading: false,
         };
         this.type = this.props.type || 1;
+        this.shadow = this.props.shadow;
     }
 
     renderLoading () {
@@ -66,7 +55,19 @@ export default class Button extends Component {
 
     render () {
         try {
-            return <Shadow style={[styles.buntWrap, typeStyleProxy[this.type]]}>
+            const typeStyle = {
+                1: {
+                    width: this.props.width || width * 0.9,
+                    borderRadius: 23,
+                },
+                2: {
+                    width: width
+                }
+            };
+            const typeStyleProxy = new Proxy(typeStyle, {
+                get: proxyGet
+            });
+            return <Shadow style={[styles.buntWrap, typeStyleProxy[this.type]]} color={this.shadow}>
                 <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.buntWrap, styles.lineStyle, typeStyleProxy[this.type]]}>
                     <TouchableOpacity style={styles.touchBtn} activeOpacity={1} onPress={() => { this.btnOnPress(); }}>
                         {this.renderLoading.call(this)}
@@ -84,7 +85,7 @@ export default class Button extends Component {
 const styles = StyleSheet.create({
     btnText: {
         color: '#fff',
-        fontSize: 17,
+        fontSize: 16,
         fontWeight: '900',
         height: 46,
         letterSpacing: 1,

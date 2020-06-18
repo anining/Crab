@@ -28,8 +28,8 @@ import AccountHomePage from '../view/userView/AccountHomePage';
 import AccountBindPage from '../view/userView/AccountBindPage';
 import AcceptQRCodePage from '../view/shareView/AcceptQRCodePage';
 import AcceptUrlPage from '../view/shareView/AcceptUrlPage';
-import ApprenticeInformationPage from '../view/shareView/ApprenticeInformationPage';
-import ApprenticeSettingPage from '../view/shareView/ApprenticeSettingPage';
+import PupilInfoPage from '../view/shareView/PupilInfoPage';
+import PupilSetPage from '../view/shareView/PupilSetPage';
 import DailyMoneyPage from '../view/activityView/DailyMoneyPage';
 import SignPage from '../view/activityView/SignPage';
 import ErrorPage from '../view/otherView/ErrorPage';
@@ -137,13 +137,13 @@ const stackScreens = [
         title: '链接收徒',
     },
     {
-        name: 'ApprenticeInformationPage',
-        component: ApprenticeInformationPage,
+        name: 'PupilInfoPage',
+        component: PupilInfoPage,
         title: '师徒信息',
     },
     {
-        name: 'ApprenticeSettingPage',
-        component: ApprenticeSettingPage,
+        name: 'PupilSetPage',
+        component: PupilSetPage,
         title: '师徒设置',
     },
     {

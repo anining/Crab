@@ -5,6 +5,10 @@ export const css = StyleSheet.create({
     RichText: {
         padding: 15
     },
+    afs: {
+        alignContent: 'flex-start',
+        alignItems: 'flex-start',
+    },
     auto: {
         bottom: 0,
         left: 0,
@@ -40,6 +44,7 @@ export const css = StyleSheet.create({
     js: {
         justifyContent: 'flex-start',
     },
+    minTitle: { color: '#666', fontSize: 12, letterSpacing: 0 },
     oh: {
         overflow: 'hidden'
     },

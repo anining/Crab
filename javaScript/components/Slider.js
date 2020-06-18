@@ -3,6 +3,7 @@ import Carousel from 'react-native-snap-carousel';
 import { Dimensions, StyleSheet, View, TouchableOpacity } from 'react-native';
 import ImageAuto from './ImageAuto';
 import { _if } from '../utils/util';
+
 const { height, width } = Dimensions.get('window');
 /**
  * 使用示例
@@ -19,21 +20,24 @@ export default class Slider extends Component {
         if (data && data.length) {
             return data;
         }
-        return [{ backgroundColor: '#ee8616' }, { backgroundColor: '#0dee62' }, { backgroundColor: '#154aee' }];
+        return [{ backgroundColor: '#eed5a6' }, { backgroundColor: '#b3eed2' }, { backgroundColor: '#abc6ee' }];
     }
 
     render () {
-        return <Carousel
+        return <View><Carousel
             data={Slider._formatData(this.props.data)}
             renderItem={({ item, index }) => {
                 return <TouchableOpacity
                     activeOpacity={1}
                     style={[styles.carouselSlide, { height: this.height }]}
                     key={`Carousel${index}`}
-                    onPress={async () => { this.props.onPress && this.props.onPress(item); }}>
-                    {_if(item.image || item.url || item.img, res => <ImageAuto source={res} style={{ width: width * 0.9 }}/>, () => {
+                    onPress={async () => {
+                        this.props.onPress && this.props.onPress(item);
+                    }}>
+                    {_if(item.image || item.url || item.img, res => <ImageAuto source={res}
+                        style={{ width: width * 0.9 }}/>, () => {
                         return <View style={[styles.sliderView, {
-                            backgroundColor: item.backgroundColor || '#f8f8f8'
+                            backgroundColor: item.backgroundColor || '#f8f8f8',
                         }]}/>;
                     })}
                 </TouchableOpacity>;
@@ -45,9 +49,9 @@ export default class Slider extends Component {
             autoplay={Boolean(this.props.autoplay)}
             autoplayDelay={2000}
             autoplayInterval={5000}
-            inactiveSlideScale={1}
-            inactiveSlideOpacity={1}
-        />;
+            inactiveSlideScale={0.94}
+            inactiveSlideOpacity={0.8}
+        /></View>;
     }
 }
 
@@ -55,10 +59,10 @@ const styles = StyleSheet.create({
     carouselSlide: {
         borderRadius: 6,
         overflow: 'hidden',
-        width: width * 0.9
+        width: width * 0.9,
     },
     sliderView: {
         height: '100%',
-        width: '100%'
-    }
+        width: '100%',
+    },
 });

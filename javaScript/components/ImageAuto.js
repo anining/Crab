@@ -15,7 +15,7 @@ export default class ImageAuto extends Component {
             height: 0// 图片高度，自适应
         };
         this.source = this.props.source;
-        this.style = formatStyle(this.props.style || { width: 100, ...css.auto });
+        this.style = formatStyle(this.props.style || { width: this.props.width || 100 });
         this.file = Image.resolveAssetSource(this.source);
         this.url = null;
     }
@@ -57,9 +57,9 @@ export default class ImageAuto extends Component {
         try {
             if (this.state.height) {
                 if (this.file) {
-                    return <Image source={this.source} style={{ ...this.style, height: this.state.height }}/>;
+                    return <Image source={this.source} key={`${JSON.stringify(this.source)}${JSON.stringify(this.style)}`} style={{ ...this.style, height: this.state.height }}/>;
                 } else {
-                    return <Image resizeMode={'cover'} source={{ uri: this.url }} style={{ ...this.style, height: this.state.height }}/>;
+                    return <Image resizeMode={'cover'} key={`${JSON.stringify(this.source)}`} source={{ uri: this.url }} style={{ ...this.style, height: this.state.height }}/>;
                 }
             } else {
                 return null;
