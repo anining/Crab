@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, ImageBackground, Dimensions } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, ImageBackground, Dimensions, TouchableOpacity } from 'react-native';
 import { css } from '../../assets/style/css';
 import Header from '../../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
@@ -25,16 +25,34 @@ export default class PupilInfoPage extends Component {
         this.state = {};
     }
 
-    static _renderShareTitle (title, icon) {
+    static _renderShareTitle (title, icon, width) {
         try {
-            return <View style={[css.flex, css.js]}>
+            return <View style={[css.flex, css.js, { width: width || '100%' }]}>
                 <ImageAuto source={icon} style={{ width: 20, marginRight: 10 }}/>
-                {/*<Text style={styles.}>{title || '-'}</Text>*/}
+                <Text style={styles.pupTitleText}>{title || '-'}</Text>
             </View>;
         } catch (e) {
-            console.log(e)
+            console.log(e);
             return null;
         }
+    }
+
+    _renderForm () {
+        const that = this;
+        return <View style={styles.formWrap}>
+            <View style={[styles.formHeaderWrap, css.flex]}>
+                <Text style={styles.fhwText}>徒孙人数</Text>
+                <Text style={styles.fhwText}>徒孙人数</Text>
+                <Text style={styles.fhwText}>徒孙人数</Text>
+                <Text style={styles.fhwText}>徒孙人数</Text>
+            </View>
+            <View style={[styles.formLineWrap, css.flex]}>
+                <Text style={styles.fhwLineText}>321</Text>
+                <Text style={styles.fhwLineText}>321</Text>
+                <Text style={styles.fhwLineText}>321</Text>
+                <Text style={[styles.fhwLineText, { borderRightWidth: 0 }]}>321</Text>
+            </View>
+        </View>;
     }
 
     render () {
@@ -53,13 +71,38 @@ export default class PupilInfoPage extends Component {
                     return <View>
                         <View style={[styles.infoHeaderWrap, css.pr]}>
                             <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.infoHeaderBg]} />
-                            <ImageBackground source={pupil8} style={[styles.infoHeader, css.pa]}></ImageBackground>
+                            <ImageBackground source={pupil8} style={[styles.infoHeader, css.pa]}>
+                                {PupilInfoPage._renderShareTitle('我的师傅', pupil5)}
+                                <View style={[styles.teacherWrap, css.flex, css.sp]}>
+                                    <ImageAuto source={pupil2} width={40}/>
+                                    <Text style={{ color: '#999', fontSize: 12 }}>他的邀请码：A67BHD12 </Text>
+                                </View>
+                                <View style={[css.flex, styles.pupBtnWrap, css.auto, css.sp]}>
+                                    <TouchableOpacity activeOpacity={1}>
+                                        <ImageAuto source={pupil7} width={width * 0.35}/>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity activeOpacity={1}>
+                                        <ImageAuto source={pupil10} width={width * 0.35}/>
+                                    </TouchableOpacity>
+                                </View>
+                            </ImageBackground>
                         </View>
                         <View style={[css.flex, css.fw, styles.pupilItemWrap]}>
-                            {PupilInfoPage._renderShareTitle(<Text></Text>)}
+                            {PupilInfoPage._renderShareTitle('今日收徒数据', pupil1)}
+                            {this._renderForm()}
                         </View>
-                        <View style={[css.flex, css.fw, styles.pupilItemWrap]}></View>
-                        <View style={[css.flex, css.fw, styles.pupilItemWrap]}></View>
+                        <View style={[css.flex, css.fw, styles.pupilItemWrap]}>
+                            {PupilInfoPage._renderShareTitle('昨日收徒数据', pupil2)}
+                            {this._renderForm()}
+                        </View>
+                        <View style={[css.flex, css.fw, styles.pupilItemWrap]}>
+                            {PupilInfoPage._renderShareTitle('累计收徒数据', pupil3)}
+                            {this._renderForm()}
+                        </View>
+                        <View style={[styles.pupListWrap, css.flex, css.sp]}>
+                            {PupilInfoPage._renderShareTitle('徒弟列表', pupil4, 200)}
+                            <Text style={styles.pupListTips}>总贡献排序</Text>
+                        </View>
                     </View>;
                 }}
                 renderItem={(item, index) => {
@@ -72,11 +115,46 @@ export default class PupilInfoPage extends Component {
     }
 }
 const styles = StyleSheet.create({
+    fhwLineText: {
+        borderRightColor: '#FFE3CF',
+        borderRightWidth: 1,
+        color: '#666',
+        flex: 1,
+        fontSize: 13,
+        height: 45,
+        lineHeight: 45,
+        textAlign: 'center',
+    },
+    fhwText: {
+        color: '#353535',
+        flex: 1,
+        fontSize: 13,
+        textAlign: 'center'
+    },
+    formHeaderWrap: {
+        backgroundColor: '#FFE3CF',
+        height: 45,
+        width: '100%',
+    },
+    formLineWrap: {
+        height: 45,
+        width: '100%',
+    },
+    formWrap: {
+        borderColor: '#FFE3CF',
+        borderRadius: 6,
+        borderWidth: 1,
+        marginTop: 20,
+        overflow: 'hidden',
+        width: 0.92 * width,
+        ...css.auto,
+    },
     infoHeader: {
         borderRadius: 10,
         height: width * 0.96 * 570 / 1107,
         left: '2%',
         overflow: 'hidden',
+        padding: 20,
         top: 10,
         width: width * 0.96
     },
@@ -90,9 +168,38 @@ const styles = StyleSheet.create({
         backgroundColor: '#f8f8f8',
         height: 210,
     },
+    pupBtnWrap: {
+        height: 'auto',
+        paddingHorizontal: 20,
+        width: '100%'
+    },
+    pupListTips: {
+        color: '#999',
+        fontSize: 11,
+    },
+    pupListWrap: {
+        backgroundColor: '#fff',
+        borderRadius: 6,
+        height: 50,
+        overflow: 'hidden',
+        width: width * 0.94,
+        ...css.auto,
+        marginBottom: 10,
+        paddingHorizontal: 15
+    },
+    pupTitleText: {
+        color: '#000',
+        fontSize: 16,
+    },
     pupilItemWrap: {
         backgroundColor: '#fff',
         marginBottom: 15,
-        minHeight: 100,
+        paddingHorizontal: 15,
+        paddingVertical: 15
+    },
+    teacherWrap: {
+        height: 90,
+        paddingHorizontal: 20,
+        width: '100%'
     },
 });
