@@ -61,5 +61,9 @@ export const css = StyleSheet.create({
     },
     sp: {
         justifyContent: 'space-between',
+    },
+    header: {
+        height: 63,
+        paddingTop: 63,
     }
 });
