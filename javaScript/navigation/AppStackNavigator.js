@@ -104,7 +104,7 @@ const stackScreens = [
     {
         name: 'CardPackageRecordsPage',
         component: CardPackageRecordsPage,
-        title: '消耗记录',
+        title: '道具记录',
     },
     {
         name: 'CardPackagePage',

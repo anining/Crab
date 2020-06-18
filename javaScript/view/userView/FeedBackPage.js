@@ -14,7 +14,7 @@ export default function FeedBackPage () {
     const [phone, setPhone] = useState('');
     const [selectId, setSelectId] = useState(1);
     const view = <Image source={feed2} style={{ height: 50, width: 50 }}/>;
-    const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>道具记录</Text>;
+    const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>反馈记录</Text>;
 
     return (
         <SafeAreaView style={[css.safeAreaView, css.pr]}>
