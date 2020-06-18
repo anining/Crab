@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { SafeAreaView, Text, Image, View, Dimensions, ScrollView, StyleSheet, ImageBackground, DeviceEventEmitter, TouchableOpacity } from 'react-native';
 import { css } from '../../assets/style/css';
 import share1 from '../../assets/icon/share/share1.png';
 import share2 from '../../assets/icon/share/share2.png';
 import share3 from '../../assets/icon/share/share3.png';
+import share4 from '../../assets/icon/share/share4.png';
+import share5 from '../../assets/icon/share/share5.png';
+import share6 from '../../assets/icon/share/share6.png';
+import share7 from '../../assets/icon/share/share7.png';
+import share8 from '../../assets/icon/share/share8.png';
 import pop1 from '../../assets/icon/pop/pop1.png';
 import Shadow from '../../components/Shadow';
 import ImageAuto from '../../components/ImageAuto';
@@ -15,72 +20,192 @@ import { N } from '../../utils/router';
 const { height, width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
 const SHARE_ITEM_RADIUS = 10; // welfare
-const WALFARE_ONE_height = 160;
-export default function SharePage () {
-    return (
-        <SafeAreaView style={css.safeAreaView}>
-            <ScrollView style={styles.scrollWrap}>
-                <View source={share1} style={[styles.shareBgWrap, css.pr]}>
-                    <ImageAuto source={share1} style={[css.pa, styles.shareBg]}/>
-                    <View style={[css.flex, styles.codeWrap, css.auto, css.sp]}>
-                        <Text style={styles.inviteCode}>我的邀请码：<Text style={styles.codeNumber}>A32321</Text> </Text>
-                        <Text style={styles.copyBtn}>复制</Text>
-                    </View>
-                    <View style={[styles.inviteWrap, css.auto]}>
-                        <Animatable.View useNativeDriver={true} iterationDelay={5000} iterationCount="infinite" animation="tada" style={[css.auto]}>
-                            <Shadow style={[styles.shareBtn]}>
-                                <LinearGradient colors={['#FEE581', '#FDC34A']} start={{ x: 1, y: 0 }} end={{ x: 1, y: 1 }} style={[styles.shareBtnTextWrap]}>
-                                    <Text style={styles.shareBtnText} onPress={() => {
-                                        // tips={'您有一个任务'}
-                                        DeviceEventEmitter.emit('showPop', <Choice info={{
-                                            icon: pop1,
-                                            tips: '您有一个任务',
-                                            minTips: '你好。。。。',
-                                            lt: '放弃任务',
-                                            lc: () => {},
-                                            rt: '继续任务',
-                                            rc: () => {},
-                                        }} />);
-                                    }}>立即收徒</Text>
-                                </LinearGradient>
-                            </Shadow>
-                        </Animatable.View>
-                        <TouchableOpacity activeOpacity={1} style={[css.flex, css.sp, styles.tipsWrap]} onPress={() => {
-                            N.navigate('PupilInfoPage');
-                        }}>
-                            <Text numberOfLines={1} style={styles.shareInfoTips}>
-                                当前提现返佣：徒弟提现反10%，徒孙提现反5%
-                            </Text>
-                            <Text style={styles.tipsBtn}>师徒信息</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={[styles.welfareWrap, css.auto, css.flex, css.fw]}>
-                        <View style={[styles.welfareItemWrap, css.pr, css.flex]}>
-                            <ImageBackground source={share2} style={[styles.shareTitle, css.flex, css.pa]}>
-                                <Text style={styles.shareTitleText}>福利一</Text>
-                            </ImageBackground>
-                            <Shadow style={styles.welfareInner}>
-                                <View style={[styles.welfareInner, { backgroundColor: '#fff' }]}>
-                                </View>
-                            </Shadow>
-                        </View>
-                        <View style={[styles.welfareItemWrap, css.pr, css.flex]}>
-                            <ImageBackground source={share2} style={[styles.shareTitle, css.flex, css.pa]}>
-                                <Text style={styles.shareTitleText}>福利二</Text>
-                            </ImageBackground>
-                            <Shadow style={styles.welfareInner}>
-                                <View style={[styles.welfareInner, { backgroundColor: '#fff' }]}>
-                                </View>
-                            </Shadow>
-                        </View>
-                        <Image source={share3} style={styles.shareInfoImage}/>
-                    </View>
+const WALFARE_ONE_height = 190;
+const WALFARE_TWO_height = 600;
+const cashBack = [{
+    title: '徒弟首次提现到账',
+    label: '师傅送1元'
+}, {
+    title: '徒弟第二次提现到账',
+    label: '师傅送2元'
+}, {
+    title: '徒弟第三次提现到账',
+    label: '师傅送3元'
+}];
+export default class SharePage extends Component {
+    // eslint-disable-next-line no-useless-constructor
+    constructor (props) {
+        super(props);
+        this.state = {};
+    }
+
+    _renderWelfare () {
+        const view = [];
+        const shareLevel = [{
+            icon: share4,
+            title: '高级推手',
+            label: <Text numberOfLine={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>80-120元</Text>现金红包，永久获得<Text style={{ color: '#FF8353' }}>2%</Text>徒弟<Text style={{ color: '#FF8353' }}>1%</Text>徒孙提现返佣。</Text>,
+            target: <Text numberOfLine={1} style={styles.welfareTargetText}>要求500徒弟提现，已提现的徒弟 80/100</Text>,
+        }, {
+            icon: share5,
+            title: '钻石推手',
+            label: <Text numberOfLine={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>300-520</Text>元现金红包，永久获得<Text style={{ color: '#FF8353' }}>2%</Text>徒弟<Text style={{ color: '#FF8353' }}>1%</Text>徒孙提现返佣。</Text>,
+            target: <Text numberOfLine={1} style={styles.welfareTargetText}>要求500徒弟提现，已提现的徒弟 80/100</Text>,
+        }, {
+            icon: share6,
+            title: '顶级推手',
+            label: <Text numberOfLine={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>1888元</Text>现金红包，永久获得2%徒弟1%徒孙提现返佣。</Text>,
+            target: <Text numberOfLine={1} style={styles.welfareTargetText}>要求500徒弟提现，已提现的徒弟 80/100</Text>,
+        }];
+        shareLevel.forEach((item, index) => {
+            view.push(<View style={[styles.welfareProgressWrap, css.flex, css.fw, css.afs]} key={`shareLevel${index}`}>
+                <View style={[css.flex, css.js, styles.wpiTitleWrap]}>
+                    <ImageAuto source={item.icon} style={{ width: 32, marginRight: 10 }}/>
+                    <Text style={[styles.welfareTitleText]}>{item.title}</Text>
                 </View>
-            </ScrollView>
-        </SafeAreaView>
-    );
+                {item.label}
+                {this._renderProgress()}
+                {item.target}
+            </View>);
+        });
+        return view;
+    }
+
+    _renderProgress () {
+        try {
+            return <View style={[css.flex, css.js, styles.progressWrap, css.auto]}>
+                <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.progressInner]} />
+            </View>;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    static _renderShareTitle (title) {
+        return <View style={[css.flex, css.js, styles.wShareTitle, css.pr]}>
+            <ImageAuto source={share8} style={{
+                width: 20,
+                ...css.pa,
+            }}/>
+            {title || <Text>自定义标题</Text>}
+        </View>;
+    }
+
+    _renderCashBack () {
+        try {
+            const view = [];
+            cashBack.forEach((item, index) => {
+                view.push(<Animatable.View useNativeDriver={true} iterationDelay={4000} delay={(index + 1) * 2000} iterationCount={5} animation="bounce" style={[css.pr, styles.cashBackItem]}>
+                    <ImageAuto source={share7} style={{
+                        width: width * 0.9 * 0.25,
+                        ...css.pa,
+                    }}/>
+                    <Text style={[css.pa, styles.cashTitle]}>{item.title}</Text>
+                    <Text style={[css.pa, styles.cashLabel]}>{item.label}</Text>
+                </Animatable.View>);
+            });
+            return <View style={[css.flex, css.sp, { marginTop: 20, width: '100%', paddingHorizontal: 10 }]}>{view}</View>;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    render () {
+        return (
+            <SafeAreaView style={css.safeAreaView}>
+                <ScrollView style={styles.scrollWrap}>
+                    <View source={share1} style={[styles.shareBgWrap, css.pr]}>
+                        <ImageAuto source={share1} style={[css.pa, styles.shareBg]}/>
+                        <View style={[css.flex, styles.codeWrap, css.auto, css.sp]}>
+                            <Text style={styles.inviteCode}>我的邀请码：<Text style={styles.codeNumber}>A32321</Text> </Text>
+                            <Text style={styles.copyBtn}>复制</Text>
+                        </View>
+                        <View style={[styles.inviteWrap, css.auto]}>
+                            <Animatable.View useNativeDriver={true} iterationDelay={5000} iterationCount="infinite" animation="tada" style={[css.auto]}>
+                                <Shadow style={[styles.shareBtn]}>
+                                    <LinearGradient colors={['#FEE581', '#FDC34A']} start={{ x: 1, y: 0 }} end={{ x: 1, y: 1 }} style={[styles.shareBtnTextWrap]}>
+                                        <Text style={styles.shareBtnText} onPress={() => {
+                                            // tips={'您有一个任务'}
+                                            DeviceEventEmitter.emit('showPop', <Choice info={{
+                                                icon: pop1,
+                                                tips: '您有一个任务',
+                                                minTips: '你好。。。。',
+                                                lt: '放弃任务',
+                                                lc: () => {},
+                                                rt: '继续任务',
+                                                rc: () => {},
+                                            }} />);
+                                        }}>立即收徒</Text>
+                                    </LinearGradient>
+                                </Shadow>
+                            </Animatable.View>
+                            <TouchableOpacity activeOpacity={1} style={[css.flex, css.sp, styles.tipsWrap]} onPress={() => {
+                                N.navigate('PupilInfoPage');
+                            }}>
+                                <Text numberOfLines={1} style={styles.shareInfoTips}>
+                                    当前提现返佣：徒弟提现反10%，徒孙提现反5%
+                                </Text>
+                                <Text style={styles.tipsBtn}>师徒信息</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={[styles.welfareWrap, css.auto, css.flex, css.fw]}>
+                            <View style={[styles.welfareItemWrap, css.pr, css.flex]}>
+                                <ImageBackground source={share2} style={[styles.shareTitle, css.flex, css.pa]}>
+                                    <Text style={styles.shareTitleText}>福利一</Text>
+                                </ImageBackground>
+                                <Shadow style={styles.welfareInner}>
+                                    <View style={[styles.welfareInner, css.flex, css.fw, css.sp, { backgroundColor: '#fff', paddingTop: 30, paddingHorizontal: 10 }]}>
+                                        {SharePage._renderShareTitle(
+                                            <Text style={styles.wTitleText}>徒弟提现送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>
+                                        )}
+                                        {this._renderCashBack()}
+                                    </View>
+                                </Shadow>
+                            </View>
+                            <View style={[styles.welfareItemWrap, css.pr, css.flex]}>
+                                <ImageBackground source={share2} style={[styles.shareTitle, css.flex, css.pa]}>
+                                    <Text style={styles.shareTitleText}>福利二</Text>
+                                </ImageBackground>
+                                <Shadow style={[styles.welfareInner, { height: WALFARE_TWO_height }]}>
+                                    <View style={[styles.welfareInner, { backgroundColor: '#fff', paddingTop: 30, paddingHorizontal: 10, height: WALFARE_TWO_height }]}>
+                                        {SharePage._renderShareTitle(
+                                            <Text style={styles.wTitleText}>收徒抢<Text style={{ color: '#FF5C22' }}>1888元</Text>现金红包加<Text style={{ color: '#FF5C22' }}>永久15%返佣</Text></Text>
+                                        )}
+                                        {this._renderWelfare()}
+                                    </View>
+                                </Shadow>
+                            </View>
+                            <Image source={share3} style={styles.shareInfoImage}/>
+                        </View>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        );
+    }
 }
 const styles = StyleSheet.create({
+    cashBackItem: {
+        height: width * 0.9 * 0.25 * 294 / 273,
+        overflow: 'hidden',
+        width: width * 0.9 * 0.25,
+    },
+    cashLabel: {
+        bottom: 0,
+        color: '#fff',
+        fontSize: 11,
+        lineHeight: 45,
+        textAlign: 'center',
+        width: '100%'
+    },
+    cashTitle: {
+        color: '#FF4A0A',
+        fontSize: 11,
+        left: '15%',
+        lineHeight: 15,
+        textAlign: 'center',
+        top: '20%',
+        width: '70%'
+    },
     codeNumber: {
         color: '#FF4400',
         fontSize: 16,
@@ -111,6 +236,20 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingTop: 10,
         width: width * 0.9
+    },
+    progressInner: {
+        borderRadius: 6,
+        height: '100%',
+        overflow: 'hidden',
+        width: '60%'
+    },
+    progressWrap: {
+        backgroundColor: '#FFE4B8',
+        borderRadius: 6,
+        height: 12,
+        marginVertical: 8,
+        overflow: 'hidden',
+        width: '94%'
     },
     scrollWrap: {
         backgroundColor: '#FF9331',
@@ -174,10 +313,19 @@ const styles = StyleSheet.create({
         marginTop: width * 0.09,
         overflow: 'hidden'
     },
+    wShareTitle: {
+        height: 40,
+        paddingLeft: 10,
+        width: '100%'
+    },
+    wTitleText: {
+        color: '#222',
+        fontSize: 16
+    },
     welfareInner: {
         borderRadius: SHARE_ITEM_RADIUS,
         height: WALFARE_ONE_height,
-        width: SHARE_ITEM_WIDTH
+        width: SHARE_ITEM_WIDTH,
     },
     welfareItemWrap: {
         height: 'auto',
@@ -185,9 +333,42 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         width: 'auto',
     },
+    welfareLabelText: {
+        color: '#734209',
+        fontSize: 14,
+        lineHeight: 24,
+        textAlign: 'left',
+        width: '100%',
+    },
+    welfareProgressWrap: {
+        backgroundColor: '#FFF8E7',
+        borderRadius: 6,
+        height: 160,
+        marginTop: 15,
+        overflow: 'hidden',
+        padding: 10,
+        width: '96%',
+        ...css.auto
+    },
+    welfareTargetText: {
+        color: '#734209',
+        fontSize: 12,
+        lineHeight: 24,
+        textAlign: 'right',
+        width: '100%',
+    },
+    welfareTitleText: {
+        color: '#222',
+        fontSize: 16,
+        fontWeight: '900'
+    },
     welfareWrap: {
         height: 'auto',
         paddingHorizontal: 15,
         width: SHARE_ITEM_WIDTH,
+    },
+    wpiTitleWrap: {
+        height: 40,
+        width: '100%'
     },
 });

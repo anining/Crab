@@ -195,7 +195,7 @@ export default class AnswerPage extends Component {
     }
 
     render () {
-        return <SafeAreaView style={[{ flex: 1 }]}>
+        return <SafeAreaView style={[{ flex: 1, paddingTop: 20, backgroundColor: '#fff' }]}>
             <ScrollView style={[{ flex: 1 }]}>
                 <View style={{ height: 20 }}/>
                 <Slider height={width * 0.35} autoplay={true}/>
@@ -205,20 +205,23 @@ export default class AnswerPage extends Component {
                     </Text>}/>
                     {this._renderDaySign()}
                 </View>
+                <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
                 <View style={styles.answerWrap}>
                     <ComTitle title={'火爆活动'} />
                     {/* {this.renderList(sprog)} */}
                     {this._renderActivity()}
                 </View>
+                <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
                 <View style={styles.answerWrap}>
                     <ComTitle title={'新手福利'} />
                     {this.renderList(sprog)}
                 </View>
+                <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
                 <View style={styles.answerWrap}>
                     <ComTitle title={'领金币'}/>
                     {this.renderList(taskList)}
                 </View>
-                <View style={{ height: 20 }}/>
+                <View style={{ height: 20, backgroundColor: '#f8f8f8' }}/>
             </ScrollView>
         </SafeAreaView>;
     }
@@ -251,7 +254,7 @@ const styles = StyleSheet.create({
     answerWrap: {
         backgroundColor: '#fff',
         height: 'auto',
-        marginTop: 15,
+        // marginTop: 15,
         minHeight: 100,
         paddingHorizontal: 10,
         paddingVertical: 15,
