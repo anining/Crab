@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     },
     selectView: {
         backgroundColor: '#fff',
-        bottom: 0,
+        bottom: 25,
         paddingLeft: 15,
         paddingRight: 15,
         position: 'absolute',
