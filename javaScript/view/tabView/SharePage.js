@@ -145,7 +145,7 @@ export default class SharePage extends Component {
                                 <Text numberOfLines={1} style={styles.shareInfoTips}>
                                     当前提现返佣：徒弟提现反10%，徒孙提现反5%
                                 </Text>
-                                <Text style={styles.tipsBtn}>师徒信息</Text>
+                                <Text style={styles.tipsBtn}>{'师徒信息>>'}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={[styles.welfareWrap, css.auto, css.flex, css.fw]}>
@@ -306,8 +306,12 @@ const styles = StyleSheet.create({
         fontWeight: '900',
     },
     tipsBtn: {
+        // backgroundColor: '#fff',
         color: '#FED567',
-        fontSize: 12,
+        fontSize: 13,
+        fontWeight: '900',
+        paddingHorizontal: 10,
+        paddingVertical: 3,
     },
     tipsWrap: {
         marginTop: width * 0.09,

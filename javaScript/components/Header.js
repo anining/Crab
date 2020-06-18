@@ -10,8 +10,12 @@ const HEIGHT = 63;
 function RenderHeaderRight ({ headerRight, onPress }) {
     if (headerRight) {
         return (
-            <TouchableOpacity style={[styles.headerRight, { alignItems: 'center', justifyContent: 'center' }]} onPress={() => {
-                onPress();
+            <TouchableOpacity activeOpacity={1} style={[styles.headerRight, { alignItems: 'center', justifyContent: 'center' }]} onPress={() => {
+                try {
+                    onPress && onPress();
+                } catch (e) {
+                    console.log(e);
+                }
             }} >
                 {headerRight}
             </TouchableOpacity>
@@ -68,7 +72,9 @@ const styles = StyleSheet.create({
         height: HEIGHT,
         lineHeight: HEIGHT,
         textAlign: 'center',
-        width: width - 140,
+        // width: width - 140,
+        // eslint-disable-next-line react-native/sort-styles
+        flex: 1
     },
     headerLeft: {
         height: HEIGHT,
@@ -77,6 +83,7 @@ const styles = StyleSheet.create({
     headerRight: {
         height: HEIGHT,
         lineHeight: HEIGHT,
+        paddingRight: 10,
         textAlign: 'center',
         width: 70
     },
