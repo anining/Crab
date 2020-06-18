@@ -72,7 +72,6 @@ export default function AccountHomePage () {
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '绑定账号' } }} navigation={N} onPress={() => {
-                // N.navigate('AccountBindPage');
                 DeviceEventEmitter.emit('showPop', <RenderSelect />);
             }} headerRight={(numbers.length || binds.length) && headerRight}/>
             <RenderView numbers={numbers} binds={binds}/>
@@ -103,7 +102,8 @@ function RenderSelect () {
     TYPE.forEach(item => {
         components.push(
             <TouchableOpacity key={item.id} onPress={() => {
-
+                DeviceEventEmitter.emit('hidePop');
+                N.navigate('AccountBindPage', { type: item.id });
             }} style={[styles.selectViewBtn, css.flexRCSB]}>
                 <Text>{item.label}</Text>
                 <Text>{'>'}</Text>
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     },
     selectView: {
         backgroundColor: '#fff',
-        bottom: 25,
+        bottom: 0,
         paddingLeft: 15,
         paddingRight: 15,
         position: 'absolute',
