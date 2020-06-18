@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { DeviceEventEmitter, Dimensions, Modal, StyleSheet, TouchableOpacity } from 'react-native';
 import { css } from '../assets/style/css';
-
-const { width, height } = Dimensions.get('window');
 /**
  * 使用示例
  DeviceEventEmitter.emit('showPop', <View/>);
@@ -36,14 +34,12 @@ export default class Prompt extends Component {
 }
 const styles = StyleSheet.create({
     modal: {
-        height: height,
-        width: width,
+        flex: 1
     },
     view: {
         alignItems: 'center',
         backgroundColor: 'rgba(0,0,0,0.3)',
-        height: height,
+        flex: 1,
         justifyContent: 'center',
-        width: width,
     },
 });
