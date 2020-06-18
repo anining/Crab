@@ -20,7 +20,7 @@ import { N } from '../../utils/router';
 const { height, width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
 const SHARE_ITEM_RADIUS = 10; // welfare
-const WALFARE_ONE_height = 160;
+const WALFARE_ONE_height = 190;
 const WALFARE_TWO_height = 600;
 const cashBack = [{
     title: '徒弟首次提现到账',
@@ -81,8 +81,8 @@ export default class SharePage extends Component {
         }
     }
 
-    _renderShareTitle (title) {
-        return <View style={[styles.wShareTitle, css.pr]}>
+    static _renderShareTitle (title) {
+        return <View style={[css.flex, css.js, styles.wShareTitle, css.pr]}>
             <ImageAuto source={share8} style={{
                 width: 20,
                 ...css.pa,
@@ -95,7 +95,7 @@ export default class SharePage extends Component {
         try {
             const view = [];
             cashBack.forEach((item, index) => {
-                view.push(<Animatable.View useNativeDriver={true} iterationDelay={4000} delay={(index + 1) * 2000} iterationCount="infinite" animation="bounce" style={[css.pr, styles.cashBackItem]}>
+                view.push(<Animatable.View useNativeDriver={true} iterationDelay={4000} delay={(index + 1) * 2000} iterationCount={3} animation="bounce" style={[css.pr, styles.cashBackItem]}>
                     <ImageAuto source={share7} style={{
                         width: width * 0.9 * 0.25,
                         ...css.pa,
@@ -104,7 +104,7 @@ export default class SharePage extends Component {
                     <Text style={[css.pa, styles.cashLabel]}>{item.label}</Text>
                 </Animatable.View>);
             });
-            return view;
+            return <View style={[css.flex, css.sp, { marginTop: 20, width: '100%', paddingHorizontal: 10 }]}>{view}</View>;
         } catch (e) {
             return null;
         }
@@ -154,8 +154,10 @@ export default class SharePage extends Component {
                                     <Text style={styles.shareTitleText}>福利一</Text>
                                 </ImageBackground>
                                 <Shadow style={styles.welfareInner}>
-                                    <View style={[styles.welfareInner, css.flex, css.sp, { backgroundColor: '#fff', padding: 10 }]}>
-                                        {this._renderShareTitle()}
+                                    <View style={[styles.welfareInner, css.flex, css.fw, css.sp, { backgroundColor: '#fff', paddingTop: 30, paddingHorizontal: 10 }]}>
+                                        {SharePage._renderShareTitle(
+                                            <Text style={styles.wTitleText}>徒弟提现送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>
+                                        )}
                                         {this._renderCashBack()}
                                     </View>
                                 </Shadow>
@@ -165,7 +167,10 @@ export default class SharePage extends Component {
                                     <Text style={styles.shareTitleText}>福利二</Text>
                                 </ImageBackground>
                                 <Shadow style={[styles.welfareInner, { height: WALFARE_TWO_height }]}>
-                                    <View style={[styles.welfareInner, { backgroundColor: '#fff', padding: 10, height: WALFARE_TWO_height }]}>
+                                    <View style={[styles.welfareInner, { backgroundColor: '#fff', paddingTop: 30, paddingHorizontal: 10, height: WALFARE_TWO_height }]}>
+                                        {SharePage._renderShareTitle(
+                                            <Text style={styles.wTitleText}>收徒抢<Text style={{ color: '#FF5C22' }}>1888元</Text>现金红包加<Text style={{ color: '#FF5C22' }}>永久15%返佣</Text></Text>
+                                        )}
                                         {this._renderWelfare()}
                                     </View>
                                 </Shadow>
@@ -309,10 +314,13 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     wShareTitle: {
-        height: 50,
-        marginTop: 15,
-        paddingLeft: 15,
-        width: '100%',
+        height: 40,
+        paddingLeft: 10,
+        width: '100%'
+    },
+    wTitleText: {
+        color: '#222',
+        fontSize: 16
     },
     welfareInner: {
         borderRadius: SHARE_ITEM_RADIUS,
