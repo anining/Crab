@@ -18,6 +18,7 @@ import with3 from '../../assets/icon/withdraw/withdraw3.png';
 import with4 from '../../assets/icon/withdraw/withdraw4.png';
 import with5 from '../../assets/icon/withdraw/withdraw5.png';
 import toast from '../../utils/toast';
+import Header from '../../components/Header';
 
 const { width } = Dimensions.get('window');
 const GOOD_LIST = [
@@ -61,8 +62,13 @@ const GOOD_LIST = [
 export default function WithdrawPage () {
     const [goodId, setGoodId] = useState();
     const [payType, setPayType] = useState('wx');
+    const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>资金记录</Text>;
+
     return (
         <SafeAreaView style={css.safeAreaView}>
+            <Header scene={{ descriptor: { options: {} }, route: { name: '我的收益' } }} navigation={N} onPress={() => {
+                N.navigate('FundingRecordsPage');
+            }} headerRight={headerRight}/>
             <ScrollView style={styles.scrollView}>
                 <ImageBackground source={with1} style={styles.moneyView}>
                     <View style={styles.moneyViewTop}>
