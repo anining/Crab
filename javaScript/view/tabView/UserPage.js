@@ -23,6 +23,12 @@ import user17 from '../../assets/icon/user/user17.png';
 const { width } = Dimensions.get('window');
 const menuList = [
     {
+        icon: user12,
+        title: 'AccountHomePage',
+        remark: '',
+        path: 'AccountHomePage'
+    },
+    {
         icon: user17,
         title: '活动中心',
         remark: '超多活动等你参与',
@@ -75,7 +81,7 @@ const menuList = [
         title: '切换账号',
         remark: '',
         path: 'VerificationStackNavigator'
-    },
+    }
 ];
 export default function UserPage () {
     return (

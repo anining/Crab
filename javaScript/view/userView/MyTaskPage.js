@@ -6,6 +6,7 @@ import ListHeader from '../../components/ListHeader';
 import ListGeneral from '../../components/ListGeneral';
 import toast from '../../utils/toast';
 import task10 from '../../assets/icon/task/task10.png';
+import { N } from '../../utils/router';
 
 const itemMarginTop = 10;
 const HEADER_DATA = [
@@ -198,7 +199,7 @@ function RenderItem ({ type, item }) {
             }}>
                 <Text style={{ color: '#353535', fontSize: 14 }}>未通过原因：<Text style={{ color: '#FF3154' }}>图片提交异常</Text></Text>
                 <TouchableOpacity onPress={() => {
-
+                    N.navigate('FeedBackPage');
                 }} style={styles.answerBtn}>
                     <Text style={{ fontSize: 12, color: '#FF3154', lineHeight: 25, textAlign: 'center' }}>我有疑问</Text>
                 </TouchableOpacity>
