@@ -79,7 +79,7 @@ function RenderSelect ({ status }) {
     const components = [];
     status.forEach(item => {
         components.push(
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
 
             }} style={styles.selectBtn} key={item.id}>
                 <Text style={{ color: '#FF6C00', fontSize: 15, lineHeight: 36, textAlign: 'center' }}>{item.label}</Text>

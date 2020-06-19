@@ -179,7 +179,7 @@ export default class AnswerPage extends Component {
         try {
             const view = [];
             view.push(
-                <TouchableOpacity activeOpacity={1}>
+                <TouchableOpacity>
                     <ImageAuto source={answer5} width={width * 0.9 * 0.48}/>
                 </TouchableOpacity>,
             );

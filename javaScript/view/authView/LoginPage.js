@@ -54,13 +54,13 @@ export default function LoginPage () {
                         placeholder={'请输入手机验证码'}
                         placeholderTextColor={'#dbdcdb'}
                         onChangeText={code => setCode(code)}/>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
                         getCode();
                     }} style={styles.codeBtn}>
                         <Text style={styles.codeText}>{codeText + (!isNaN(codeText) ? 's' : '')}</Text>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity activeOpacity={1} onPress={() => {
                     N.replace('MaterialTopTabNavigator');
                 }} style={styles.loginBtn}>
                     <Text style={styles.loginText}>立即注册</Text>

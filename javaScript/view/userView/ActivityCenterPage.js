@@ -55,7 +55,7 @@ export default function ActivityCenterPage () {
                                             <Image source={TYPE_DATA[item.type]} style={styles.image} />
                                             <Text numberOfLines={1} style={{ fontSize: 14, fontWeight: '500', color: '#353535', maxWidth: 130 }}>{item.label}</Text>
                                         </View>
-                                        <TouchableOpacity onPress={() => {
+                                        <TouchableOpacity activeOpacity={1} onPress={() => {
                                             // N.navigate(item.path);
                                         }}>
                                             <Text numberOfLines={1} style={{ fontSize: 12, fontWeight: '500', color: '#353535' }}>查看详情 》</Text>

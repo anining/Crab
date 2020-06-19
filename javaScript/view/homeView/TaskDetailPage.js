@@ -33,7 +33,7 @@ export default function TaskDetailPage () {
                 <View style={styles.endTimeView}>
                     <View style={styles.endTimeViewItem}>
                         <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>剩余时间：<Text style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }}>00:00:00</Text></Text>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity activeOpacity={1} onPress={() => {
 
                         }} style={styles.giveUpBtn}>
                             <Text style={{ color: '#868686', fontSize: 12, lineHeight: 28, textAlign: 'center' }}>放弃任务</Text>
@@ -62,7 +62,7 @@ export default function TaskDetailPage () {
                         </View>
                         <View style={styles.taskDetailBottomView}>
                             <Text style={{ color: '#999', fontSize: 12 }}>通过率低于20%时，建议切换账号做单。</Text>
-                            <TouchableOpacity onPress={() => {
+                            <TouchableOpacity activeOpacity={1} onPress={() => {
 
                             }} style={styles.changeNumber}>
                                 <Text style={{ color: '#FF6C00', fontSize: 12, lineHeight: 28, textAlign: 'center' }}>切换账号</Text>
@@ -83,7 +83,7 @@ export default function TaskDetailPage () {
                             <Image source={task6} style={{ height: 14, width: 14, marginRight: 5 }}/>
                             <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>做单教程</Text>
                         </View>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity activeOpacity={1} onPress={() => {
 
                         }}>
                             <Text style={{ color: '#FF6C00', fontSize: 12 }}>帮助中心</Text>
@@ -101,7 +101,7 @@ export default function TaskDetailPage () {
                             <Image source={task5} style={{ height: 14, width: 14, marginRight: 5 }}/>
                             <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>提交审核</Text>
                         </View>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity activeOpacity={1} onPress={() => {
 
                         }}>
                             <Text style={{ color: '#FF6C00', fontSize: 12 }}>帮助中心</Text>
@@ -122,18 +122,18 @@ export default function TaskDetailPage () {
                         </View>
                     </View>
                 </View>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity activeOpacity={1} onPress={() => {
 
                 }} style={styles.submitBtn}>
                     <Text style={styles.submitBtnText}>提交任务</Text>
                 </TouchableOpacity>
             </ScrollView>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
 
             }} style={{ position: 'absolute', bottom: '29%', right: 10 }}>
                 <Image source={task2} style={{ height: 70, width: 84 }}/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
 
             }} style={{ position: 'absolute', bottom: '15%', right: 10 }}>
                 <Image source={task3} style={{ height: 70, width: 84 }}/>

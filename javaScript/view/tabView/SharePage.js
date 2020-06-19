@@ -232,6 +232,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
     },
     inviteWrap: {
+        // backgroundColor: 'red',
         height: width * 0.35,
         paddingHorizontal: 15,
         paddingTop: 10,

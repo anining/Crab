@@ -27,7 +27,9 @@ export default class Prompt extends Component {
         return <Modal visible={this.state.show} transparent={true} animationType='fade' onRequestClose={() => {
         }} hardwareAccelerated={true} presentationStyle='overFullScreen' style={styles.modal}>
             <TouchableOpacity activeOpacity={1} style={[styles.view, css.flex]} onPress={() => { this.setState({ show: false }); }}>
-                {this.state.dom}
+                <TouchableOpacity activeOpacity={1} onPress={() => { this.props.cancel && this.setState({ show: false }); }}>
+                    {this.state.dom}
+                </TouchableOpacity>
             </TouchableOpacity>
         </Modal>;
     }

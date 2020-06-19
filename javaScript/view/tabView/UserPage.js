@@ -97,7 +97,7 @@ export default function UserPage () {
                             </View>
                             <View style={styles.userCardBottom}>
                                 <Text style={styles.inviteCode}>邀请码:A23345643</Text>
-                                <TouchableOpacity onPress={() => {
+                                <TouchableOpacity activeOpacity={1} onPress={() => {
                                     Clipboard.setString('hello world');
                                 }} style={styles.copyBtn}>
                                     <Text style={styles.copyText}>复制</Text>
@@ -105,7 +105,7 @@ export default function UserPage () {
                             </View>
                         </View>
                     </View>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
                         N.navigate('WeChatBindPage');
                     }} style={styles.bindBtn}>
                         <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
@@ -116,7 +116,7 @@ export default function UserPage () {
                     <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
                         <View style={styles.moneyViewTop}>
                             <Text style={{ color: '#222', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
-                            <TouchableOpacity onPress={() => {
+                            <TouchableOpacity activeOpacity={1} onPress={() => {
                                 N.navigate('WithdrawPage');
                             }} style={styles.withDrawBtn}>
                                 <Text style={{ lineHeight: 30, textAlign: 'center', color: '#fff' }}>立即提现</Text>
@@ -141,25 +141,25 @@ export default function UserPage () {
                 <View style={styles.myTask}>
                     <Text style={styles.myTaskTitle}>我的任务</Text>
                     <View style={styles.myTaskViewBottom}>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity activeOpacity={1} onPress={() => {
                             N.navigate('MyTaskPage', { type: 1 });
                         }} style={styles.myTaskBtn}>
                             <Image source={user3} style={styles.myTaskBtnIcon}/>
                             <Text style={styles.myTaskBtnText}>进行中<Text style={{ color: '#FF7751' }}> 1</Text></Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity activeOpacity={1} onPress={() => {
                             N.navigate('MyTaskPage', { type: 2 });
                         }} style={styles.myTaskBtn}>
                             <Image source={user4} style={styles.myTaskBtnIcon}/>
                             <Text style={styles.myTaskBtnText}>审核中<Text style={{ color: '#FF7751' }}> 1</Text></Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity activeOpacity={1} onPress={() => {
                             N.navigate('MyTaskPage', { type: 3 });
                         }} style={styles.myTaskBtn}>
                             <Image source={user5} style={styles.myTaskBtnIcon}/>
                             <Text style={styles.myTaskBtnText}>已通过<Text style={{ color: '#FF7751' }}> 1</Text></Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity activeOpacity={1} onPress={() => {
                             N.navigate('MyTaskPage', { type: 4 });
                         }} style={styles.myTaskBtn}>
                             <Image source={user6} style={styles.myTaskBtnIcon}/>
@@ -178,7 +178,7 @@ function RenderMenu ({ menuList }) {
     const components = [];
     menuList.forEach(menu => {
         components.push(
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 if (menu.path === 'VerificationStackNavigator') {
                     N.replace(menu.path);
                 } else {

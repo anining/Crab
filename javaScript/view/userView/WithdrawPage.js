@@ -100,21 +100,21 @@ export default function WithdrawPage () {
                 <View style={styles.withDrawView}>
                     <View style={styles.withDrawViewTitle}>
                         <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>提现到</Text>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity activeOpacity={1} onPress={() => {
                             N.navigate('WithdrawRecordsPage');
                         }}>
                             <Text style={{ fontSize: 12, color: '#FF6C00' }}>提现记录</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.withDrawType}>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity activeOpacity={1} onPress={() => {
                             setPayType('ali');
                         }} style={[styles.withDrawTypeItem, { borderColor: payType === 'ali' ? '#FF6C00' : '#D0D0D0' }]}>
                             <RenderWithDrawTypeSelectView select={payType === 'ali'}/>
                             <Image source={with3} style={{ width: 26, height: 26, marginRight: 7 }}/>
                             <Text style={{ fontSize: 16, color: '#222' }}>支付宝账户</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity activeOpacity={1} onPress={() => {
                             setPayType('wx');
                         }} style={[styles.withDrawTypeItem, { borderColor: payType === 'wx' ? '#FF6C00' : '#D0D0D0' }]}>
                             <RenderWithDrawTypeSelectView select={payType === 'wx'}/>
@@ -133,7 +133,7 @@ export default function WithdrawPage () {
                 <Text numberOflines={1} style={styles.text}>7.支付宝账号和姓名必须匹配，否则提现不会到账。</Text>
                 <Text numberOflines={1} style={[styles.text, { paddingBottom: 50 }]}>8.每天每档只能提现一次。</Text>
             </ScrollView>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 if (payType === 'wx') {
                     N.replace('MaterialTopTabNavigator');
                 } else {
@@ -150,7 +150,7 @@ function RenderGoodItem ({ goodList, setGoodId, goodId }) {
     const goodView = [];
     goodList.forEach(good => {
         goodView.push(
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 setGoodId(good.id);
             }} key={good.id} style={[styles.goodItem, {
                 borderColor: goodId === good.id ? '#FF6C00' : '#D0D0D0',

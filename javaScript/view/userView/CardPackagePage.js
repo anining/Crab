@@ -53,7 +53,7 @@ function RenderCard ({ cards, setItem, item }) {
     const components = [];
     cards.forEach(card => {
         components.push(
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 setItem(card);
             }} style={[styles.cardItem, { borderColor: card.id === item.id ? '#FFE06F' : '#F1F1F1', backgroundColor: card.id === item.id ? '#FFF6D7' : '#F1F1F1' }]}>
                 <Text style={{ color: '#353535', fontSize: 14, fontWeight: '500' }}>{card.label}</Text>
