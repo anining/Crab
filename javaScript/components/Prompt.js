@@ -12,21 +12,32 @@ export default class Prompt extends Component {
             show: false,
             dom: null,
         };
+        this.close = null;
+    }
+
+    onClose () {
+        this.setState({ show: false });
+        this.close && this.close();
     }
 
     componentDidMount () {
         DeviceEventEmitter.addListener('hidePop', () => {
-            this.setState({ show: false });
+            this.onClose();
         });
         DeviceEventEmitter.addListener('showPop', (info) => {
-            this.setState({ show: true, dom: info });
+            if (info.dom) {
+                this.close = info.close;
+                this.setState({ show: true, dom: info.dom });
+            } else {
+                this.setState({ show: true, dom: info });
+            }
         });
     }
 
     render () {
         return <Modal visible={this.state.show} transparent={true} animationType='fade' onRequestClose={() => {
         }} hardwareAccelerated={true} presentationStyle='overFullScreen' style={styles.modal}>
-            <TouchableOpacity activeOpacity={1} style={[styles.view, css.flex]} onPress={() => { this.setState({ show: false }); }}>
+            <TouchableOpacity activeOpacity={1} style={[styles.view, css.flex]} onPress={() => { this.onClose(); }}>
                 {this.state.dom}
             </TouchableOpacity>
         </Modal>;

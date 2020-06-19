@@ -44,6 +44,22 @@ function postWithdraw (withdraw_id, money, withdraw_type, account, name) {
     return transformFetch('POST', '/withdraw', data);
 }
 
+// 提现列表
+function withdrawLogs (page, size) {
+    return transformFetch('GET', '/withdraw/logs', { page, size });
+}
+
+// 资金记录
+function income (page, size, source) {
+    let data = {
+        page, size
+    };
+    if (source) {
+        data = Object.assign(data, { source });
+    }
+    return transformFetch('GET', '/income', data);
+}
+
 const transformFetch = async (method, url, data = {}) => {
     const TIME_STAMP = Math.round(Date.now() / 1000).toString();
     const POST_DATA = JSON.stringify(data);
@@ -79,4 +95,4 @@ const transformFetch = async (method, url, data = {}) => {
     }
 };
 
-export { apiLogin, verifyCode, user, withdraw, postWithdraw };
+export { apiLogin, verifyCode, user, withdraw, postWithdraw, withdrawLogs, income };
