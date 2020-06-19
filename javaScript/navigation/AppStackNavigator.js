@@ -220,8 +220,8 @@ function AppStackNavigator () {
                 asyncStorage.multiGet(response)
                     .then(r => {
                         initializationStore(r);
-                        setKeys([]);
                         setStatusBar();
+                        setKeys([]);
                         SplashScreen.hide();
                     });
             })
@@ -236,14 +236,9 @@ function AppStackNavigator () {
         return (
             <NavigationContainer>
                 <Prompt/>
-                <Stack.Navigator screenOptions={{
-                    header: ({ scene, previous, navigation }) => <Header scene={scene} previous={previous}
-                        navigation={navigation}/>,
-                }}>
-                    <Stack.Screen name="MaterialTopTabNavigator" options={{ headerShown: false }}
-                        component={TabNavigator}/>
-                    <Stack.Screen name="VerificationStackNavigator" component={StackNavigator}
-                        options={{ headerShown: false }}/>
+                <Stack.Navigator screenOptions={{ header: ({ scene, previous, navigation }) => <Header scene={scene} previous={previous} navigation={navigation}/> }}>
+                    <Stack.Screen name="MaterialTopTabNavigator" options={{ headerShown: false }} component={TabNavigator}/>
+                    <Stack.Screen name="VerificationStackNavigator" component={StackNavigator} options={{ headerShown: false }}/>
                     {GenerateScreen}
                 </Stack.Navigator>
             </NavigationContainer>

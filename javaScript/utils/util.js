@@ -1,4 +1,4 @@
-import { NativeModules, PermissionsAndroid } from 'react-native';
+import { PermissionsAndroid } from 'react-native';
 import store from './store';
 import * as U from 'karet.util';
 import CryptoJS from 'crypto-js';
@@ -6,7 +6,7 @@ import { API_URL, PRIVATE_KEY } from './config';
 
 const initializationStore = keys => {
     const localStore = store.get();
-    keys = [...keys, [{ channel: '??' }]];
+    keys = [...keys, [{ channel: 'default' }]];
     keys.forEach(key => {
         localStore[key[0]] = key[1];
     });
@@ -27,8 +27,9 @@ const parameterTransform = (method, key, parameter) => {
     }
     let parameterString = API_URL + key + '?';
     for (const param in parameter) {
+        // eslint-disable-next-line no-prototype-builtins
         if (parameter.hasOwnProperty(param)) {
-            parameterString += param + '=' + parameter[param] + '&'; '';
+            parameterString += param + '=' + parameter[param] + '&';
         }
     }
     return parameterString.slice(0, -1);
@@ -37,6 +38,7 @@ const parameterTransform = (method, key, parameter) => {
 const buildStr = data => {
     let signString = '';
     for (const item in data) {
+        // eslint-disable-next-line no-prototype-builtins
         if (data.hasOwnProperty(item)) {
             signString += item + '=' + data[item] + '&';
         }
@@ -45,7 +47,7 @@ const buildStr = data => {
 };
 
 // AES解密
-const AesDecrypt = (word) => {
+const AesDecrypt = word => {
     try {
         const decrypt = CryptoJS.AES.decrypt(word, CryptoJS.enc.Base64.parse(PRIVATE_KEY), {
             mode: CryptoJS.mode.ECB,

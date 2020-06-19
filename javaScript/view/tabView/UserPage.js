@@ -19,6 +19,8 @@ import user14 from '../../assets/icon/user/user14.png';
 import user15 from '../../assets/icon/user/user15.png';
 import user16 from '../../assets/icon/user/user16.png';
 import user17 from '../../assets/icon/user/user17.png';
+import * as U from 'karet.util';
+import store from '../../utils/store';
 
 const { width } = Dimensions.get('window');
 const menuList = [
@@ -84,6 +86,9 @@ const menuList = [
     }
 ];
 export default function UserPage () {
+    const authorization = U.view(['authorization'], store);
+    console.log(authorization.get());
+
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8', paddingTop: 20 }]}>
             <ScrollView>

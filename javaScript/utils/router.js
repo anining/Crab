@@ -17,6 +17,7 @@ class router {
         return this.filterRouters.includes(routeName);
     }
 
+    // 没有用到的路由方法
     // reset
     // pop
     // setParams
@@ -38,12 +39,11 @@ class router {
     }
 
     replace (routeName, params = {}, authorization = U.view(['authorization'], store).get()) {
-        // if (this.filterRouteName(routeName) || authorization) {
-        //     this.navigation.replace(routeName, { ...params });
-        // } else {
-        //     this.navigation.replace(this.authRouterName);
-        // }
-        this.navigation.replace(routeName, { ...params });
+        if (this.filterRouteName(routeName) || authorization) {
+            this.navigation.replace(routeName, { ...params });
+        } else {
+            this.navigation.replace(this.authRouterName);
+        }
     }
 
     push (routeName, params = {}, authorization = U.view(['authorization'], store).get()) {
@@ -55,12 +55,11 @@ class router {
     }
 
     navigate (routeName, params = {}, authorization = U.view(['authorization'], store).get()) {
-        this.navigation.navigate(routeName, { ...params });
-        // if (this.filterRouteName(routeName) || authorization) {
-        //     this.navigation.navigate(routeName, { ...params });
-        // } else {
-        //     this.navigation.replace(this.authRouterName);
-        // }
+        if (this.filterRouteName(routeName) || authorization) {
+            this.navigation.navigate(routeName, { ...params });
+        } else {
+            this.navigation.replace(this.authRouterName);
+        }
     }
 
     goBack (key) {
