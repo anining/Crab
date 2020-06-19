@@ -15,8 +15,8 @@ import { N } from '../../utils/router';
 import Header from '../../components/Header';
 import card1 from '../../assets/icon/card/card1.png';
 import Null from '../../components/Null';
+import feed1 from '../../assets/icon/feed/feed1.png';
 
-const { width, height } = Dimensions.get('window');
 const NUMBERS = [
     {
         avatar: 'https://dss0.bdstatic.com/6Ox1bjeh1BF3odCf/it/u=489293176,3448257280&fm=85&app=92&f=JPEG?w=121&h=75&s=CDC1AC440C06077412C18D980300C08B',
@@ -118,7 +118,19 @@ function RenderSelect () {
     );
 }
 
+function RenderSelectView ({ select }) {
+    if (select) {
+        return (
+            <View style={styles.selectBtnTrue} >
+                <Image source={feed1} style={{ height: 7, width: 9 }}/>
+            </View>
+        );
+    }
+    return <View style={styles.selectBtn} />;
+}
+
 function RenderChange ({ id, type }) {
+    const [selectId, setSelectId] = useState();
     const components = [];
     const TYPE = [
         {
@@ -147,22 +159,16 @@ function RenderChange ({ id, type }) {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                paddingLeft:15,
-                paddingRight:15
+                paddingLeft: 15,
+                paddingRight: 15
             }} onPress={() => {
-
+                setSelectId(item.id);
             }}>
-                <View style={{ flexDirection: 'row' ,alignItems: 'center'}}>
-                    <Image source={card1} style={{ height: 32, width: 32, borderRadius: 16 ,marginRight:5}} />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image source={card1} style={{ height: 32, width: 32, borderRadius: 16, marginRight: 5 }} />
                     <Text>音符任务专号</Text>
                 </View>
-                <View style={{
-                    height: 20,
-                    width: 20,
-                    borderRadius: 10,
-                    borderWidth: 1,
-                    borderColor: '#999999'
-                }}></View>
+                <RenderSelectView select={item.id === selectId}/>
             </TouchableOpacity>
         );
     });
@@ -208,7 +214,6 @@ function RenderChange ({ id, type }) {
                     <Text style={{ lineHeight: 33, textAlign: 'center', color: '#fff' }}>切换账号</Text>
                 </TouchableOpacity>
             </View>
-            {/* {components} */}
         </View>
     );
 }
@@ -365,6 +370,23 @@ const styles = StyleSheet.create({
         marginTop: 10,
         paddingBottom: 15,
         width: '100%'
+    },
+    selectBtn: {
+        borderColor: '#999',
+        borderRadius: 10,
+        borderWidth: 1,
+        height: 20,
+        marginLeft: 7,
+        width: 20
+    },
+    selectBtnTrue: {
+        alignItems: 'center',
+        backgroundColor: '#FF3B00',
+        borderRadius: 10,
+        height: 20,
+        justifyContent: 'center',
+        marginLeft: 7,
+        width: 20
     },
     selectView: {
         backgroundColor: '#fff',
