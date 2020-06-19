@@ -4,7 +4,7 @@ import CryptoJS from 'crypto-js';
 import toast from './toast';
 import { AesDecrypt, buildStr, parameterTransform } from './util';
 import * as U from 'karet.util';
-import store from './store';
+import { store } from './store';
 import { N } from './router';
 
 // login
@@ -23,7 +23,12 @@ function verifyCode (phone, scene = 'login') {
     return transformFetch('POST', '/verify/code', { phone, scene });
 }
 
-const transformFetch = async (method, url, data) => {
+// 用户信息
+function user () {
+    return transformFetch('GET', '/user');
+}
+
+const transformFetch = async (method, url, data = {}) => {
     const TIME_STAMP = Math.round(Date.now() / 1000).toString();
     const POST_DATA = JSON.stringify(data);
     const HEADER = new Headers({
@@ -58,4 +63,4 @@ const transformFetch = async (method, url, data) => {
     }
 };
 
-export { apiLogin, verifyCode };
+export { apiLogin, verifyCode, user };

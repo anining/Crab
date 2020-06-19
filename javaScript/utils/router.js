@@ -1,5 +1,5 @@
 import * as U from 'karet.util';
-import store from './store';
+import { store } from './store';
 
 class router {
     constructor (navigation, filterRouters, authRouterName) {

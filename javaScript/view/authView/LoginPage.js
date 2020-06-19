@@ -8,7 +8,7 @@ import toast from '../../utils/toast';
 import { apiLogin, verifyCode } from '../../utils/api';
 // import Android from '../../components/Android';
 import * as U from 'karet.util';
-import store from '../../utils/store';
+import { store } from '../../utils/store';
 import asyncStorage from '../../utils/asyncStorage';
 
 export default function LoginPage () {

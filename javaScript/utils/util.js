@@ -1,5 +1,5 @@
 import { PermissionsAndroid } from 'react-native';
-import store from './store';
+import { store } from './store';
 import * as U from 'karet.util';
 import CryptoJS from 'crypto-js';
 import { API_URL, PRIVATE_KEY } from './config';
