@@ -19,10 +19,11 @@ import user14 from '../../assets/icon/user/user14.png';
 import user15 from '../../assets/icon/user/user15.png';
 import user16 from '../../assets/icon/user/user16.png';
 import user17 from '../../assets/icon/user/user17.png';
-import { user, withdraw } from '../../utils/api';
+import { user } from '../../utils/api';
 import { setter, getter } from '../../utils/store';
 import toast from '../../utils/toast';
 import { useEffect } from 'react';
+import * as U from 'karet.util';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -129,7 +130,7 @@ export default function UserPage () {
             <ScrollView>
                 <View style={styles.userDetailView}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Image source={{ uri: userAvatar.get() }} style={styles.avatarIcon}/>
+                        <Image karet-lift source={U.template({ uri: userAvatar })} style={styles.avatarIcon}/>
                         <View>
                             <View style={styles.userCardTop}>
                                 <Text karet-lift style={styles.userPhone}>{userPhone}</Text>
