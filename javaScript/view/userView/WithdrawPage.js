@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import * as React from 'karet';
+import { useState, useEffect } from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -17,52 +18,47 @@ import with2 from '../../assets/icon/withdraw/withdraw2.png';
 import with3 from '../../assets/icon/withdraw/withdraw3.png';
 import with4 from '../../assets/icon/withdraw/withdraw4.png';
 import with5 from '../../assets/icon/withdraw/withdraw5.png';
-import toast from '../../utils/toast';
 import Header from '../../components/Header';
+import { getter } from '../../utils/store';
+import { postWithdraw, withdraw } from '../../utils/api';
+import toast from '../../utils/toast';
 
 const { width } = Dimensions.get('window');
-const GOOD_LIST = [
-    {
-        id: 1,
-        price: 10,
-        handlingFee: 1,
-        once: true,
-    },
-    {
-        id: 2,
-        price: 10,
-        handlingFee: 0,
-        once: false,
-    },
-    {
-        id: 3,
-        price: 10,
-        handlingFee: 1,
-        once: false,
-    },
-    {
-        id: 4,
-        price: 10,
-        handlingFee: 1,
-        once: false,
-    },
-    {
-        id: 5,
-        price: 10,
-        handlingFee: 1,
-        once: false,
-    },
-    {
-        id: 6,
-        price: 10,
-        handlingFee: 1,
-        once: false,
-    },
-];
+
 export default function WithdrawPage () {
     const [goodId, setGoodId] = useState();
+    const [money, setMoney] = useState();
+    const [goods, setGoods] = useState([]);
     const [payType, setPayType] = useState('wx');
     const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>资金记录</Text>;
+    const { userTodayIncome, userTotalIncome, userBalance } = getter(['userTotalIncome', 'userTodayIncome', 'userBalance']);
+
+    useEffect(() => {
+        withdraw().then(r => {
+            const { data } = r;
+            console.log(data);
+            setGoods(data);
+            if (data.length) {
+                setGoodId(data[0].withdraw_id);
+                setMoney(data[0].money);
+            }
+        });
+    }, []);
+
+    function apiWithdraw () {
+        postWithdraw(goodId, money, payType).then(r => {
+            const { error, msg } = r;
+            if (error) {
+                toast(msg || '提现失败');
+                if (error === 8) {
+                    N.navigate('WeChatBindPage');
+                }
+            } else {
+                toast('提现成功');
+                N.goBack();
+            }
+        });
+    }
 
     return (
         <SafeAreaView style={css.safeAreaView}>
@@ -72,7 +68,7 @@ export default function WithdrawPage () {
             <ScrollView style={styles.scrollView}>
                 <ImageBackground source={with1} style={styles.moneyView}>
                     <View style={styles.moneyViewTop}>
-                        <Text style={{ fontWeight: '600', fontSize: 31, color: '#fff' }}>1520.5</Text>
+                        <Text karet-lift style={{ fontWeight: '600', fontSize: 31, color: '#fff' }}>{userBalance}</Text>
                         <Text style={{ fontSize: 11, color: '#fff' }}>可提现收益(金币)</Text>
                     </View>
                     <View style={styles.moneyViewBottom}>
@@ -80,12 +76,12 @@ export default function WithdrawPage () {
                             borderRightWidth: 1,
                             borderRightColor: '#FFF',
                         }]}>
-                            <Text style={{ fontWeight: '800', fontSize: 14, color: '#fff' }}>500W</Text>
+                            <Text karet-lift style={{ fontWeight: '800', fontSize: 14, color: '#fff' }}>{userTodayIncome}</Text>
                             <Text style={{ fontSize: 11, color: '#fff' }}>今日收益(金币)</Text>
                         </View>
                         <View style={styles.moneyViewItem}>
-                            <Text style={{ fontWeight: '800', fontSize: 14, color: '#fff' }}>500W</Text>
-                            <Text style={{ fontSize: 11, color: '#fff' }}>今日收益(金币)</Text>
+                            <Text karet-lift style={{ fontWeight: '800', fontSize: 14, color: '#fff' }}>{userTotalIncome}</Text>
+                            <Text style={{ fontSize: 11, color: '#fff' }}>总收益(金币)</Text>
                         </View>
                     </View>
                 </ImageBackground>
@@ -95,7 +91,7 @@ export default function WithdrawPage () {
                             style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = 10000金币）</Text></Text>
                         <Text style={{ fontSize: 11, color: '#999' }}>连续签到可获取免手续费特权</Text>
                     </View>
-                    <RenderGoodItem goodList={GOOD_LIST} setGoodId={setGoodId} goodId={goodId}/>
+                    <RenderGoodItem goods={goods} setGoodId={setGoodId} goodId={goodId} setMoney={setMoney}/>
                 </View>
                 <View style={styles.withDrawView}>
                     <View style={styles.withDrawViewTitle}>
@@ -111,15 +107,15 @@ export default function WithdrawPage () {
                             setPayType('ali');
                         }} style={[styles.withDrawTypeItem, { borderColor: payType === 'ali' ? '#FF6C00' : '#D0D0D0' }]}>
                             <RenderWithDrawTypeSelectView select={payType === 'ali'}/>
-                            <Image source={with3} style={{ width: 26, height: 26, marginRight: 7 }}/>
-                            <Text style={{ fontSize: 16, color: '#222' }}>支付宝账户</Text>
+                            <Image source={with3} style={styles.withDrawImage}/>
+                            <Text style={styles.withDrawText}>支付宝账户</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
                             setPayType('wx');
                         }} style={[styles.withDrawTypeItem, { borderColor: payType === 'wx' ? '#FF6C00' : '#D0D0D0' }]}>
                             <RenderWithDrawTypeSelectView select={payType === 'wx'}/>
-                            <Image source={with4} style={{ width: 26, height: 26, marginRight: 7 }}/>
-                            <Text style={{ fontSize: 16, color: '#222' }}>微信账户</Text>
+                            <Image source={with4} style={styles.withDrawImage}/>
+                            <Text style={styles.withDrawText}>微信账户</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -135,7 +131,7 @@ export default function WithdrawPage () {
             </ScrollView>
             <TouchableOpacity onPress={() => {
                 if (payType === 'wx') {
-                    N.replace('MaterialTopTabNavigator');
+                    apiWithdraw();
                 } else {
                     N.navigate('WithdrawAliPayPage');
                 }
@@ -146,23 +142,29 @@ export default function WithdrawPage () {
     );
 }
 
-function RenderGoodItem ({ goodList, setGoodId, goodId }) {
+function RenderGoodItem ({ goods, setGoodId, setMoney, goodId }) {
     const goodView = [];
-    goodList.forEach(good => {
+    goods.forEach(good => {
+        const { withdraw_id, money, ext_fee, is_withdraw, all_times } = good;
+        const value = goodId === withdraw_id;
+        if (is_withdraw && all_times === 1) {
+            return;
+        }
         goodView.push(
             <TouchableOpacity onPress={() => {
-                setGoodId(good.id);
-            }} key={good.id} style={[styles.goodItem, {
-                borderColor: goodId === good.id ? '#FF6C00' : '#D0D0D0',
-                backgroundColor: goodId === good.id ? '#FFF5F0' : '#fff',
+                setGoodId(withdraw_id);
+                setMoney(money);
+            }} key={withdraw_id} style={[styles.goodItem, {
+                borderColor: value ? '#FF6C00' : '#D0D0D0',
+                backgroundColor: value ? '#FFF5F0' : '#fff',
             }]}>
-                <RenderGoodOnceView once={good.once}/>
-                <Text style={{ fontSize: 20, color: '#FF6C00', fontWeight: '800', marginBottom: 2 }}>{good.price}元</Text>
+                <RenderGoodOnceView once={!is_withdraw && all_times === 1}/>
+                <Text style={styles.goodMoney}>{good.money}元</Text>
                 <Text style={{
                     fontSize: 12,
-                    color: good.handlingFee ? '#999' : '#FF6C00',
+                    color: ext_fee ? '#999' : '#FF6C00',
                     marginTop: 2,
-                }}>{good.handlingFee ? `手续费：${good.handlingFee}元` : '免手续费'}</Text>
+                }}>{ext_fee ? `手续费：${ext_fee}元` : '免手续费'}</Text>
             </TouchableOpacity>,
         );
     });
@@ -177,8 +179,8 @@ function RenderGoodOnceView ({ once }) {
     if (once) {
         return (
             <ImageBackground source={with2}
-                style={{ height: 24, width: 59, position: 'absolute', top: '-18%', left: '-3%' }}>
-                <Text style={{ lineHeight: 21, textAlign: 'center', fontSize: 12, color: '#fff' }}>仅一次</Text>
+                style={styles.onceWithDraw}>
+                <Text style={styles.onceWithDrawText}>仅一次</Text>
             </ImageBackground>
         );
     }
@@ -213,6 +215,12 @@ const styles = StyleSheet.create({
         marginRight: '1%',
         position: 'relative',
         width: '31.333%',
+    },
+    goodMoney: {
+        color: '#FF6C00',
+        fontSize: 20,
+        fontWeight: '800',
+        marginBottom: 2
     },
     goodView: {
         backgroundColor: '#fff',
@@ -254,6 +262,19 @@ const styles = StyleSheet.create({
         marginLeft: '25%',
         width: '50%',
     },
+    onceWithDraw: {
+        height: 24,
+        left: '-3%',
+        position: 'absolute',
+        top: '-18%',
+        width: 59
+    },
+    onceWithDrawText: {
+        color: '#fff',
+        fontSize: 12,
+        lineHeight: 21,
+        textAlign: 'center'
+    },
     scrollView: {
         backgroundColor: '#F8F8F8',
         flex: 1,
@@ -293,6 +314,15 @@ const styles = StyleSheet.create({
         fontSize: 17,
         lineHeight: 44,
         textAlign: 'center',
+    },
+    withDrawImage: {
+        height: 26,
+        marginRight: 7,
+        width: 26
+    },
+    withDrawText: {
+        color: '#222',
+        fontSize: 16
     },
     withDrawType: {
         alignItems: 'center',

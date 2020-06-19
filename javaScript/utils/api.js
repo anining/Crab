@@ -28,6 +28,22 @@ function user () {
     return transformFetch('GET', '/user');
 }
 
+// 提现商品
+function withdraw () {
+    return transformFetch('GET', '/withdraw');
+}
+
+// 提现
+function postWithdraw (withdraw_id, money, withdraw_type, account, name) {
+    let data = {
+        withdraw_id, money, withdraw_type
+    };
+    if (account && name) {
+        data = Object.assign(data, { name, account });
+    }
+    return transformFetch('POST', '/withdraw', data);
+}
+
 const transformFetch = async (method, url, data = {}) => {
     const TIME_STAMP = Math.round(Date.now() / 1000).toString();
     const POST_DATA = JSON.stringify(data);
@@ -63,4 +79,4 @@ const transformFetch = async (method, url, data = {}) => {
     }
 };
 
-export { apiLogin, verifyCode, user };
+export { apiLogin, verifyCode, user, withdraw, postWithdraw };
