@@ -32,7 +32,7 @@ export default function Header ({ scene = { descriptor: { options: {} }, route: 
     try {
         const { options } = scene.descriptor;
         // 自定义导航
-        if (['FeedBackPage', 'AccountBindPage', 'AccountHomePage', 'FundingRecordsPage', 'WithdrawRecordsPage', 'WithdrawPage', 'PupilInfoPage', 'CardPackagePage', 'DailyMoneyPage'].includes(scene.route.name)) {
+        if (['FeedBackPage', 'AccountBindPage', 'AccountHomePage', 'FundingRecordsPage', 'WithdrawRecordsPage', 'WithdrawPage', 'PupilInfoPage', 'CardPackagePage', 'DailyMoneyPage', 'DailyRedPackagePage'].includes(scene.route.name)) {
             return <></>;
         }
         return (
