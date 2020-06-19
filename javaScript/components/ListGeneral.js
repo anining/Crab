@@ -164,7 +164,7 @@ export default class ListGeneral extends Component {
         }
         const listView = [];
         if (!this.state.list[0].items.length) {
-            const emptyView = this.props.empty || <Text>null</Text>;
+            const emptyView = this.props.empty || <Text style={styles.error}>暂时没有数据</Text>;
             listView.push(emptyView);
             return <ScrollView refreshControl={
                 <RefreshControl
@@ -175,6 +175,7 @@ export default class ListGeneral extends Component {
                     size={10}
                 />
             } showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+                {this.renderHeader.call(this)}
                 {listView}
             </ScrollView>;
         } else {

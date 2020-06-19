@@ -21,6 +21,8 @@ import answer14 from '../../assets/icon/answer/answer14.png';
 import Shadow from '../../components/Shadow';
 import { _if } from '../../utils/util';
 import Button from '../../components/Button';
+import { N } from '../../utils/router';
+
 const { height, width } = Dimensions.get('window');
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待
 const sprog = [{
@@ -29,69 +31,69 @@ const sprog = [{
     minTitle: '看视频还有很多小攻略',
     money: 5000,
     btnText: '领取奖励',
-    btnStatus: 1
+    btnStatus: 1,
 }, {
     icon: answer3,
     label: '看视频，领金币',
     minTitle: '看视频还有很多小攻略',
     money: 5000,
     btnText: '领取奖励',
-    btnStatus: 1
+    btnStatus: 1,
 }, {
     icon: answer13,
     label: '做任务，领金币',
     minTitle: '看视频还有很多小攻略',
     money: 5000,
     btnText: '领取奖励',
-    btnStatus: 1
+    btnStatus: 1,
 }];
 const taskList = [{
     icon: answer1,
     label: '绑定账号，领金币',
     minTitle: '看视频还有很多小攻略',
     btnText: '领取奖励',
-    btnStatus: 1
+    btnStatus: 1,
 }, {
     icon: answer3,
     label: '看视频，领金币',
     minTitle: '看视频还有很多小攻略',
     btnText: '领取奖励',
-    btnStatus: 1
+    btnStatus: 1,
 }, {
     icon: answer13,
     label: '做任务，领金币',
     minTitle: '看视频还有很多小攻略',
     btnText: '领取奖励',
-    btnStatus: 1
+    btnStatus: 1,
 }];
 const signList = [{
     money: 1000,
     sign: true,
-    prop: false
+    prop: false,
 }, {
     money: 1000,
     sign: true,
-    prop: false
+    prop: false,
 }, {
     money: 1000,
     sign: true,
-    prop: false
+    prop: false,
 }, {
     money: 1000,
     sign: true,
-    prop: false
+    prop: false,
 }, {
     money: 1000,
     sign: true,
-    prop: false
+    prop: false,
 }, {
     money: 1000,
     sign: false,
-    prop: false
+    prop: false,
 }, {
     money: 0,
     sign: false,
-    prop: answer7
+    prop: answer7,
 }];
 export default class AnswerPage extends Component {
     constructor (props) {
@@ -105,23 +107,26 @@ export default class AnswerPage extends Component {
             list && list.forEach((item, index) => {
                 view.push(
                     <View style={[styles.answerItemWrap, css.flex, css.sp, {
-                        borderBottomWidth: index + 1 >= list.length ? 0 : 1
+                        borderBottomWidth: index + 1 >= list.length ? 0 : 1,
                     }]} key={`${index}list`}>
                         <View style={[css.flex, styles.aiwLeft, css.js]}>
                             <ImageAuto source={item.icon} width={40}/>
                             <View style={[css.flex, css.fw, styles.aiwText]}>
                                 <View style={[css.flex, css.js, { width: '100%' }]}>
-                                    <Text style={[styles.labelText, { width: 'auto' }]} numberOfLines={1}>{item.label}</Text>
-                                    {_if(item.money, res => <Text style={styles.labelMoney} numberOfLines={1}> +{res}</Text>)}
+                                    <Text style={[styles.labelText, { width: 'auto' }]}
+                                        numberOfLines={1}>{item.label}</Text>
+                                    {_if(item.money, res => <Text style={styles.labelMoney}
+                                        numberOfLines={1}> +{res}</Text>)}
                                     {_if(item.money, res => <ImageAuto source={answer14} width={20}/>)}
                                 </View>
-                                <Text style={[styles.labelText, styles.labelMinTitle]} numberOfLines={1}>{item.minTitle}</Text>
+                                <Text style={[styles.labelText, styles.labelMinTitle]}
+                                    numberOfLines={1}>{item.minTitle}</Text>
                             </View>
                         </View>
                         <Shadow style={styles.todoBtn} color={'#d43912'}>
                             <Text style={styles.todoBtnText}>领取奖励</Text>
                         </Shadow>
-                    </View>
+                    </View>,
                 );
             });
             return view;
@@ -134,15 +139,15 @@ export default class AnswerPage extends Component {
         const view = [];
         signList.forEach((item, index) => {
             view.push(<View key={`sign${index}`} style={[css.flex, css.fw, styles.signItemWrap, {
-                backgroundColor: item.sign ? '#FF9C00' : '#F0F0F0'
+                backgroundColor: item.sign ? '#FF9C00' : '#F0F0F0',
             }]}>
                 <Text style={[styles.signText, {
-                    color: item.sign ? '#fff' : '#353535'
+                    color: item.sign ? '#fff' : '#353535',
                 }]}>{_if(item.money, res => res)}</Text>
                 <ImageAuto source={item.prop ? item.prop : item.sign ? answer11 : answer9} width={width * 0.08}/>
                 <Text style={[styles.signText, {
                     color: item.sign ? '#fff' : '#353535',
-                    lineHeight: 18
+                    lineHeight: 18,
                 }]}>{index + 1}天</Text>
             </View>);
         });
@@ -176,17 +181,19 @@ export default class AnswerPage extends Component {
             view.push(
                 <TouchableOpacity activeOpacity={1}>
                     <ImageAuto source={answer5} width={width * 0.9 * 0.48}/>
-                </TouchableOpacity>
+                </TouchableOpacity>,
             );
             view.push(
                 <View style={[css.flex, css.fw, styles.activityRight]}>
                     <TouchableOpacity activeOpacity={1} style={styles.arItemWrap}>
                         <ImageAuto source={answer6} width={width * 0.9 * 0.48}/>
                     </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={1} style={styles.arItemWrap}>
+                    <TouchableOpacity activeOpacity={1} style={styles.arItemWrap} onPress={() => {
+                        N.navigate('DailyMoneyPage');
+                    }}>
                         <ImageAuto source={answer8} width={width * 0.9 * 0.48}/>
                     </TouchableOpacity>
-                </View>
+                </View>,
             );
             return <View style={[css.flex, css.sp, { paddingHorizontal: 10 }]} key={'activity'}>{view}</View>;
         } catch (e) {
@@ -201,19 +208,19 @@ export default class AnswerPage extends Component {
                 <Slider height={width * 0.35} autoplay={true}/>
                 <View style={styles.answerWrap}>
                     <ComTitle title={'每日签到'} minTitle={<Text style={css.minTitle}>
-                    连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text>
+                        连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text>
                     </Text>}/>
                     {this._renderDaySign()}
                 </View>
                 <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
                 <View style={styles.answerWrap}>
-                    <ComTitle title={'火爆活动'} />
+                    <ComTitle title={'火爆活动'}/>
                     {/* {this.renderList(sprog)} */}
                     {this._renderActivity()}
                 </View>
                 <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
                 <View style={styles.answerWrap}>
-                    <ComTitle title={'新手福利'} />
+                    <ComTitle title={'新手福利'}/>
                     {this.renderList(sprog)}
                 </View>
                 <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
@@ -229,7 +236,7 @@ export default class AnswerPage extends Component {
 const styles = StyleSheet.create({
     activityRight: {
         height: '100%',
-        marginLeft: width * 0.9 * 0.05
+        marginLeft: width * 0.9 * 0.05,
     },
     aiwLeft: {
         height: '100%',
@@ -240,7 +247,7 @@ const styles = StyleSheet.create({
         height: '100%',
         overflow: 'hidden',
         paddingLeft: 10,
-        width: width * 0.9 - 120
+        width: width * 0.9 - 120,
     },
     answerItemWrap: {
         borderBottomColor: '#EDEDED',
@@ -249,7 +256,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         width: width * 0.9,
         ...css.auto,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
     },
     answerWrap: {
         backgroundColor: '#fff',
@@ -263,28 +270,28 @@ const styles = StyleSheet.create({
     arItemWrap: {
         height: 'auto',
         marginBottom: width * 0.05,
-        width: '100%'
+        width: '100%',
     },
     labelMinTitle: {
         color: '#999',
-        fontSize: 11
+        fontSize: 11,
     },
     labelMoney: {
         color: '#FF6C00',
         fontSize: 14,
-        fontWeight: '900'
+        fontWeight: '900',
     },
     labelText: {
         color: '#222',
         fontSize: 14,
         lineHeight: 22,
         textAlign: 'left',
-        width: '100%'
+        width: '100%',
     },
     maxSTT: {
         color: '#222',
         fontSize: 13,
-        fontWeight: '900'
+        fontWeight: '900',
     },
     signAllTopWrap: {
         marginTop: 15,
@@ -292,7 +299,7 @@ const styles = StyleSheet.create({
     signAllWrap: {
         height: 70,
         marginTop: 10,
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
     },
     signItemWrap: {
         backgroundColor: '#F0F0F0',
@@ -307,18 +314,18 @@ const styles = StyleSheet.create({
         fontSize: 10,
         lineHeight: 12,
         textAlign: 'center',
-        width: '100%'
+        width: '100%',
     },
     signTipsText: {
         color: '#353535',
         fontSize: 12,
         lineHeight: 22,
         textAlign: 'left',
-        width: '100%'
+        width: '100%',
     },
     signTipsWrap: {
         height: '100%',
-        width: width * 0.9 - 120
+        width: width * 0.9 - 120,
     },
     todoBtn: {
         borderRadius: 13,
@@ -333,6 +340,6 @@ const styles = StyleSheet.create({
         height: 26,
         lineHeight: 26,
         textAlign: 'center',
-        width: '100%'
-    }
+        width: '100%',
+    },
 });
