@@ -130,10 +130,13 @@ export default function WithdrawPage () {
                 <Text numberOflines={1} style={[styles.text, { paddingBottom: 50 }]}>8.每天每档只能提现一次。</Text>
             </ScrollView>
             <TouchableOpacity onPress={() => {
+                if (!goodId) {
+                    return;
+                }
                 if (payType === 'wx') {
                     apiWithdraw();
                 } else {
-                    N.navigate('WithdrawAliPayPage');
+                    N.navigate('WithdrawAliPayPage', { goodId });
                 }
             }} style={styles.withDrawBtn}>
                 <Text style={styles.withDrawBtnText}>立即提现</Text>
