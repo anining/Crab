@@ -136,7 +136,7 @@ export default function WithdrawPage () {
                 if (payType === 'wx') {
                     apiWithdraw();
                 } else {
-                    N.navigate('WithdrawAliPayPage', { goodId });
+                    N.navigate('WithdrawAliPayPage', { goodId, money });
                 }
             }} style={styles.withDrawBtn}>
                 <Text style={styles.withDrawBtnText}>立即提现</Text>
