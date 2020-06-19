@@ -19,9 +19,10 @@ import user14 from '../../assets/icon/user/user14.png';
 import user15 from '../../assets/icon/user/user15.png';
 import user16 from '../../assets/icon/user/user16.png';
 import user17 from '../../assets/icon/user/user17.png';
-import { user } from '../../utils/api';
+import { user, withdraw } from '../../utils/api';
 import { setter, getter } from '../../utils/store';
 import toast from '../../utils/toast';
+import { useEffect } from 'react';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -104,12 +105,14 @@ const TASK_MENU = [
 ];
 
 export default function UserPage () {
-    function getUser () {
+    useEffect(() => {
         user().then(r => {
             if (!r.error) {
-                const { avatar: userAvatar, balance: userBalance, correct_rate, invite_code: userInviteCode, nickname: userNickName, phone: userPhone, prop_num, surpass, total_task_num, openid, user_id: userId } = r.data;
+                const { avatar: userAvatar, balance: userBalance, today_income: userTodayIncome, total_income: userTotalIncome, correct_rate, invite_code: userInviteCode, nickname: userNickName, phone: userPhone, prop_num, surpass, total_task_num, openid, user_id: userId } = r.data;
                 setter([
                     ['userPhone', userPhone],
+                    ['userTodayIncome', userTodayIncome],
+                    ['userTotalIncome', userTotalIncome],
                     ['userNickName', userNickName],
                     ['userAvatar', userAvatar],
                     ['userBalance', userBalance],
@@ -118,9 +121,8 @@ export default function UserPage () {
                 ]);
             }
         });
-    }
-    getUser();
-    const { userPhone, userNickName, userBalance, userId, userAvatar, userInviteCode } = getter(['userPhone', 'userBalance', 'userId', 'userNickName', 'userAvatar', 'userInviteCode']);
+    }, []);
+    const { userPhone, userNickName, userTodayIncome, userTotalIncome, userBalance, userId, userAvatar, userInviteCode } = getter(['userTotalIncome', 'userTodayIncome', 'userPhone', 'userBalance', 'userId', 'userNickName', 'userAvatar', 'userInviteCode']);
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8', paddingTop: 20 }]}>
@@ -167,11 +169,11 @@ export default function UserPage () {
                                 <Text style={styles.moneyTitle}>可提现(金币)</Text>
                             </View>
                             <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
-                                {/* <Text style={styles.moneyText}>500</Text> */}
+                                <Text karet-lift style={styles.moneyText}>{userTodayIncome}</Text>
                                 <Text style={styles.moneyTitle}>今日收益(金币)</Text>
                             </View>
                             <View style={styles.moneyViewItem}>
-                                {/* <Text style={styles.moneyText}>500</Text> */}
+                                <Text karet-lift style={styles.moneyText}>{userTotalIncome}</Text>
                                 <Text style={styles.moneyTitle}>总收益(金币)</Text>
                             </View>
                         </View>
