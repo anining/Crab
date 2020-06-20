@@ -34,7 +34,7 @@ export default function WithdrawPage () {
     const [goods, setGoods] = useState([]);
     const [payType, setPayType] = useState('wx');
     const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>资金记录</Text>;
-    const { userTodayIncome, userTotalIncome, userBalance } = getter(['userTotalIncome', 'userTodayIncome', 'userBalance']);
+    const { today_income, total_income, balance } = getter(['user.today_income', 'user.total_income', 'user.balance']);
 
     useEffect(() => {
         withdraw().then(r => {
@@ -79,7 +79,7 @@ export default function WithdrawPage () {
             <ScrollView style={styles.scrollView}>
                 <ImageBackground source={with1} style={styles.moneyView}>
                     <View style={styles.moneyViewTop}>
-                        <Text karet-lift style={{ fontWeight: '600', fontSize: 31, color: '#fff' }}>{userBalance}</Text>
+                        <Text karet-lift style={{ fontWeight: '600', fontSize: 31, color: '#fff' }}>{balance}</Text>
                         <Text style={{ fontSize: 11, color: '#fff' }}>可提现收益(金币)</Text>
                     </View>
                     <View style={styles.moneyViewBottom}>
@@ -87,11 +87,11 @@ export default function WithdrawPage () {
                             borderRightWidth: 1,
                             borderRightColor: '#FFF',
                         }]}>
-                            <Text karet-lift style={{ fontWeight: '800', fontSize: 14, color: '#fff' }}>{userTodayIncome}</Text>
+                            <Text karet-lift style={{ fontWeight: '800', fontSize: 14, color: '#fff' }}>{today_income}</Text>
                             <Text style={{ fontSize: 11, color: '#fff' }}>今日收益(金币)</Text>
                         </View>
                         <View style={styles.moneyViewItem}>
-                            <Text karet-lift style={{ fontWeight: '800', fontSize: 14, color: '#fff' }}>{userTotalIncome}</Text>
+                            <Text karet-lift style={{ fontWeight: '800', fontSize: 14, color: '#fff' }}>{total_income}</Text>
                             <Text style={{ fontSize: 11, color: '#fff' }}>总收益(金币)</Text>
                         </View>
                     </View>

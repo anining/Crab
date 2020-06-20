@@ -39,11 +39,9 @@ import NewbiePage from '../view/homeView/NewbiePage';
 import TaskDetailPage from '../view/homeView/TaskDetailPage';
 import { css } from '../assets/style/css';
 import asyncStorage from '../utils/asyncStorage';
-import { initializationStore, transformMoney } from '../utils/util';
+import { initializationStore } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
 import Prompt from '../components/Prompt';
-import { app, user } from '../utils/api';
-import { setter } from '../utils/store';
 
 const Stack = createStackNavigator();
 
@@ -217,11 +215,11 @@ function AppStackNavigator () {
         <Stack.Screen name={screen.name} component={screen.component} options={{ title: screen.title }}
             key={screen.name}/>);
     useEffect(() => {
-        app().then(r => {
-            if (!r.error) {
-                const { balance_rate, popup } = r.data;
-            }
-        });
+        // app().then(r => {
+        //     if (!r.error) {
+        //         const { balance_rate, popup } = r.data;
+        //     }
+        // });
     }, []);
     useEffect(() => {
         asyncStorage.getAllKeys()

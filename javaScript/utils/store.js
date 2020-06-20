@@ -1,22 +1,17 @@
 import * as U from 'karet.util';
 import asyncStorage from './asyncStorage';
+import { DEFAULT_USER } from './data';
 
 const localStore = {
-    userPhone: '未登录',
-    userNickName: '未登录',
-    userAvatar: 'https://ali.rn.libragx.com/avatar21.png',
-    userInviteCode: '4sada54da',
+    user: DEFAULT_USER,
+    app: null,
     authorization: null,
-    userBalance: 0,
-    userTodayIncome: 0,
-    userTotalIncome: 0,
-    channel: 'master',
-    userId: '',
+    channel: 'default'
 };
 
 const store = U.atom(localStore);
 
-function setter (items = [], storage = true) {
+function setter (items = [], storage = false) {
     items.forEach(item => {
         U.set(U.view([item[0]], store), item[1]);
         storage && asyncStorage.setItem(item[0], item[1]);
@@ -26,7 +21,9 @@ function setter (items = [], storage = true) {
 function getter (items = []) {
     const object = {};
     items.forEach(item => {
-        object[item] = U.view([item], store);
+        const local = [...item.split('.')];
+        const pop = [...local].pop();
+        object[pop] = U.view(local, store);
     });
     return object;
 }
@@ -34,14 +31,9 @@ function getter (items = []) {
 function clear () {
     asyncStorage.clear();
     setter([
-        ['userPhone', '未登录'],
-        ['userTodayIncome', 0],
-        ['userTotalIncome', 0],
-        ['userBalance', 0],
-        ['userNickName', '未登录'],
-        ['userAvatar', 'https://ali.rn.libragx.com/avatar21.png'],
-        ['userInviteCode', '未登录'],
-        ['userId', '未登录']
+        ['user', DEFAULT_USER],
+        ['app', null],
+        ['authorization', null]
     ]);
 }
 
