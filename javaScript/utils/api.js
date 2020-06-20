@@ -28,7 +28,7 @@ function user () {
     return transformFetch('GET', '/user');
 }
 
-// 用户信息
+// app
 function app () {
     return transformFetch('GET', '/app');
 }
@@ -57,6 +57,16 @@ function withdrawLogs (page, size) {
 // 活动
 function activity () {
     return transformFetch('GET', '/activity');
+}
+
+// 阿里云oss上传token
+function uploadToken () {
+    return transformFetch('GET', '/upload/token');
+}
+
+// 反馈
+function feedback (feedback_type, content, images) {
+    return transformFetch('POST', '/feedback', { feedback_type, content, images });
 }
 
 // 资金记录
@@ -105,4 +115,4 @@ const transformFetch = async (method, url, data = {}) => {
     }
 };
 
-export { apiLogin, verifyCode, user, withdraw, postWithdraw, withdrawLogs, income, app, activity };
+export { apiLogin, verifyCode, user, withdraw, postWithdraw, withdrawLogs, income, app, activity, uploadToken };
