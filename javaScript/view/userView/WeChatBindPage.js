@@ -33,7 +33,7 @@ export default function WeChatBindPage () {
     return (
         <SafeAreaView style={css.safeAreaView}>
             <Image source={chat1} style={styles.image} ref={ref => setView(ref)}/>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 save();
             }} style={styles.btn}>
                 <Text style={styles.btnText}>保存图片到本地</Text>

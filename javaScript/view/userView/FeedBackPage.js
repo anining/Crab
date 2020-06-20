@@ -22,13 +22,13 @@ export default function FeedBackPage () {
                 N.navigate('FeedBackRecordsPage');
             }} headerRight={headerRight}/>
             <View style={styles.selectView}>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity activeOpacity={1} onPress={() => {
                     setSelectId(1);
                 }} style={[styles.select, { backgroundColor: selectId === 1 ? '#FFF7F4' : '#fff', }]}>
                     <Text style={{ color: '#353535', fontSize: 15, fontWeight: '500' }}>功能建议</Text>
                     <RenderSelectView select={selectId === 1}/>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity activeOpacity={1} onPress={() => {
                     setSelectId(2);
                 }} style={[styles.select, { backgroundColor: selectId !== 1 ? '#FFF7F4' : '#fff', }]}>
                     <Text style={{ color: '#353535', fontSize: 15, fontWeight: '500' }}>发现bug</Text>
@@ -61,7 +61,7 @@ export default function FeedBackPage () {
                     placeholderTextColor={'#999999'}
                     onChangeText={phone => setPhone(phone)}/>
             </View>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
 
             }} style={[styles.btn, css.pa, { bottom: 0 }]}>
                 <Text style={{ fontSize: 17, color: '#fff', lineHeight: 44, textAlign: 'center' }}>提交反馈</Text>

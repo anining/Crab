@@ -112,7 +112,7 @@ function L ({ type, itemHeight }) {
                                 </View>
                                 <View style={styles.itemViewCenter}>
                                     <Text style={{ color: '#353535', fontSize: 14 }}>接任务ID：1524873</Text>
-                                    <TouchableOpacity onPress={() => {
+                                    <TouchableOpacity activeOpacity={1} onPress={() => {
                                         Clipboard.setString('hello world');
                                         toast('复制成功');
                                     }} style={styles.copyBtn}>
@@ -134,7 +134,7 @@ function RenderItem ({ type, item }) {
     case 1:return (
         <>
             <Text style={styles.deadline}>剩余时间：00:59:59</Text>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
 
             }} style={styles.giveUpBtn}>
                 <Text style={{ fontSize: 17, color: '#FF6C00', lineHeight: 42, textAlign: 'center' }}>放弃任务</Text>
@@ -198,7 +198,7 @@ function RenderItem ({ type, item }) {
                 paddingLeft: 10,
             }}>
                 <Text style={{ color: '#353535', fontSize: 14 }}>未通过原因：<Text style={{ color: '#FF3154' }}>图片提交异常</Text></Text>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity activeOpacity={1} onPress={() => {
                     N.navigate('FeedBackPage');
                 }} style={styles.answerBtn}>
                     <Text style={{ fontSize: 12, color: '#FF3154', lineHeight: 25, textAlign: 'center' }}>我有疑问</Text>

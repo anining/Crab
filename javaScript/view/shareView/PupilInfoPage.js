@@ -78,10 +78,10 @@ export default class PupilInfoPage extends Component {
                                     <Text style={{ color: '#999', fontSize: 12 }}>他的邀请码：A67BHD12 </Text>
                                 </View>
                                 <View style={[css.flex, styles.pupBtnWrap, css.auto, css.sp]}>
-                                    <TouchableOpacity activeOpacity={1}>
+                                    <TouchableOpacity>
                                         <ImageAuto source={pupil7} width={width * 0.35}/>
                                     </TouchableOpacity>
-                                    <TouchableOpacity activeOpacity={1}>
+                                    <TouchableOpacity>
                                         <ImageAuto source={pupil10} width={width * 0.35}/>
                                     </TouchableOpacity>
                                 </View>

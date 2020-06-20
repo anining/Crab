@@ -28,25 +28,31 @@ function RenderHeaderRight ({ headerRight, onPress }) {
 /**
  * @return {null}
  */
-export default function Header ({ scene = { descriptor: { options: {} }, route: { name: '-' } }, previous, navigation = N, replace, headerRight, onPress, style, label }) {
+export default function Header ({ scene = { descriptor: { options: {} }, route: { name: '-' } }, previous, navigation = N, replace, headerRight, onPress, style, label, icon, color, backOnPress }) {
     try {
         const { options } = scene.descriptor;
         // 自定义导航
-        if (['FeedBackPage', 'AccountBindPage', 'AccountHomePage', 'FundingRecordsPage', 'WithdrawRecordsPage', 'WithdrawPage', 'PupilInfoPage', 'CardPackagePage', 'DailyMoneyPage'].includes(scene.route.name)) {
+        if (['FeedBackPage', 'AccountBindPage', 'AccountHomePage', 'FundingRecordsPage', 'WithdrawRecordsPage', 'WithdrawPage', 'PupilInfoPage', 'CardPackagePage', 'DailyMoneyPage', 'DailyRedPackagePage'].includes(scene.route.name)) {
             return <></>;
         }
         return (
             <View style={[styles.header, (style || {})]}>
                 <View style={styles.headerLeft}>
-                    <TouchableOpacity onPress={() => {
-                        replace ? navigation.replace('MaterialTopTabNavigator') : navigation.goBack();
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
+                        if (backOnPress && typeof backOnPress === 'function') {
+                            backOnPress();
+                        } else {
+                            replace ? navigation.replace('MaterialTopTabNavigator') : navigation.goBack();
+                        }
                     }} style={styles.returnBtn}>
-                        <ImageAuto source={replace ? header1 : header2} style={{
+                        <ImageAuto source={icon || (replace ? header1 : header2)} style={{
                             width: replace ? 16 : 9,
                         }}/>
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.headerCenter}>{label || options.title || scene.route.name}</Text>
+                <Text style={[styles.headerCenter, {
+                    color: color || '#353535'
+                }]}>{label || options.title || scene.route.name}</Text>
                 <RenderHeaderRight headerRight={headerRight} onPress={onPress}/>
             </View>
         );

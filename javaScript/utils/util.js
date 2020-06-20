@@ -172,4 +172,59 @@ async function requestPermission (success, fail) {
     }
 }
 
+// 防抖函数
+export function _debounce (func, wait) {
+    let timeout;
+    // let first = true;
+    return function () {
+        const context = this;
+        const args = arguments;
+        if (timeout) {
+            timeout = clearTimeout(timeout);
+        }
+        timeout = setTimeout(() => {
+            timeout = null;
+            func.apply(context, args);
+        }, wait);
+    };
+}
+
+export function djangoTime (timeString) {
+    try {
+        if (typeof timeString === 'number') {
+            return timeString;
+        }
+        timeString = timeString.toString();
+        if (timeString.indexOf('.') < 0) {
+            timeString += '.000';
+        }
+        const str = timeString.slice(0, -7);
+        const ret = str.replace('T', ' ').replace(/-/g, '/');
+        return ret + ' GMT+08:00';
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export function msecsTransform (msecs) {
+    if (msecs < 0) {
+        return '00:00:00';
+    }
+    if (msecs / 3600000 > 1) {
+        const hour = Math.floor(msecs / 3600000);
+        const minute = Math.floor((msecs % 3600000) / 60000);
+        const scend = Math.floor((msecs % 60000) / 1000);
+        return `${hour > 9 ? hour : '0' + hour}:${
+            minute > 9 ? minute : '0' + minute
+        }:${scend > 9 ? scend : '0' + scend}`;
+    } else {
+        const minute = Math.floor(msecs / 60000);
+        const scend = Math.floor((msecs % 60000) / 1000);
+        return `00:${minute > 9 ? minute : '0' + minute}:${
+            scend > 9 ? scend : '0' + scend
+        }`;
+    }
+}
+
+export { getRequestParameter, requestPermission, initializationStore, buildStr, parameterTransform, AesDecrypt };
 export { getRequestParameter, requestPermission, transformTime, initializationStore, buildStr, parameterTransform, AesDecrypt, transformMoney };

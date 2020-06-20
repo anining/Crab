@@ -179,13 +179,17 @@ export default class AnswerPage extends Component {
         try {
             const view = [];
             view.push(
-                <TouchableOpacity activeOpacity={1}>
+                <TouchableOpacity activeOpacity={1} onPress={() => {
+                    N.navigate('DailyRedPackagePage');
+                }}>
                     <ImageAuto source={answer5} width={width * 0.9 * 0.48}/>
                 </TouchableOpacity>,
             );
             view.push(
                 <View style={[css.flex, css.fw, styles.activityRight]}>
-                    <TouchableOpacity activeOpacity={1} style={styles.arItemWrap}>
+                    <TouchableOpacity activeOpacity={1} style={styles.arItemWrap} onPress={() => {
+                        N.navigate('SharePage');
+                    }}>
                         <ImageAuto source={answer6} width={width * 0.9 * 0.48}/>
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={1} style={styles.arItemWrap} onPress={() => {
