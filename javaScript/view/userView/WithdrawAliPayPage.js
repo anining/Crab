@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Text, View, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput } from 'react-native';
+import {
+    SafeAreaView,
+    Text,
+    View,
+    StyleSheet,
+    Image,
+    TouchableOpacity,
+    Dimensions,
+    TextInput,
+    DeviceEventEmitter,
+} from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import Crab from '../../components/Crab';
@@ -7,6 +17,8 @@ import with7 from '../../assets/icon/withdraw/withdraw7.png';
 import with8 from '../../assets/icon/withdraw/withdraw8.png';
 import { postWithdraw } from '../../utils/api';
 import toast from '../../utils/toast';
+import Choice from '../../components/Choice';
+import with10 from '../../assets/icon/withdraw/withdraw10.png';
 
 const { width } = Dimensions.get('window');
 export default function WithdrawAliPayPage (props) {
@@ -16,21 +28,29 @@ export default function WithdrawAliPayPage (props) {
     const [name, setName] = useState();
 
     function withdraw () {
-        if (!goodId || !money) {
-            toast('请重新选择商品进行提现');
-            return;
-        }
-        if (!number || !name) {
-            toast('请完善信息');
+        if (!goodId || !money || !number || !name) {
+            toast('提现失败');
             return;
         }
         postWithdraw(goodId, money, 'ali', number, name).then(r => {
-            const { error, msg } = r;
+            const { error } = r;
             if (error) {
+                const { msg } = r;
                 toast(msg || '提现失败');
+                if (error === 8) {
+                    N.navigate('WeChatBindPage');
+                }
             } else {
-                toast('提现成功');
-                N.goBack();
+                DeviceEventEmitter.emit('showPop', <Choice info={{
+                    icon: with10,
+                    tips: '提现申请成功，请耐心等待审核。一般1个工作日内审核完成。',
+                    type: 1,
+                    rc: () => {
+                        N.navigate('UserPage');
+                    },
+                    rt: '我知道了',
+                    fontSize: 15
+                }}/>);
             }
         });
     }
