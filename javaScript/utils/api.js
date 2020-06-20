@@ -28,6 +28,11 @@ function user () {
     return transformFetch('GET', '/user');
 }
 
+// 用户信息
+function app () {
+    return transformFetch('GET', '/app');
+}
+
 // 提现商品
 function withdraw () {
     return transformFetch('GET', '/withdraw');
@@ -47,6 +52,11 @@ function postWithdraw (withdraw_id, money, withdraw_type, account, name) {
 // 提现列表
 function withdrawLogs (page, size) {
     return transformFetch('GET', '/withdraw/logs', { page, size });
+}
+
+// 活动
+function activity () {
+    return transformFetch('GET', '/activity');
 }
 
 // 资金记录
@@ -95,4 +105,4 @@ const transformFetch = async (method, url, data = {}) => {
     }
 };
 
-export { apiLogin, verifyCode, user, withdraw, postWithdraw, withdrawLogs, income };
+export { apiLogin, verifyCode, user, withdraw, postWithdraw, withdrawLogs, income, app, activity };

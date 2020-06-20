@@ -16,6 +16,8 @@ const { width, height } = Dimensions.get('window');
      lc: () => {},（选填）
      rt: '继续任务',（选填）
      rc: () => {},（选填）
+     type: 'oneBtn' 选填,
+     fontSize:12 选填,
  }} />
  * **/
 export default class Choice extends Component {
@@ -50,16 +52,22 @@ export default class Choice extends Component {
                 <View style={[styles.choiceWrap, css.flex, css.fw, {
                     paddingTop: this.icon ? 40 : 20
                 }]}>
-                    <Text style={styles.tips}>{this.props.info.tips}</Text>
+                    <Text style={[styles.tips, {
+                        fontSize: getValue(this.props.info, 'fontSize') || 17
+                    }]}>{this.props.info.tips}</Text>
                     {_if(this.props.info.minTips, res => <Text style={styles.minTips}>{res}</Text>)}
-                    <View style={[css.flex, css.sp, styles.btnWrap]}>
-                        <Text style={[styles.popBtn, styles.popCancel]} numberOfLines={1} onPress={() => {
-                            this.cancel();
-                        }}>取消</Text>
+                    <View style={[css.flex, styles.btnWrap, {
+                        justifyContent: getValue(this.props.info, 'type') ? 'center' : 'space-between',
+                    }]}>
+                        {_if(getValue(this.props.info, 'type'), res => null, () => {
+                            return <Text style={[styles.popBtn, styles.popCancel]} numberOfLines={1} onPress={() => {
+                                this.cancel();
+                            }}>{getValue(this.props.info, 'lt') || '取消'}</Text>;
+                        })}
                         <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.popBtn, styles.popSure]}>
                             <Text style={[styles.popBtn, styles.popSure]} numberOfLines={1} onPress={() => {
                                 this.sure();
-                            }}>确定</Text>
+                            }}>{getValue(this.props.info, 'rt') || '确定'}</Text>
                         </LinearGradient>
                     </View>
                 </View>
@@ -81,6 +89,7 @@ const styles = StyleSheet.create({
         height: 'auto',
         overflow: 'hidden',
         paddingBottom: 20,
+        paddingHorizontal: 15,
         width: width * 0.8
     },
     minTips: {

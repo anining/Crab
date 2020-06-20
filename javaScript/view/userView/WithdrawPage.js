@@ -10,6 +10,7 @@ import {
     Text,
     View,
     Dimensions,
+    DeviceEventEmitter,
 } from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
@@ -18,10 +19,12 @@ import with2 from '../../assets/icon/withdraw/withdraw2.png';
 import with3 from '../../assets/icon/withdraw/withdraw3.png';
 import with4 from '../../assets/icon/withdraw/withdraw4.png';
 import with5 from '../../assets/icon/withdraw/withdraw5.png';
+import with10 from '../../assets/icon/withdraw/withdraw10.png';
 import Header from '../../components/Header';
 import { getter } from '../../utils/store';
 import { postWithdraw, withdraw } from '../../utils/api';
 import toast from '../../utils/toast';
+import Choice from '../../components/Choice';
 
 const { width } = Dimensions.get('window');
 
@@ -36,7 +39,6 @@ export default function WithdrawPage () {
     useEffect(() => {
         withdraw().then(r => {
             const { data } = r;
-            console.log(data);
             setGoods(data);
             if (data.length) {
                 setGoodId(data[0].withdraw_id);
@@ -47,15 +49,24 @@ export default function WithdrawPage () {
 
     function apiWithdraw () {
         postWithdraw(goodId, money, payType).then(r => {
-            const { error, msg } = r;
+            const { error } = r;
             if (error) {
+                const { msg } = r;
                 toast(msg || '提现失败');
                 if (error === 8) {
                     N.navigate('WeChatBindPage');
                 }
             } else {
-                toast('提现成功');
-                N.goBack();
+                DeviceEventEmitter.emit('showPop', <Choice info={{
+                    icon: with10,
+                    tips: '提现申请成功，请耐心等待审核。一般1个工作日内审核完成。',
+                    type: 1,
+                    rc: () => {
+                        N.goBack();
+                    },
+                    rt: '我知道了',
+                    fontSize: 15
+                }}/>);
             }
         });
     }
@@ -131,6 +142,7 @@ export default function WithdrawPage () {
             </ScrollView>
             <TouchableOpacity onPress={() => {
                 if (!goodId) {
+                    toast('提现失败');
                     return;
                 }
                 if (payType === 'wx') {
@@ -229,7 +241,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 8,
         marginLeft: '1%',
-        minHeight: 225,
         paddingBottom: 15,
         paddingLeft: 10,
         paddingRight: 10,
@@ -362,5 +373,5 @@ const styles = StyleSheet.create({
         height: 50,
         justifyContent: 'space-between',
         marginBottom: 5,
-    },
+    }
 });

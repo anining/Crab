@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, Image, Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { css } from '../../assets/style/css';
 import ListGeneral from '../../components/ListGeneral';
 import activity1 from '../../assets/icon/activity/activity1.png';
 import activity2 from '../../assets/icon/activity/activity2.png';
 import { N } from '../../utils/router';
+import { activity } from '../../utils/api';
 
 const itemHeight = 170;
 const itemMarginTop = 10;
 const TYPE_DATA = [activity2, activity2, activity1];
 
 export default function ActivityCenterPage () {
+    useEffect(() => {
+        activity().then(r => {
+            console.log(r);
+        });
+    }, []);
     return (
         <SafeAreaView style={css.safeAreaView}>
             <View style={{ paddingLeft: 15, paddingRight: 15, flex: 1, backgroundColor: '#F8F8F8' }}>
