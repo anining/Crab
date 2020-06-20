@@ -15,7 +15,7 @@ export default function LoginPage () {
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('');
     const [codeText, setCodeText] = useState('获取验证码');
-    const [inviteCode, setInviteCode] = useState('');
+    // const [inviteCode, setInviteCode] = useState('');
 
     // useEffect(() => {
     // const r = await Android.verifyLogin();
