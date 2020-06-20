@@ -8,6 +8,8 @@ const localStore = {
     userInviteCode: '4sada54da',
     authorization: null,
     userBalance: 0,
+    userTodayIncome: 0,
+    userTotalIncome: 0,
     channel: 'master',
     userId: '',
 };
