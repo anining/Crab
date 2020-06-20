@@ -226,5 +226,4 @@ export function msecsTransform (msecs) {
     }
 }
 
-export { getRequestParameter, requestPermission, initializationStore, buildStr, parameterTransform, AesDecrypt };
 export { getRequestParameter, requestPermission, transformTime, initializationStore, buildStr, parameterTransform, AesDecrypt, transformMoney };
