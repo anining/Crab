@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import { uploadImage } from '../utils/api';
 import toast from '../utils/toast';
+import { uploadToken } from '../utils/api';
 
-export default function Upload ({ children, style = {}, images, setImages, length }) {
+export default function Upload ({ children, images = [], setImages, style = {}, length }) {
     const [file, setFiles] = useState();
 
     useEffect(() => {
@@ -12,37 +12,43 @@ export default function Upload ({ children, style = {}, images, setImages, lengt
             return;
         }
         try {
-            uploadImage('taskpicture', 'AA_StarPraise/')
-                .then(response => {
-                    if (response && !response.error) {
-                        const { dir, accessid, policy, signature } = response.data;
-                        const domain = 'https://ali.taskpic.libragx.com';
-                        const key = dir + Date.now();
+            uploadToken()
+                .then(r => {
+                    if (r && !r.error) {
+                        const { dir, accessid, policy, signature, cdn_domain } = r.data;
+                        const key = dir + '/' + Date.now();
                         const FD = new FormData();
                         FD.append('key', key);
-                        FD.append('Content-Type', file.type);
+                        FD.append('Content-Type', file.mime);
                         FD.append('OSSAccessKeyId', accessid);
                         FD.append('policy', policy);
                         FD.append('signature', signature);
                         FD.append('file', file);
                         const XHR = new XMLHttpRequest();
-                        XHR.addEventListener('error', () => {
-                            toast('上传图片失败');
+                        XHR.upload.addEventListener('progress', evt => {
+                            console.log(evt);
+                        }, false);
+                        XHR.addEventListener('error', (e) => {
+                            toast('上传失败2');
                         }, false);
                         XHR.addEventListener('load', () => {
-                            const newImages = [...[Object.assign(file, { uri: `${domain}/${key}` })], ...images].slice(0, length);
-                            setImages(newImages);
+                            console.log(11111111);
+                            // const newImages = [...[Object.assign(file, { uri: `${cdn_domain}/${key}` })], ...images].slice(0, length);
+                            // setImages(newImages);
                         }, false);
-                        XHR.open('POST', domain, true);
+                        XHR.open('POST', cdn_domain, true);
                         XHR.send(FD);
                     } else {
-                        toast('上传图片失败');
+                        toast('上传失败1');
                     }
+                })
+                .catch(() => {
+                    toast('上传失败3');
                 });
         } catch (e) {
-            toast('上传图片失败');
+            toast('上传失败4');
         }
-    }, file);
+    }, [file]);
 
     return (
         <TouchableOpacity activeOpacity={1} onPress={() => {
@@ -51,11 +57,10 @@ export default function Upload ({ children, style = {}, images, setImages, lengt
                 includeBase64: true,
                 mediaType: 'photo',
                 compressImageQuality: 1,
-            }).then(image => setFiles(image));
-            // }).then(image => {
-            //     const newImages = [...[image], ...images].slice(0, length);
-            //     setImages(newImages);
-            // });
+            }).then(file => {
+                const uploadFile = Object.assign({ type: file.mime, uri: file.path, }, file);
+                setFiles(uploadFile);
+            });
         }} style={style}>
             {children}
         </TouchableOpacity>

@@ -64,6 +64,16 @@ export function activity () {
     return transformFetch('GET', '/activity');
 }
 
+// 阿里云oss上传token
+export function uploadToken () {
+    return transformFetch('GET', '/upload/token');
+}
+
+// 反馈
+export function feedback (feedback_type, content, images) {
+    return transformFetch('POST', '/feedback', { feedback_type, content, images });
+}
+
 // 资金记录
 export function income (page, size, source) {
     let data = {
