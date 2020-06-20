@@ -140,6 +140,10 @@ function transformMoney (money) {
     return money * 10000;
 }
 
+function transformTime (time, start = 10, end = 11) {
+    return `${time.slice(0, start)} ${time.slice(end, end + 8)}`;
+}
+
 async function requestPermission (success, fail) {
     try {
         if (Platform.OS === 'ios') {
@@ -168,4 +172,4 @@ async function requestPermission (success, fail) {
     }
 }
 
-export { getRequestParameter, requestPermission, initializationStore, buildStr, parameterTransform, AesDecrypt, transformMoney };
+export { getRequestParameter, requestPermission, transformTime, initializationStore, buildStr, parameterTransform, AesDecrypt, transformMoney };

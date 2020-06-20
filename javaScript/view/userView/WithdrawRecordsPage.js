@@ -6,6 +6,7 @@ import Header from '../../components/Header';
 import { N } from '../../utils/router';
 import { withdrawLogs } from '../../utils/api';
 import with9 from '../../assets/icon/withdraw/withdraw9.png';
+import { transformMoney, transformTime } from '../../utils/util';
 
 const itemHeight = 110;
 const itemMarginTop = 10;
@@ -35,8 +36,8 @@ export default function WithdrawRecordsPage () {
                             <>
                                 <View style={styles.itemView} key={withdraw_log_id}>
                                     <View style={[css.flexRCSB, styles.item, { borderBottomWidth: 1, borderBottomColor: '#EDEDED' }]}>
-                                        <Text numberOfLines={1} style={{ fontSize: 12, color: '#999', maxWidth: 200 }}>申请时间：{created_at}</Text>
-                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>-{balance}<Text style={{ fontSize: 14, fontWeight: '600' }}>元</Text></Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 12, color: '#999', maxWidth: 200 }}>申请时间：{transformTime(created_at)}</Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>-{transformMoney(balance)}<Text style={{ fontSize: 14, fontWeight: '600' }}>金币({balance}元)</Text></Text>
                                     </View>
                                     <RenderView status={status}/>
                                 </View>
