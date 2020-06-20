@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, DeviceEventEmitter, TouchableOpacity, Text, StyleSheet, Modal, View } from 'react-native';
+import { SafeAreaView, DeviceEventEmitter, TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { css } from '../../assets/style/css';
 import ListGeneral from '../../components/ListGeneral';
 import Header from '../../components/Header';
 import { N } from '../../utils/router';
 import { income } from '../../utils/api';
+import { transformMoney, transformTime } from '../../utils/util';
 
 const itemHeight = 110;
 const itemMarginTop = 10;
@@ -55,22 +56,21 @@ export default function FundingRecordsPage () {
         if (source) {
             DeviceEventEmitter.emit('showPop', {
                 dom: <RenderSelect setSource={setSource} source={source}/>,
-                close: () => {
-                    console.log(source);
-                }
+                close,
             });
-            listRef._onRefresh();
         }
     }, [source]);
+
+    function close () {
+        listRef._onRefresh();
+    }
 
     return (
         <SafeAreaView style={css.safeAreaView}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '资金记录' } }} navigation={N} onPress={() => {
                 DeviceEventEmitter.emit('showPop', {
                     dom: <RenderSelect setSource={setSource} source={source}/>,
-                    close: () => {
-                        console.log(source);
-                    }
+                    close,
                 });
             }} headerRight={headerRight}/>
             <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
@@ -91,8 +91,8 @@ export default function FundingRecordsPage () {
                             <>
                                 <View style={styles.itemView} key={income_log_id}>
                                     <View style={[css.flexRCSB, styles.item, { borderBottomWidth: 1, borderBottomColor: '#EDEDED' }]}>
-                                        <Text numberOfLines={1} style={{ fontSize: 12, color: '#999' }}>变动时间：{created_at}</Text>
-                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>{change_balance}<Text style={{ fontSize: 14, fontWeight: '600' }}>金币</Text></Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 12, color: '#999' }}>变动时间：{transformTime(created_at)}</Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>{transformMoney(change_balance)}<Text style={{ fontSize: 14, fontWeight: '600' }}>金币</Text></Text>
                                     </View>
                                     <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
                                         <Text numberOfLines={1} style={ { color: '#353535', fontSize: 14, fontWeight: '500' }}>变动来源：{STATUS_DATA[source - 1].label}</Text>
