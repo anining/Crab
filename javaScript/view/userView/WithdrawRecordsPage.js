@@ -1,57 +1,44 @@
 import React from 'react';
-import { SafeAreaView, TouchableOpacity, Text, StyleSheet, View } from 'react-native';
+import { SafeAreaView, Dimensions, TouchableOpacity, Image, Text, StyleSheet, View, DeviceEventEmitter } from 'react-native';
 import { css } from '../../assets/style/css';
 import ListGeneral from '../../components/ListGeneral';
 import Header from '../../components/Header';
 import { N } from '../../utils/router';
-import toast from '../../utils/toast';
+import { withdrawLogs } from '../../utils/api';
+import with9 from '../../assets/icon/withdraw/withdraw9.png';
 
 const itemHeight = 110;
 const itemMarginTop = 10;
+const { width } = Dimensions.get('window');
 export default function WithdrawRecordsPage () {
     const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>状态说明</Text>;
 
     return (
         <SafeAreaView style={css.safeAreaView}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '提现记录' } }} navigation={N} onPress={() => {
-                toast('alert');
+                DeviceEventEmitter.emit('showPop', <Image source={with9} style={{ height: width * 0.8 * (1038 / 885), width: width * 0.8 }}/>);
             }} headerRight={headerRight}/>
             <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
                 <ListGeneral
                     itemHeight={itemHeight}
                     itemMarginTop={itemMarginTop}
                     getList={async (page, num, callback) => {
-                        // eslint-disable-next-line standard/no-callback-literal
-                        callback([
-                            {
-                                id: 1,
-                                time: '2020.02.23 01:1',
-                                status: 1,
-                                price: 0.8,
-                            },
-                            {
-                                id: 2,
-                                time: '2020.02.23 01:1',
-                                status: 2,
-                                price: 0.8,
-                            },
-                            {
-                                id: 3,
-                                time: '2020.02.23 01:1',
-                                status: 3,
-                                price: 0.8,
-                            },
-                        ]);
+                        withdrawLogs(page, num).then(r => {
+                            if (!r.error) {
+                                callback(r.data);
+                            }
+                        });
                     }}
                     renderItem={item => {
+                        const { withdraw_log_id, status, created_at, balance } = item;
                         return (
                             <>
-                                <View style={styles.itemView} key={item.id}>
+                                <View style={styles.itemView} key={withdraw_log_id}>
                                     <View style={[css.flexRCSB, styles.item, { borderBottomWidth: 1, borderBottomColor: '#EDEDED' }]}>
-                                        <Text numberOfLines={1} style={{ fontSize: 12, color: '#999' }}>申请时间：{item.time}</Text>
-                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>-8000<Text style={{ fontSize: 14, fontWeight: '600' }}>金币(0.8元）</Text></Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 12, color: '#999', maxWidth: 200 }}>申请时间：{created_at}</Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>-{balance}<Text style={{ fontSize: 14, fontWeight: '600' }}>元</Text></Text>
                                     </View>
-                                    <RenderView item={item}/>
+                                    <RenderView status={status}/>
                                 </View>
                             </>
                         );
@@ -62,8 +49,8 @@ export default function WithdrawRecordsPage () {
     );
 }
 
-function RenderView ({ item }) {
-    switch (item.status) {
+function RenderView ({ status }) {
+    switch (status) {
     case 1:return (
         <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
             <Text numberOfLines={1} style={ { color: '#0045FF', fontSize: 15, maxWidth: 180 }}>提现中</Text>
@@ -109,5 +96,5 @@ const styles = StyleSheet.create({
     text: {
         color: '#353535',
         fontSize: 14
-    },
+    }
 });

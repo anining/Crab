@@ -23,8 +23,8 @@ export default class HomePage extends Component {
         // const DATA_TEXT = await FETCH_DATA.text();
         // console.log(DATA_TEXT);
         // console.log(DATA_TEXT.indexOf('focus block'), DATA_TEXT.indexOf('follower block'), DATA_TEXT.indexOf('liked-num block'));
-        const ret = await dyCrack('https://www.iesdouyin.com/share/user/72611237713');
-        console.log(ret, 'react-native, 获取用户抖音数据');
+        // const ret = await dyCrack('https://www.iesdouyin.com/share/user/72611237713');
+        // console.log(ret, 'react-native, 获取用户抖音数据');
     }
 
     render () {

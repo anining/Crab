@@ -1,69 +1,101 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, DeviceEventEmitter, TouchableOpacity, Text, StyleSheet, Modal, View } from 'react-native';
 import { css } from '../../assets/style/css';
 import ListGeneral from '../../components/ListGeneral';
 import Header from '../../components/Header';
 import { N } from '../../utils/router';
+import { income } from '../../utils/api';
 
 const itemHeight = 110;
 const itemMarginTop = 10;
 const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>来源筛选</Text>;
+const STATUS_DATA = [
+    {
+        id: 1,
+        label: '做单收入'
+    },
+    {
+        id: 2,
+        label: '收徒奖励'
+    },
+    {
+        id: 3,
+        label: '活动奖励'
+    },
+    {
+        id: 4,
+        label: '返佣收益'
+    },
+    {
+        id: 5,
+        label: '新手福利'
+    },
+    {
+        id: 6,
+        label: '提现退款'
+    },
+    {
+        id: 7,
+        label: '提现'
+    },
+    {
+        id: 8,
+        label: '签到'
+    },
+    {
+        id: 9,
+        label: '游戏闯关'
+    }
+];
 export default function FundingRecordsPage () {
-    const STATUS_DATA = [
-        { id: 1, label: '全部' },
-        { id: 2, label: '活动红包' },
-        { id: 3, label: '官方红包' },
-        { id: 4, label: '任务通过' },
-        { id: 5, label: '收徒奖励' },
-        { id: 6, label: '徒弟返现' },
-        { id: 7, label: '提现' },
-    ];
+    const [source, setSource] = useState(0);
+    const [listRef, setListRef] = useState();
+
+    useEffect(() => {
+        if (source) {
+            DeviceEventEmitter.emit('showPop', {
+                dom: <RenderSelect setSource={setSource} source={source}/>,
+                close: () => {
+                    console.log(source);
+                }
+            });
+            listRef._onRefresh();
+        }
+    }, [source]);
 
     return (
         <SafeAreaView style={css.safeAreaView}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '资金记录' } }} navigation={N} onPress={() => {
-                DeviceEventEmitter.emit('showPop', <RenderSelect status={STATUS_DATA}/>);
+                DeviceEventEmitter.emit('showPop', {
+                    dom: <RenderSelect setSource={setSource} source={source}/>,
+                    close: () => {
+                        console.log(source);
+                    }
+                });
             }} headerRight={headerRight}/>
             <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
                 <ListGeneral
+                    ref={ref => setListRef(ref)}
                     itemHeight={itemHeight}
                     itemMarginTop={itemMarginTop}
                     getList={async (page, num, callback) => {
-                        // eslint-disable-next-line standard/no-callback-literal
-                        callback([
-                            {
-                                id: 1,
-                                time: '2020.02.23 01:1',
-                                price: 0.8,
-                                type: '-',
-                                origin: '任务通过(ID:1115)'
-                            },
-                            {
-                                id: 2,
-                                time: '2020.02.23 01:1',
-                                price: 0.8,
-                                type: '-',
-                                origin: '任务通过(ID:1115)'
-                            },
-                            {
-                                id: 3,
-                                time: '2020.02.23 01:1',
-                                price: 0.8,
-                                type: '+',
-                                origin: '提现'
-                            },
-                        ]);
+                        income(page, num, source).then(r => {
+                            if (!r.error) {
+                                callback(r.data);
+                            }
+                        });
                     }}
                     renderItem={item => {
+                        const { income_log_id, created_at, source, change_balance } = item;
                         return (
                             <>
-                                <View style={styles.itemView} key={item.id}>
+                                <View style={styles.itemView} key={income_log_id}>
                                     <View style={[css.flexRCSB, styles.item, { borderBottomWidth: 1, borderBottomColor: '#EDEDED' }]}>
-                                        <Text numberOfLines={1} style={{ fontSize: 12, color: '#999' }}>变动时间：{item.time}</Text>
-                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>{item.type}8000<Text style={{ fontSize: 14, fontWeight: '600' }}>金币</Text></Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 12, color: '#999' }}>变动时间：{created_at}</Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>{change_balance}<Text style={{ fontSize: 14, fontWeight: '600' }}>金币</Text></Text>
                                     </View>
                                     <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-                                        <Text numberOfLines={1} style={ { color: '#353535', fontSize: 14, fontWeight: '500' }}>变动来源：{item.origin}</Text>
+                                        <Text numberOfLines={1} style={ { color: '#353535', fontSize: 14, fontWeight: '500' }}>变动来源：{STATUS_DATA[source - 1].label}</Text>
                                     </View>
                                 </View>
                             </>
@@ -75,24 +107,21 @@ export default function FundingRecordsPage () {
     );
 }
 
-function RenderSelect ({ status }) {
+function RenderSelect ({ setSource, source }) {
     const components = [];
-    status.forEach(item => {
+    STATUS_DATA.forEach(item => {
         components.push(
-            <TouchableOpacity activeOpacity={1} onPress={() => {
-
-            }} style={styles.selectBtn} key={item.id}>
-                <Text style={{ color: '#FF6C00', fontSize: 15, lineHeight: 36, textAlign: 'center' }}>{item.label}</Text>
+            <TouchableOpacity onPress={() => {
+                setSource(item.id);
+            }} style={[styles.selectBtn, { backgroundColor: source === item.id ? '#FFEBDC' : '#F5F5F5' }]} key={item.id}>
+                <Text style={[styles.selectBtnText, { color: source === item.id ? '#FF6C00' : '#333' }]}>{item.label}</Text>
             </TouchableOpacity>
         );
     });
     return (
-        <View style={{ width: '100%', position: 'absolute', top: 0 }}>
-            <Header scene={{ descriptor: { options: {} }, route: { name: '资金记录' } }} navigation={N} onPress={() => {
-                DeviceEventEmitter.emit('hidePop');
-            }} headerRight={headerRight}/>
+        <View style={{ position: 'absolute', width: '100%', top: 0 }}>
             <View style={styles.selectView}>
-                <Text style={{ fontSize: 16, fontWeight: '600', color: '#353535', paddingLeft: '2%', paddingRight: '2%' }}>变动来源</Text>
+                <Text style={styles.selectMenu}>变动来源</Text>
                 <View style={styles.select}>
                     {components}
                 </View>
@@ -126,13 +155,25 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     selectBtn: {
-        backgroundColor: '#FFEBDC',
         borderRadius: 18,
         height: 36,
         marginLeft: '2%',
         marginRight: '2%',
         marginTop: 15,
         width: '29.333%'
+    },
+    selectBtnText: {
+        fontSize: 15,
+        lineHeight: 36,
+        textAlign: 'center'
+    },
+    selectMenu: {
+        color: '#353535',
+        fontSize: 16,
+        fontWeight: '600',
+        marginBottom: 7,
+        paddingLeft: '2%',
+        paddingRight: '2%'
     },
     selectView: {
         backgroundColor: '#fff',
@@ -147,5 +188,5 @@ const styles = StyleSheet.create({
     text: {
         color: '#353535',
         fontSize: 14
-    },
+    }
 });

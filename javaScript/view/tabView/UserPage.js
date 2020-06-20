@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'karet';
 import { View, SafeAreaView, StyleSheet, ScrollView, ImageBackground, Image, Text, TouchableOpacity, Dimensions } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { css } from '../../assets/style/css';
@@ -19,15 +19,14 @@ import user14 from '../../assets/icon/user/user14.png';
 import user15 from '../../assets/icon/user/user15.png';
 import user16 from '../../assets/icon/user/user16.png';
 import user17 from '../../assets/icon/user/user17.png';
+import { user } from '../../utils/api';
+import { setter, getter } from '../../utils/store';
+import toast from '../../utils/toast';
+import { useEffect } from 'react';
+import * as U from 'karet.util';
 
 const { width } = Dimensions.get('window');
-const menuList = [
-    {
-        icon: user12,
-        title: 'AccountHomePage',
-        remark: '',
-        path: 'AccountHomePage'
-    },
+const MENU_LIST = [
     {
         icon: user17,
         title: '活动中心',
@@ -83,29 +82,72 @@ const menuList = [
         path: 'VerificationStackNavigator'
     }
 ];
+const TASK_MENU = [
+    {
+        id: 1,
+        label: '进行中',
+        icon: user3
+    },
+    {
+        id: 2,
+        label: '审核中',
+        icon: user4
+    },
+    {
+        id: 3,
+        label: '已通过',
+        icon: user5
+    },
+    {
+        id: 4,
+        label: '未通过',
+        icon: user6
+    }
+];
+
 export default function UserPage () {
+    useEffect(() => {
+        user().then(r => {
+            if (!r.error) {
+                const { avatar: userAvatar, balance: userBalance, today_income: userTodayIncome, total_income: userTotalIncome, correct_rate, invite_code: userInviteCode, nickname: userNickName, phone: userPhone, prop_num, surpass, total_task_num, openid, user_id: userId } = r.data;
+                setter([
+                    ['userPhone', userPhone],
+                    ['userTodayIncome', userTodayIncome],
+                    ['userTotalIncome', userTotalIncome],
+                    ['userNickName', userNickName],
+                    ['userAvatar', userAvatar],
+                    ['userBalance', userBalance],
+                    ['userInviteCode', userInviteCode],
+                    ['userId', userId]
+                ]);
+            }
+        });
+    }, []);
+    const { userPhone, userNickName, userTodayIncome, userTotalIncome, userBalance, userId, userAvatar, userInviteCode } = getter(['userTotalIncome', 'userTodayIncome', 'userPhone', 'userBalance', 'userId', 'userNickName', 'userAvatar', 'userInviteCode']);
+
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8', paddingTop: 20 }]}>
             <ScrollView>
                 <View style={styles.userDetailView}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Image source={{ uri: 'https://dss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=360292469,3749990901&fm=173&app=49&f=JPEG?w=312&h=208&s=6AB35FC94EB3CAC6440DE0310300C051' }} style={styles.avatarIcon}/>
-                        <View style={styles.userCard}>
+                        <Image karet-lift source={U.template({ uri: userAvatar })} style={styles.avatarIcon}/>
+                        <View>
                             <View style={styles.userCardTop}>
-                                <Text style={styles.userPhone}>188****1451</Text>
-                                <Text style={styles.userId}>ID:159 1231 1333</Text>
+                                <Text karet-lift style={styles.userPhone}>{userPhone}</Text>
+                                <Text karet-lift style={styles.userId}>ID:{userId}</Text>
                             </View>
                             <View style={styles.userCardBottom}>
-                                <Text style={styles.inviteCode}>邀请码:A23345643</Text>
-                                <TouchableOpacity activeOpacity={1} onPress={() => {
-                                    Clipboard.setString('hello world');
+                                <Text karet-lift style={styles.inviteCode}>邀请码:{userInviteCode}</Text>
+                                <TouchableOpacity onPress={() => {
+                                    Clipboard.setString(userInviteCode.get());
+                                    toast('复制成功');
                                 }} style={styles.copyBtn}>
                                     <Text style={styles.copyText}>复制</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
                     </View>
-                    <TouchableOpacity activeOpacity={1} onPress={() => {
+                    <TouchableOpacity onPress={() => {
                         N.navigate('WeChatBindPage');
                     }} style={styles.bindBtn}>
                         <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
@@ -116,7 +158,7 @@ export default function UserPage () {
                     <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
                         <View style={styles.moneyViewTop}>
                             <Text style={{ color: '#222', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
-                            <TouchableOpacity activeOpacity={1} onPress={() => {
+                            <TouchableOpacity onPress={() => {
                                 N.navigate('WithdrawPage');
                             }} style={styles.withDrawBtn}>
                                 <Text style={{ lineHeight: 30, textAlign: 'center', color: '#fff' }}>立即提现</Text>
@@ -124,15 +166,15 @@ export default function UserPage () {
                         </View>
                         <View style={styles.moneyViewBottom}>
                             <View style={styles.moneyViewItem}>
-                                <Text style={styles.moneyText}>500</Text>
+                                <Text karet-lift style={styles.moneyText}>{userBalance}</Text>
                                 <Text style={styles.moneyTitle}>可提现(金币)</Text>
                             </View>
                             <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
-                                <Text style={styles.moneyText}>500</Text>
+                                <Text karet-lift style={styles.moneyText}>{userTodayIncome}</Text>
                                 <Text style={styles.moneyTitle}>今日收益(金币)</Text>
                             </View>
                             <View style={styles.moneyViewItem}>
-                                <Text style={styles.moneyText}>500</Text>
+                                <Text karet-lift style={styles.moneyText}>{userTotalIncome}</Text>
                                 <Text style={styles.moneyTitle}>总收益(金币)</Text>
                             </View>
                         </View>
@@ -140,53 +182,42 @@ export default function UserPage () {
                 </View>
                 <View style={styles.myTask}>
                     <Text style={styles.myTaskTitle}>我的任务</Text>
-                    <View style={styles.myTaskViewBottom}>
-                        <TouchableOpacity activeOpacity={1} onPress={() => {
-                            N.navigate('MyTaskPage', { type: 1 });
-                        }} style={styles.myTaskBtn}>
-                            <Image source={user3} style={styles.myTaskBtnIcon}/>
-                            <Text style={styles.myTaskBtnText}>进行中<Text style={{ color: '#FF7751' }}> 1</Text></Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={1} onPress={() => {
-                            N.navigate('MyTaskPage', { type: 2 });
-                        }} style={styles.myTaskBtn}>
-                            <Image source={user4} style={styles.myTaskBtnIcon}/>
-                            <Text style={styles.myTaskBtnText}>审核中<Text style={{ color: '#FF7751' }}> 1</Text></Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={1} onPress={() => {
-                            N.navigate('MyTaskPage', { type: 3 });
-                        }} style={styles.myTaskBtn}>
-                            <Image source={user5} style={styles.myTaskBtnIcon}/>
-                            <Text style={styles.myTaskBtnText}>已通过<Text style={{ color: '#FF7751' }}> 1</Text></Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={1} onPress={() => {
-                            N.navigate('MyTaskPage', { type: 4 });
-                        }} style={styles.myTaskBtn}>
-                            <Image source={user6} style={styles.myTaskBtnIcon}/>
-                            <Text style={styles.myTaskBtnText}>未通过<Text style={{ color: '#FF7751' }}> 1</Text></Text>
-                        </TouchableOpacity>
-                    </View>
+                    <RenderTaskMenu />
                 </View>
-                <RenderMenu menuList={menuList}/>
+                <RenderMenu />
             </ScrollView>
-
         </SafeAreaView>
     );
 }
 
-function RenderMenu ({ menuList }) {
+function RenderTaskMenu () {
     const components = [];
-    menuList.forEach(menu => {
+    TASK_MENU.forEach(menu => {
         components.push(
-            <TouchableOpacity activeOpacity={1} onPress={() => {
-                if (menu.path === 'VerificationStackNavigator') {
-                    N.replace(menu.path);
-                } else {
-                    N.navigate(menu.path);
-                }
-            }} style={styles.btn} key={menu.title}>
+            <TouchableOpacity onPress={() => {
+                N.navigate('MyTaskPage', { id: menu.id });
+            }} style={styles.myTaskBtn} key={menu.id}>
+                <Image source={menu.icon} style={styles.myTaskBtnIcon}/>
+                <Text style={styles.myTaskBtnText}>{menu.label}<Text style={{ color: '#FF7751' }}></Text></Text>
+            </TouchableOpacity>
+        );
+    });
+    return (
+        <View style={styles.myTaskViewBottom}>
+            {components}
+        </View>
+    );
+}
+
+function RenderMenu () {
+    const components = [];
+    MENU_LIST.forEach(menu => {
+        components.push(
+            <TouchableOpacity onPress={() => {
+                menu.path === 'VerificationStackNavigator' ? N.replace(menu.path) : N.navigate(menu.path);
+            }} style={styles.btn} key={menu.path}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image source={menu.icon} style={{ height: 20, width: 20, marginRight: 5, fontSize: 15 }}/>
+                    <Image source={menu.icon} style={styles.menuIcon}/>
                     <Text>{menu.title}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -254,6 +285,12 @@ const styles = StyleSheet.create({
         color: '#666',
         fontSize: 10,
         marginRight: 10
+    },
+    menuIcon: {
+        fontSize: 15,
+        height: 20,
+        marginRight: 5,
+        width: 20
     },
     moneyText: {
         fontSize: 18,
@@ -335,9 +372,6 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
         width: '100%'
-    },
-    userCard: {
-    // alignItems: 'center'
     },
     userCardBottom: {
         alignItems: 'flex-end',

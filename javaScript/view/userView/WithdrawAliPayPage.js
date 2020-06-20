@@ -3,27 +3,41 @@ import { SafeAreaView, Text, View, StyleSheet, Image, TouchableOpacity, Dimensio
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import Crab from '../../components/Crab';
-import with6 from '../../assets/icon/withdraw/withdraw6.png';
 import with7 from '../../assets/icon/withdraw/withdraw7.png';
 import with8 from '../../assets/icon/withdraw/withdraw8.png';
+import { postWithdraw } from '../../utils/api';
+import toast from '../../utils/toast';
 
-const { width, height } = Dimensions.get('window');
-export default function WithdrawAliPayPage () {
-    const [price, setPrice] = useState();
+const { width } = Dimensions.get('window');
+export default function WithdrawAliPayPage (props) {
+    const [goodId] = useState(`${props.route.params.goodId}`);
+    const [money] = useState(`${props.route.params.money}`);
     const [number, setNumber] = useState();
     const [name, setName] = useState();
+
+    function withdraw () {
+        if (!goodId || !money) {
+            toast('请重新选择商品进行提现');
+            return;
+        }
+        if (!number || !name) {
+            toast('请完善信息');
+            return;
+        }
+        postWithdraw(goodId, money, 'ali', number, name).then(r => {
+            const { error, msg } = r;
+            if (error) {
+                toast(msg || '提现失败');
+            } else {
+                toast('提现成功');
+                N.goBack();
+            }
+        });
+    }
+
     return (
         <SafeAreaView style={[css.safeAreaView, css.flexCSB]}>
             <View style={styles.container}>
-                <View style={styles.inputView}>
-                    <Image source={with6} style={{ height: 20, width: 20, marginRight: 5, }} />
-                    <Text style={{ fontWeight: '500', fontSize: 14, color: '#353535' }}>提现金额：</Text>
-                    <TextInput
-                        maxLength={11}
-                        placeholder={'请输入提现金额'}
-                        placeholderTextColor={'#BCBCBC'}
-                        onChangeText={price => setPrice(price)}/>
-                </View>
                 <View style={styles.inputView}>
                     <Image source={with8} style={{ height: 20, width: 20, marginRight: 5, }} />
                     <Text style={{ fontWeight: '500', fontSize: 14, color: '#353535' }}>支付宝账号：</Text>
@@ -47,8 +61,8 @@ export default function WithdrawAliPayPage () {
                 <Crab text="提现说明：" paddingLeft={0}/>
                 <Text style={{ fontSize: 12, color: '#999' }}>1.支付宝账号姓名必须匹配，否则提现不会到账。</Text>
             </View>
-            <TouchableOpacity activeOpacity={1} onPress={() => {
-                N.replace('MaterialTopTabNavigator');
+            <TouchableOpacity onPress={() => {
+                withdraw();
             }} style={styles.btn}>
                 <Text style={styles.btnText}>提现到支付宝</Text>
             </TouchableOpacity>

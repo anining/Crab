@@ -19,7 +19,7 @@ import icon8 from '../assets/icon/tab/tab8.png';
 const Tab = createMaterialTopTabNavigator();
 
 export default function TabNavigator ({ navigation }) {
-    proxyRouter(navigation, ['MaterialTopTabNavigator'], 'VerificationStackNavigator');
+    proxyRouter(navigation, ['MaterialTopTabNavigator', 'LoginPage'], 'VerificationStackNavigator');
     return (
         <Tab.Navigator
             tabBarPosition="bottom"
@@ -36,22 +36,25 @@ export default function TabNavigator ({ navigation }) {
                     case 'SharePage':
                         iconPath = focused ? icon6 : icon5;
                         break;
-                    case 'UserPage':
-                        iconPath = focused ? icon8 : icon7;
-                        break;
                     default:
-                        iconPath = focused ? icon1 : icon2;
+                        iconPath = focused ? icon8 : icon7;
                     }
                     return <Image source={iconPath} style={[css.auto, { height: 20, width: 20, marginTop: -3 }]}/>;
                 },
             })}
             tabBarOptions={{
-                showIcon: true, // 是否显示标签图标
-                activeTintColor: '#2D2D2D', // 活动标签的标签和图标颜色
-                inactiveTintColor: '#666666', // 非活动标签的标签和图标颜色
-                pressColor: '#ffffff', // 波纹的颜色
-                labelStyle: { fontSize: 10, marginTop: -5 }, // 标签的样式
-                style: { // 标签栏的样式
+                // 是否显示标签图标
+                showIcon: true,
+                // 活动标签的标签和图标颜色
+                activeTintColor: '#2D2D2D',
+                // 非活动标签的标签和图标颜色
+                inactiveTintColor: '#666',
+                // 波纹的颜色
+                pressColor: '#fff',
+                // 标签的样式
+                labelStyle: { fontSize: 10, marginTop: -5 },
+                // 标签栏的样式
+                style: {
                     height: 50,
                     borderTopWidth: 1,
                     borderTopColor: '#efefef',

@@ -1,6 +1,5 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-const { height, width } = Dimensions.get('window');
 export const css = StyleSheet.create({
     RichText: {
         padding: 15
@@ -41,6 +40,10 @@ export const css = StyleSheet.create({
     fw: {
         flexWrap: 'wrap'
     },
+    header: {
+        height: 63,
+        paddingTop: 63,
+    },
     js: {
         justifyContent: 'flex-start',
     },
@@ -56,14 +59,10 @@ export const css = StyleSheet.create({
         position: 'relative',
     },
     safeAreaView: {
-        backgroundColor: '#fff', // 主题颜色
+        backgroundColor: '#fff',
         flex: 1,
     },
     sp: {
         justifyContent: 'space-between',
-    },
-    header: {
-        height: 63,
-        paddingTop: 63,
     }
 });

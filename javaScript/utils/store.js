@@ -1,12 +1,32 @@
 import * as U from 'karet.util';
+import asyncStorage from './asyncStorage';
 
-const store = {
+const localStore = {
     userPhone: 16620466044,
-    userNickname: 'Ryan',
+    userNickName: 'Ryan',
     userAvatar: 'https://ali.rn.libragx.com/avatar21.png',
     userInviteCode: '4sada54da',
     authorization: null,
+    userBalance: 0,
     channel: 'master',
+    userId: '',
 };
 
-export default U.atom(store);
+const store = U.atom(localStore);
+
+function setter (items = [], storage = true) {
+    items.forEach(item => {
+        U.set(U.view([item[0]], store), item[1]);
+        storage && asyncStorage.setItem(item[0], item[1]);
+    });
+}
+
+function getter (items = []) {
+    const object = {};
+    items.forEach(item => {
+        object[item] = U.view([item], store);
+    });
+    return object;
+}
+
+export { store, setter, getter };
