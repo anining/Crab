@@ -24,6 +24,7 @@ import { setter, getter } from '../../utils/store';
 import toast from '../../utils/toast';
 import { useEffect } from 'react';
 import * as U from 'karet.util';
+import { transformMoney } from '../../utils/util';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -112,18 +113,18 @@ export default function UserPage () {
                 const { avatar: userAvatar, balance: userBalance, today_income: userTodayIncome, total_income: userTotalIncome, correct_rate, invite_code: userInviteCode, nickname: userNickName, phone: userPhone, prop_num, surpass, total_task_num, openid, user_id: userId } = r.data;
                 setter([
                     ['userPhone', userPhone],
-                    ['userTodayIncome', userTodayIncome],
-                    ['userTotalIncome', userTotalIncome],
+                    ['userTodayIncome', transformMoney(userTodayIncome)],
+                    ['userTotalIncome', transformMoney(userTotalIncome)],
+                    ['userBalance', transformMoney(userBalance)],
                     ['userNickName', userNickName],
                     ['userAvatar', userAvatar],
-                    ['userBalance', userBalance],
                     ['userInviteCode', userInviteCode],
                     ['userId', userId]
                 ]);
             }
         });
     }, []);
-    const { userPhone, userNickName, userTodayIncome, userTotalIncome, userBalance, userId, userAvatar, userInviteCode } = getter(['userTotalIncome', 'userTodayIncome', 'userPhone', 'userBalance', 'userId', 'userNickName', 'userAvatar', 'userInviteCode']);
+    const { userPhone, userTodayIncome, userTotalIncome, userBalance, userId, userAvatar, userInviteCode } = getter(['userTotalIncome', 'userTodayIncome', 'userPhone', 'userBalance', 'userId', 'userAvatar', 'userInviteCode']);
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8', paddingTop: 20 }]}>
@@ -133,11 +134,11 @@ export default function UserPage () {
                         <Image karet-lift source={U.template({ uri: userAvatar })} style={styles.avatarIcon}/>
                         <View>
                             <View style={styles.userCardTop}>
-                                <Text karet-lift style={styles.userPhone}>{userPhone}</Text>
-                                <Text karet-lift style={styles.userId}>ID:{userId}</Text>
+                                <Text karet-lift numberOfLines={1} style={styles.userPhone}>{userPhone}</Text>
+                                <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{userId}</Text>
                             </View>
                             <View style={styles.userCardBottom}>
-                                <Text karet-lift style={styles.inviteCode}>邀请码:{userInviteCode}</Text>
+                                <Text karet-lift numberOfLines={1} style={styles.inviteCode}>邀请码:{userInviteCode}</Text>
                                 <TouchableOpacity onPress={() => {
                                     Clipboard.setString(userInviteCode.get());
                                     toast('复制成功');
@@ -157,7 +158,7 @@ export default function UserPage () {
                 <View style={styles.moneyView}>
                     <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
                         <View style={styles.moneyViewTop}>
-                            <Text style={{ color: '#222', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
+                            <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
                             <TouchableOpacity onPress={() => {
                                 N.navigate('WithdrawPage');
                             }} style={styles.withDrawBtn}>
@@ -293,6 +294,7 @@ const styles = StyleSheet.create({
         width: 20
     },
     moneyText: {
+        color: '#fff',
         fontSize: 18,
         fontWeight: '800'
     },
@@ -400,7 +402,8 @@ const styles = StyleSheet.create({
     userPhone: {
         fontSize: 18,
         fontWeight: '800',
-        marginRight: 10
+        marginRight: 10,
+        maxWidth: 120
     },
     withDrawBtn: {
         borderColor: '#fff',

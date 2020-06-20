@@ -130,6 +130,16 @@ export function getValue (obj, key) {
     }
 }
 
+function transformMoney (money) {
+    if (isNaN(money)) {
+        return 0;
+    }
+    if (money >= 10) {
+        return `${money}w`;
+    }
+    return money * 10000;
+}
+
 async function requestPermission (success, fail) {
     try {
         if (Platform.OS === 'ios') {
@@ -158,4 +168,4 @@ async function requestPermission (success, fail) {
     }
 }
 
-export { getRequestParameter, requestPermission, initializationStore, buildStr, parameterTransform, AesDecrypt };
+export { getRequestParameter, requestPermission, initializationStore, buildStr, parameterTransform, AesDecrypt, transformMoney };
