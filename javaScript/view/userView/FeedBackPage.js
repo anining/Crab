@@ -102,9 +102,9 @@ function RenderSelectView ({ select }) {
 function RenderImage ({ images }) {
     const imageView = [];
     images.forEach(image => {
-        // imageView.push(
-        //     <Image key={image.data + Date.now()} style={styles.image} source={{ uri: `data:${image.mime};base64,${image.data}` }} />
-        // );
+        imageView.push(
+            <Image key={image.data + Date.now()} style={styles.image} source={{ uri: `data:${image.mime};base64,${image.data}` }} />
+        );
     });
     return <>{imageView}</>;
 }

@@ -2,9 +2,12 @@ import React from 'react';
 import { SafeAreaView, Image, Text, StyleSheet, View } from 'react-native';
 import { css } from '../../assets/style/css';
 import ListGeneral from '../../components/ListGeneral';
+import { getFeedback } from '../../utils/api';
+import { transformTime } from '../../utils/util';
 
 const itemHeight = 250;
 const itemMarginTop = 10;
+const TYPE = ['功能建议', '发现bug'];
 export default function FeedBackRecordsPage () {
     return (
         <SafeAreaView style={css.safeAreaView}>
@@ -13,40 +16,22 @@ export default function FeedBackRecordsPage () {
                     itemHeight={itemHeight}
                     itemMarginTop={itemMarginTop}
                     getList={async (page, num, callback) => {
-                        // eslint-disable-next-line standard/no-callback-literal
-                        callback([
-                            {
-                                time: '2020.01.15',
-                                type: '遇到问题',
-                                phone: 'prismslight',
-                                reason: '提现遇到问题',
-                                images: ['https://dss1.bdstatic.com/6OF1bjeh1BF3odCf/it/u=1793749814,3186819134&fm=85&app=92&f=JPEG?w=121&h=75&s=EFA40FC07C71108C241C41300300B090', 'https://dss1.bdstatic.com/6OF1bjeh1BF3odCf/it/u=1793749814,3186819134&fm=85&app=92&f=JPEG?w=121&h=75&s=EFA40FC07C71108C241C41300300B090']
-                            },
-                            {
-                                time: '2020.01.15',
-                                type: '遇到问题',
-                                phone: 'prismslight',
-                                reason: '提现遇到问题',
-                                images: ['https://dss1.bdstatic.com/6OF1bjeh1BF3odCf/it/u=1793749814,3186819134&fm=85&app=92&f=JPEG?w=121&h=75&s=EFA40FC07C71108C241C41300300B090', 'https://dss1.bdstatic.com/6OF1bjeh1BF3odCf/it/u=1793749814,3186819134&fm=85&app=92&f=JPEG?w=121&h=75&s=EFA40FC07C71108C241C41300300B090']
-                            },
-                            {
-                                time: '2020.01.15',
-                                type: '遇到问题',
-                                phone: 'prismslight',
-                                reason: '提现遇到问题',
-                                images: ['https://dss1.bdstatic.com/6OF1bjeh1BF3odCf/it/u=1793749814,3186819134&fm=85&app=92&f=JPEG?w=121&h=75&s=EFA40FC07C71108C241C41300300B090']
-                            },
-                        ]);
+                        getFeedback(page, num).then(r => {
+                            if (!r.error) {
+                                callback(r.data);
+                            }
+                        });
                     }}
                     renderItem={item => {
+                        const { feedback_id, created_at, images, feedback_type, contact, content } = item;
                         return (
                             <>
-                                <View style={styles.itemView} key={item.time + item.phone}>
-                                    <Text numberOfLines={1} style={styles.time}>反馈时间：{item.time}</Text>
-                                    <Text numberOfLines={1} style={styles.type}>反馈类型：<Text style={{ color: '#353535' }}>{item.type}</Text></Text>
-                                    <Text numberOfLines={1} style={styles.type}>联系方式：<Text style={{ color: '#353535' }}>{item.phone}</Text></Text>
-                                    <Text numberOfLines={1} style={styles.type}>问题描述：<Text style={{ color: '#353535' }}>{item.reason}</Text></Text>
-                                    <RenderImage images={item.images}/>
+                                <View style={styles.itemView} key={feedback_id}>
+                                    <Text numberOfLines={1} style={styles.time}>反馈时间：{transformTime(created_at)}</Text>
+                                    <Text numberOfLines={1} style={styles.type}>反馈类型：<Text style={{ color: '#353535' }}>{TYPE[feedback_type - 1]}</Text></Text>
+                                    <Text numberOfLines={1} style={styles.type}>联系方式：<Text style={{ color: '#353535' }}>{contact}</Text></Text>
+                                    <Text numberOfLines={1} style={styles.type}>问题描述：<Text style={{ color: '#353535' }}>{content}</Text></Text>
+                                    <RenderImage images={images}/>
                                 </View>
                             </>
                         );

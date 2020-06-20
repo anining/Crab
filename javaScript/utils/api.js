@@ -69,6 +69,11 @@ function feedback (feedback_type, content, images, contact) {
     return transformFetch('POST', '/feedback', { feedback_type, content, images, contact });
 }
 
+// 反馈记录
+function getFeedback (page, size) {
+    return transformFetch('GET', '/feedback', { page, size });
+}
+
 // 资金记录
 function income (page, size, source) {
     let data = {
@@ -115,4 +120,4 @@ const transformFetch = async (method, url, data = {}) => {
     }
 };
 
-export { apiLogin, verifyCode, user, withdraw, postWithdraw, withdrawLogs, income, app, feedback, activity, uploadToken };
+export { apiLogin, verifyCode, user, withdraw, postWithdraw, withdrawLogs, income, app, feedback, activity, getFeedback, uploadToken };
