@@ -86,22 +86,22 @@ const MENU_LIST = [
 ];
 const TASK_MENU = [
     {
-        id: 1,
+        id: 0,
         label: '进行中',
         icon: user3
     },
     {
-        id: 2,
+        id: 1,
         label: '审核中',
         icon: user4
     },
     {
-        id: 3,
+        id: 2,
         label: '已通过',
         icon: user5
     },
     {
-        id: 4,
+        id: 3,
         label: '未通过',
         icon: user6
     }

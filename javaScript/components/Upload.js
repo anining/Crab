@@ -16,37 +16,33 @@ export default function Upload ({ children, images = [], setImages, style = {}, 
                 .then(r => {
                     if (r && !r.error) {
                         const { dir, accessid, policy, signature, cdn_domain } = r.data;
-                        const key = dir + '/' + Date.now();
+                        const key = dir + '/xz-' + Date.now();
                         const FD = new FormData();
                         FD.append('key', key);
-                        FD.append('Content-Type', file.mime);
                         FD.append('OSSAccessKeyId', accessid);
+                        FD.append('Content-Type', file.mime);
                         FD.append('policy', policy);
                         FD.append('signature', signature);
-                        FD.append('file', file);
+                        FD.append('file', Object.assign({ type: file.mime, uri: file.path }, file));
                         const XHR = new XMLHttpRequest();
-                        XHR.upload.addEventListener('progress', evt => {
-                            console.log(evt);
-                        }, false);
-                        XHR.addEventListener('error', (e) => {
-                            toast('上传失败2');
+                        XHR.addEventListener('error', () => {
+                            toast('上传失败');
                         }, false);
                         XHR.addEventListener('load', () => {
-                            console.log(11111111);
-                            // const newImages = [...[Object.assign(file, { uri: `${cdn_domain}/${key}` })], ...images].slice(0, length);
-                            // setImages(newImages);
+                            const newImages = [...[Object.assign(file, { uri: `${cdn_domain}/${key}` })], ...images].slice(0, length);
+                            setImages(newImages);
                         }, false);
                         XHR.open('POST', cdn_domain, true);
                         XHR.send(FD);
                     } else {
-                        toast('上传失败1');
+                        toast('上传失败');
                     }
                 })
                 .catch(() => {
-                    toast('上传失败3');
+                    toast('上传失败');
                 });
         } catch (e) {
-            toast('上传失败4');
+            toast('上传失败');
         }
     }, [file]);
 
@@ -57,10 +53,7 @@ export default function Upload ({ children, images = [], setImages, style = {}, 
                 includeBase64: true,
                 mediaType: 'photo',
                 compressImageQuality: 1,
-            }).then(file => {
-                const uploadFile = Object.assign({ type: file.mime, uri: file.path, }, file);
-                setFiles(uploadFile);
-            });
+            }).then(file => setFiles(file));
         }} style={style}>
             {children}
         </TouchableOpacity>

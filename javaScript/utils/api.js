@@ -60,8 +60,8 @@ export function withdrawLogs (page, size) {
 }
 
 // 活动
-export function activity () {
-    return transformFetch('GET', '/activity');
+export function activity (page = 1, size = 10) {
+    return transformFetch('GET', '/activity', { page, size });
 }
 
 // 活动详情
@@ -75,8 +75,23 @@ export function uploadToken () {
 }
 
 // 反馈
-export function feedback (feedback_type, content, images) {
-    return transformFetch('POST', '/feedback', { feedback_type, content, images });
+export function feedback (feedback_type, content, images, contact) {
+    return transformFetch('POST', '/feedback', { feedback_type, content, images, contact });
+}
+
+// 反馈记录
+export function getFeedback (page, size) {
+    return transformFetch('GET', '/feedback', { page, size });
+}
+
+// 小黑屋
+export function userBaned (page, size) {
+    return transformFetch('GET', '/user/baned', { page, size });
+}
+
+// 接任务列表
+export function taskReceive (page, size, status) {
+    return transformFetch('GET', '/task/receive', { page, size, status });
 }
 
 // 资金记录

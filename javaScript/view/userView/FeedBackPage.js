@@ -6,6 +6,8 @@ import feed2 from '../../assets/icon/feed/feed2.png';
 import Upload from '../../components/Upload';
 import Header from '../../components/Header';
 import { N } from '../../utils/router';
+import { feedback } from '../../utils/api';
+import toast from '../../utils/toast';
 
 const { width } = Dimensions.get('window');
 export default function FeedBackPage () {
@@ -15,6 +17,22 @@ export default function FeedBackPage () {
     const [selectId, setSelectId] = useState(1);
     const view = <Image source={feed2} style={{ height: 50, width: 50 }}/>;
     const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>反馈记录</Text>;
+
+    function apiFeedback () {
+        if (!text || !phone) {
+            toast('操作失败');
+            return;
+        }
+        feedback(selectId, text, images, phone)
+            .then(r => {
+                if (r.error) {
+                    toast('操作失败');
+                } else {
+                    toast('操作成功');
+                    N.goBack();
+                }
+            });
+    }
 
     return (
         <SafeAreaView style={[css.safeAreaView, css.pr, { backgroundColor: '#F8F8F8' }]}>
@@ -63,9 +81,7 @@ export default function FeedBackPage () {
                     placeholderTextColor={'#999'}
                     onChangeText={phone => setPhone(phone)}/>
             </View>
-            <TouchableOpacity activeOpacity={1} onPress={() => {
-                console.log(images);
-            }} style={[styles.btn, css.pa, { bottom: 0 }]}>
+            <TouchableOpacity onPress={apiFeedback} style={[styles.btn, css.pa, { bottom: 0 }]}>
                 <Text style={{ fontSize: 17, color: '#fff', lineHeight: 44, textAlign: 'center' }}>提交反馈</Text>
             </TouchableOpacity>
         </SafeAreaView>
@@ -86,9 +102,9 @@ function RenderSelectView ({ select }) {
 function RenderImage ({ images }) {
     const imageView = [];
     images.forEach(image => {
-        // imageView.push(
-        //     <Image key={image.data + Date.now()} style={styles.image} source={{ uri: `data:${image.mime};base64,${image.data}` }} />
-        // );
+        imageView.push(
+            <Image key={image.data + Date.now()} style={styles.image} source={{ uri: `data:${image.mime};base64,${image.data}` }} />
+        );
     });
     return <>{imageView}</>;
 }
