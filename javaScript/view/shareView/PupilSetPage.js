@@ -28,13 +28,13 @@ export default class PupilSetPage extends Component {
             <View style={styles.formAllWrap}>
                 {PupilSetPage._renderShareTitle('基本信息', pupil5)}
                 <View style={[css.flex, css.sp, styles.inputWrap]}>
-                    <Text style={[styles.setInputText]} numberOfLine={1}>QQ群号</Text>
+                    <Text style={[styles.setInputText]} numberOfLines={1}>QQ群号</Text>
                     <TextInput style={[styles.setInput]} maxLength={30} placeholder={'请输入QQ群号'} placeholderTextColor={'#BCBCBC'} onChangeText={() => {
 
                     }}/>
                 </View>
                 <View style={[css.flex, css.sp, styles.inputWrap]}>
-                    <Text style={[styles.setInputText]} numberOfLine={1}>微信号</Text>
+                    <Text style={[styles.setInputText]} numberOfLines={1}>微信号</Text>
                     <TextInput style={[styles.setInput]} maxLength={30} placeholder={'请输入QQ群号'} placeholderTextColor={'#BCBCBC'} onChangeText={() => {
 
                     }}/>

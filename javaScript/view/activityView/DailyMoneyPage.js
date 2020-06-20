@@ -70,7 +70,7 @@ export default class DailyMoneyPage extends Component {
                                 }}>提现到我的钱包</Text>
                             </Shadow>
                         </Animatable.View>
-                        <Text style={styles.dmMinTips} numberOfLine={1}>满30元既可以提现到钱包</Text>
+                        <Text style={styles.dmMinTips} numberOfLines={1}>满30元既可以提现到钱包</Text>
                     </View>
                 </ImageBackground>
                 <View style={styles.recordWrap}>
