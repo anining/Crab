@@ -55,8 +55,8 @@ function withdrawLogs (page, size) {
 }
 
 // 活动
-function activity () {
-    return transformFetch('GET', '/activity');
+function activity (page, size) {
+    return transformFetch('GET', '/activity', { page, size });
 }
 
 // 阿里云oss上传token
@@ -72,6 +72,16 @@ function feedback (feedback_type, content, images, contact) {
 // 反馈记录
 function getFeedback (page, size) {
     return transformFetch('GET', '/feedback', { page, size });
+}
+
+// 小黑屋
+function userBaned (page, size) {
+    return transformFetch('GET', '/user/baned', { page, size });
+}
+
+// 接任务列表
+function taskReceive (page, size, status) {
+    return transformFetch('GET', '/task/receive', { page, size, status });
 }
 
 // 资金记录
@@ -120,4 +130,4 @@ const transformFetch = async (method, url, data = {}) => {
     }
 };
 
-export { apiLogin, verifyCode, user, withdraw, postWithdraw, withdrawLogs, income, app, feedback, activity, getFeedback, uploadToken };
+export { apiLogin, verifyCode, user, withdraw, postWithdraw, withdrawLogs, income, app, feedback, activity, userBaned, taskReceive, getFeedback, uploadToken };

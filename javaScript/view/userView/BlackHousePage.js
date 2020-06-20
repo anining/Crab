@@ -3,6 +3,8 @@ import { Dimensions, SafeAreaView, Image, Text, StyleSheet, View } from 'react-n
 import { css } from '../../assets/style/css';
 import ListGeneral from '../../components/ListGeneral';
 import house1 from '../../assets/icon/house/house1.png';
+import { userBaned } from '../../utils/api';
+import { transformTime } from '../../utils/util';
 
 const { height, width } = Dimensions.get('window');
 const itemHeight = 100;
@@ -16,45 +18,28 @@ export default function BlackHousePage () {
                     itemHeight={itemHeight}
                     itemMarginTop={itemMarginTop}
                     getList={async (page, num, callback) => {
-                        // eslint-disable-next-line standard/no-callback-literal
-                        callback([
-                            {
-                                avatar: 'https://dss1.bdstatic.com/6OF1bjeh1BF3odCf/it/u=1793749814,3186819134&fm=85&app=92&f=JPEG?w=121&h=75&s=EFA40FC07C71108C241C41300300B090',
-                                nickName: 'nickName',
-                                time: '2020.01.15',
-                                deadline: '永久',
-                                reason: '屡次恶意做单'
-                            },
-                            {
-                                avatar: 'https://dss1.bdstatic.com/6OF1bjeh1BF3odCf/it/u=1793749814,3186819134&fm=85&app=92&f=JPEG?w=121&h=75&s=EFA40FC07C71108C241C41300300B090',
-                                nickName: '屡次恶意做单屡次恶意做单屡次恶意做单屡次恶意做单',
-                                time: '2020.01.15',
-                                deadline: '永久',
-                                reason: '屡次恶意做单'
-                            },
-                            {
-                                avatar: 'https://dss1.bdstatic.com/6OF1bjeh1BF3odCf/it/u=1793749814,3186819134&fm=85&app=92&f=JPEG?w=121&h=75&s=EFA40FC07C71108C241C41300300B090',
-                                nickName: 'nickName',
-                                time: '2020.01.15',
-                                deadline: '永久',
-                                reason: '屡次恶意做单屡次恶意做单屡次恶意做单屡次恶意做单'
-                            },
-                        ]);
+                        userBaned(page, num).then(r => {
+                            if (!r.error) {
+                                console.log(r);
+                                callback(r.data);
+                            }
+                        });
                     }}
                     renderItem={item => {
+                        const { updated_at, nickname, avatar } = item;
                         return (
                             <>
-                                <View style={styles.itemView} key={item.nickName + item.time}>
+                                <View style={styles.itemView} key={nickname + updated_at}>
                                     <View style={[css.flexRCSB, styles.item]}>
                                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                            <Image source={{ uri: item.avatar }} style={styles.image} />
-                                            <Text numberOfLines={1} style={{ fontSize: 14, color: '#222', maxWidth: 130 }}>{item.nickName}</Text>
+                                            <Image source={{ uri: avatar }} style={styles.image} />
+                                            <Text numberOfLines={1} style={{ fontSize: 14, color: '#222', maxWidth: 130 }}>{nickname}</Text>
                                         </View>
-                                        <Text numberOfLines={1} style={{ fontSize: 13, color: '#999999' }}>封停时间：{item.time}</Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 13, color: '#999' }}>封停时间：{transformTime(updated_at)}</Text>
                                     </View>
                                     <View style={[css.flexRCSB, styles.item]}>
-                                        <Text numberOfLines={1} style={[styles.text, { maxWidth: 180 }]}>封停原因：{item.reason}</Text>
-                                        <Text numberOfLines={1} style={styles.text}>封停期限：{item.deadline}</Text>
+                                        {/* <Text numberOfLines={1} style={[styles.text, { maxWidth: 180 }]}>封停原因：{item.reason}</Text> */}
+                                        {/* <Text numberOfLines={1} style={styles.text}>封停期限：{item.deadline}</Text> */}
                                     </View>
                                 </View>
                             </>
@@ -90,5 +75,5 @@ const styles = StyleSheet.create({
     text: {
         color: '#353535',
         fontSize: 14
-    },
+    }
 });
