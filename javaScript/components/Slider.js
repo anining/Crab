@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
         width: width * 0.9,
     },
     sliderView: {
+        backgroundColor: '#f8f8f8',
         height: '100%',
-        width: '100%',
+        width: '100%'
     },
 });

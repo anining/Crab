@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
+import * as React from 'karet';
 import { Dimensions, SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { css } from '../../assets/style/css';
 import Slider from '../../components/Slider';
@@ -19,9 +20,10 @@ import answer12 from '../../assets/icon/answer/answer12.png';
 import answer13 from '../../assets/icon/answer/answer13.png';
 import answer14 from '../../assets/icon/answer/answer14.png';
 import Shadow from '../../components/Shadow';
-import { _if } from '../../utils/util';
+import { _if, _tc } from '../../utils/util';
 import Button from '../../components/Button';
 import { N } from '../../utils/router';
+import { getter } from '../../utils/store';
 
 const { height, width } = Dimensions.get('window');
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待
@@ -95,6 +97,7 @@ const signList = [{
     sign: false,
     prop: answer7,
 }];
+const { banner } = getter(['banner']);
 export default class AnswerPage extends Component {
     constructor (props) {
         super(props);
@@ -124,7 +127,7 @@ export default class AnswerPage extends Component {
                             </View>
                         </View>
                         <Shadow style={styles.todoBtn} color={'#d43912'}>
-                            <Text style={styles.todoBtnText}>领取奖励</Text>
+                            <Text style={styles.todoBtnText} karet-lift>领取奖励</Text>
                         </Shadow>
                     </View>,
                 );
@@ -209,7 +212,7 @@ export default class AnswerPage extends Component {
         return <SafeAreaView style={[{ flex: 1, paddingTop: 20, backgroundColor: '#fff' }]}>
             <ScrollView style={[{ flex: 1 }]}>
                 <View style={{ height: 20 }}/>
-                <Slider height={width * 0.35} autoplay={true}/>
+                <Slider data={banner.get()} height={width * 0.35} autoplay={true}/>
                 <View style={styles.answerWrap}>
                     <ComTitle title={'每日签到'} minTitle={<Text style={css.minTitle}>
                         连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text>

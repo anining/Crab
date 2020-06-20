@@ -8,7 +8,7 @@ import { store } from './store';
 import { N } from './router';
 
 // login
-function apiLogin (phone, code, invite_code) {
+export function apiLogin (phone, code, invite_code) {
     let data = {
         phone, code
     };
@@ -19,27 +19,32 @@ function apiLogin (phone, code, invite_code) {
 }
 
 // 发送验证码
-function verifyCode (phone, scene = 'login') {
+export function verifyCode (phone, scene = 'login') {
     return transformFetch('POST', '/verify/code', { phone, scene });
 }
 
 // 用户信息
-function user () {
+export function user () {
     return transformFetch('GET', '/user');
 }
 
 // 用户信息
-function app () {
+export function app () {
     return transformFetch('GET', '/app');
 }
 
+// banner
+export function banner () {
+    return transformFetch('GET', '/banner');
+}
+
 // 提现商品
-function withdraw () {
+export function withdraw () {
     return transformFetch('GET', '/withdraw');
 }
 
 // 提现
-function postWithdraw (withdraw_id, money, withdraw_type, account, name) {
+export function postWithdraw (withdraw_id, money, withdraw_type, account, name) {
     let data = {
         withdraw_id, money, withdraw_type
     };
@@ -50,17 +55,17 @@ function postWithdraw (withdraw_id, money, withdraw_type, account, name) {
 }
 
 // 提现列表
-function withdrawLogs (page, size) {
+export function withdrawLogs (page, size) {
     return transformFetch('GET', '/withdraw/logs', { page, size });
 }
 
 // 活动
-function activity () {
+export function activity () {
     return transformFetch('GET', '/activity');
 }
 
 // 资金记录
-function income (page, size, source) {
+export function income (page, size, source) {
     let data = {
         page, size
     };
@@ -92,10 +97,14 @@ const transformFetch = async (method, url, data = {}) => {
                 const FETCH_DATA = await fetch(parameterTransform(method, url, data), request);
                 const DATA_TEXT = await FETCH_DATA.text();
                 const localDate = DEVELOPER === 'Production' ? JSON.parse(AesDecrypt(DATA_TEXT)) : JSON.parse(DATA_TEXT);
+                localDate.error && toast(localDate.detail);
                 resolve(localDate);
             }),
-        ])
-            .then(r => r);
+            // eslint-disable-next-line handle-callback-err
+        ]).then(r => r).catch(err => {
+            console.log(err);
+            return { error: 999, msg: '请求失败' };
+        });
     } catch (e) {
         if (e.error === 999) {
             N.navigate('ErrorPage');
@@ -104,5 +113,3 @@ const transformFetch = async (method, url, data = {}) => {
         return { error: 999, msg: '请求失败' };
     }
 };
-
-export { apiLogin, verifyCode, user, withdraw, postWithdraw, withdrawLogs, income, app, activity };

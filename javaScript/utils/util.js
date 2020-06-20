@@ -226,4 +226,21 @@ export function msecsTransform (msecs) {
     }
 }
 
+export function _tc (fn, err) {
+    try {
+        if (fn && typeof fn === 'function') {
+            fn();
+        } else {
+            return null;
+        }
+    } catch (e) {
+        console.log(e);
+        if (err && typeof err === 'function') {
+            err();
+        } else {
+            return err;
+        }
+    }
+}
+
 export { getRequestParameter, requestPermission, transformTime, initializationStore, buildStr, parameterTransform, AesDecrypt, transformMoney };

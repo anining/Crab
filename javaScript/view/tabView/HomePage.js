@@ -9,6 +9,7 @@ import data4 from '../../lottie/data4';
 import Button from '../../components/Button';
 import WebView from 'react-native-webview';
 import { dyCrack } from '../../crack/dy';
+import { ksCrack } from '../../crack/ks';
 
 const { height, width } = Dimensions.get('window');
 export default class HomePage extends Component {
@@ -23,8 +24,8 @@ export default class HomePage extends Component {
         // const DATA_TEXT = await FETCH_DATA.text();
         // console.log(DATA_TEXT);
         // console.log(DATA_TEXT.indexOf('focus block'), DATA_TEXT.indexOf('follower block'), DATA_TEXT.indexOf('liked-num block'));
-        // const ret = await dyCrack('https://www.iesdouyin.com/share/user/72611237713');
-        // console.log(ret, 'react-native, 获取用户抖音数据');
+        // const ret = await ksCrack('https://c.kuaishou.com/fw/user/lmt12240705?fid=1537814271&cc=share_copylink&shareMethod=TOKEN&docId=0&kpn=KUAISHOU&subBiz=PROFILE&shareId=195028693665&docABKey=share_textid_profile&shareToken=X-6ttIwfElXJ91Rz_A&shareResourceType=PROFILE_SELF&groupABKey=share_group_profile&shareMode=APP&groupName=&expTag=null&appType=1&shareObjectId=1537814271&shareUrlOpened=0');
+        // console.log(ret, 'react-native, 获取用户ks数据');
     }
 
     render () {

@@ -42,6 +42,7 @@ import asyncStorage from '../utils/asyncStorage';
 import { initializationStore } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
 import Prompt from '../components/Prompt';
+import {updateApp, updateBanner} from '../utils/update';
 
 const Stack = createStackNavigator();
 
@@ -215,11 +216,8 @@ function AppStackNavigator () {
         <Stack.Screen name={screen.name} component={screen.component} options={{ title: screen.title }}
             key={screen.name}/>);
     useEffect(() => {
-        // app().then(r => {
-        //     if (!r.error) {
-        //         const { balance_rate, popup } = r.data;
-        //     }
-        // });
+        updateApp();
+        updateBanner();
     }, []);
     useEffect(() => {
         asyncStorage.getAllKeys()

@@ -6,9 +6,9 @@ const localStore = {
     user: DEFAULT_USER,
     app: null,
     authorization: null,
-    channel: 'default'
+    channel: 'default',
+    banner: null
 };
-
 const store = U.atom(localStore);
 
 function setter (items = [], storage = false) {

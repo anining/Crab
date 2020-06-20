@@ -25,6 +25,7 @@ import toast from '../../utils/toast';
 import { useEffect } from 'react';
 import * as U from 'karet.util';
 import { transformMoney } from '../../utils/util';
+import { updateUser } from '../../utils/update';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -108,16 +109,7 @@ const TASK_MENU = [
 
 export default function UserPage () {
     useEffect(() => {
-        user().then(r => {
-            if (!r.error) {
-                const { data } = r;
-                const { balance, today_income, total_income } = data;
-                data.today_income = transformMoney(today_income);
-                data.total_income = transformMoney(total_income);
-                data.balance = transformMoney(balance);
-                setter([['user', data]]);
-            }
-        });
+        updateUser();
     }, []);
     const { today_income, total_income, balance, phone, user_id, avatar, invite_code } = getter(['user.today_income', 'user.total_income', 'user.balance', 'user.phone', 'user.user_id', 'user.avatar', 'user.invite_code']);
 

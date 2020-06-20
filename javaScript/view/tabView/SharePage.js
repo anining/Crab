@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
+import * as React from 'karet';
 import { SafeAreaView, Text, Image, View, Dimensions, ScrollView, StyleSheet, ImageBackground, DeviceEventEmitter, TouchableOpacity } from 'react-native';
 import { css } from '../../assets/style/css';
 import share1 from '../../assets/icon/share/share1.png';
@@ -16,6 +17,7 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import Choice from '../../components/Choice';
 import { N } from '../../utils/router';
+import { getter } from '../../utils/store';
 
 const { height, width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
@@ -32,6 +34,7 @@ const cashBack = [{
     title: '徒弟第三次提现到账',
     label: '师傅送3元'
 }];
+const { invite_code } = getter(['user.invite_code']);
 export default class SharePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
@@ -117,7 +120,7 @@ export default class SharePage extends Component {
                     <View source={share1} style={[styles.shareBgWrap, css.pr]}>
                         <ImageAuto source={share1} style={[css.pa, styles.shareBg]}/>
                         <View style={[css.flex, styles.codeWrap, css.auto, css.sp]}>
-                            <Text style={styles.inviteCode}>我的邀请码：<Text style={styles.codeNumber}>A32321</Text> </Text>
+                            <Text style={styles.inviteCode}>我的邀请码：<Text style={styles.codeNumber} karet-lift>{invite_code}</Text> </Text>
                             <Text style={styles.copyBtn}>复制</Text>
                         </View>
                         <View style={[styles.inviteWrap, css.auto]}>
