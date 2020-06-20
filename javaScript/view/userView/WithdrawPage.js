@@ -100,7 +100,7 @@ export default function WithdrawPage () {
                     <View style={styles.goodViewTitle}>
                         <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>提现金额<Text
                             style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = 10000金币）</Text></Text>
-                        <Text style={{ fontSize: 11, color: '#999' }}>连续签到可获取免手续费特权</Text>
+                        <Text style={{ fontSize: 11, color: '#999' }} numberOfLines={1}>连续签到可获取免手续费特权</Text>
                     </View>
                     <RenderGoodItem goods={goods} setGoodId={setGoodId} goodId={goodId} setMoney={setMoney}/>
                 </View>
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 50,
         justifyContent: 'space-between',
-        marginBottom: 5,
+        marginBottom: 5
     },
     moneyView: {
         height: (width - 20) * 468 / 1089,
