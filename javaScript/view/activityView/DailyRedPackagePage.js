@@ -19,6 +19,7 @@ import Header from '../../components/Header';
 import header3 from '../../assets/icon/header/header3.png';
 import ImageAuto from '../../components/ImageAuto';
 import CountDown from '../../components/CountDown';
+import { _gv } from '../../utils/util';
 const { height, width } = Dimensions.get('window');
 const redList = [{}, {}, {}, {}, {}, {}];
 export default class DailyRedPackagePage extends Component {
@@ -28,6 +29,8 @@ export default class DailyRedPackagePage extends Component {
     }
 
     componentDidMount () {
+        console.log(_gv(this.props, 'route.params.activity_id'));
+        // console.log(this.props.route.params.activity_id);
     }
 
     _renderRedItem () {

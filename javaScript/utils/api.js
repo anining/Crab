@@ -64,6 +64,11 @@ export function activity () {
     return transformFetch('GET', '/activity');
 }
 
+// 活动详情
+export function activityDetail (activity_id) {
+    return transformFetch('GET', '/activity/detail', { activity_id });
+}
+
 // 阿里云oss上传token
 export function uploadToken () {
     return transformFetch('GET', '/upload/token');
@@ -112,7 +117,7 @@ const transformFetch = async (method, url, data = {}) => {
             }),
             // eslint-disable-next-line handle-callback-err
         ]).then(r => r).catch(err => {
-            console.log(err);
+            console.log(JSON.stringify(err));
             return { error: 999, msg: '请求失败' };
         });
     } catch (e) {

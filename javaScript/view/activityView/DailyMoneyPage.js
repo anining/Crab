@@ -27,14 +27,29 @@ import LinearGradient from 'react-native-linear-gradient';
 import Choice from '../../components/Choice';
 import pop1 from '../../assets/icon/pop/pop1.png';
 import * as Animatable from 'react-native-animatable';
+import { _gv } from '../../utils/util';
+import { activityDetail } from '../../utils/api';
 const { height, width } = Dimensions.get('window');
 export default class DailyMoneyPage extends Component {
     constructor (props) {
         super(props);
         this.state = {};
+        this.active_id = _gv(this.props, 'route.params.activity_id');
     }
 
     componentDidMount () {
+        // console.log(_gv(this.props, 'route.params.activity_id'));
+        this._activityDetail();
+    }
+
+    async _activityDetail () {
+        try {
+            console.log(this.active_id, 'activity_id');
+            const ret = await activityDetail(this.active_id);
+            console.log(ret, '???');
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     render () {

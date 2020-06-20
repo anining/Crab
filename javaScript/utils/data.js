@@ -5,7 +5,7 @@ const DEFAULT_USER = {
     phone: '未登录',
     nickname: '未登录',
     avatar: 'https://ali.rn.libragx.com/avatar21.png',
-    invite_code: '4sada54da',
+    invite_code: '******',
     user_id: '未登录'
 };
 

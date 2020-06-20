@@ -1,5 +1,5 @@
-import { app, banner, user } from './api';
-import {_tc, transformMoney} from './util';
+import { activity, app, banner, user } from './api';
+import { _tc, transformMoney } from './util';
 import { setter } from './store';
 export const updateUser = () => {
     user().then(res => _tc(() => {
@@ -29,3 +29,23 @@ export const updateBanner = () => {
         }
     }));
 };
+export const updateActivity = () => {
+    activity().then(res => _tc(() => {
+        if (!res.error && res.data) {
+            console.log(res, 'activity');
+            setter([['activity', res.data]]);
+            setter([['activityObj', formatActivity(res.data)]]);
+        }
+    }));
+};
+function formatActivity (list) {
+    try {
+        const obj = {};
+        list.forEach((item) => {
+            obj[item.category] = item;
+        });
+        return obj;
+    } catch (e) {
+        return {};
+    }
+}

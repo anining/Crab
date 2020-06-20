@@ -98,6 +98,7 @@ const signList = [{
     prop: answer7,
 }];
 const { banner } = getter(['banner']);
+const { activityObj } = getter(['activityObj']);
 export default class AnswerPage extends Component {
     constructor (props) {
         super(props);
@@ -183,7 +184,9 @@ export default class AnswerPage extends Component {
             const view = [];
             view.push(
                 <TouchableOpacity activeOpacity={1} onPress={() => {
-                    N.navigate('DailyRedPackagePage');
+                    _tc(() => N.navigate('DailyRedPackagePage', {
+                        activity_id: (activityObj.get() || {})[2].activity_id
+                    }));
                 }}>
                     <ImageAuto source={answer5} width={width * 0.9 * 0.48}/>
                 </TouchableOpacity>,
@@ -196,7 +199,9 @@ export default class AnswerPage extends Component {
                         <ImageAuto source={answer6} width={width * 0.9 * 0.48}/>
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={1} style={styles.arItemWrap} onPress={() => {
-                        N.navigate('DailyMoneyPage');
+                        _tc(() => N.navigate('OpenMoneyPage', {
+                            activity_id: (activityObj.get() || {})[1].activity_id
+                        }));
                     }}>
                         <ImageAuto source={answer8} width={width * 0.9 * 0.48}/>
                     </TouchableOpacity>

@@ -234,12 +234,34 @@ export function _tc (fn, err) {
             return null;
         }
     } catch (e) {
-        console.log(e);
+        console.log(JSON.stringify(e));
         if (err && typeof err === 'function') {
             err();
         } else {
             return err;
         }
+    }
+}
+
+export function _gv (obj, str) {
+    try {
+        let ret = '';
+        let nowObj = obj;
+        for (let i = 0; i < [...str.split('.')].length; i++) {
+            const key = [...str.split('.')][i];
+            if (key in nowObj) {
+                if (key === [...str.split('.')].pop()) {
+                    ret = nowObj[key];
+                } else {
+                    nowObj = nowObj[key];
+                }
+            } else {
+                break;
+            }
+        }
+        return ret;
+    } catch (e) {
+        return '';
     }
 }
 

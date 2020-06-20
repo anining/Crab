@@ -42,7 +42,8 @@ import asyncStorage from '../utils/asyncStorage';
 import { initializationStore } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
 import Prompt from '../components/Prompt';
-import {updateApp, updateBanner} from '../utils/update';
+import { updateActivity, updateApp, updateBanner } from '../utils/update';
+import OpenMoneyPage from '../view/activityView/OpenMoneyPage';
 
 const Stack = createStackNavigator();
 
@@ -158,6 +159,11 @@ const stackScreens = [
         title: '每日红包',
     },
     {
+        name: 'OpenMoneyPage',
+        component: OpenMoneyPage,
+        title: '每日现金',
+    },
+    {
         name: 'SignPage',
         component: SignPage,
         title: '签到',
@@ -209,7 +215,6 @@ function setStatusBar () {
     StatusBar.setBackgroundColor('rgba(0,0,0,0)');
     StatusBar.setTranslucent(true);
 }
-
 function AppStackNavigator () {
     const [keys, setKeys] = useState();
     const GenerateScreen = stackScreens.map(screen =>
@@ -218,6 +223,7 @@ function AppStackNavigator () {
     useEffect(() => {
         updateApp();
         updateBanner();
+        updateActivity();
     }, []);
     useEffect(() => {
         asyncStorage.getAllKeys()

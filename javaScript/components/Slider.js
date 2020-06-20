@@ -57,6 +57,7 @@ export default class Slider extends Component {
 
 const styles = StyleSheet.create({
     carouselSlide: {
+        backgroundColor: '#eee',
         borderRadius: 6,
         overflow: 'hidden',
         width: width * 0.9,
