@@ -65,8 +65,8 @@ function uploadToken () {
 }
 
 // 反馈
-function feedback (feedback_type, content, images) {
-    return transformFetch('POST', '/feedback', { feedback_type, content, images });
+function feedback (feedback_type, content, images, contact) {
+    return transformFetch('POST', '/feedback', { feedback_type, content, images, contact });
 }
 
 // 资金记录
@@ -115,4 +115,4 @@ const transformFetch = async (method, url, data = {}) => {
     }
 };
 
-export { apiLogin, verifyCode, user, withdraw, postWithdraw, withdrawLogs, income, app, activity, uploadToken };
+export { apiLogin, verifyCode, user, withdraw, postWithdraw, withdrawLogs, income, app, feedback, activity, uploadToken };
