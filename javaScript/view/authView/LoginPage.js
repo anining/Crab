@@ -7,9 +7,7 @@ import login2 from '../../assets/icon/login/login2.png';
 import toast from '../../utils/toast';
 import { apiLogin, verifyCode } from '../../utils/api';
 // import Android from '../../components/Android';
-import * as U from 'karet.util';
-import { store } from '../../utils/store';
-import asyncStorage from '../../utils/asyncStorage';
+import { getter, setter, store } from '../../utils/store';
 
 export default function LoginPage () {
     const [phone, setPhone] = useState('');
@@ -29,9 +27,7 @@ export default function LoginPage () {
         const r = await apiLogin(phone, code);
         if (!r.error) {
             const { access_token, token_type } = r.data;
-            const authorization = U.view(['authorization'], store);
-            U.set(authorization, `${token_type} ${access_token}`);
-            asyncStorage.setItem('authorization', `${token_type} ${access_token}`);
+            setter([['authorization', `${token_type} ${access_token}`]], true);
             N.replace('MaterialTopTabNavigator');
         } else {
             toast(r.msg || '登录失败');

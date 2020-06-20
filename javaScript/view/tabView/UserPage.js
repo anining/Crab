@@ -110,37 +110,32 @@ export default function UserPage () {
     useEffect(() => {
         user().then(r => {
             if (!r.error) {
-                const { avatar: userAvatar, balance: userBalance, today_income: userTodayIncome, total_income: userTotalIncome, correct_rate, invite_code: userInviteCode, nickname: userNickName, phone: userPhone, prop_num, surpass, total_task_num, openid, user_id: userId } = r.data;
-                setter([
-                    ['userPhone', userPhone],
-                    ['userTodayIncome', transformMoney(userTodayIncome)],
-                    ['userTotalIncome', transformMoney(userTotalIncome)],
-                    ['userBalance', transformMoney(userBalance)],
-                    ['userNickName', userNickName],
-                    ['userAvatar', userAvatar],
-                    ['userInviteCode', userInviteCode],
-                    ['userId', userId]
-                ]);
+                const { data } = r;
+                const { balance, today_income, total_income } = data;
+                data.today_income = transformMoney(today_income);
+                data.total_income = transformMoney(total_income);
+                data.balance = transformMoney(balance);
+                setter([['user', data]]);
             }
         });
     }, []);
-    const { userPhone, userTodayIncome, userTotalIncome, userBalance, userId, userAvatar, userInviteCode } = getter(['userTotalIncome', 'userTodayIncome', 'userPhone', 'userBalance', 'userId', 'userAvatar', 'userInviteCode']);
+    const { today_income, total_income, balance, phone, user_id, avatar, invite_code } = getter(['user.today_income', 'user.total_income', 'user.balance', 'user.phone', 'user.user_id', 'user.avatar', 'user.invite_code']);
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8', paddingTop: 20 }]}>
             <ScrollView>
                 <View style={styles.userDetailView}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Image karet-lift source={U.template({ uri: userAvatar })} style={styles.avatarIcon}/>
+                        <Image karet-lift source={U.template({ uri: avatar })} style={styles.avatarIcon}/>
                         <View>
                             <View style={styles.userCardTop}>
-                                <Text karet-lift numberOfLines={1} style={styles.userPhone}>{userPhone}</Text>
-                                <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{userId}</Text>
+                                <Text karet-lift numberOfLines={1} style={styles.userPhone}>{phone}</Text>
+                                <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{user_id}</Text>
                             </View>
                             <View style={styles.userCardBottom}>
-                                <Text karet-lift numberOfLines={1} style={styles.inviteCode}>邀请码:{userInviteCode}</Text>
+                                <Text karet-lift numberOfLines={1} style={styles.inviteCode}>邀请码:{invite_code}</Text>
                                 <TouchableOpacity onPress={() => {
-                                    Clipboard.setString(userInviteCode.get());
+                                    Clipboard.setString(invite_code.get());
                                     toast('复制成功');
                                 }} style={styles.copyBtn}>
                                     <Text style={styles.copyText}>复制</Text>
@@ -167,15 +162,15 @@ export default function UserPage () {
                         </View>
                         <View style={styles.moneyViewBottom}>
                             <View style={styles.moneyViewItem}>
-                                <Text karet-lift style={styles.moneyText}>{userBalance}</Text>
+                                <Text karet-lift style={styles.moneyText}>{balance}</Text>
                                 <Text style={styles.moneyTitle}>可提现(金币)</Text>
                             </View>
                             <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
-                                <Text karet-lift style={styles.moneyText}>{userTodayIncome}</Text>
+                                <Text karet-lift style={styles.moneyText}>{today_income}</Text>
                                 <Text style={styles.moneyTitle}>今日收益(金币)</Text>
                             </View>
                             <View style={styles.moneyViewItem}>
-                                <Text karet-lift style={styles.moneyText}>{userTotalIncome}</Text>
+                                <Text karet-lift style={styles.moneyText}>{total_income}</Text>
                                 <Text style={styles.moneyTitle}>总收益(金币)</Text>
                             </View>
                         </View>
