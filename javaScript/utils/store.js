@@ -2,8 +2,8 @@ import * as U from 'karet.util';
 import asyncStorage from './asyncStorage';
 
 const localStore = {
-    userPhone: 16620466044,
-    userNickName: 'Ryan',
+    userPhone: '未登录',
+    userNickName: '未登录',
     userAvatar: 'https://ali.rn.libragx.com/avatar21.png',
     userInviteCode: '4sada54da',
     authorization: null,
@@ -29,4 +29,18 @@ function getter (items = []) {
     return object;
 }
 
-export { store, setter, getter };
+function clear () {
+    asyncStorage.clear();
+    setter([
+        ['userPhone', '未登录'],
+        ['userTodayIncome', 0],
+        ['userTotalIncome', 0],
+        ['userBalance', 0],
+        ['userNickName', '未登录'],
+        ['userAvatar', 'https://ali.rn.libragx.com/avatar21.png'],
+        ['userInviteCode', '未登录'],
+        ['userId', '未登录']
+    ]);
+}
+
+export { store, setter, getter, clear };

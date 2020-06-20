@@ -20,7 +20,7 @@ import user15 from '../../assets/icon/user/user15.png';
 import user16 from '../../assets/icon/user/user16.png';
 import user17 from '../../assets/icon/user/user17.png';
 import { user } from '../../utils/api';
-import { setter, getter } from '../../utils/store';
+import { setter, getter, clear } from '../../utils/store';
 import toast from '../../utils/toast';
 import { useEffect } from 'react';
 import * as U from 'karet.util';
@@ -215,7 +215,12 @@ function RenderMenu () {
     MENU_LIST.forEach(menu => {
         components.push(
             <TouchableOpacity onPress={() => {
-                menu.path === 'VerificationStackNavigator' ? N.replace(menu.path) : N.navigate(menu.path);
+                if (menu.path === 'VerificationStackNavigator') {
+                    clear();
+                    N.replace(menu.path);
+                } else {
+                    N.navigate(menu.path);
+                }
             }} style={styles.btn} key={menu.path}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image source={menu.icon} style={styles.menuIcon}/>
