@@ -102,7 +102,7 @@ function RenderSelect () {
     ];
     TYPE.forEach(item => {
         components.push(
-            <TouchableOpacity key={item.id} onPress={() => {
+            <TouchableOpacity activeOpacity={1} key={item.id} onPress={() => {
                 DeviceEventEmitter.emit('hidePop');
                 N.navigate('AccountBindPage', { type: item.label });
             }} style={[styles.selectViewBtn, css.flexRCSB]}>
@@ -152,7 +152,7 @@ function RenderChange ({ id, type }) {
     ];
     TYPE.forEach(item => {
         components.push(
-            <TouchableOpacity style={ {
+            <TouchableOpacity activeOpacity={1} style={ {
                 height: 50,
                 width: '100%',
                 marginBottom: 10,
@@ -184,7 +184,7 @@ function RenderChange ({ id, type }) {
                     {components}
                 </ScrollView>
             </View>
-            <TouchableOpacity style={styles.addBtn} onPress={() => {
+            <TouchableOpacity activeOpacity={1} style={styles.addBtn} onPress={() => {
                 DeviceEventEmitter.emit('hidePop');
                 N.navigate('AccountBindPage', { type: '绑定头条账号' });
             }}>
@@ -203,12 +203,12 @@ function RenderChange ({ id, type }) {
                 <Text style={{ color: '#FF3B00', fontSize: 15 }}>添加新账号</Text>
             </TouchableOpacity>
             <View style={[css.flexRCSB, { paddingLeft: 5, paddingRight: 5, paddingTop: 20, paddingBottom: 20 }]}>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity activeOpacity={1} onPress={() => {
                     DeviceEventEmitter.emit('hidePop');
                 }} style={styles.changeLBtn}>
                     <Text style={{ lineHeight: 33, textAlign: 'center', color: '#FF3B00', fontSize: 15 }}>取消</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity activeOpacity={1} onPress={() => {
                     DeviceEventEmitter.emit('hidePop');
                 }} style={styles.changeRBtn}>
                     <Text style={{ lineHeight: 33, textAlign: 'center', color: '#fff' }}>切换账号</Text>
@@ -223,7 +223,7 @@ function RenderView ({ numbers = [], binds = [] }) {
         const children = (
             <>
                 <Text style={{ marginTop: 7, marginBottom: 20 }}>快去绑定账号做任务吧～</Text>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity activeOpacity={1} onPress={() => {
                     DeviceEventEmitter.emit('showPop', <RenderSelect />);
                 }} style={{ width: 206, height: 44, backgroundColor: '#FF9C00', borderRadius: 22 }}>
                     <Text numberOfLines={1} style={{ color: '#fff', lineHeight: 44, textAlign: 'center', fontSize: 17 }}>添加绑定</Text>
@@ -258,7 +258,7 @@ function RenderNumberView ({ numbers = [] }) {
                             <Text numberOfLines={1} style={{ fontSize: 10, color: '#353535' }}>账号类型：{number.type}</Text>
                         </View>
                     </View>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
                         DeviceEventEmitter.emit('showPop', <RenderChange id={number.id} type={number.type}/>);
                     }} style={styles.changeBindBtn}>
                         <Text numberOfLines={1} style={{ color: '#fff', lineHeight: 35, textAlign: 'center', fontSize: 13 }}>切换账号(5)</Text>
@@ -283,19 +283,19 @@ function RenderBindView ({ binds = [] }) {
                 </View>
                 <View style={[css.flexRCSB, styles.item, styles.urlView]}>
                     <Text numberOfLines={1} style={styles.urlText}>绑定链接：https://www.baidu.com/s/</Text>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
 
                     }}>
                         <Text numberOfLines={1} style={{ fontSize: 12, color: '#FF6C00' }}>复制链接</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={[css.flexRCSB, styles.item, styles.btnView]}>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
 
                     }} style={styles.giveUpBtn}>
                         <Text numberOfLines={1} style={styles.bindBtnText }>{bind.status === 1 ? '换号重绑' : '刷新状态'}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
 
                     }} style={[styles.giveUpBtn, { backgroundColor: '#fff', borderWidth: 1, borderColor: '#FF6C00' }]}>
                         <Text numberOfLines={1} style={[styles.bindBtnText, { color: '#FF6C00' }]}>取消绑定</Text>

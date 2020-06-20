@@ -82,7 +82,7 @@ function RenderAnswerItem ({ answers }) {
     const answersView = [];
     answers.forEach(answer => {
         answersView.push(
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 N.navigate('HelpCenterDetailPage', { detail: answer.detail });
             }} style={styles.item} key={answer.title}>
                 <Text style={{ color: '#666', fontSize: 14 }}>{answer.title}</Text>

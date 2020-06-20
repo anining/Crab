@@ -1,24 +1,34 @@
 import cheerio from 'cheerio-without-node-native';
+let timer = null;
+
 export async function dyCrack (url) {
-    const response = await fetch(url);
-    const html = await response.text();
-    console.log(html);
-    const $ = cheerio.load(formatHtml(html));
-    return {
-        focus: $('.follow-info .focus .num .iconfont').text().replace(/\s*/g, ''),
-        follower: $('.follow-info .follower .num .iconfont').text().replace(/\s*/g, ''),
-        liked: $('.follow-info .liked-num .num .iconfont').text().replace(/\s*/g, ''),
-        userTab: $('.video-tab .tab-wrap .user-tab .iconfont').text().replace(/\s*/g, ''),
-        likeTab: $('.video-tab .tab-wrap .like-tab .iconfont').text().replace(/\s*/g, ''),
-    };
+    try {
+        if (!timer) {
+            timer = setTimeout(() => {
+                timer = clearTimeout(timer);
+            }, 2000);
+            const response = await fetch(url);
+            const html = await response.text();
+            const $ = cheerio.load(formatHtml(html));
+            return {
+                focus: $('.follow-info .focus .num .iconfont').text().replace(/\s*/g, ''),
+                follower: $('.follow-info .follower .num .iconfont').text().replace(/\s*/g, ''),
+                liked: $('.follow-info .liked-num .num .iconfont').text().replace(/\s*/g, ''),
+                userTab: $('.video-tab .tab-wrap .user-tab .iconfont').text().replace(/\s*/g, ''),
+                likeTab: $('.video-tab .tab-wrap .like-tab .iconfont').text().replace(/\s*/g, ''),
+            };
+        }
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 function formatHtml (html) {
     try {
         let strHtml = html.toString();
-        for (const key in numberMap) {
+        for (const key in numberMapProxy) {
             const re = new RegExp(`&#xe${key};`, 'g');
-            strHtml = strHtml.replace(re, numberMap[key]);
+            strHtml = strHtml.replace(re, numberMapProxy[key]);
         }
         return strHtml;
     } catch (e) {
@@ -58,3 +68,14 @@ const numberMap = {
     615: 9,
     '61e': 9,
 };
+
+function proxyGet (target, key) {
+    if (key in target) {
+        return target[key];
+    } else {
+        return '-';
+    }
+}
+export const numberMapProxy = new Proxy(numberMap, {
+    get: proxyGet
+});

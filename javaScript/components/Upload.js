@@ -45,7 +45,7 @@ export default function Upload ({ children, style = {}, images, setImages, lengt
     }, file);
 
     return (
-        <TouchableOpacity onPress={() => {
+        <TouchableOpacity activeOpacity={1} onPress={() => {
             ImagePicker.openPicker({
                 cropping: false,
                 includeBase64: true,

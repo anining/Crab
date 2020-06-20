@@ -69,7 +69,7 @@ export default class Button extends Component {
             });
             return <Shadow style={[styles.buntWrap, typeStyleProxy[this.type]]} color={this.shadow}>
                 <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.buntWrap, styles.lineStyle, typeStyleProxy[this.type]]}>
-                    <TouchableOpacity style={styles.touchBtn} activeOpacity={1} onPress={() => { this.btnOnPress(); }}>
+                    <TouchableOpacity activeOpacity={1} style={styles.touchBtn} activeOpacity={1} onPress={() => { this.btnOnPress(); }}>
                         {this.renderLoading.call(this)}
                         <Text style={styles.btnText}>
                             {this.props.name || this.props.title || '确定'}

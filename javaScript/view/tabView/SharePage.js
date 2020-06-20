@@ -45,17 +45,17 @@ export default class SharePage extends Component {
             icon: share4,
             title: '高级推手',
             label: <Text numberOfLine={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>80-120元</Text>现金红包，永久获得<Text style={{ color: '#FF8353' }}>2%</Text>徒弟<Text style={{ color: '#FF8353' }}>1%</Text>徒孙提现返佣。</Text>,
-            target: <Text numberOfLine={1} style={styles.welfareTargetText}>要求500徒弟提现，已提现的徒弟 80/100</Text>,
+            target: <Text numberOfLines={1} style={styles.welfareTargetText}>要求500徒弟提现，已提现的徒弟 80/100</Text>,
         }, {
             icon: share5,
             title: '钻石推手',
             label: <Text numberOfLine={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>300-520</Text>元现金红包，永久获得<Text style={{ color: '#FF8353' }}>2%</Text>徒弟<Text style={{ color: '#FF8353' }}>1%</Text>徒孙提现返佣。</Text>,
-            target: <Text numberOfLine={1} style={styles.welfareTargetText}>要求500徒弟提现，已提现的徒弟 80/100</Text>,
+            target: <Text numberOfLines={1} style={styles.welfareTargetText}>要求500徒弟提现，已提现的徒弟 80/100</Text>,
         }, {
             icon: share6,
             title: '顶级推手',
-            label: <Text numberOfLine={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>1888元</Text>现金红包，永久获得2%徒弟1%徒孙提现返佣。</Text>,
-            target: <Text numberOfLine={1} style={styles.welfareTargetText}>要求500徒弟提现，已提现的徒弟 80/100</Text>,
+            label: <Text numberOfLines={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>1888元</Text>现金红包，永久获得2%徒弟1%徒孙提现返佣。</Text>,
+            target: <Text numberOfLines={1} style={styles.welfareTargetText}>要求500徒弟提现，已提现的徒弟 80/100</Text>,
         }];
         shareLevel.forEach((item, index) => {
             view.push(<View style={[styles.welfareProgressWrap, css.flex, css.fw, css.afs]} key={`shareLevel${index}`}>
@@ -232,6 +232,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
     },
     inviteWrap: {
+        // backgroundColor: 'red',
         height: width * 0.35,
         paddingHorizontal: 15,
         paddingTop: 10,
