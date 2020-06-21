@@ -232,7 +232,7 @@ function AppStackNavigator () {
     useEffect(() => {
         asyncStorage.getAllKeys()
             .then(response => {
-                console.log(response);
+                console.log(response, '=');
                 asyncStorage.multiGet(response)
                     .then(r => {
                         console.log(r, '缓存去除数据');

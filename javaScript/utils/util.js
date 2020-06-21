@@ -9,7 +9,11 @@ const initializationStore = keys => {
     const localStore = store.get();
     keys = [...keys, [{ channel: 'default' }]];
     keys.forEach(key => {
-        localStore[key[0]] = key[1];
+        try {
+            localStore[key[0]] = JSON.parse(key[1]);
+        } catch (e) {
+            localStore[key[0]] = key[1];
+        }
     });
     U.set(store, localStore);
 };

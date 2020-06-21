@@ -15,7 +15,7 @@ function setter (items = [], storage = false) {
     items.forEach(item => {
         try {
             U.set(U.view([item[0]], store), item[1]);
-            console.log('存值', item[0], JSON.stringify(item[1]));
+            // console.log('存值', item[0], JSON.stringify(item[1]));
             storage && asyncStorage.setItem(item[0], JSON.stringify(item[1]));
         } catch (e) {
         }

@@ -21,9 +21,11 @@ export default class HomePage extends Component {
 
     render () {
         return (
-            <SafeAreaView style={css.safeAreaView}>
+            <SafeAreaView style={[css.safeAreaView, {
+                backgroundColor: '#8AE9FC'
+            }]}>
                 <LottieView
-                    style={{ width: '100%', height: 'auto' }}
+                    style={{ width: width, height: 'auto' }}
                     imageAssetsFolder={'lottie5'}
                     source={data5}
                     loop={true}

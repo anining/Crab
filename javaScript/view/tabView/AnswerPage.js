@@ -86,26 +86,23 @@ export default class AnswerPage extends Component {
 
     async _newUserTask () {
         const ret = await newUserTask();
-        console.log(ret, '???==321');
     }
 
     // total_task_num
     async _signLogs () {
         const ret = await signLogs();
-        console.log(ret, '???==');
     }
 
     formatTaskPlatform (taskPlatform) {
         try {
             return taskPlatform.map((item) => {
-                console.log(item, '???=??');
-                // return {
-                //     icon: item.item,
-                //     label: item.label,
-                //     minTitle: item.accounts.length ? JSON.stringify(item.accounts) : '您还未绑定账号',
-                //     btnText: '去做任务',
-                //     btnStatus: 2,
-                // };
+                return {
+                    icon: item.icon,
+                    label: item.label,
+                    minTitle: item.accounts.length ? JSON.stringify(item.accounts) : '您还未绑定账号',
+                    btnText: '去做任务',
+                    btnStatus: 2,
+                };
             });
         } catch (e) {
             return [];
@@ -135,7 +132,7 @@ export default class AnswerPage extends Component {
                             </View>
                         </View>
                         <Shadow style={styles.todoBtn} color={'#d43912'}>
-                            <Text style={styles.todoBtnText} karet-lift>领取奖励</Text>
+                            <Text style={styles.todoBtnText} karet-lift>{item.btnText}</Text>
                         </Shadow>
                     </View>,
                 );
@@ -272,7 +269,7 @@ export default class AnswerPage extends Component {
                 <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
                 <View style={styles.answerWrap} karet-lift>
                     <ComTitle title={'领金币'}/>
-                    {/* {this.renderList((taskPlatform))} */}
+                    {this.renderList((this.formatTaskPlatform(taskPlatform.get())))}
                 </View>
                 <View style={{ height: 20, backgroundColor: '#f8f8f8' }}/>
             </ScrollView>
