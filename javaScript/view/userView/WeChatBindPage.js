@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Image, Text, View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { SafeAreaView, Image, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { css } from '../../assets/style/css';
 import chat1 from '../../assets/icon/chat/chat1.png';
 import { captureRef } from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
-import chat2 from '../../assets/icon/chat/chat2.png';
 import { requestPermission } from '../../utils/util';
 import toast from '../../utils/toast';
 import Crab from '../../components/Crab';
