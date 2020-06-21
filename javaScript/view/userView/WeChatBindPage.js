@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { SafeAreaView, Image, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { css } from '../../assets/style/css';
-import chat1 from '../../assets/icon/chat/chat1.png';
 import { captureRef } from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
 import { requestPermission } from '../../utils/util';
 import toast from '../../utils/toast';
 import Crab from '../../components/Crab';
+import { getter } from '../../utils/store';
 
 const { width } = Dimensions.get('window');
 export default function WeChatBindPage () {
     const [view, setView] = useState();
+    const { wx_bind_qrcode } = getter(['app.wx_bind_qrcode']);
+
     function save () {
         requestPermission(() => {
             if (view) {
@@ -31,7 +33,7 @@ export default function WeChatBindPage () {
 
     return (
         <SafeAreaView style={css.safeAreaView}>
-            <Image source={chat1} style={styles.image} ref={ref => setView(ref)}/>
+            <Image source={{ uri: wx_bind_qrcode.get() }} style={styles.image} ref={ref => setView(ref)}/>
             <TouchableOpacity activeOpacity={1} onPress={() => {
                 save();
             }} style={styles.btn}>
