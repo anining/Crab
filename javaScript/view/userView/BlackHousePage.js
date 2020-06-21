@@ -20,13 +20,12 @@ export default function BlackHousePage () {
                     getList={async (page, num, callback) => {
                         userBaned(page, num).then(r => {
                             if (!r.error) {
-                                console.log(r);
                                 callback(r.data);
                             }
                         });
                     }}
                     renderItem={item => {
-                        const { updated_at, nickname, avatar } = item;
+                        const { updated_at, nickname, avatar, baned_reason, baned_time } = item;
                         return (
                             <>
                                 <View style={styles.itemView} key={nickname + updated_at}>
@@ -38,8 +37,8 @@ export default function BlackHousePage () {
                                         <Text numberOfLines={1} style={{ fontSize: 13, color: '#999' }}>封停时间：{transformTime(updated_at)}</Text>
                                     </View>
                                     <View style={[css.flexRCSB, styles.item]}>
-                                        {/* <Text numberOfLines={1} style={[styles.text, { maxWidth: 180 }]}>封停原因：{item.reason}</Text> */}
-                                        {/* <Text numberOfLines={1} style={styles.text}>封停期限：{item.deadline}</Text> */}
+                                        <Text numberOfLines={1} style={[styles.text, { maxWidth: 180 }]}>封停原因：{baned_reason || '错误使用账号'}</Text>
+                                        <Text numberOfLines={1} style={styles.text}>解封时间：{transformTime(baned_time)}</Text>
                                     </View>
                                 </View>
                             </>
