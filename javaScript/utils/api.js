@@ -32,6 +32,11 @@ export function app () {
     return transformFetch('GET', '/app');
 }
 
+// 账号列表
+export function account (platform_category) {
+    return transformFetch('GET', '/account', platform_category && { platform_category });
+}
+
 // 帮助中心
 export function helpCenter () {
     return transformFetch('GET', '/help_center');
