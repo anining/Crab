@@ -30,7 +30,7 @@ export default class Choice extends Component {
     sure () {
         try {
             DeviceEventEmitter.emit('hidePop');
-            this.props.info.rc();
+            this.props.info.rc && this.props.info.rc();
         } catch (e) {
             console.log(e);
         }
@@ -39,7 +39,7 @@ export default class Choice extends Component {
     cancel () {
         try {
             DeviceEventEmitter.emit('hidePop');
-            this.props.info.lc();
+            this.props.info.lc && this.props.info.lc();
         } catch (e) {
             console.log(e);
         }

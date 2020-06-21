@@ -3,6 +3,7 @@ import { store } from './store';
 import * as U from 'karet.util';
 import CryptoJS from 'crypto-js';
 import { API_URL, PRIVATE_KEY } from './config';
+import { BALANCE_RATE } from './data';
 
 const initializationStore = keys => {
     const localStore = store.get();
@@ -130,14 +131,18 @@ export function getValue (obj, key) {
     }
 }
 
-function transformMoney (money) {
-    if (isNaN(money)) {
+function transformMoney (money, digits = 0) {
+    try {
+        if (isNaN(money)) {
+            return 0;
+        }
+        if (money >= (BALANCE_RATE / 10000)) {
+            return `${money.toFixed(2)}w`;
+        }
+        return (money * BALANCE_RATE).toFixed(digits);
+    } catch (e) {
         return 0;
     }
-    if (money >= 10) {
-        return `${money}w`;
-    }
-    return money * 10000;
 }
 
 function transformTime (time, start = 10, end = 11) {
@@ -236,7 +241,7 @@ export function _tc (fn, err) {
     } catch (e) {
         console.log(JSON.stringify(e));
         if (err && typeof err === 'function') {
-            err();
+            err(e);
         } else {
             return err;
         }

@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import * as React from 'karet';
-import { Dimensions, SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import * as U from 'karet.util';
+import { Dimensions, SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity, DeviceEventEmitter } from 'react-native';
 import { css } from '../../assets/style/css';
 import Slider from '../../components/Slider';
 import ComTitle from '../../components/ComTitle';
@@ -19,11 +20,14 @@ import answer11 from '../../assets/icon/answer/answer11.png';
 import answer12 from '../../assets/icon/answer/answer12.png';
 import answer13 from '../../assets/icon/answer/answer13.png';
 import answer14 from '../../assets/icon/answer/answer14.png';
+import pop5 from '../../assets/icon/pop/pop5.png';
 import Shadow from '../../components/Shadow';
-import { _if, _tc } from '../../utils/util';
+import { _if, _tc, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
 import { N } from '../../utils/router';
 import { getter } from '../../utils/store';
+import { newUserTask, sign, signLogs } from '../../utils/api';
+import Choice from '../../components/Choice';
 
 const { height, width } = Dimensions.get('window');
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待
@@ -68,11 +72,44 @@ const taskList = [{
     btnText: '领取奖励',
     btnStatus: 1,
 }];
-const { banner, signConfig, activityObj, balance_rate: balanceRate } = getter(['banner', 'signConfig', 'activityObj', 'balance_rate']);
+const { banner, signConfig, activityObj, user, taskPlatform } = getter(['banner', 'signConfig', 'activityObj', 'user', 'taskPlatform']);
 export default class AnswerPage extends Component {
     constructor (props) {
         super(props);
         this.state = {};
+    }
+
+    componentDidMount () {
+        this._signLogs();
+        this._newUserTask();
+    }
+
+    async _newUserTask () {
+        const ret = await newUserTask();
+        console.log(ret, '???==321');
+    }
+
+    // total_task_num
+    async _signLogs () {
+        const ret = await signLogs();
+        console.log(ret, '???==');
+    }
+
+    formatTaskPlatform (taskPlatform) {
+        try {
+            return taskPlatform.map((item) => {
+                console.log(item, '???=??');
+                // return {
+                //     icon: item.item,
+                //     label: item.label,
+                //     minTitle: item.accounts.length ? JSON.stringify(item.accounts) : '您还未绑定账号',
+                //     btnText: '去做任务',
+                //     btnStatus: 2,
+                // };
+            });
+        } catch (e) {
+            return [];
+        }
     }
 
     renderList (list) {
@@ -105,6 +142,7 @@ export default class AnswerPage extends Component {
             });
             return view;
         } catch (e) {
+            console.log(e);
             return null;
         }
     }
@@ -112,18 +150,18 @@ export default class AnswerPage extends Component {
     _renderSignList () {
         try {
             const view = [];
-            const balanceRateObj = balanceRate.get();
             const signConfigObj = signConfig.get();
             for (const day in signConfigObj) {
                 const item = signConfigObj[day];
                 // console.log(item, '??');
                 view.push(<View key={`sign${day}`} style={[css.flex, css.fw, styles.signItemWrap, {
                     // backgroundColor: item.sign ? '#FF9C00' : '#F0F0F0',
+                    backgroundColor: item.prop ? '#ffeddd' : '#F0F0F0',
                 }]}>
                     <Text style={[styles.signText, {
                         // color: item.sign ? '#fff' : '#353535',
-                    }]}>{_if(item.add_balance, res => res * balanceRateObj)}</Text>
-                    <ImageAuto source={item.prop ? item.prop : item.sign ? answer11 : answer9} width={width * 0.08}/>
+                    }]}>{_if(item.add_balance, res => transformMoney(res))}</Text>
+                    <ImageAuto source={item.prop ? item.prop.icon : item.sign ? answer11 : answer9} width={item.prop ? width * 0.055 : width * 0.07}/>
                     <Text style={[styles.signText, {
                         // color: item.sign ? '#fff' : '#353535',
                         lineHeight: 18,
@@ -132,28 +170,46 @@ export default class AnswerPage extends Component {
             }
             return view;
         } catch (e) {
+            console.log(e);
             return null;
         }
     }
 
     _renderDaySign () {
         try {
-            const that = this;
+            const userInfo = user.get();
+            const today_task_num = userInfo.today_task_num || 0;
             const view = [];
             view.push(<View key={'dayList'} style={[styles.signAllTopWrap, css.flex]}>
                 {this._renderSignList()}
             </View>);
             view.push(<View key={'signWrap'} style={[css.flex, css.sp, styles.signAllWrap]}>
                 <View style={[css.flex, css.fw, styles.signTipsWrap]}>
-                    <Text style={[styles.signTipsText, styles.maxSTT]}>完成进度: <Text style={{ color: '#FF6C00' }}>5</Text>/10</Text>
+                    <Text style={[styles.signTipsText, styles.maxSTT]}>完成进度: <Text style={{ color: '#FF6C00' }}>{today_task_num}</Text>/10</Text>
                     <Text style={[styles.signTipsText]}>提交并通过10单任务即可签到</Text>
                 </View>
-                <Button width={120} name={'签到领钱'} shadow={'#ff0008'}/>
+                <Button width={120} name={'签到领钱'} shadow={'#ff0008'} onPress={async (callback) => {
+                    await AnswerPage._sign();
+                    callback();
+                }}/>
             </View>);
             return view;
         } catch (e) {
             console.log(e);
             return null;
+        }
+    }
+
+    static async _sign () {
+        const ret = await sign();
+        if (ret && !ret.error) {
+            DeviceEventEmitter.emit('showPop', <Choice info={{
+                icon: pop5,
+                tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>100金币</Text> </Text>,
+                minTips: '请在"我的-我的背包"查看收益详情',
+                type: 'oneBtn',
+                rt: '我知道了',
+            }}/>);
         }
     }
 
@@ -165,22 +221,22 @@ export default class AnswerPage extends Component {
                     _tc(() => N.navigate('DailyRedPackagePage', {
                         activity_id: (activityObj.get() || {})[2].activity_id
                     }));
-                }}>
+                }} key={'DailyRedPackagePage'}>
                     <ImageAuto source={answer5} width={width * 0.9 * 0.48}/>
                 </TouchableOpacity>,
             );
             view.push(
-                <View style={[css.flex, css.fw, styles.activityRight]}>
+                <View style={[css.flex, css.fw, styles.activityRight]} key={'appPage'}>
                     <TouchableOpacity activeOpacity={1} style={styles.arItemWrap} onPress={() => {
                         N.navigate('SharePage');
-                    }}>
+                    }} key={'SharePage'}>
                         <ImageAuto source={answer6} width={width * 0.9 * 0.48}/>
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={1} style={styles.arItemWrap} onPress={() => {
                         _tc(() => N.navigate('OpenMoneyPage', {
                             activity_id: (activityObj.get() || {})[1].activity_id
                         }));
-                    }}>
+                    }} key={'OpenMoneyPage'}>
                         <ImageAuto source={answer8} width={width * 0.9 * 0.48}/>
                     </TouchableOpacity>
                 </View>,
@@ -214,9 +270,9 @@ export default class AnswerPage extends Component {
                     {this.renderList(sprog)}
                 </View>
                 <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
-                <View style={styles.answerWrap}>
+                <View style={styles.answerWrap} karet-lift>
                     <ComTitle title={'领金币'}/>
-                    {this.renderList(taskList)}
+                    {/* {this.renderList((taskPlatform))} */}
                 </View>
                 <View style={{ height: 20, backgroundColor: '#f8f8f8' }}/>
             </ScrollView>

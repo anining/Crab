@@ -42,7 +42,7 @@ import asyncStorage from '../utils/asyncStorage';
 import { initializationStore } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
 import Prompt from '../components/Prompt';
-import { getSignConfig, updateActivity, updateApp, updateBanner } from '../utils/update';
+import { getSignConfig, getTaskPlatform, updateActivity, updateApp, updateBanner } from '../utils/update';
 import OpenMoneyPage from '../view/activityView/OpenMoneyPage';
 
 const Stack = createStackNavigator();
@@ -215,29 +215,36 @@ function setStatusBar () {
     StatusBar.setBackgroundColor('rgba(0,0,0,0)');
     StatusBar.setTranslucent(true);
 }
+
+function initNetInfo () {
+    updateApp();
+    updateBanner();
+    updateActivity();
+    getSignConfig();
+    getTaskPlatform();
+}
+
 function AppStackNavigator () {
     const [keys, setKeys] = useState();
     const GenerateScreen = stackScreens.map(screen =>
         <Stack.Screen name={screen.name} component={screen.component} options={{ title: screen.title }}
             key={screen.name}/>);
     useEffect(() => {
-        updateApp();
-        updateBanner();
-        updateActivity();
-        getSignConfig();
-    }, []);
-    useEffect(() => {
         asyncStorage.getAllKeys()
             .then(response => {
+                console.log(response);
                 asyncStorage.multiGet(response)
                     .then(r => {
+                        console.log(r, '缓存去除数据');
                         initializationStore(r);
+                        initNetInfo();
                         setStatusBar();
                         setKeys([]);
                         SplashScreen.hide();
                     });
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err);
                 setKeys([]);
             });
         return () => {
@@ -248,9 +255,14 @@ function AppStackNavigator () {
         return (
             <NavigationContainer>
                 <Prompt/>
-                <Stack.Navigator screenOptions={{ header: ({ scene, previous, navigation }) => <Header scene={scene} previous={previous} navigation={navigation}/> }}>
-                    <Stack.Screen name="MaterialTopTabNavigator" options={{ headerShown: false }} component={TabNavigator}/>
-                    <Stack.Screen name="VerificationStackNavigator" component={StackNavigator} options={{ headerShown: false }}/>
+                <Stack.Navigator screenOptions={{
+                    header: ({ scene, previous, navigation }) => <Header scene={scene} previous={previous}
+                        navigation={navigation}/>,
+                }}>
+                    <Stack.Screen name="MaterialTopTabNavigator" options={{ headerShown: false }}
+                        component={TabNavigator}/>
+                    <Stack.Screen name="VerificationStackNavigator" component={StackNavigator}
+                        options={{ headerShown: false }}/>
                     {GenerateScreen}
                 </Stack.Navigator>
             </NavigationContainer>

@@ -17,10 +17,14 @@ export default class Slider extends Component {
     }
 
     static _formatData (data) {
-        if (data && data.length) {
-            return data;
+        try {
+            if (data && data.length) {
+                return data;
+            }
+            return [{ backgroundColor: '#eed5a6' }, { backgroundColor: '#b3eed2' }, { backgroundColor: '#abc6ee' }];
+        } catch (e) {
+            console.log(e);
         }
-        return [{ backgroundColor: '#eed5a6' }, { backgroundColor: '#b3eed2' }, { backgroundColor: '#abc6ee' }];
     }
 
     render () {

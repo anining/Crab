@@ -2,7 +2,7 @@ import { DeviceEventEmitter } from 'react-native';
 import { DEVELOPER, PRIVATE_KEY, UA_ID } from './config';
 import CryptoJS from 'crypto-js';
 import toast from './toast';
-import { AesDecrypt, buildStr, parameterTransform } from './util';
+import { _tc, AesDecrypt, buildStr, parameterTransform } from './util';
 import * as U from 'karet.util';
 import { store } from './store';
 import { N } from './router';
@@ -199,11 +199,21 @@ const transformFetch = async (method, url, data = {}) => {
             }),
             // eslint-disable-next-line no-async-promise-executor
             new Promise(async (resolve, reject) => {
-                const FETCH_DATA = await fetch(parameterTransform(method, url, data), request);
-                const DATA_TEXT = await FETCH_DATA.text();
-                const localDate = DEVELOPER === 'Production' ? JSON.parse(AesDecrypt(DATA_TEXT)) : JSON.parse(DATA_TEXT);
-                localDate.error && toast(localDate.detail);
-                resolve(localDate);
+                try {
+                    const FETCH_DATA = await fetch(parameterTransform(method, url, data), request);
+                    const DATA_TEXT = await FETCH_DATA.text();
+                    const localDate = DEVELOPER === 'Production' ? JSON.parse(AesDecrypt(DATA_TEXT)) : JSON.parse(DATA_TEXT);
+                    localDate.error && toast(localDate.msg);
+                    if ('error' in localDate) {
+                        resolve(localDate);
+                    } else {
+                        console.log(localDate, 'error===');
+                        // localDate.detail && toast('请勿频繁操作');
+                        resolve({ error: 999, msg: '请求失败' });
+                    }
+                } catch (e) {
+                    resolve({ error: 999, msg: '请求失败' });
+                }
             }),
             // eslint-disable-next-line handle-callback-err
         ]).then(r => r).catch(err => {
