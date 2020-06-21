@@ -232,10 +232,8 @@ function AppStackNavigator () {
     useEffect(() => {
         asyncStorage.getAllKeys()
             .then(response => {
-                console.log(response, '=');
                 asyncStorage.multiGet(response)
                     .then(r => {
-                        console.log(r, '缓存去除数据');
                         initializationStore(r);
                         initNetInfo();
                         setStatusBar();
