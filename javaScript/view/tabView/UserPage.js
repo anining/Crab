@@ -19,16 +19,20 @@ import user14 from '../../assets/icon/user/user14.png';
 import user15 from '../../assets/icon/user/user15.png';
 import user16 from '../../assets/icon/user/user16.png';
 import user17 from '../../assets/icon/user/user17.png';
-import { user } from '../../utils/api';
-import { setter, getter, clear } from '../../utils/store';
+import { getter, clear } from '../../utils/store';
 import toast from '../../utils/toast';
 import { useEffect } from 'react';
 import * as U from 'karet.util';
-import { transformMoney } from '../../utils/util';
 import { updateUser } from '../../utils/update';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
+    {
+        icon: user17,
+        title: 'AccountHomePage',
+        remark: '',
+        path: 'AccountHomePage'
+    },
     {
         icon: user17,
         title: '活动中心',
@@ -38,7 +42,7 @@ const MENU_LIST = [
     {
         icon: user8,
         title: '道具背包',
-        remark: '1个道具',
+        remark: '',
         path: 'CardPackagePage'
     },
     {
