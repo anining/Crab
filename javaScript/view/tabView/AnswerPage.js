@@ -68,37 +68,7 @@ const taskList = [{
     btnText: '领取奖励',
     btnStatus: 1,
 }];
-const signList = [{
-    money: 1000,
-    sign: true,
-    prop: false,
-}, {
-    money: 1000,
-    sign: true,
-    prop: false,
-}, {
-    money: 1000,
-    sign: true,
-    prop: false,
-}, {
-    money: 1000,
-    sign: true,
-    prop: false,
-}, {
-    money: 1000,
-    sign: true,
-    prop: false,
-}, {
-    money: 1000,
-    sign: false,
-    prop: false,
-}, {
-    money: 0,
-    sign: false,
-    prop: answer7,
-}];
-const { banner } = getter(['banner']);
-const { activityObj } = getter(['activityObj']);
+const { banner, signConfig, activityObj, balance_rate: balanceRate } = getter(['banner', 'signConfig', 'activityObj', 'balance_rate']);
 export default class AnswerPage extends Component {
     constructor (props) {
         super(props);
@@ -140,22 +110,30 @@ export default class AnswerPage extends Component {
     }
 
     _renderSignList () {
-        const view = [];
-        signList.forEach((item, index) => {
-            view.push(<View key={`sign${index}`} style={[css.flex, css.fw, styles.signItemWrap, {
-                backgroundColor: item.sign ? '#FF9C00' : '#F0F0F0',
-            }]}>
-                <Text style={[styles.signText, {
-                    color: item.sign ? '#fff' : '#353535',
-                }]}>{_if(item.money, res => res)}</Text>
-                <ImageAuto source={item.prop ? item.prop : item.sign ? answer11 : answer9} width={width * 0.08}/>
-                <Text style={[styles.signText, {
-                    color: item.sign ? '#fff' : '#353535',
-                    lineHeight: 18,
-                }]}>{index + 1}天</Text>
-            </View>);
-        });
-        return view;
+        try {
+            const view = [];
+            const balanceRateObj = balanceRate.get();
+            const signConfigObj = signConfig.get();
+            for (const day in signConfigObj) {
+                const item = signConfigObj[day];
+                // console.log(item, '??');
+                view.push(<View key={`sign${day}`} style={[css.flex, css.fw, styles.signItemWrap, {
+                    // backgroundColor: item.sign ? '#FF9C00' : '#F0F0F0',
+                }]}>
+                    <Text style={[styles.signText, {
+                        // color: item.sign ? '#fff' : '#353535',
+                    }]}>{_if(item.add_balance, res => res * balanceRateObj)}</Text>
+                    <ImageAuto source={item.prop ? item.prop : item.sign ? answer11 : answer9} width={width * 0.08}/>
+                    <Text style={[styles.signText, {
+                        // color: item.sign ? '#fff' : '#353535',
+                        lineHeight: 18,
+                    }]}>{day}天</Text>
+                </View>);
+            }
+            return view;
+        } catch (e) {
+            return null;
+        }
     }
 
     _renderDaySign () {

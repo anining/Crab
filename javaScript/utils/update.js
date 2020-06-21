@@ -1,4 +1,4 @@
-import { activity, app, banner, user } from './api';
+import { activity, app, banner, signConfig, user } from './api';
 import { _tc, transformMoney } from './util';
 import { setter } from './store';
 export const updateUser = () => {
@@ -17,10 +17,18 @@ export const updateApp = () => {
     app().then(res => _tc(() => {
         if (!res.error && res.data) {
             console.log(res, 'app');
-            setter([['app', res.data]]);
+            setter([['app', formatAppInfo(res.data)]]);
         }
     }));
 };
+function formatAppInfo (app) {
+    try {
+        setter([['balance_rate', app.balance_rate || 1000]]);
+        return app;
+    } catch (e) {
+        return app;
+    }
+}
 export const updateBanner = () => {
     banner().then(res => _tc(() => {
         if (!res.error && res.data) {
@@ -43,6 +51,25 @@ function formatActivity (list) {
         const obj = {};
         list.forEach((item) => {
             obj[item.category] = item;
+        });
+        return obj;
+    } catch (e) {
+        return {};
+    }
+}
+export const getSignConfig = () => {
+    signConfig().then(res => _tc(() => {
+        if (!res.error && res.data) {
+            console.log(res, 'signConfig');
+            setter([['signConfig', formatSignConfig(res.data)]]);
+        }
+    }));
+};
+function formatSignConfig (config) {
+    try {
+        const obj = {};
+        config.forEach((item) => {
+            obj[item.day] = item;
         });
         return obj;
     } catch (e) {

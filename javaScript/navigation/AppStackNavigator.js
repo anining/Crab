@@ -42,7 +42,7 @@ import asyncStorage from '../utils/asyncStorage';
 import { initializationStore } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
 import Prompt from '../components/Prompt';
-import { updateActivity, updateApp, updateBanner } from '../utils/update';
+import { getSignConfig, updateActivity, updateApp, updateBanner } from '../utils/update';
 import OpenMoneyPage from '../view/activityView/OpenMoneyPage';
 
 const Stack = createStackNavigator();
@@ -224,6 +224,7 @@ function AppStackNavigator () {
         updateApp();
         updateBanner();
         updateActivity();
+        getSignConfig();
     }, []);
     useEffect(() => {
         asyncStorage.getAllKeys()

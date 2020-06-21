@@ -7,7 +7,8 @@ const localStore = {
     app: null,
     authorization: null,
     channel: 'default',
-    banner: null
+    banner: null,
+    balance_rate: 10000,
 };
 const store = U.atom(localStore);
 
