@@ -146,6 +146,9 @@ function transformMoney (money, digits = 0) {
 }
 
 function transformTime (time, start = 10, end = 11) {
+    if (!time) {
+        return '00:00:00';
+    }
     return `${time.slice(0, start)} ${time.slice(end, end + 8)}`;
 }
 

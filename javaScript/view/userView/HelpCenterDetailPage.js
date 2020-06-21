@@ -1,12 +1,14 @@
 import React from 'react';
-import { SafeAreaView, Text, ScrollView } from 'react-native';
+import { Dimensions, SafeAreaView, ScrollView } from 'react-native';
 import { css } from '../../assets/style/css';
+import HTML from 'react-native-render-html';
 
+const { width } = Dimensions.get('window');
 export default function HelpCenterDetailPage (props) {
     return (
         <SafeAreaView style={[css.safeAreaView, css.RichText]}>
             <ScrollView >
-                <Text>{props.route.params.detail}</Text>
+                <HTML html={props.route.params.content} imagesMaxWidth={width} tagsStyles={{ p: { lineHeight: 24 } }}/>
             </ScrollView>
         </SafeAreaView>
     );

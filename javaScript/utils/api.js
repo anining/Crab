@@ -1,4 +1,3 @@
-import { DeviceEventEmitter } from 'react-native';
 import { DEVELOPER, PRIVATE_KEY, UA_ID } from './config';
 import CryptoJS from 'crypto-js';
 import toast from './toast';
@@ -33,6 +32,11 @@ export function app () {
     return transformFetch('GET', '/app');
 }
 
+// 帮助中心
+export function helpCenter () {
+    return transformFetch('GET', '/help_center');
+}
+
 // banner
 export function banner () {
     return transformFetch('GET', '/banner');
@@ -41,6 +45,16 @@ export function banner () {
 // 提现商品
 export function withdraw () {
     return transformFetch('GET', '/withdraw');
+}
+
+// 道具
+export function prop () {
+    return transformFetch('GET', '/prop/prop');
+}
+
+// 道具记录
+export function propLogs () {
+    return transformFetch('GET', '/prop/prop/logs');
 }
 
 // 提现
@@ -169,6 +183,11 @@ export function taskReceive (page, size, status) {
     return transformFetch('GET', '/task/receive', { page, size, status });
 }
 
+// 放弃任务
+export function giveUp (receive_task_id) {
+    return transformFetch('POST', '/task/giveup', { receive_task_id });
+}
+
 // 资金记录
 export function income (page, size, source) {
     let data = {
@@ -217,7 +236,6 @@ const transformFetch = async (method, url, data = {}) => {
             }),
             // eslint-disable-next-line handle-callback-err
         ]).then(r => r).catch(err => {
-            console.log(JSON.stringify(err));
             return { error: 999, msg: '请求失败' };
         });
     } catch (e) {

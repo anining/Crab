@@ -10,7 +10,7 @@ export default class Prompt extends Component {
         super(props);
         this.state = {
             show: false,
-            dom: null,
+            dom: { props: {} },
         };
         this.close = null;
     }
@@ -37,8 +37,8 @@ export default class Prompt extends Component {
     render () {
         return <Modal visible={this.state.show} transparent={true} animationType='fade' onRequestClose={() => {
         }} hardwareAccelerated={true} presentationStyle='overFullScreen' style={styles.modal}>
-            <TouchableOpacity activeOpacity={1} style={[styles.view, css.flex]} onPress={() => { this.onClose(); }}>
-                <TouchableOpacity activeOpacity={1} onPress={() => { this.props.cancel && this.onClose(); }}>
+            <TouchableOpacity activeOpacity={1} style={[styles.view, css.flex]} onPress={(e) => { e.stopPropagation(); this.onClose(); }}>
+                <TouchableOpacity activeOpacity={1} onPress={() => { this.props.cancel && this.onClose(); }} {...this.state.dom.props}>
                     {this.state.dom}
                 </TouchableOpacity>
             </TouchableOpacity>
