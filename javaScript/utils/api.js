@@ -69,6 +69,81 @@ export function activityDetail (activity_id) {
     return transformFetch('GET', '/activity/detail', { activity_id });
 }
 
+// 领取完成任务红包
+export function getReceiveTaskAward () {
+    return transformFetch('POST', '/activity/receive_task_award');
+}
+
+// 提取拼多多红包
+export function getRedPackage () {
+    return transformFetch('PUT', '/activity/red_package');
+}
+
+// 打开拼多多红包
+export function openRedPackage () {
+    return transformFetch('POST', '/activity/red_package');
+}
+
+// 拼多多红包跑马灯
+export function redPackageLatest () {
+    return transformFetch('POST', '/activity/red_package/latest');
+}
+
+// 新手任务
+export function newUserTask () {
+    return transformFetch('GET', '/newuser/task');
+}
+
+// 领取新手任务
+export function getNewUserTask (new_user_task_id) {
+    return transformFetch('POST', '/newuser/task', { new_user_task_id });
+}
+
+// 签到配置
+export function signConfig () {
+    return transformFetch('GET', '/sign/config');
+}
+
+// 签到记录
+export function signLogs () {
+    return transformFetch('GET', '/sign');
+}
+
+// 签到
+export function sign () {
+    return transformFetch('POST', '/sign');
+}
+
+// 任务大类别
+export function taskPlatform () {
+    return transformFetch('GET', '/task/platform');
+}
+
+// 躺赚详情
+export function awardDetail () {
+    return transformFetch('GET', '/children/award/detail');
+}
+
+// 领取徒弟提现奖励
+export function getChildAward () {
+    return transformFetch('POST', '/children/award/withdraw');
+}
+
+// 领取推手奖励
+export function getPromoteAward () {
+    return transformFetch('POST', '/children/award/promote');
+}
+
+// 绑定父级
+export function bindParent () {
+    return transformFetch('PUT', '/children/parent');
+}
+
+// 徒弟详情
+export function childDetail () {
+    return transformFetch('POST', '/children/detail');
+}
+
 // 阿里云oss上传token
 export function uploadToken () {
     return transformFetch('GET', '/upload/token');
