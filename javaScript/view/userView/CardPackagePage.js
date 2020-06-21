@@ -1,49 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, TouchableOpacity, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import Header from '../../components/Header';
-import card1 from '../../assets/icon/card/card1.png';
 import Null from '../../components/Null';
+import { prop } from '../../utils/api';
 
-const TYPE_DATA = [card1, card1, card1, card1, card1];
 export default function CardPackagePage () {
-    const [item, setItem] = useState({
-        id: 1,
-        type: 1,
-        number: 10,
-        label: '特权卡',
-        instructions: '提现时自动使用。',
-        scope: '提现要手续费的金额。',
-        features: '提现免手续费一次。'
-    },);
+    const [cards, setCards] = useState([]);
+    const [item, setItem] = useState({});
+    useEffect(() => {
+        prop().then(r => {
+            if (!r.error) {
+                setCards(r.data);
+                r.data.length && setItem(r.data[0]);
+            }
+        });
+    }, []);
     const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>道具记录</Text>;
-    const CARDS = [];
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '道具背包' } }} navigation={N} onPress={() => {
                 N.navigate('CardPackageRecordsPage');
             }} headerRight={headerRight}/>
-            <RenderView CARDS={CARDS} item={item} setItem={setItem}/>
+            <RenderView cards={cards} item={item} setItem={setItem}/>
         </SafeAreaView>
     );
 }
 
-function RenderView ({ CARDS, setItem, item }) {
-    if (!CARDS.length) {
+function RenderView ({ cards, setItem, item }) {
+    if (!cards.length) {
         return <Null text='您还没有道具哦～'/>;
     }
+    const { label, usage_range, function: f, usage, num } = item;
     return (
         <ScrollView>
-            <RenderCard cards={CARDS} setItem={setItem} item={item}/>
+            <RenderCard cards={cards} setItem={setItem} item={item}/>
             <View style={styles.detail}>
                 <Text style={styles.title} numberOfLines={1}>道具说明：</Text>
-                <Text style={styles.text} numberOfLines={1}>道具名称：{item.label}</Text>
-                <Text style={styles.text} numberOfLines={1}>道具数量：{item.number}</Text>
-                <Text style={styles.text} numberOfLines={1}>使用方法：{item.instructions}</Text>
-                <Text style={styles.text} numberOfLines={1}>适用范围：{item.scope}</Text>
-                <Text style={styles.text} numberOfLines={1}>道具功能：{item.features}</Text>
+                <Text style={styles.text} numberOfLines={1}>道具名称：{label}</Text>
+                <Text style={styles.text} numberOfLines={1}>道具数量：{num}</Text>
+                <Text style={styles.text} numberOfLines={1}>使用方法：{usage}</Text>
+                <Text style={styles.text} numberOfLines={1}>适用范围：{usage_range}</Text>
+                <Text style={styles.text} numberOfLines={1}>道具功能：{f}</Text>
             </View>
         </ScrollView>
     );
@@ -52,13 +52,15 @@ function RenderView ({ CARDS, setItem, item }) {
 function RenderCard ({ cards, setItem, item }) {
     const components = [];
     cards.forEach(card => {
+        const { prop_id, label, icon, num } = card;
+        const { prop_id: id } = item;
         components.push(
             <TouchableOpacity activeOpacity={1} onPress={() => {
                 setItem(card);
-            }} style={[styles.cardItem, { borderColor: card.id === item.id ? '#FFE06F' : '#F1F1F1', backgroundColor: card.id === item.id ? '#FFF6D7' : '#F1F1F1' }]}>
-                <Text style={{ color: '#353535', fontSize: 14, fontWeight: '500' }}>{card.label}</Text>
-                <Image source={TYPE_DATA[card.type]} style={{ height: 43 / 1.3, width: 34 / 1.3 }}/>
-                <Text style={{ color: '#FF6C00', fontSize: 14 }}>x{card.number}</Text>
+            }} key={prop_id} style={[styles.cardItem, { borderColor: prop_id === id ? '#FFE06F' : '#F1F1F1', backgroundColor: prop_id === id ? '#FFF6D7' : '#F1F1F1' }]}>
+                <Text numberOfLines={1} style={{ color: '#353535', fontSize: 14, fontWeight: '500' }}>{label}</Text>
+                <Image source={{ uri: icon }} style={{ height: 43 / 1.3, width: 34 / 1.3 }}/>
+                <Text style={{ color: '#FF6C00', fontSize: 14 }}>x{num}</Text>
             </TouchableOpacity>
         );
     });
