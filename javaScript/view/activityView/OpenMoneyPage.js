@@ -17,7 +17,7 @@ import Header from '../../components/Header';
 import header3 from '../../assets/icon/header/header3.png';
 import ImageAuto from '../../components/ImageAuto';
 import activity14 from '../../assets/icon/activity/activity14.png';
-import { activityDetail } from '../../utils/api';
+import { activityDetail, openRedPackage } from '../../utils/api';
 import { N } from '../../utils/router';
 const { height, width } = Dimensions.get('window');
 export default class OpenMoneyPage extends Component {
@@ -31,6 +31,24 @@ export default class OpenMoneyPage extends Component {
 
     componentDidMount () {
         this._activityDetail();
+        // this._openRedPackage();
+    }
+
+    async _openRedPackage () {
+        try {
+            const ret = await openRedPackage(this.active_id);
+            console.log(ret);
+            if (ret && !ret.error) {
+                console.log(ret);
+                // this.setState({
+                //     receivedStatus: 2
+                // }, () => {
+                //     DeviceEventEmitter.emit('hidePop');
+                // });
+            }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     async _activityDetail () {
@@ -38,7 +56,7 @@ export default class OpenMoneyPage extends Component {
             console.log(this.active_id, 'activity_id');
             const ret = await activityDetail(this.active_id);
             if (ret && !ret.error) {
-                if (ret.data.logs.length) {
+                if (ret.data.log.length) {
                     _tc(() => N.navigate('DailyMoneyPage', {
                         activity_id: this.active_id
                     }));
@@ -47,14 +65,10 @@ export default class OpenMoneyPage extends Component {
                         receivedStatus: 1
                     });
                     DeviceEventEmitter.emit('showPop', {
-                        dom: <View style={[css.pr]}>
-                            <TouchableOpacity activeOpacity={1} style={[styles.redInnerWrap, css.pa, css.flex, css.fw]} onPress={() => {
-                                this.setState({
-                                    receivedStatus: 2
-                                }, () => {
-                                    DeviceEventEmitter.emit('hidePop');
-                                });
-                            }}>
+                        dom: <TouchableOpacity activeOpacity={1} style={[css.pr]} onPress={async () => {
+                            await this._openRedPackage();
+                        }}>
+                            <TouchableOpacity activeOpacity={1} style={[styles.redInnerWrap, css.pa, css.flex, css.fw]}>
                                 <ImageAuto style={{
                                     width: 48,
                                     borderRadius: 20,
@@ -64,7 +78,7 @@ export default class OpenMoneyPage extends Component {
                                 <Text style={styles.redTipsText}>最低20元现金等着你</Text>
                             </TouchableOpacity>
                             <ImageAuto width={width * 0.8} source={activity14}/>
-                        </View>,
+                        </TouchableOpacity>,
                         close: () => {
                             if (this.state.receivedStatus < 2) {
                                 N.goBack();
@@ -108,15 +122,11 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     redInnerWrap: {
-        // backgroundColor: 'red',
         flex: 1,
-        height: '100%',
+        overflow: 'hidden',
         padding: 20,
-        width: '100%',
-        // eslint-disable-next-line react-native/sort-styles
         paddingLeft: '13%',
-        paddingBottom: '30%',
-        overflow: 'hidden'
+        width: '100%'
     },
     redNameText: {
         color: '#FDFAB1',

@@ -22,11 +22,11 @@ import answer13 from '../../assets/icon/answer/answer13.png';
 import answer14 from '../../assets/icon/answer/answer14.png';
 import pop5 from '../../assets/icon/pop/pop5.png';
 import Shadow from '../../components/Shadow';
-import { _if, _tc, transformMoney } from '../../utils/util';
+import { _if, _tc, bannerAction, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
 import { N } from '../../utils/router';
 import { getter } from '../../utils/store';
-import { newUserTask, sign, signLogs } from '../../utils/api';
+import { getTask, newUserTask, sign, signLogs } from '../../utils/api';
 import Choice from '../../components/Choice';
 
 const { height, width } = Dimensions.get('window');
@@ -53,59 +53,98 @@ const sprog = [{
     btnText: '领取奖励',
     btnStatus: 1,
 }];
-const taskList = [{
-    icon: answer1,
-    label: '绑定账号，领金币',
-    minTitle: '看视频还有很多小攻略',
-    btnText: '领取奖励',
-    btnStatus: 1,
-}, {
-    icon: answer3,
-    label: '看视频，领金币',
-    minTitle: '看视频还有很多小攻略',
-    btnText: '领取奖励',
-    btnStatus: 1,
-}, {
-    icon: answer13,
-    label: '做任务，领金币',
-    minTitle: '看视频还有很多小攻略',
-    btnText: '领取奖励',
-    btnStatus: 1,
-}];
+const sprogObj = {
+    1: {
+        icon: answer3,
+        label: '看视频，领金币',
+        minTitle: '看视频还有很多小攻略',
+        money: 0,
+        btnText: '领取奖励',
+        btnStatus: 1,
+    },
+    2: {
+        icon: answer1,
+        label: '绑定账号，领金币',
+        minTitle: '看视频还有很多小攻略',
+        money: 0,
+        btnText: '领取奖励',
+        btnStatus: 1,
+    },
+    3: {
+        icon: answer13,
+        label: '做任务，领金币',
+        minTitle: '看视频还有很多小攻略',
+        money: 0,
+        btnText: '领取奖励',
+        btnStatus: 1,
+    }
+};
+// video = 1
+// account = 2
+// task = 3
+// return {
+//     cls.video: "看视频领金币",
+//     cls.account: "绑定账号领金币",
+//     cls.task: "做任务得奖励",
+// }
 const { banner, signConfig, activityObj, user, taskPlatform } = getter(['banner', 'signConfig', 'activityObj', 'user', 'taskPlatform']);
 export default class AnswerPage extends Component {
     constructor (props) {
         super(props);
-        this.state = {};
+        this.state = {
+            signDay: 0,
+            newUser: [],
+        };
     }
 
-    componentDidMount () {
-        this._signLogs();
-        this._newUserTask();
+    async componentDidMount () {
+        await this._signLogs();
+        await this._newUserTask();
     }
 
     async _newUserTask () {
         const ret = await newUserTask();
+        console.log(ret, '新手福利');
+        if (ret && !ret.error) {
+            this.setState({
+                newUser: ret.data
+            });
+        }
     }
 
     // total_task_num
     async _signLogs () {
         const ret = await signLogs();
+        console.log(ret, '签到记录');
+        if (ret && !ret.error) {
+            this.setState({
+                signDay: ret.data.length
+            });
+        }
     }
 
     formatTaskPlatform (taskPlatform) {
         try {
             return taskPlatform.map((item) => {
                 return {
-                    icon: item.icon,
-                    label: item.label,
                     minTitle: item.accounts.length ? JSON.stringify(item.accounts) : '您还未绑定账号',
                     btnText: '去做任务',
                     btnStatus: 2,
+                    ...item
                 };
             });
         } catch (e) {
             return [];
+        }
+    }
+
+    // 接任务
+    async _getTask (category) {
+        try {
+            const ret = await getTask(category);
+            console.log(ret);
+        } catch (e) {
+            console.log(e);
         }
     }
 
@@ -131,9 +170,17 @@ export default class AnswerPage extends Component {
                                     numberOfLines={1}>{item.minTitle}</Text>
                             </View>
                         </View>
-                        <Shadow style={styles.todoBtn} color={'#d43912'}>
-                            <Text style={styles.todoBtnText} karet-lift>{item.btnText}</Text>
-                        </Shadow>
+                        {_if(item.btnStatus === 2, res => {
+                            return <Text style={styles.todoTaskText} karet-lift onPress={async () => {
+                                // getTask
+                                console.log(item.platform_category);
+                                await this._getTask(item.platform_category);
+                            }}>{item.btnText}</Text>;
+                        }, () => {
+                            return <Shadow style={styles.todoBtn} color={'#d43912'}>
+                                <Text style={styles.todoBtnText} karet-lift>{item.btnText}</Text>
+                            </Shadow>;
+                        })}
                     </View>,
                 );
             });
@@ -150,17 +197,16 @@ export default class AnswerPage extends Component {
             const signConfigObj = signConfig.get();
             for (const day in signConfigObj) {
                 const item = signConfigObj[day];
-                // console.log(item, '??');
+                console.log(item);
                 view.push(<View key={`sign${day}`} style={[css.flex, css.fw, styles.signItemWrap, {
-                    // backgroundColor: item.sign ? '#FF9C00' : '#F0F0F0',
-                    backgroundColor: item.prop ? '#ffeddd' : '#F0F0F0',
+                    backgroundColor: day <= this.state.signDay ? '#FF9C00' : '#F0F0F0',
                 }]}>
                     <Text style={[styles.signText, {
-                        // color: item.sign ? '#fff' : '#353535',
+                        color: day <= this.state.signDay ? '#fff' : '#353535',
                     }]}>{_if(item.add_balance, res => transformMoney(res))}</Text>
-                    <ImageAuto source={item.prop ? item.prop.icon : item.sign ? answer11 : answer9} width={item.prop ? width * 0.055 : width * 0.07}/>
+                    <ImageAuto source={item.prop ? item.prop.icon : day <= this.state.signDay ? answer11 : answer9} width={item.prop ? width * 0.055 : width * 0.07}/>
                     <Text style={[styles.signText, {
-                        // color: item.sign ? '#fff' : '#353535',
+                        color: day <= this.state.signDay ? '#fff' : '#353535',
                         lineHeight: 18,
                     }]}>{day}天</Text>
                 </View>);
@@ -199,14 +245,25 @@ export default class AnswerPage extends Component {
 
     static async _sign () {
         const ret = await sign();
+        console.log(ret, '签到');
         if (ret && !ret.error) {
-            DeviceEventEmitter.emit('showPop', <Choice info={{
-                icon: pop5,
-                tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>100金币</Text> </Text>,
-                minTips: '请在"我的-我的背包"查看收益详情',
-                type: 'oneBtn',
-                rt: '我知道了',
-            }}/>);
+            if (ret.prop) {
+                DeviceEventEmitter.emit('showPop', <Choice info={{
+                    icon: pop5,
+                    tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{ret.prop.label}</Text> </Text>,
+                    minTips: '请在"我的-我的背包"查看收益详情',
+                    type: 'oneBtn',
+                    rt: '我知道了',
+                }}/>);
+            } else {
+                DeviceEventEmitter.emit('showPop', <Choice info={{
+                    icon: pop5,
+                    tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{transformMoney(ret.add_balance)}金币</Text> </Text>,
+                    minTips: '请在"我的-我的背包"查看收益详情',
+                    type: 'oneBtn',
+                    rt: '我知道了',
+                }}/>);
+            }
         }
     }
 
@@ -216,7 +273,7 @@ export default class AnswerPage extends Component {
             view.push(
                 <TouchableOpacity activeOpacity={1} onPress={() => {
                     _tc(() => N.navigate('DailyRedPackagePage', {
-                        activity_id: (activityObj.get() || {})[2].activity_id
+                        activity_id: (activityObj.get() || {})[1].activity_id
                     }));
                 }} key={'DailyRedPackagePage'}>
                     <ImageAuto source={answer5} width={width * 0.9 * 0.48}/>
@@ -231,7 +288,7 @@ export default class AnswerPage extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={1} style={styles.arItemWrap} onPress={() => {
                         _tc(() => N.navigate('OpenMoneyPage', {
-                            activity_id: (activityObj.get() || {})[1].activity_id
+                            activity_id: (activityObj.get() || {})[2].activity_id
                         }));
                     }} key={'OpenMoneyPage'}>
                         <ImageAuto source={answer8} width={width * 0.9 * 0.48}/>
@@ -248,7 +305,10 @@ export default class AnswerPage extends Component {
         return <SafeAreaView style={[{ flex: 1, paddingTop: 20, backgroundColor: '#fff' }]}>
             <ScrollView style={[{ flex: 1 }]}>
                 <View style={{ height: 20 }}/>
-                <Slider data={banner.get()} height={width * 0.35} autoplay={true}/>
+                <Slider data={banner.get()} height={width * 0.35} autoplay={true} onPress={async (item) => {
+                    // console.log(item);
+                    await bannerAction(item.category, item.link, item.title);
+                }}/>
                 <View style={styles.answerWrap}>
                     <ComTitle title={'每日签到'} minTitle={<Text style={css.minTitle}>
                         连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text>
@@ -385,4 +445,15 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         width: '100%',
     },
+    todoTaskText: {
+        borderColor: '#FF3B00',
+        borderRadius: 13,
+        borderWidth: 1,
+        color: '#FF3B00',
+        fontSize: 12,
+        height: 26,
+        lineHeight: 26,
+        textAlign: 'center',
+        width: 70,
+    }
 });

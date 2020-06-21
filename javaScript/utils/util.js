@@ -1,4 +1,4 @@
-import { PermissionsAndroid } from 'react-native';
+import { PermissionsAndroid, Linking } from 'react-native';
 import { store } from './store';
 import * as U from 'karet.util';
 import CryptoJS from 'crypto-js';
@@ -274,6 +274,29 @@ export function _gv (obj, str) {
         return ret;
     } catch (e) {
         return '';
+    }
+}
+
+export async function bannerAction (action, link, label) {
+    // console.log(action, link, label);
+    try {
+        if (action === 1) {
+            // app 跳转内部页面
+            N.navigate(link);
+        }
+        if (action === 2) {
+            // 到webview页面加载活动
+            N.navigate('WebViewPage', {
+                url: link,
+                title: label || '活动',
+            });
+        }
+        if (action === 4) {
+            // eslint-disable-next-line handle-callback-err
+            Linking.openURL(link).catch(err => {});
+        }
+    } catch (e) {
+        console.log(e);
     }
 }
 

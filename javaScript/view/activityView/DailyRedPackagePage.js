@@ -20,17 +20,29 @@ import header3 from '../../assets/icon/header/header3.png';
 import ImageAuto from '../../components/ImageAuto';
 import CountDown from '../../components/CountDown';
 import { _gv } from '../../utils/util';
+import {activityDetail} from '../../utils/api';
 const { height, width } = Dimensions.get('window');
 const redList = [{}, {}, {}, {}, {}, {}];
 export default class DailyRedPackagePage extends Component {
     constructor (props) {
         super(props);
         this.state = {};
+        this.active_id = _gv(this.props, 'route.params.activity_id');
     }
 
     componentDidMount () {
-        console.log(_gv(this.props, 'route.params.activity_id'));
-        // console.log(this.props.route.params.activity_id);
+        // console.log(_gv(this.props, 'route.params.activity_id'));
+        this._activityDetail();
+    }
+
+    async _activityDetail () {
+        try {
+            console.log(this.active_id, 'activity_id');
+            const ret = await activityDetail(this.active_id);
+            console.log(ret, '???');
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     _renderRedItem () {

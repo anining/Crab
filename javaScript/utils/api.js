@@ -94,8 +94,8 @@ export function getRedPackage () {
 }
 
 // 打开拼多多红包
-export function openRedPackage () {
-    return transformFetch('POST', '/activity/red_package');
+export function openRedPackage (activity_id) {
+    return transformFetch('POST', '/activity/red_package', { activity_id });
 }
 
 // 拼多多红包跑马灯
@@ -178,6 +178,11 @@ export function userBaned (page, size) {
     return transformFetch('GET', '/user/baned', { page, size });
 }
 
+// 接任务
+export function getTask (app_task_category_id) {
+    return transformFetch('POST', '/task/receive', { app_task_category_id });
+}
+
 // 接任务列表
 export function taskReceive (page, size, status) {
     return transformFetch('GET', '/task/receive', { page, size, status });
@@ -226,16 +231,18 @@ const transformFetch = async (method, url, data = {}) => {
                     if ('error' in localDate) {
                         resolve(localDate);
                     } else {
-                        console.log(localDate, 'error===');
+                        console.log(localDate, 'error1');
                         // localDate.detail && toast('请勿频繁操作');
                         resolve({ error: 999, msg: '请求失败' });
                     }
                 } catch (e) {
+                    console.log(e, 'error2');
                     resolve({ error: 999, msg: '请求失败' });
                 }
             }),
             // eslint-disable-next-line handle-callback-err
         ]).then(r => r).catch(err => {
+            console.log(err, 'error3');
             return { error: 999, msg: '请求失败' };
         });
     } catch (e) {
