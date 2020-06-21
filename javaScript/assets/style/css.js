@@ -16,6 +16,11 @@ export const css = StyleSheet.create({
         right: 0,
         top: 0,
     },
+    cover: {
+        flex: 1,
+        height: '100%',
+        width: '100%'
+    },
     flex: {
         alignContent: 'center',
         alignItems: 'center',
