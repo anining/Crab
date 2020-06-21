@@ -32,6 +32,11 @@ export function app () {
     return transformFetch('GET', '/app');
 }
 
+// 帮助中心
+export function helpCenter () {
+    return transformFetch('GET', '/help_center');
+}
+
 // banner
 export function banner () {
     return transformFetch('GET', '/banner');
