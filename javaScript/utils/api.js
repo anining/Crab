@@ -199,8 +199,13 @@ export function userBaned (page, size) {
 }
 
 // 接任务
-export function getTask (app_task_category_id) {
-    return transformFetch('POST', '/task/receive', { app_task_category_id });
+export function getTask (task_platform_id) {
+    return transformFetch('POST', '/task/receive', { task_platform_id });
+}
+
+// 提交任务
+export function taskSubmit (receive_task_id, images, nickname) {
+    return transformFetch('POST', '/task/submit', { receive_task_id, images, nickname });
 }
 
 // 接任务列表
@@ -246,6 +251,8 @@ const transformFetch = async (method, url, data = {}) => {
                 try {
                     const FETCH_DATA = await fetch(parameterTransform(method, url, data), request);
                     const DATA_TEXT = await FETCH_DATA.text();
+                    console.log(FETCH_DATA);
+                    console.log(DATA_TEXT);
                     const localDate = DEVELOPER === 'Production' ? JSON.parse(AesDecrypt(DATA_TEXT)) : JSON.parse(DATA_TEXT);
                     localDate.error && toast(localDate.msg);
                     if ('error' in localDate) {

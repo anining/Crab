@@ -80,7 +80,7 @@ function L ({ type, itemHeight }) {
                     return (
                         <>
                             <TouchableOpacity style={[styles.itemView, { height: itemHeight }]} key={receive_task_id} onPress={() => {
-                                N.navigate('TaskDetailPage', { receive_task_id });
+                                N.navigate('TaskDetailPage', { detail: item });
                             }}>
                                 <View style={styles.itemViewTop}>
                                     <Text style={{ color: '#353535', fontSize: 15, fontWeight: '500' }}>任务类型：{category}</Text>
