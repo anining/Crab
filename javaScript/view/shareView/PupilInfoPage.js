@@ -18,11 +18,24 @@ import pupil10 from '../../assets/icon/pupil/pupil10.png';
 import ListGeneral from '../../components/ListGeneral';
 import ImageAuto from '../../components/ImageAuto';
 import share8 from '../../assets/icon/share/share8.png';
+import { childDetail } from '../../utils/api';
+import { _tc } from '../../utils/util';
 const { height, width } = Dimensions.get('window');
 export default class PupilInfoPage extends Component {
     constructor (props) {
         super(props);
         this.state = {};
+    }
+
+    componentDidMount () {
+        this._childDetail();
+    }
+
+    _childDetail () {
+        _tc(async () => {
+            const ret = await childDetail();
+            console.log(ret, '??');
+        });
     }
 
     static _renderShareTitle (title, icon, width) {

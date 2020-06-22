@@ -15,10 +15,7 @@ export default class CountDown extends Component {
     componentDidMount () {
         this.timer = setInterval(() => {
             try {
-                if (
-                    this.props.time &&
-                    +new Date(djangoTime(this.props.time)) >= +new Date()
-                ) {
+                if (this.props.time && +new Date(djangoTime(this.props.time)) >= +new Date()) {
                     this.setState({
                         nowTime: +new Date(),
                     });
@@ -30,17 +27,20 @@ export default class CountDown extends Component {
             }
         }, 1000);
         this.props.millisecond && (this.milliTimer = setInterval(() => {
-            // console.log(millisecond);
-            if (millisecond > 0) {
-                millisecond--;
-                this.setState({
-                    millisecond: millisecond
-                });
+            if (this.props.time && +new Date(djangoTime(this.props.time)) >= +new Date()) {
+                if (millisecond > 0) {
+                    millisecond--;
+                    this.setState({
+                        millisecond: millisecond
+                    });
+                } else {
+                    millisecond = 9;
+                    this.setState({
+                        millisecond: millisecond
+                    });
+                }
             } else {
-                millisecond = 9;
-                this.setState({
-                    millisecond: millisecond
-                });
+                this.setState({ millisecond: 0 });
             }
         }, 100));
     }

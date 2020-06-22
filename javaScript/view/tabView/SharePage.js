@@ -32,7 +32,7 @@ import { getter } from '../../utils/store';
 import Clipboard from '@react-native-community/clipboard';
 import toast from '../../utils/toast';
 import { awardDetail } from '../../utils/api';
-import { _if } from '../../utils/util';
+import { _gv, _if } from '../../utils/util';
 
 const { height, width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
@@ -51,7 +51,6 @@ const cashBack = [{
 }];
 const { invite_code } = getter(['user.invite_code']);
 export default class SharePage extends Component {
-    // eslint-disable-next-line no-useless-constructor
     constructor (props) {
         super(props);
         this.state = {
@@ -61,7 +60,6 @@ export default class SharePage extends Component {
 
     async _awardDetail () {
         const ret = await awardDetail();
-        // console.log(ret, '师徒详情');
         if (ret && !ret.error) {
             this.setState({ detailInfo: ret.data });
         }
@@ -80,29 +78,9 @@ export default class SharePage extends Component {
         }, {
             icon: share6,
         }];
-        const validNumber = parseInt(this.getValidChildren());
+        const validNumber = parseInt(_gv(this.state.detailInfo, 'valid_children', 0));
         shareLevel.forEach((item, index) => {
-            const info = this.getPromoteValue(index);
-            if (info) {
-                view.push(<View style={[styles.welfareProgressWrap, css.flex, css.fw, css.afs]} key={`shareLevel${index}`}>
-                    <View style={[css.flex, css.js, styles.wpiTitleWrap]}>
-                        <ImageAuto source={item.icon} style={{ width: 32, marginRight: 10 }}/>
-                        <Text style={[styles.welfareTitleText]}>{info.label}</Text>
-                    </View>
-                    {<Text numberOfLines={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>{info.min_money}{info.max_money > info.min_money ? `-${info.max_money}` : ''}元</Text>现金红包，永久获得{info.first_rebate * 100 + '%'}徒弟{info.second_rebate * 100 + '%'}徒孙提现返佣。</Text>}
-                    {this._renderProgress(validNumber / parseInt(info.need_children_num))}
-                    <Text numberOfLines={1} style={styles.welfareTargetText}>要求{info.need_children_num}徒弟提现，已提现的徒弟 {validNumber}/{info.need_children_num}</Text>
-                </View>);
-            }
-        });
-        return view;
-    }
-
-    getPromoteValue (index) {
-        try {
-            return this.state.detailInfo.promote_level[index];
-        } catch (e) {
-            return {
+            const info = _gv(this.state.detailInfo, `promote_level.${index}`, {
                 max_money: 888,
                 min_money: 888,
                 first_rebate: 0.02,
@@ -111,19 +89,23 @@ export default class SharePage extends Component {
                 label: '终极推手',
                 des: '-',
                 get_type: 1,
-            };
-        }
+            });
+            if (info) {
+                view.push(<View style={[styles.welfareProgressWrap, css.flex, css.fw, css.afs]} key={`shareLevel${index}`}>
+                    <View style={[css.flex, css.js, styles.wpiTitleWrap]}>
+                        <ImageAuto source={item.icon} style={{ width: 32, marginRight: 10 }}/>
+                        <Text style={[styles.welfareTitleText]}>{info.label}</Text>
+                    </View>
+                    {<Text numberOfLines={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>{info.min_money}{info.max_money > info.min_money ? `-${info.max_money}` : ''}元</Text>现金红包，永久获得{info.first_rebate * 100 + '%'}徒弟{info.second_rebate * 100 + '%'}徒孙提现返佣。</Text>}
+                    {SharePage._renderProgress(validNumber / parseInt(info.need_children_num))}
+                    <Text numberOfLines={1} style={styles.welfareTargetText}>要求{info.need_children_num}徒弟提现，已提现的徒弟 {validNumber}/{info.need_children_num}</Text>
+                </View>);
+            }
+        });
+        return view;
     }
 
-    getValidChildren () {
-        try {
-            return this.state.detailInfo.valid_children;
-        } catch (e) {
-            return 0;
-        }
-    }
-
-    _renderProgress (widthP) {
+    static _renderProgress (widthP) {
         try {
             return <View style={[css.flex, css.js, styles.progressWrap, css.auto]}>
                 <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }}

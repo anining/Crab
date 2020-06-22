@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Animated, StyleSheet, Text, View, Easing, Dimensions, Image, } from 'react-native';
 import { css } from '../assets/style/css';
+import PropTypes from 'prop-types';
 const { height, width } = Dimensions.get('window');
 const LAMP_HEIGHT = 28; // 单个高度
 const LAMP_BORDER_RADIUS = 14;
@@ -19,7 +20,6 @@ export default class Lamp extends Component {
 
     async componentDidMount () {
         this.AnimationStart.call(this, 0, this.state.LampList.length);
-        // this.AnimationStart.call(this, 0, this.state.LampList.length);
     }
 
     AnimationStart (index, count) {
@@ -70,6 +70,12 @@ export default class Lamp extends Component {
         );
     }
 }
+
+Lamp.propTypes = {
+
+};
+Lamp.defaultProps = {
+};
 
 const styles = StyleSheet.create({
     animatedWrap: {
