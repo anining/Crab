@@ -94,6 +94,8 @@ export default class AnswerPage extends Component {
         this.state = {
             signDay: 0,
             newUser: [],
+            signBtnText: '签到领钱',
+            hadSign: false
         };
     }
 
@@ -231,8 +233,8 @@ export default class AnswerPage extends Component {
                     <Text style={[styles.signTipsText, styles.maxSTT]}>完成进度: <Text style={{ color: '#FF6C00' }}>{today_task_num}</Text>/10</Text>
                     <Text style={[styles.signTipsText]}>提交并通过10单任务即可签到</Text>
                 </View>
-                <Button width={120} name={'签到领钱'} shadow={'#ff0008'} onPress={async (callback) => {
-                    await AnswerPage._sign();
+                <Button key={`${this.state.signBtnText}${this.state.signDay}`} width={120} name={this.state.signBtnText} disable={this.state.hadSign} shadow={'#ff0008'} onPress={async (callback) => {
+                    await this._sign();
                     callback();
                 }}/>
             </View>);
@@ -243,7 +245,7 @@ export default class AnswerPage extends Component {
         }
     }
 
-    static async _sign () {
+    async _sign () {
         const ret = await sign();
         console.log(ret, '签到');
         if (ret && !ret.error) {
@@ -258,11 +260,23 @@ export default class AnswerPage extends Component {
             } else {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: pop5,
-                    tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{transformMoney(ret.add_balance)}金币</Text> </Text>,
+                    tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{transformMoney(ret.data.add_balance)}金币</Text> </Text>,
                     minTips: '请在"我的-我的背包"查看收益详情',
                     type: 'oneBtn',
                     rt: '我知道了',
                 }}/>);
+            }
+            this.setState({
+                signDay: this.state.signDay + 1,
+                signBtnText: '已签到',
+                hadSign: true
+            });
+        } else {
+            if (ret.error === 3) {
+                this.setState({
+                    signBtnText: '已签到',
+                    hadSign: true
+                });
             }
         }
     }

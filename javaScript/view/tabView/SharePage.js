@@ -32,6 +32,7 @@ import { getter } from '../../utils/store';
 import Clipboard from '@react-native-community/clipboard';
 import toast from '../../utils/toast';
 import { awardDetail } from '../../utils/api';
+import { _if } from '../../utils/util';
 
 const { height, width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
@@ -40,13 +41,13 @@ const WALFARE_ONE_height = 190;
 const WALFARE_TWO_height = 600;
 const cashBack = [{
     title: '徒弟首次提现到账',
-    label: '师傅送1元',
+    label: '师傅得1元',
 }, {
     title: '徒弟第二次提现到账',
-    label: '师傅送2元',
+    label: '师傅得2元',
 }, {
     title: '徒弟第三次提现到账',
-    label: '师傅送3元',
+    label: '师傅得3元',
 }];
 const { invite_code } = getter(['user.invite_code']);
 export default class SharePage extends Component {
@@ -60,58 +61,75 @@ export default class SharePage extends Component {
 
     async _awardDetail () {
         const ret = await awardDetail();
-        console.log(ret, '师徒详情');
+        // console.log(ret, '师徒详情');
         if (ret && !ret.error) {
             this.setState({ detailInfo: ret.data });
         }
     }
 
-    componentDidMount () {
-        this._awardDetail();
+    async componentDidMount () {
+        await this._awardDetail();
     }
 
     _renderWelfare () {
         const view = [];
         const shareLevel = [{
             icon: share4,
-            title: '高级推手',
-            label: <Text numberOfLine={2} style={styles.welfareLabelText}>送<Text
-                style={{ color: '#FF8353' }}>80-120元</Text>现金红包，永久获得<Text style={{ color: '#FF8353' }}>2%</Text>徒弟<Text
-                style={{ color: '#FF8353' }}>1%</Text>徒孙提现返佣。</Text>,
-            target: <Text numberOfLines={1} style={styles.welfareTargetText}>要求500徒弟提现，已提现的徒弟 80/100</Text>,
         }, {
             icon: share5,
-            title: '钻石推手',
-            label: <Text numberOfLine={2} style={styles.welfareLabelText}>送<Text
-                style={{ color: '#FF8353' }}>300-520</Text>元现金红包，永久获得<Text style={{ color: '#FF8353' }}>2%</Text>徒弟<Text
-                style={{ color: '#FF8353' }}>1%</Text>徒孙提现返佣。</Text>,
-            target: <Text numberOfLines={1} style={styles.welfareTargetText}>要求500徒弟提现，已提现的徒弟 80/100</Text>,
         }, {
             icon: share6,
-            title: '顶级推手',
-            label: <Text numberOfLines={2} style={styles.welfareLabelText}>送<Text
-                style={{ color: '#FF8353' }}>1888元</Text>现金红包，永久获得2%徒弟1%徒孙提现返佣。</Text>,
-            target: <Text numberOfLines={1} style={styles.welfareTargetText}>要求500徒弟提现，已提现的徒弟 80/100</Text>,
         }];
+        const validNumber = parseInt(this.getValidChildren());
         shareLevel.forEach((item, index) => {
-            view.push(<View style={[styles.welfareProgressWrap, css.flex, css.fw, css.afs]} key={`shareLevel${index}`}>
-                <View style={[css.flex, css.js, styles.wpiTitleWrap]}>
-                    <ImageAuto source={item.icon} style={{ width: 32, marginRight: 10 }}/>
-                    <Text style={[styles.welfareTitleText]}>{item.title}</Text>
-                </View>
-                {item.label}
-                {this._renderProgress()}
-                {item.target}
-            </View>);
+            const info = this.getPromoteValue(index);
+            if (info) {
+                view.push(<View style={[styles.welfareProgressWrap, css.flex, css.fw, css.afs]} key={`shareLevel${index}`}>
+                    <View style={[css.flex, css.js, styles.wpiTitleWrap]}>
+                        <ImageAuto source={item.icon} style={{ width: 32, marginRight: 10 }}/>
+                        <Text style={[styles.welfareTitleText]}>{info.label}</Text>
+                    </View>
+                    {<Text numberOfLines={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>{info.min_money}{info.max_money > info.min_money ? `-${info.max_money}` : ''}元</Text>现金红包，永久获得{info.first_rebate * 100 + '%'}徒弟{info.second_rebate * 100 + '%'}徒孙提现返佣。</Text>}
+                    {this._renderProgress(validNumber / parseInt(info.need_children_num))}
+                    <Text numberOfLines={1} style={styles.welfareTargetText}>要求{info.need_children_num}徒弟提现，已提现的徒弟 {validNumber}/{info.need_children_num}</Text>
+                </View>);
+            }
         });
         return view;
     }
 
-    _renderProgress () {
+    getPromoteValue (index) {
+        try {
+            return this.state.detailInfo.promote_level[index];
+        } catch (e) {
+            return {
+                max_money: 888,
+                min_money: 888,
+                first_rebate: 0.02,
+                second_rebate: 0.01,
+                need_children_num: 200,
+                label: '终极推手',
+                des: '-',
+                get_type: 1,
+            };
+        }
+    }
+
+    getValidChildren () {
+        try {
+            return this.state.detailInfo.valid_children;
+        } catch (e) {
+            return 0;
+        }
+    }
+
+    _renderProgress (widthP) {
         try {
             return <View style={[css.flex, css.js, styles.progressWrap, css.auto]}>
                 <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }}
-                    style={[styles.progressInner]}/>
+                    style={[styles.progressInner, {
+                        width: widthP * 100 + 5 + '%'
+                    }]}/>
             </View>;
         } catch (e) {
             return null;
@@ -138,8 +156,8 @@ export default class SharePage extends Component {
                         width: width * 0.9 * 0.25,
                         ...css.pa,
                     }}/>
-                    <Text style={[css.pa, styles.cashTitle]}>{item.title}</Text>
-                    <Text style={[css.pa, styles.cashLabel]}>{item.label}</Text>
+                    <Text style={[css.pa, styles.cashTitle]}>徒弟第{_if(this.state.detailInfo, res => res.children_withdraw_award_config[index].times, () => 0)}次提现</Text>
+                    <Text style={[css.pa, styles.cashLabel]}>师傅得{_if(this.state.detailInfo, res => res.children_withdraw_award_config[index].money, () => 0)}元</Text>
                 </Animatable.View>);
             });
             return <View
@@ -208,8 +226,7 @@ export default class SharePage extends Component {
                                         paddingHorizontal: 10,
                                     }]}>
                                         {SharePage._renderShareTitle(
-                                            <Text style={styles.wTitleText}>徒弟提现送<Text
-                                                style={{ color: '#FF5C22' }}>6元</Text></Text>,
+                                            <Text style={styles.wTitleText}>徒弟提现送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>,
                                         )}
                                         {this._renderCashBack()}
                                     </View>
