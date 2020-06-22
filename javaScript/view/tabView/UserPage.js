@@ -29,12 +29,6 @@ const { width } = Dimensions.get('window');
 const MENU_LIST = [
     {
         icon: user17,
-        title: 'AccountHomePage',
-        remark: '',
-        path: 'AccountHomePage'
-    },
-    {
-        icon: user17,
         title: '活动中心',
         remark: '超多活动等你参与',
         path: 'ActivityCenterPage'
