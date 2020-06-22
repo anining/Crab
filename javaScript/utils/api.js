@@ -37,6 +37,21 @@ export function account (platform_category) {
     return transformFetch('GET', '/account', platform_category && { platform_category });
 }
 
+// 取消绑定
+export function deleteAccount (account_id) {
+    return transformFetch('DELETE', '/account', { account_id });
+}
+
+// 账号绑定
+export function postAccount (platform_category, home_url) {
+    return transformFetch('POST', '/account', { platform_category, home_url });
+}
+
+// 账号切换
+export function putAccount (platform_category, account_id) {
+    return transformFetch('PUT', '/account', { platform_category, account_id });
+}
+
 // 帮助中心
 export function helpCenter () {
     return transformFetch('GET', '/help_center');
@@ -216,10 +231,10 @@ const transformFetch = async (method, url, data = {}) => {
         authorization: U.view(['authorization'], store).get(),
         'x-uaid': UA_ID,
         'x-timestamp': TIME_STAMP,
-        'x-signature': CryptoJS.HmacSHA256((method === 'GET' ? buildStr(data) : POST_DATA) + '.' + TIME_STAMP, PRIVATE_KEY).toString(),
+        'x-signature': CryptoJS.HmacSHA256(((method === 'GET' || method === 'DELETE') ? buildStr(data) : POST_DATA) + '.' + TIME_STAMP, PRIVATE_KEY).toString(),
     });
     const request = { method, headers: HEADER };
-    method !== 'GET' && (request.body = POST_DATA);
+    (method === 'POST' || method === 'PUT') && (request.body = POST_DATA);
     try {
         return Promise.race([
             new Promise((resolve, reject) => {

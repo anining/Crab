@@ -27,7 +27,7 @@ const initializationStore = keys => {
  * @author JinPing Tan 2020/3/30
  */
 const parameterTransform = (method, key, parameter) => {
-    if (method !== 'GET') {
+    if (method === 'POST' || method === 'PUT') {
         return API_URL + key;
     }
     let parameterString = API_URL + key + '?';
