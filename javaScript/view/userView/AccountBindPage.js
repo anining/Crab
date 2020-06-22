@@ -46,7 +46,7 @@ export default function AccountBindPage (props) {
                             onChangeText={url => setUrl(url)}/>
                     </View>
                     <TouchableOpacity onPress={() => {
-                        N.navigate('AccountBindCoursePage');
+                        N.navigate('AccountBindCoursePage', { id: props.route.params.id });
                     }}>
                         <Text style={{ textAlign: 'right', paddingLeft: 15, paddingRight: 15, fontSize: 14, fontWeight: '500', color: '#FF6C00' }}>{'绑定教程 >'}</Text>
                     </TouchableOpacity>
