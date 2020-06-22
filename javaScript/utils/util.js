@@ -1,14 +1,19 @@
-import { PermissionsAndroid } from 'react-native';
+import { PermissionsAndroid, Linking } from 'react-native';
 import { store } from './store';
 import * as U from 'karet.util';
 import CryptoJS from 'crypto-js';
 import { API_URL, PRIVATE_KEY } from './config';
+import { BALANCE_RATE } from './data';
 
 const initializationStore = keys => {
     const localStore = store.get();
     keys = [...keys, [{ channel: 'default' }]];
     keys.forEach(key => {
-        localStore[key[0]] = key[1];
+        try {
+            localStore[key[0]] = JSON.parse(key[1]);
+        } catch (e) {
+            localStore[key[0]] = key[1];
+        }
     });
     U.set(store, localStore);
 };
@@ -130,14 +135,18 @@ export function getValue (obj, key) {
     }
 }
 
-function transformMoney (money) {
-    if (isNaN(money)) {
+function transformMoney (money, digits = 0) {
+    try {
+        if (isNaN(money)) {
+            return 0;
+        }
+        if (money >= (BALANCE_RATE / 10000)) {
+            return `${money.toFixed(2)}w`;
+        }
+        return (money * BALANCE_RATE).toFixed(digits);
+    } catch (e) {
         return 0;
     }
-    if (money >= 10) {
-        return `${money}w`;
-    }
-    return money * 10000;
 }
 
 function transformTime (time, start = 10, end = 11) {
@@ -239,7 +248,7 @@ export function _tc (fn, err) {
     } catch (e) {
         console.log(JSON.stringify(e));
         if (err && typeof err === 'function') {
-            err();
+            err(e);
         } else {
             return err;
         }
@@ -265,6 +274,29 @@ export function _gv (obj, str) {
         return ret;
     } catch (e) {
         return '';
+    }
+}
+
+export async function bannerAction (action, link, label) {
+    // console.log(action, link, label);
+    try {
+        if (action === 1) {
+            // app 跳转内部页面
+            N.navigate(link);
+        }
+        if (action === 2) {
+            // 到webview页面加载活动
+            N.navigate('WebViewPage', {
+                url: link,
+                title: label || '活动',
+            });
+        }
+        if (action === 4) {
+            // eslint-disable-next-line handle-callback-err
+            Linking.openURL(link).catch(err => {});
+        }
+    } catch (e) {
+        console.log(e);
     }
 }
 

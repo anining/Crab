@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, View, Text, DeviceEventEmitter } from 'react-native';
+import { Dimensions, StyleSheet, View, Text, DeviceEventEmitter, TouchableOpacity } from 'react-native';
 import { css } from '../assets/style/css';
 import LinearGradient from 'react-native-linear-gradient';
 import { _if, getValue } from '../utils/util';
@@ -30,7 +30,7 @@ export default class Choice extends Component {
     sure () {
         try {
             DeviceEventEmitter.emit('hidePop');
-            this.props.info.rc();
+            this.props.info.rc && this.props.info.rc();
         } catch (e) {
             console.log(e);
         }
@@ -39,7 +39,7 @@ export default class Choice extends Component {
     cancel () {
         try {
             DeviceEventEmitter.emit('hidePop');
-            this.props.info.lc();
+            this.props.info.lc && this.props.info.lc();
         } catch (e) {
             console.log(e);
         }
@@ -47,7 +47,7 @@ export default class Choice extends Component {
 
     render () {
         try {
-            return <View style={[css.pr]}>
+            return <TouchableOpacity style={[css.pr]} activeOpacity={1}>
                 {_if(this.icon, res => <ImageAuto source={res} style={[styles.popIcon]}/>)}
                 <View style={[styles.choiceWrap, css.flex, css.fw, {
                     paddingTop: this.icon ? 40 : 20
@@ -71,7 +71,7 @@ export default class Choice extends Component {
                         </LinearGradient>
                     </View>
                 </View>
-            </View>;
+            </TouchableOpacity>;
         } catch (e) {
             return null;
         }
@@ -80,8 +80,8 @@ export default class Choice extends Component {
 const styles = StyleSheet.create({
     btnWrap: {
         marginTop: 10,
-        paddingHorizontal: 25,
-        width: '100%',
+        paddingHorizontal: 5,
+        width: '100%'
     },
     choiceWrap: {
         backgroundColor: '#fff',

@@ -1,4 +1,4 @@
-const DEFAULT_USER = {
+export const DEFAULT_USER = {
     balance: 0,
     today_income: 0,
     total_income: 0,
@@ -8,5 +8,4 @@ const DEFAULT_USER = {
     invite_code: '******',
     user_id: '未登录'
 };
-
-export { DEFAULT_USER };
+export const BALANCE_RATE = 10000; // rmb显示金币转换比例

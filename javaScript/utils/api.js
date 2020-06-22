@@ -1,7 +1,7 @@
 import { DEVELOPER, PRIVATE_KEY, UA_ID } from './config';
 import CryptoJS from 'crypto-js';
 import toast from './toast';
-import { AesDecrypt, buildStr, parameterTransform } from './util';
+import { _tc, AesDecrypt, buildStr, parameterTransform } from './util';
 import * as U from 'karet.util';
 import { store } from './store';
 import { N } from './router';
@@ -88,6 +88,81 @@ export function activityDetail (activity_id) {
     return transformFetch('GET', '/activity/detail', { activity_id });
 }
 
+// 领取完成任务红包
+export function getReceiveTaskAward () {
+    return transformFetch('POST', '/activity/receive_task_award');
+}
+
+// 提取拼多多红包
+export function getRedPackage () {
+    return transformFetch('PUT', '/activity/red_package');
+}
+
+// 打开拼多多红包
+export function openRedPackage (activity_id) {
+    return transformFetch('POST', '/activity/red_package', { activity_id });
+}
+
+// 拼多多红包跑马灯
+export function redPackageLatest () {
+    return transformFetch('POST', '/activity/red_package/latest');
+}
+
+// 新手任务
+export function newUserTask () {
+    return transformFetch('GET', '/newuser/task');
+}
+
+// 领取新手任务
+export function getNewUserTask (new_user_task_id) {
+    return transformFetch('POST', '/newuser/task', { new_user_task_id });
+}
+
+// 签到配置
+export function signConfig () {
+    return transformFetch('GET', '/sign/config');
+}
+
+// 签到记录
+export function signLogs () {
+    return transformFetch('GET', '/sign');
+}
+
+// 签到
+export function sign () {
+    return transformFetch('POST', '/sign');
+}
+
+// 任务大类别
+export function taskPlatform () {
+    return transformFetch('GET', '/task/platform');
+}
+
+// 躺赚详情
+export function awardDetail () {
+    return transformFetch('GET', '/children/award/detail');
+}
+
+// 领取徒弟提现奖励
+export function getChildAward () {
+    return transformFetch('POST', '/children/award/withdraw');
+}
+
+// 领取推手奖励
+export function getPromoteAward () {
+    return transformFetch('POST', '/children/award/promote');
+}
+
+// 绑定父级
+export function bindParent () {
+    return transformFetch('PUT', '/children/parent');
+}
+
+// 徒弟详情
+export function childDetail () {
+    return transformFetch('POST', '/children/detail');
+}
+
 // 阿里云oss上传token
 export function uploadToken () {
     return transformFetch('GET', '/upload/token');
@@ -106,6 +181,11 @@ export function getFeedback (page, size) {
 // 小黑屋
 export function userBaned (page, size) {
     return transformFetch('GET', '/user/baned', { page, size });
+}
+
+// 接任务
+export function getTask (app_task_category_id) {
+    return transformFetch('POST', '/task/receive', { app_task_category_id });
 }
 
 // 接任务列表
@@ -148,14 +228,26 @@ const transformFetch = async (method, url, data = {}) => {
             }),
             // eslint-disable-next-line no-async-promise-executor
             new Promise(async (resolve, reject) => {
-                const FETCH_DATA = await fetch(parameterTransform(method, url, data), request);
-                const DATA_TEXT = await FETCH_DATA.text();
-                const localDate = DEVELOPER === 'Production' ? JSON.parse(AesDecrypt(DATA_TEXT)) : JSON.parse(DATA_TEXT);
-                localDate.error && toast(localDate.detail);
-                resolve(localDate);
+                try {
+                    const FETCH_DATA = await fetch(parameterTransform(method, url, data), request);
+                    const DATA_TEXT = await FETCH_DATA.text();
+                    const localDate = DEVELOPER === 'Production' ? JSON.parse(AesDecrypt(DATA_TEXT)) : JSON.parse(DATA_TEXT);
+                    localDate.error && toast(localDate.msg);
+                    if ('error' in localDate) {
+                        resolve(localDate);
+                    } else {
+                        console.log(localDate, 'error1');
+                        // localDate.detail && toast('请勿频繁操作');
+                        resolve({ error: 999, msg: '请求失败' });
+                    }
+                } catch (e) {
+                    console.log(e, 'error2');
+                    resolve({ error: 999, msg: '请求失败' });
+                }
             }),
             // eslint-disable-next-line handle-callback-err
         ]).then(r => r).catch(err => {
+            console.log(err, 'error3');
             return { error: 999, msg: '请求失败' };
         });
     } catch (e) {

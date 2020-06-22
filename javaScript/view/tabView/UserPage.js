@@ -110,7 +110,6 @@ const TASK_MENU = [
         icon: user6
     }
 ];
-
 export default function UserPage () {
     useEffect(() => {
         updateUser();
@@ -122,6 +121,7 @@ export default function UserPage () {
             <ScrollView>
                 <View style={styles.userDetailView}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        {/* <LocalView url={U.template({ uri: avatar })}/> */}
                         <Image karet-lift source={U.template({ uri: avatar })} style={styles.avatarIcon}/>
                         <View>
                             <View style={styles.userCardTop}>

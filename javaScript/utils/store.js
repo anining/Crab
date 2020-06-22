@@ -7,14 +7,18 @@ const localStore = {
     app: null,
     authorization: null,
     channel: 'default',
-    banner: null
+    banner: null,
 };
 const store = U.atom(localStore);
 
 function setter (items = [], storage = false) {
     items.forEach(item => {
-        U.set(U.view([item[0]], store), item[1]);
-        storage && asyncStorage.setItem(item[0], item[1]);
+        try {
+            U.set(U.view([item[0]], store), item[1]);
+            // console.log('存值', item[0], JSON.stringify(item[1]));
+            storage && asyncStorage.setItem(item[0], JSON.stringify(item[1]));
+        } catch (e) {
+        }
     });
 }
 
@@ -33,7 +37,7 @@ function clear () {
     setter([
         ['user', DEFAULT_USER],
         ['app', null],
-        ['authorization', null]
+        ['authorization', null],
     ]);
 }
 
