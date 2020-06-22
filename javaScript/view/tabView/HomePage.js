@@ -20,6 +20,7 @@ import game41 from '../../assets/icon/game/game41.png';
 import game25 from '../../assets/icon/game/game25.png';
 import game22 from '../../assets/icon/game/game22.png';
 import game31 from '../../assets/icon/game/game31.png';
+import game35 from '../../assets/icon/game/game35.png';
 import game12 from '../../assets/icon/game/game12.png';
 import ImageAuto from '../../components/ImageAuto';
 import ShiftView from '../../components/ShiftView';
@@ -71,8 +72,20 @@ export default class HomePage extends Component {
                     </View>
                     {/* 中部显示区域 */}
                     <View style={[css.flex, css.pa, styles.homeMidWrap, css.afs]}>
-                        {/* <View style={styles}></View> */}
-                        <Lamp/>
+                        <TouchableOpacity style={[css.pa, styles.outputWrap]} activeOpacity={1} onPress={() => {
+                            DeviceEventEmitter.emit('showPop', <GameDialog btn={'我知道了'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个
+                                最多同时持有
+                            <Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>}/>);
+                        }}>
+                            <ImageBackground source={game5} style={[css.flex, css.fw, styles.outputWrapImg]}>
+                                <Text style={[styles.outputText]}>金币产量</Text>
+                                <Text style={[styles.outputText, { fontWeight: '900' }]}>110%</Text>
+                            </ImageBackground>
+                        </TouchableOpacity>
+                        <ImageBackground source={game35} style={[css.pa, styles.noticeIcon]}>
+                            <Text style={[css.pa, styles.noticeNumber]}>10</Text>
+                        </ImageBackground>
+                        <Lamp width={'100%'} backgroundColor={'rgba(0,179,216,.5)'} color={'#005262'} color1={'#FF6C00'}/>
                     </View>
                     {/* 底部显示区域 */}
                     <ImageBackground source={game12} style={[css.flex, css.pa, styles.homeBottomWrap, css.fw, css.afs]}>
@@ -132,13 +145,51 @@ const styles = StyleSheet.create({
         width
     },
     homeMidWrap: {
-        // backgroundColor: 'red',
         height: MID_HEIGHT,
         overflow: 'hidden',
+        paddingHorizontal: 20,
         paddingTop: 10,
         top: HEADER_HEIGHT,
         width,
-        paddingHorizontal: 20,
+    },
+    noticeIcon: {
+        height: width * 0.1 * 96 / 93,
+        right: 30,
+        top: 65,
+        width: width * 0.1,
+    },
+    noticeNumber: {
+        backgroundColor: 'red',
+        borderColor: '#bababa',
+        borderRadius: 12,
+        borderWidth: 1,
+        color: '#fff',
+        fontSize: 10,
+        height: 24,
+        lineHeight: 24,
+        right: -5,
+        textAlign: 'center',
+        top: -5,
+        transform: [{ scale: 0.9 }],
+        width: 24,
+    },
+    outputText: {
+        color: '#fff',
+        fontSize: 10,
+        lineHeight: 12,
+        textAlign: 'center',
+        transform: [{ scale: 0.9 }],
+        width: '100%'
+    },
+    outputWrap: {
+        right: 15,
+        top: 130,
+    },
+    outputWrapImg: {
+        height: width * 0.185 * 171 / 207,
+        overflow: 'hidden',
+        paddingTop: width * 0.06,
+        width: width * 0.185
     },
     progressWrap: {
         height: width * 0.35,

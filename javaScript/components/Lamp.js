@@ -16,6 +16,10 @@ export default class Lamp extends Component {
             translateValue: new Animated.Value(0), // 定位初始值为0
             LampList: [{}, {}, {}],
         };
+        this.width = this.props.width;
+        this.backgroundColor = this.props.backgroundColor;
+        this.color = this.props.color;
+        this.color1 = this.props.color1;
     }
 
     async componentDidMount () {
@@ -41,7 +45,10 @@ export default class Lamp extends Component {
 
     render () {
         return (
-            <View style={[css.flex, styles.lamp]}>
+            <View style={[css.flex, styles.lamp, {
+                width: this.width,
+                backgroundColor: this.backgroundColor
+            }]}>
                 {/* <View style={[css.flex, css.js, { width: LAMP_ICON_WIDTH, height: LAMP_HEIGHT }]} > */}
                 {/*    /!* <Image source={home2} style={styles.icon} /> *!/ */}
                 {/* </View> */}
@@ -52,7 +59,9 @@ export default class Lamp extends Component {
                                 const lampView = [];
                                 this.state.LampList.forEach((item, index) => {
                                     lampView.push(
-                                        <Text style={styles.lampItem} key={index} numberOfLines={1} > 恭喜 <Text style={{ color: '#ffebc1' }}> xxx </Text>成功领取现金 <Text style={{ color: '#ffebc1' }}> xxx 元 </Text></Text>,
+                                        <Text style={[styles.lampItem, {
+                                            color: this.color
+                                        }]} key={index} numberOfLines={1} > 恭喜 <Text style={{ color: this.color1 }}> xxx </Text>成功领取现金 <Text style={{ color: this.color1 }}> xxx 元 </Text></Text>,
                                     );
                                 });
                                 return lampView;
@@ -72,9 +81,15 @@ export default class Lamp extends Component {
 }
 
 Lamp.propTypes = {
-
+    backgroundColor: PropTypes.string,
+    color: PropTypes.string,
+    color1: PropTypes.string,
 };
 Lamp.defaultProps = {
+    width: '70%',
+    backgroundColor: '#F02E21',
+    color: '#fff',
+    color1: '#ffebc1'
 };
 
 const styles = StyleSheet.create({
