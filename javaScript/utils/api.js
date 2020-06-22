@@ -218,6 +218,19 @@ export function giveUp (receive_task_id) {
     return transformFetch('POST', '/task/giveup', { receive_task_id });
 }
 
+// 闯关题目
+export function getGame () {
+    return transformFetch('GET', '/game/level', {});
+}
+// 通关题目
+export function passGame () {
+    return transformFetch('POST', '/game/level', {});
+}
+// 错题记录
+export function gameErrorLog () {
+    return transformFetch('GET', '/game/error', {});
+}
+
 // 资金记录
 export function income (page, size, source) {
     let data = {
