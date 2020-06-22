@@ -37,7 +37,6 @@ export default function AccountHomePage () {
 
     function updateBinds () {
         account().then(r => {
-            console.log(r);
             !r.error && setBinds(r.data);
         });
     }
@@ -91,7 +90,6 @@ function RenderChange ({ binds = [], label, updateBinds, account_id, platform_ca
     function apiPutAccount () {
         putAccount(platform_category, selectId).then(r => {
             if (!r.error) {
-                console.log(r);
                 toast('操作成功');
                 updateBinds();
             } else {
@@ -194,8 +192,12 @@ function RenderBindView ({ binds = [], updateBinds }) {
     }
 
     binds.forEach(bind => {
-        const { account_id, reason, status, avatar, nickname, home_url, success_rate, task_platform } = bind;
+        console.log(bind);
+        const { account_id, reason, status, avatar, nickname, home_url, is_current, success_rate, task_platform } = bind;
         const { label, platform_category } = task_platform;
+        if (!is_current) {
+            return;
+        }
         if (status === 1) {
             components.push(
                 <View style={styles.numberView} key={account_id}>
