@@ -28,6 +28,7 @@ import { N } from '../../utils/router';
 import { getter } from '../../utils/store';
 import { getTask, newUserTask, sign, signLogs } from '../../utils/api';
 import Choice from '../../components/Choice';
+import toast from '../../utils/toast';
 
 const { height, width } = Dimensions.get('window');
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待
@@ -141,10 +142,19 @@ export default class AnswerPage extends Component {
     }
 
     // 接任务
-    async _getTask (category) {
+    _getTask (category) {
         try {
-            const ret = await getTask(category);
-            console.log(ret);
+            getTask(category).then(r => {
+                if (r.error) {
+                    toast(r.msg || '操作失败');
+                    if (error === 9) {
+                        N.navigate('AccountHomePage');
+                    }
+                } else {
+                    const { data } = r;
+                    N.navigate('TaskDetailPage', { detail: data });
+                }
+            });
         } catch (e) {
             console.log(e);
         }
@@ -173,10 +183,8 @@ export default class AnswerPage extends Component {
                             </View>
                         </View>
                         {_if(item.btnStatus === 2, res => {
-                            return <Text style={styles.todoTaskText} karet-lift onPress={async () => {
-                                // getTask
-                                console.log(item.platform_category);
-                                await this._getTask(item.platform_category);
+                            return <Text style={styles.todoTaskText} karet-lift onPress={ () => {
+                                this._getTask(item.platform_category);
                             }}>{item.btnText}</Text>;
                         }, () => {
                             return <Shadow style={styles.todoBtn} color={'#d43912'}>
@@ -199,7 +207,6 @@ export default class AnswerPage extends Component {
             const signConfigObj = signConfig.get();
             for (const day in signConfigObj) {
                 const item = signConfigObj[day];
-                console.log(item);
                 view.push(<View key={`sign${day}`} style={[css.flex, css.fw, styles.signItemWrap, {
                     backgroundColor: day <= this.state.signDay ? '#FF9C00' : '#F0F0F0',
                 }]}>

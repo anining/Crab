@@ -32,6 +32,26 @@ export function app () {
     return transformFetch('GET', '/app');
 }
 
+// 账号列表
+export function account (platform_category) {
+    return transformFetch('GET', '/account', platform_category && { platform_category });
+}
+
+// 取消绑定
+export function deleteAccount (account_id) {
+    return transformFetch('DELETE', '/account', { account_id });
+}
+
+// 账号绑定
+export function postAccount (platform_category, home_url) {
+    return transformFetch('POST', '/account', { platform_category, home_url });
+}
+
+// 账号切换
+export function putAccount (platform_category, account_id) {
+    return transformFetch('PUT', '/account', { platform_category, account_id });
+}
+
 // 帮助中心
 export function helpCenter () {
     return transformFetch('GET', '/help_center');
@@ -179,8 +199,13 @@ export function userBaned (page, size) {
 }
 
 // 接任务
-export function getTask (app_task_category_id) {
-    return transformFetch('POST', '/task/receive', { app_task_category_id });
+export function getTask (task_platform_id) {
+    return transformFetch('POST', '/task/receive', { task_platform_id });
+}
+
+// 提交任务
+export function taskSubmit (receive_task_id, images, nickname) {
+    return transformFetch('POST', '/task/submit', { receive_task_id, images, nickname });
 }
 
 // 接任务列表
@@ -211,10 +236,10 @@ const transformFetch = async (method, url, data = {}) => {
         authorization: U.view(['authorization'], store).get(),
         'x-uaid': UA_ID,
         'x-timestamp': TIME_STAMP,
-        'x-signature': CryptoJS.HmacSHA256((method === 'GET' ? buildStr(data) : POST_DATA) + '.' + TIME_STAMP, PRIVATE_KEY).toString(),
+        'x-signature': CryptoJS.HmacSHA256(((method === 'GET' || method === 'DELETE') ? buildStr(data) : POST_DATA) + '.' + TIME_STAMP, PRIVATE_KEY).toString(),
     });
     const request = { method, headers: HEADER };
-    method !== 'GET' && (request.body = POST_DATA);
+    (method === 'POST' || method === 'PUT') && (request.body = POST_DATA);
     try {
         return Promise.race([
             new Promise((resolve, reject) => {
@@ -226,6 +251,8 @@ const transformFetch = async (method, url, data = {}) => {
                 try {
                     const FETCH_DATA = await fetch(parameterTransform(method, url, data), request);
                     const DATA_TEXT = await FETCH_DATA.text();
+                    console.log(FETCH_DATA);
+                    console.log(DATA_TEXT);
                     const localDate = DEVELOPER === 'Production' ? JSON.parse(AesDecrypt(DATA_TEXT)) : JSON.parse(DATA_TEXT);
                     localDate.error && toast(localDate.msg);
                     if ('error' in localDate) {
