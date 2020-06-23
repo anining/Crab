@@ -7,7 +7,7 @@ import ListGeneral from '../../components/ListGeneral';
 import toast from '../../utils/toast';
 import task10 from '../../assets/icon/task/task10.png';
 import { N } from '../../utils/router';
-import { giveUp, taskReceive } from '../../utils/api';
+import { giveUp, taskReceive, taskReceiveDetail } from '../../utils/api';
 import { transformMoney, transformTime } from '../../utils/util';
 import CountDown from '../../components/CountDown';
 
@@ -47,7 +47,7 @@ function RenderHeader ({ id }) {
     const components = [];
     HEADER_DATA.forEach(header => {
         components.push(
-            <View tabLabel={header.tabLabel} key={header.type}>
+            <View tabLabel={header.tabLabel} key={header.tabLabel}>
                 <L type={header.type} itemHeight={header.itemHeight}/>
             </View>
         );
@@ -80,7 +80,13 @@ function L ({ type, itemHeight }) {
                     return (
                         <>
                             <TouchableOpacity style={[styles.itemView, { height: itemHeight }]} key={receive_task_id} onPress={() => {
-                                N.navigate('TaskDetailPage', { detail: item });
+                                taskReceiveDetail(receive_task_id).then(r => {
+                                    if (r.error) {
+                                        toast(r.msg || '操作失败');
+                                    } else {
+                                        N.navigate('TaskDetailPage', { detail: r.data });
+                                    }
+                                });
                             }}>
                                 <View style={styles.itemViewTop}>
                                     <Text style={{ color: '#353535', fontSize: 15, fontWeight: '500' }}>任务类型：{category}</Text>
