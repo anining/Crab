@@ -26,7 +26,7 @@ import { _if, _tc, bannerAction, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
 import { N } from '../../utils/router';
 import { getter } from '../../utils/store';
-import { getTask, newUserTask, sign, signLogs } from '../../utils/api';
+import { getTask, newUserTask, sign, signLogs, taskReceiveDetail } from '../../utils/api';
 import Choice from '../../components/Choice';
 import toast from '../../utils/toast';
 
@@ -149,8 +149,14 @@ export default class AnswerPage extends Component {
                         N.navigate('AccountHomePage');
                     }
                 } else {
-                    const { data } = r;
-                    N.navigate('TaskDetailPage', { detail: data });
+                    const { receive_task_id } = r.data;
+                    taskReceiveDetail(receive_task_id).then(r => {
+                        if (r.error) {
+                            toast(r.msg || '操作失败');
+                        } else {
+                            N.navigate('TaskDetailPage', { detail: r.data });
+                        }
+                    });
                 }
             });
         } catch (e) {
