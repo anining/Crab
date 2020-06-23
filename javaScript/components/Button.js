@@ -28,6 +28,7 @@ export default class Button extends Component {
         };
         this.type = this.props.type || 1;
         this.shadow = this.props.shadow;
+        this.disable = this.props.disable;
     }
 
     renderLoading () {
@@ -67,16 +68,24 @@ export default class Button extends Component {
             const typeStyleProxy = new Proxy(typeStyle, {
                 get: proxyGet
             });
-            return <Shadow style={[styles.buntWrap, typeStyleProxy[this.type]]} color={this.shadow}>
-                <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.buntWrap, styles.lineStyle, typeStyleProxy[this.type]]}>
-                    <TouchableOpacity activeOpacity={1} style={styles.touchBtn} activeOpacity={1} onPress={() => { this.btnOnPress(); }}>
-                        {this.renderLoading.call(this)}
-                        <Text style={styles.btnText}>
-                            {this.props.name || this.props.title || '确定'}
-                        </Text>
-                    </TouchableOpacity>
-                </LinearGradient>
-            </Shadow>;
+            if (this.disable) {
+                return <Shadow style={[styles.buntWrap, typeStyleProxy[this.type]]} color={'#666'}>
+                    <Text style={styles.disableBtnText}>
+                        {this.props.name || this.props.title || '确定'}
+                    </Text>
+                </Shadow>;
+            } else {
+                return <Shadow style={[styles.buntWrap, typeStyleProxy[this.type]]} color={this.shadow}>
+                    <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.buntWrap, styles.lineStyle, typeStyleProxy[this.type]]}>
+                        <TouchableOpacity activeOpacity={1} style={styles.touchBtn} activeOpacity={1} onPress={() => { this.btnOnPress(); }}>
+                            {this.renderLoading.call(this)}
+                            <Text style={styles.btnText}>
+                                {this.props.name || this.props.title || '确定'}
+                            </Text>
+                        </TouchableOpacity>
+                    </LinearGradient>
+                </Shadow>;
+            }
         } catch (e) {
             return null;
         }
@@ -96,6 +105,19 @@ const styles = StyleSheet.create({
     buntWrap: {
         height: 46,
         lineHeight: 46
+    },
+    disableBtnText: {
+        backgroundColor: '#b4b4b4',
+        borderRadius: 23,
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '900',
+        height: 46,
+        letterSpacing: 1,
+        lineHeight: 46,
+        overflow: 'hidden',
+        textAlign: 'center',
+        width: '100%'
     },
     lineStyle: {
         overflow: 'hidden',

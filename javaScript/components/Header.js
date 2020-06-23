@@ -33,6 +33,7 @@ export default function Header ({ scene = { descriptor: { options: {} }, route: 
         const { options } = scene.descriptor;
         // 自定义导航
         if (['FeedBackPage', 'TaskDetailPage', 'AccountBindPage', 'AccountHomePage', 'FundingRecordsPage', 'WithdrawRecordsPage', 'WithdrawPage', 'PupilInfoPage', 'CardPackagePage', 'DailyMoneyPage', 'DailyRedPackagePage', 'OpenMoneyPage'].includes(scene.route.name)) {
+        if (['GamePage', 'FeedBackPage', 'AccountBindPage', 'AccountHomePage', 'FundingRecordsPage', 'WithdrawRecordsPage', 'WithdrawPage', 'PupilInfoPage', 'CardPackagePage', 'DailyMoneyPage', 'DailyRedPackagePage', 'OpenMoneyPage'].includes(scene.route.name)) {
             return <></>;
         }
         return (

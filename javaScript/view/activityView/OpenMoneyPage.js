@@ -24,7 +24,8 @@ export default class OpenMoneyPage extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            receivedStatus: 0 // 0 网络请求中，2 已经领取过了，1没有领取过
+            receivedStatus: 0, // 0 网络请求中，2 已经领取过了，1没有领取过
+            pageInfo: null,
         };
         this.active_id = _gv(this.props, 'route.params.activity_id');
     }
@@ -40,11 +41,12 @@ export default class OpenMoneyPage extends Component {
             console.log(ret);
             if (ret && !ret.error) {
                 console.log(ret);
-                // this.setState({
-                //     receivedStatus: 2
-                // }, () => {
-                //     DeviceEventEmitter.emit('hidePop');
-                // });
+                this.setState({
+                    receivedStatus: 2,
+                    pageInfo: ret.data
+                }, () => {
+                    DeviceEventEmitter.emit('hidePop');
+                });
             }
         } catch (e) {
             console.log(e);
@@ -56,9 +58,10 @@ export default class OpenMoneyPage extends Component {
             console.log(this.active_id, 'activity_id');
             const ret = await activityDetail(this.active_id);
             if (ret && !ret.error) {
-                if (ret.data.log.length) {
-                    _tc(() => N.navigate('DailyMoneyPage', {
-                        activity_id: this.active_id
+                if (ret.data.log.money) {
+                    _tc(() => N.replace('DailyMoneyPage', {
+                        activity_id: this.active_id,
+                        pageInfo: this.state.pageInfo
                     }));
                 } else {
                     this.setState({
@@ -101,7 +104,7 @@ export default class OpenMoneyPage extends Component {
                         return null;
                     }, () => {
                         return <View>
-
+                            <Text>{JSON.stringify(this.state.pageInfo)}</Text>
                         </View>;
                     })}
                 </ImageBackground>

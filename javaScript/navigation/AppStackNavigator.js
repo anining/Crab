@@ -44,6 +44,7 @@ import SplashScreen from 'react-native-splash-screen';
 import Prompt from '../components/Prompt';
 import { getSignConfig, getTaskPlatform, updateActivity, updateApp, updateBanner } from '../utils/update';
 import OpenMoneyPage from '../view/activityView/OpenMoneyPage';
+import GamePage from '../view/gameView/GamePage';
 
 const Stack = createStackNavigator();
 
@@ -208,6 +209,11 @@ const stackScreens = [
         component: ActivityCenterPage,
         title: '活动中心',
     },
+    {
+        name: 'GamePage',
+        component: GamePage,
+        title: '答题',
+    }
 ];
 
 function setStatusBar () {

@@ -269,7 +269,7 @@ export function _tc (fn, err) {
     }
 }
 
-export function _gv (obj, str) {
+export function _gv (obj, str, defaultValue) {
     try {
         let ret = '';
         let nowObj = obj;
@@ -287,7 +287,7 @@ export function _gv (obj, str) {
         }
         return ret;
     } catch (e) {
-        return '';
+        return defaultValue || '';
     }
 }
 

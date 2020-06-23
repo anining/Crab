@@ -15,6 +15,8 @@ import icon5 from '../assets/icon/tab/tab5.png';
 import icon6 from '../assets/icon/tab/tab6.png';
 import icon7 from '../assets/icon/tab/tab7.png';
 import icon8 from '../assets/icon/tab/tab8.png';
+import icon9 from '../assets/icon/tab/tab9.png';
+import icon10 from '../assets/icon/tab/tab10.png';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -28,7 +30,7 @@ export default function TabNavigator ({ navigation }) {
                     let iconPath;
                     switch (route.name) {
                     case 'HomePage':
-                        iconPath = focused ? icon4 : icon3;
+                        iconPath = focused ? icon9 : icon10;
                         break;
                     case 'AnswerPage':
                         iconPath = focused ? icon2 : icon1;
@@ -63,6 +65,9 @@ export default function TabNavigator ({ navigation }) {
                     height: 0,
                     width: 0,
                 },
+                tabStyle: {
+                    backgroundColor: '#fff'
+                }
             }}
         >
             <Tab.Screen name="HomePage" component={HomePage} options={{ title: '主页' }}/>

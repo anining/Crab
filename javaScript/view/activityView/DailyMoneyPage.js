@@ -33,7 +33,9 @@ const { height, width } = Dimensions.get('window');
 export default class DailyMoneyPage extends Component {
     constructor (props) {
         super(props);
-        this.state = {};
+        this.state = {
+            pageInfo: _gv(this.props, 'route.params.pageInfo')
+        };
         this.active_id = _gv(this.props, 'route.params.activity_id');
     }
 
