@@ -39,36 +39,44 @@ import { getter, store } from '../../utils/store';
 import * as U from 'karet.util';
 import { useFocusEffect } from '@react-navigation/native';
 import { Down } from '../../components/Down';
+import ImageAuto from '../../components/ImageAuto';
 
 export default function TaskDetailPage (props) {
-    const [images, setImages] = useState([]);
-    const [name, setName] = useState('');
     const { detail } = props.route.params;
+    const { images: submitImages } = detail;
+    const [images, setImages] = useState(submitImages);
+    const [name, setName] = useState('');
 
     useFocusEffect(() => {
         const onBackPress = () => {
-            backClick();
-            return true;
+            const { status } = detail;
+            if (status === 1) {
+                backClick();
+                return true;
+            }
         };
         BackHandler.addEventListener('hardwareBackPress', onBackPress);
         return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     });
 
     function backClick () {
-        const { activityObj } = getter(['activityObj']);
-        const { today_pass_num } = getter(['user.today_pass_num']);
-        console.log(activityObj.get());
-        const number = today_pass_num.get() - 1 < 1 ? 1 : today_pass_num.get() - 1;
-        DeviceEventEmitter.emit('showPop', <Choice info={{
-            icon: pop3,
-            tips: `再做 ${number} 个任务就可以拆红包了！`,
-            minTips: '您确定要返回首页(自动放弃任务)吗？',
-            lt: '返回首页',
-            lc: () => {
-                N.goBack();
-            },
-            rt: '继续任务'
-        }} />);
+        const { status } = detail;
+        if (status === 1) {
+            const { activityObj } = getter(['activityObj']);
+            const { today_pass_num } = getter(['user.today_pass_num']);
+            console.log(activityObj.get());
+            const number = today_pass_num.get() - 1 < 1 ? 1 : today_pass_num.get() - 1;
+            DeviceEventEmitter.emit('showPop', <Choice info={{
+                icon: pop3,
+                tips: `再做 ${number} 个任务就可以拆红包了！`,
+                minTips: '您确定要返回首页(自动放弃任务)吗？',
+                lt: '返回首页',
+                lc: () => {
+                    N.goBack();
+                },
+                rt: '继续任务'
+            }} />);
+        }
     }
 
     return (
@@ -187,19 +195,14 @@ function ClaimView ({ detail }) {
     );
 }
 
-function TransformUrlView ({ content, label }) {
+function TransformUrlView ({ content, status, label }) {
     const url = getUrl(content);
     if (url) {
         const textArray = content.split(url);
         return (
             <Text style={styles.taskCourseText}>{label}<Text style={{ color: '#FF6C00' }}>{textArray[0]} <Text onPress={() => {
                 try {
-                    Linking.openURL(url)
-                        .then(r => {
-                            console.log(r);
-                        }).catch(e => {
-                            console.log(e);
-                        });
+                    status === 1 && Linking.openURL(url).then(r => { console.log(r); });
                 } catch (e) {
                     console.log(e);
                     toast('打开失败');
@@ -235,18 +238,27 @@ function RenderView ({ name, setImages, status, images, item, setName }) {
 
     if (name === 'task') {
         if (type === 'text') {
-            return <TransformUrlView content={content} label={label}/>;
+            return <TransformUrlView status={status} content={content} label={label}/>;
         }
         return (
             <>
                 <Text style={styles.taskCourseText}>{label}</Text>
-                <ImageBackground source={{ uri: content }} style={styles.saveBtn} ref={ref => setView(ref)}>
-                    <TouchableOpacity onPress={() => {
-                        save();
-                    }} style={{ marginBottom: '10%' }}>
-                        <Text style={{ color: '#FF6C00', fontSize: 14 }}>保存图片</Text>
-                    </TouchableOpacity>
-                </ImageBackground>
+                <TouchableOpacity onPress={() => {
+                    DeviceEventEmitter.emit('showPop', {
+
+                        //注释
+                        dom: <ImageAuto source={{ uri: content }} style={ {width: 200}}/>,
+                        close: () => {},
+                    });
+                }} style={{ marginTop: 10 }}>
+                    <ImageBackground source={{ uri: content }} style={styles.saveBtn} ref={ref => setView(ref)}>
+                        <TouchableOpacity onPress={() => {
+                            save();
+                        }} style={{ marginBottom: '10%' }}>
+                            <Text style={styles.saveBtnText}>保存图片</Text>
+                        </TouchableOpacity>
+                    </ImageBackground>
+                </TouchableOpacity>
             </>
         );
     } else {
@@ -296,7 +308,7 @@ function CourseView ({ detail, setName, images, setImages }) {
                         <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>做单教程</Text>
                     </View>
                     <TouchableOpacity onPress={() => {
-                        N.navigate('HelpCenterPage');
+                        status === 1 && N.navigate('HelpCenterPage');
                     }}>
                         <Text style={{ color: status === 1 ? '#FF6C00' : '#4F4F4F', fontSize: 12 }}>帮助中心</Text>
                     </TouchableOpacity>
@@ -312,7 +324,7 @@ function CourseView ({ detail, setName, images, setImages }) {
                         <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>提交审核</Text>
                     </View>
                     <TouchableOpacity onPress={() => {
-                        N.navigate('HelpCenterPage');
+                        status === 1 && N.navigate('HelpCenterPage');
                     }}>
                         <Text style={{ color: status === 1 ? '#FF6C00' : '#4F4F4F', fontSize: 12 }}>帮助中心</Text>
                     </TouchableOpacity>
@@ -404,11 +416,30 @@ function Btn ({ images, detail, name }) {
     );
 }
 
-function RenderImage ({ images, setImages, status, sourceImage }) {
+function RenderImage ({ images = [], setImages, status, sourceImage }) {
     const view = <Image source={task8} style={ styles.uploadImage}/>;
+    if (images.length && status !== 1) {
+        const localImages = images;
+        const uri = localImages.shift();
+        setImages(localImages);
+        return (
+            <View style={css.flexRCSB}>
+                <TouchableOpacity onPress={() => {
+                    alert('1');
+                }} style={{ marginTop: 10 }}>
+                    <Image source={{ uri: sourceImage }} style={[styles.uploadImage, { marginTop: 0 }]}/>
+                </TouchableOpacity>
+                <Image source={{ uri }} style={ styles.uploadImage}/>
+            </View>
+        );
+    }
     return (
         <View style={css.flexRCSB}>
-            <Image source={{ uri: sourceImage }} style={ styles.uploadImage}/>
+            <TouchableOpacity onPress={() => {
+                alert('1');
+            }} style={{ marginTop: 10 }}>
+                <Image source={{ uri: sourceImage }} style={[styles.uploadImage, { marginTop: 0 }]}/>
+            </TouchableOpacity>
             <Upload children={view} editable={status === 1} images={images} setImages={setImages}/>
         </View>
     );
@@ -460,10 +491,22 @@ const styles = StyleSheet.create({
     },
     saveBtn: {
         alignItems: 'center',
+        borderColor: '#E1E1E1',
+        borderRadius: 6,
+        borderWidth: 1,
         height: 199,
         justifyContent: 'flex-end',
-        marginTop: 10,
         width: 156
+    },
+    saveBtnText: {
+        backgroundColor: '#FF6C00',
+        borderRadius: 3,
+        color: '#fff',
+        fontSize: 14,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 5
     },
     submitBtn: {
         borderRadius: 22,
@@ -545,6 +588,9 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     uploadImage: {
+        borderColor: '#E1E1E1',
+        borderRadius: 6,
+        borderWidth: 1,
         height: 199,
         marginTop: 10,
         width: 156

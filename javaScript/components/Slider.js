@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Carousel from 'react-native-snap-carousel';
 import { Dimensions, StyleSheet, View, TouchableOpacity } from 'react-native';
 import ImageAuto from './ImageAuto';
-import { _if } from '../utils/util';
+import { _if, getUrl } from '../utils/util';
 
 const { height, width } = Dimensions.get('window');
 /**
@@ -38,7 +38,7 @@ export default class Slider extends Component {
                     onPress={async () => {
                         this.props.onPress && this.props.onPress(item);
                     }}>
-                    {_if(item.image || item.url || item.img, res => <ImageAuto source={res}
+                    {_if(getUrl(item.image || item.url || item.img), res => <ImageAuto source={res}
                         style={{ width: width * 0.9 }}/>, () => {
                         return <View style={[styles.sliderView, {
                             backgroundColor: item.backgroundColor || '#f8f8f8',
