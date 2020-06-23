@@ -17,20 +17,18 @@ import toast from '../../utils/toast';
 import { transformMoney } from '../../utils/util';
 
 export default function TaskDetailPage (props) {
-    console.log(props.route.params.detail);
-    const { status, finish_deadline, receive_task_id, course, task_category_label, nickname, description, success_rate } = props.route.params.detail;
     const [images, setImages] = useState([]);
     const [name, setName] = useState('');
-    // const [sourceImages, setSourceImages] = useState([]);
+    const { detail } = props.route.params;
 
     return (
         <SafeAreaView style={[css.safeAreaView, styles.safeAreaView]}>
             <ScrollView>
-                <EndTimeView status={status} finish_deadline={finish_deadline} receive_task_id={receive_task_id}/>
-                <DetailView task_category_label={task_category_label} success_rate={success_rate} nickname={nickname} status={status}/>
-                <ClaimView description={description}/>
-                <CourseView course={course} setName={setName} setImages={setImages} images={images}/>
-                <Btn status={status} receive_task_id={receive_task_id} images={images} nickname={nickname}/>
+                <EndTimeView detail={detail}/>
+                <DetailView detail={detail}/>
+                <ClaimView detail={detail}/>
+                <CourseView detail={detail} setName={setName} setImages={setImages} images={images}/>
+                <Btn detail={detail} name={name} images={images}/>
             </ScrollView>
             <TouchableOpacity onPress={() => {}} style={{ position: 'absolute', bottom: '29%', right: 10 }}>
                 <Image source={task2} style={{ height: 70, width: 84 }}/>
@@ -42,7 +40,8 @@ export default function TaskDetailPage (props) {
     );
 }
 
-function EndTimeView ({ status, finish_deadline, receive_task_id }) {
+function EndTimeView ({ detail }) {
+    const { status, finish_deadline, receive_task_id } = detail;
     function apiGiveUp () {
         giveUp(receive_task_id)
             .then(r => {
@@ -79,7 +78,8 @@ function EndTimeView ({ status, finish_deadline, receive_task_id }) {
     return <></>;
 }
 
-function DetailView ({ task_category_label, nickname, success_rate, status }) {
+function DetailView ({ detail }) {
+    const { task_category_label, unit_money, nickname, success_rate, status } = detail;
     return (
         <View style={styles.taskDetail}>
             <View style={styles.taskDetailTop}>
@@ -89,7 +89,7 @@ function DetailView ({ task_category_label, nickname, success_rate, status }) {
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image source={task7} style={{ height: 20, width: 19, marginRight: 5 }}/>
-                    {/* <Text style={{ color: '#FF6C00', fontSize: 24 }}>{transformMoney(unit_money)}<Text style={{ fontSize: 14 }}>金币</Text></Text> */}
+                    <Text style={{ color: '#FF6C00', fontSize: 24 }}>{transformMoney(unit_money)}<Text style={{ fontSize: 14 }}>金币</Text></Text>
                 </View>
             </View>
             <View style={styles.taskDetailBottom}>
@@ -101,8 +101,8 @@ function DetailView ({ task_category_label, nickname, success_rate, status }) {
                     <Text style={{ color: '#999', fontSize: 12 }}>通过率低于20%时，建议切换账号做单。</Text>
                     <TouchableOpacity onPress={() => {
                         status === 1 && N.navigate('AccountHomePage');
-                    }} style={styles.changeNumber}>
-                        <Text style={{ color: '#FF6C00', fontSize: 12, lineHeight: 28, textAlign: 'center' }}>切换账号</Text>
+                    }} style={[styles.changeNumber, { borderColor: status === 1 ? '#FF6C00' : '#ABABAB' }]}>
+                        <Text style={{ color: status === 1 ? '#FF6C00' : '#4F4F4F', fontSize: 12, lineHeight: 28, textAlign: 'center' }}>切换账号</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -110,7 +110,8 @@ function DetailView ({ task_category_label, nickname, success_rate, status }) {
     );
 }
 
-function ClaimView ({ description }) {
+function ClaimView ({ detail }) {
+    const { description } = detail;
     return (
         <View style={styles.taskClaim}>
             <View style={styles.taskClaimTop}>
@@ -122,7 +123,8 @@ function ClaimView ({ description }) {
     );
 }
 
-function RenderView ({ name, setImages, images, type, label, content, setName }) {
+function RenderView ({ name, setImages, status, images, item, setName }) {
+    const { type, label, content } = item;
     if (name === 'task') {
         if (type === 'text') {
             return <Text style={styles.taskCourseText}>{label}<Text style={{ color: '#FF6C00' }}>{content}</Text></Text>;
@@ -139,9 +141,10 @@ function RenderView ({ name, setImages, images, type, label, content, setName })
                 <View style={{ marginTop: 20 }}>
                     <Text style={{ color: '#222', fontSize: 14 }}>{label}</Text>
                     <TextInput
+                        editable={status === 1}
                         style={styles.input}
                         maxLength={20}
-                        placeholder={'请输入抖音名称'}
+                        placeholder={content}
                         placeholderTextColor={'#FF7008'}
                         onChangeText={name => setName(name)}/>
                 </View>
@@ -150,24 +153,25 @@ function RenderView ({ name, setImages, images, type, label, content, setName })
         return (
             <>
                 <Text style={styles.taskCourseText}>{label}</Text>
-                <RenderImage images={images} setImages={setImages} sourceImage={content}/>
+                <RenderImage images={images} setImages={setImages} status={status} sourceImage={content}/>
                 <Text style={{ color: '#222', fontSize: 14, lineHeight: 30 }}>（请按照示例上传截图）</Text>
             </>
         );
     }
 }
 
-function CourseView ({ course, setName, images, setImages }) {
-    const { submit, task } = course;
+function CourseView ({ detail, setName, images, setImages }) {
+    const { course, status } = detail;
+    const { submit = [], task = [] } = course;
     const submitView = [];
     const taskView = [];
     submit.forEach(item => {
-        const { type, label, content } = item;
-        submitView.push(<RenderView setName={setName} images={images} setImages={setImages} name="submit" key={label} type={type} label={label} content={content}/>);
+        const { label } = item;
+        submitView.push(<RenderView status={status} setName={setName} images={images} setImages={setImages} name="submit" key={label} item={item}/>);
     });
     task.forEach(item => {
-        const { type, label, content } = item;
-        taskView.push(<RenderView images={images} setImages={setImages} setName={setName} name="task" key={label} type={type} label={label} content={content}/>);
+        const { label } = item;
+        taskView.push(<RenderView status={status} images={images} setImages={setImages} setName={setName} name="task" key={label} item={item}/>);
     });
     return (
         <>
@@ -180,7 +184,7 @@ function CourseView ({ course, setName, images, setImages }) {
                     <TouchableOpacity onPress={() => {
                         N.navigate('HelpCenterPage');
                     }}>
-                        <Text style={{ color: '#FF6C00', fontSize: 12 }}>帮助中心</Text>
+                        <Text style={{ color: status === 1 ? '#FF6C00' : '#4F4F4F', fontSize: 12 }}>帮助中心</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ padding: 10 }}>
@@ -196,7 +200,7 @@ function CourseView ({ course, setName, images, setImages }) {
                     <TouchableOpacity onPress={() => {
                         N.navigate('HelpCenterPage');
                     }}>
-                        <Text style={{ color: '#FF6C00', fontSize: 12 }}>帮助中心</Text>
+                        <Text style={{ color: status === 1 ? '#FF6C00' : '#4F4F4F', fontSize: 12 }}>帮助中心</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ padding: 10, }}>
@@ -207,9 +211,10 @@ function CourseView ({ course, setName, images, setImages }) {
     );
 }
 
-function Btn ({ status, receive_task_id, images, nickname }) {
+function Btn ({ images, detail, name }) {
+    const { status, nickname, receive_task_id, } = detail;
     function submit () {
-        taskSubmit(receive_task_id, images, nickname).then(r => {
+        taskSubmit(receive_task_id, images, name || nickname).then(r => {
             if (r.error) {
                 toast(r.msg || '操作失败');
             } else {
@@ -256,19 +261,18 @@ function Btn ({ status, receive_task_id, images, nickname }) {
     );
 }
 
-function RenderImage ({ images, setImages, sourceImage }) {
+function RenderImage ({ images, setImages, status, sourceImage }) {
     const view = <Image source={task8} style={ styles.uploadImage}/>;
     return (
         <View style={css.flexRCSB}>
             <Image source={{ uri: sourceImage }} style={ styles.uploadImage}/>
-            <Upload children={view} images={images} setImages={setImages}/>
+            <Upload children={view} editable={status === 1} images={images} setImages={setImages}/>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     changeNumber: {
-        borderColor: '#FF6C00',
         borderRadius: 14,
         borderWidth: 1,
         height: 28,
