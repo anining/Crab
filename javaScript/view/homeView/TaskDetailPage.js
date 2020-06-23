@@ -1,5 +1,18 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Image, Text, View, TouchableOpacity, StyleSheet, ScrollView, TextInput } from 'react-native';
+import {
+    SafeAreaView,
+    Image,
+    Linking,
+    Text,
+    View,
+    TouchableOpacity,
+    ImageBackground,
+    StyleSheet,
+    ScrollView,
+    TextInput,
+    BackHandler,
+    DeviceEventEmitter,
+} from 'react-native';
 import { css } from '../../assets/style/css';
 import task2 from '../../assets/icon/task/task2.png';
 import task3 from '../../assets/icon/task/task3.png';
@@ -11,47 +24,98 @@ import task8 from '../../assets/icon/task/task8.png';
 import task9 from '../../assets/icon/task/task9.png';
 import Upload from '../../components/Upload';
 import { N } from '../../utils/router';
-import CountDown from '../../components/CountDown';
 import { giveUp, taskSubmit } from '../../utils/api';
 import toast from '../../utils/toast';
-import { transformMoney } from '../../utils/util';
+import { getUrl, requestPermission, transformMoney } from '../../utils/util';
+import { captureRef } from 'react-native-view-shot';
+import CameraRoll from '@react-native-community/cameraroll';
+import Choice from '../../components/Choice';
+import pop3 from '../../assets/icon/pop/pop3.png';
+import pop11 from '../../assets/icon/pop/pop11.png';
+import pop9 from '../../assets/icon/pop/pop9.png';
+import pop12 from '../../assets/icon/pop/pop12.png';
+import Header from '../../components/Header';
+import { getter, store } from '../../utils/store';
+import * as U from 'karet.util';
+import { useFocusEffect } from '@react-navigation/native';
+import { Down } from '../../components/Down';
 
 export default function TaskDetailPage (props) {
     const [images, setImages] = useState([]);
     const [name, setName] = useState('');
     const { detail } = props.route.params;
 
+    useFocusEffect(() => {
+        const onBackPress = () => {
+            backClick();
+            return true;
+        };
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+        return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    });
+
+    function backClick () {
+        const { activityObj } = getter(['activityObj']);
+        const { today_pass_num } = getter(['user.today_pass_num']);
+        console.log(activityObj.get());
+        const number = today_pass_num.get() - 1 < 1 ? 1 : today_pass_num.get() - 1;
+        DeviceEventEmitter.emit('showPop', <Choice info={{
+            icon: pop3,
+            tips: `再做 ${number} 个任务就可以拆红包了！`,
+            minTips: '您确定要返回首页(自动放弃任务)吗？',
+            lt: '返回首页',
+            lc: () => {
+                N.goBack();
+            },
+            rt: '继续任务'
+        }} />);
+    }
+
     return (
-        <SafeAreaView style={[css.safeAreaView, styles.safeAreaView]}>
-            <ScrollView>
-                <EndTimeView detail={detail}/>
-                <DetailView detail={detail}/>
-                <ClaimView detail={detail}/>
-                <CourseView detail={detail} setName={setName} setImages={setImages} images={images}/>
-                <Btn detail={detail} name={name} images={images}/>
-            </ScrollView>
-            <TouchableOpacity onPress={() => {}} style={{ position: 'absolute', bottom: '29%', right: 10 }}>
-                <Image source={task2} style={{ height: 70, width: 84 }}/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {}} style={{ position: 'absolute', bottom: '15%', right: 10 }}>
-                <Image source={task3} style={{ height: 70, width: 84 }}/>
-            </TouchableOpacity>
+        <SafeAreaView style={[css.safeAreaView]}>
+            <Header label={'任务信息'} backOnPress={() => {
+                backClick();
+            }}/>
+            <View style={ styles.safeAreaView}>
+                <ScrollView>
+                    <EndTimeView detail={detail}/>
+                    <DetailView detail={detail}/>
+                    <ClaimView detail={detail}/>
+                    <CourseView detail={detail} setName={setName} setImages={setImages} images={images}/>
+                    <Btn detail={detail} name={name} images={images}/>
+                </ScrollView>
+                <TouchableOpacity onPress={() => {}} style={{ position: 'absolute', bottom: '29%', right: 10 }}>
+                    <Image source={task2} style={{ height: 70, width: 84 }}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {}} style={{ position: 'absolute', bottom: '15%', right: 10 }}>
+                    <Image source={task3} style={{ height: 70, width: 84 }}/>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     );
 }
 
 function EndTimeView ({ detail }) {
-    const { status, finish_deadline, receive_task_id } = detail;
+    const { status, finish_deadline, audit_type, receive_task_id } = detail;
+    const AUDIT_TYPE = ['', '接口审核', '通用审核', '不审核'];
     function apiGiveUp () {
-        giveUp(receive_task_id)
-            .then(r => {
-                if (r.error) {
-                    toast(r.msg || '操作失败');
-                } else {
-                    toast('操作成功');
-                    N.goBack();
-                }
-            });
+        DeviceEventEmitter.emit('showPop', <Choice info={{
+            icon: pop3,
+            tips: '赏金近在咫尺啦~',
+            minTips: '确定要放弃任务吗？',
+            lt: '放弃任务',
+            lc: () => {
+                giveUp(receive_task_id).then(r => {
+                    if (r.error) {
+                        toast(r.msg || '操作失败');
+                    } else {
+                        toast('操作成功');
+                        N.goBack();
+                    }
+                });
+            },
+            rt: '继续任务'
+        }} />);
     }
 
     if (status === 1) {
@@ -60,7 +124,7 @@ function EndTimeView ({ detail }) {
                 <View style={styles.endTimeViewItem}>
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>剩余时间：</Text>
-                        <CountDown time={new Date(finish_deadline)} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }}/>
+                        <Down time={finish_deadline} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }}/>
                     </View>
                     <TouchableOpacity onPress={() => {
                         apiGiveUp();
@@ -69,7 +133,7 @@ function EndTimeView ({ detail }) {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.endTimeViewItem}>
-                    <Text style={{ color: '#555', fontSize: 12 }}>审核时间：24小时内审核</Text>
+                    <Text style={{ color: '#555', fontSize: 12 }}>审核时间：{AUDIT_TYPE[audit_type]}</Text>
                     <Text style={{ color: '#999', fontSize: 12 }}>超时未提交自动放弃任务</Text>
                 </View>
             </View>
@@ -123,16 +187,66 @@ function ClaimView ({ detail }) {
     );
 }
 
+function TransformUrlView ({ content, label }) {
+    const url = getUrl(content);
+    if (url) {
+        const textArray = content.split(url);
+        return (
+            <Text style={styles.taskCourseText}>{label}<Text style={{ color: '#FF6C00' }}>{textArray[0]} <Text onPress={() => {
+                try {
+                    Linking.openURL(url)
+                        .then(r => {
+                            console.log(r);
+                        }).catch(e => {
+                            console.log(e);
+                        });
+                } catch (e) {
+                    console.log(e);
+                    toast('打开失败');
+                }
+            }} style={{ color: 'red' }}>{url}</Text> {textArray[1]}</Text></Text>
+        );
+    } else {
+        return <Text style={styles.taskCourseText}>{label}<Text style={{ color: '#FF6C00' }}>{content}</Text></Text>;
+    }
+}
+
 function RenderView ({ name, setImages, status, images, item, setName }) {
     const { type, label, content } = item;
+    const [view, setView] = useState();
+
+    function save () {
+        requestPermission(() => {
+            if (view) {
+                captureRef(view, {
+                    format: 'jpg',
+                    quality: 1.0,
+                }).then(
+                    uri => {
+                        CameraRoll.saveToCameraRoll(uri)
+                            .then(() => toast('保存成功,请到相册查看'))
+                            .catch(() => toast('保存失败'));
+                    },
+                    () => () => toast('保存失败'),
+                );
+            }
+        }).then(r => console.log(r));
+    }
+
     if (name === 'task') {
         if (type === 'text') {
-            return <Text style={styles.taskCourseText}>{label}<Text style={{ color: '#FF6C00' }}>{content}</Text></Text>;
+            return <TransformUrlView content={content} label={label}/>;
         }
         return (
             <>
                 <Text style={styles.taskCourseText}>{label}</Text>
-                <Image source={{ uri: content }} style={{ height: 199, width: 156, marginTop: 10 }}/>
+                <ImageBackground source={{ uri: content }} style={styles.saveBtn} ref={ref => setView(ref)}>
+                    <TouchableOpacity onPress={() => {
+                        save();
+                    }} style={{ marginBottom: '10%' }}>
+                        <Text style={{ color: '#FF6C00', fontSize: 14 }}>保存图片</Text>
+                    </TouchableOpacity>
+                </ImageBackground>
             </>
         );
     } else {
@@ -212,14 +326,43 @@ function CourseView ({ detail, setName, images, setImages }) {
 }
 
 function Btn ({ images, detail, name }) {
-    const { status, nickname, receive_task_id, } = detail;
+    const { status, nickname, receive_task_id, success_rate } = detail;
+    const { success_rate_threshold } = getter(['app.success_rate_threshold']);
+
     function submit () {
         taskSubmit(receive_task_id, images, name || nickname).then(r => {
             if (r.error) {
-                toast(r.msg || '操作失败');
+                DeviceEventEmitter.emit('showPop', <Choice info={{
+                    icon: pop12,
+                    tips: 'r.msg' || '提交失败',
+                    type: 'oneBtn',
+                    rt: '我知道了'
+                }} />);
             } else {
-                toast('操作成功');
-                N.goBack();
+                const { today_pass_num } = getter(['user.today_pass_num']);
+                U.set(U.view(['user', 'today_pass_num'], store), Number.parseInt(today_pass_num.get()) + 1);
+                if (Number(success_rate_threshold) > Number(success_rate)) {
+                    DeviceEventEmitter.emit('showPop', <Choice info={{
+                        icon: pop9,
+                        tips: '您的账号可能已经不健康',
+                        minTips: '提交的任务可能会不通过！建议更换账号做单,您可以重新打开链接复查做单结果',
+                        type: 'oneBtn',
+                        rc: () => {
+                            N.goBack();
+                        },
+                        rt: '我知道了'
+                    }} />);
+                } else {
+                    DeviceEventEmitter.emit('showPop', <Choice info={{
+                        icon: pop11,
+                        tips: '提交任务成功，请耐心等待审核！',
+                        type: 'oneBtn',
+                        rc: () => {
+                            N.goBack();
+                        },
+                        rt: '我知道了'
+                    }} />);
+                }
             }
         });
     }
@@ -295,7 +438,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     giveUpBtn: {
-        backgroundColor: '#D2D0D0',
+        backgroundColor: '#eee',
         borderRadius: 14,
         height: 28,
         width: 72
@@ -315,10 +458,17 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10
     },
+    saveBtn: {
+        alignItems: 'center',
+        height: 199,
+        justifyContent: 'flex-end',
+        marginTop: 10,
+        width: 156
+    },
     submitBtn: {
         borderRadius: 22,
         height: 44,
-        marginBottom: 20,
+        marginBottom: 100,
         marginTop: 20
     },
     submitBtnText: {
