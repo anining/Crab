@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { css } from '../../assets/style/css';
 import LottieView from 'lottie-react-native';
-import zt from '../../lottie/zt';
+import whole1 from '../../lottie/whole1';
 import game1 from '../../assets/icon/game/game1.png';
 import game5 from '../../assets/icon/game/game5.png';
 import game41 from '../../assets/icon/game/game41.png';
@@ -39,12 +39,12 @@ export default class HomePage extends Component {
 
     render () {
         return (
-            <ImageBackground source={game41} style={[css.flex, css.pr, css.cover]}>
-                <LottieView style={{ width: width, height: 'auto' }} imageAssetsFolder={'zt'} source={zt} loop={true} autoPlay={true} speed={1}/>
+            <ImageBackground source={game41} style={[css.flex, css.pr, css.cover, css.afs]}>
+                <LottieView style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1} loop={true} autoPlay={true} speed={1}/>
                 <View style={[css.pa, css.cover]}>
-                    {/* <ShiftView> */}
-                    {/*    <ImageAuto source={game25} width={60}/> */}
-                    {/* </ShiftView> */}
+                    <ShiftView autoPlay={true} loop={true} duration={800} delay={1000} startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}>
+                        <ImageAuto source={game22} width={33}/>
+                    </ShiftView>
                     {/* 头部显示区域 */}
                     <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
                         <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex]} onPress={() => {
@@ -60,7 +60,7 @@ export default class HomePage extends Component {
                             </View>
                             <ImageAuto source={game31} width={22}/>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex]}>
+                        <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex, css.sp, { width: 180 }]}>
                             <ImageAuto source={game22} width={33}/>
                             <View style={styles.hdnTextWrap}>
                                 <Text style={styles.hdnText}>32132131</Text>
@@ -123,10 +123,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,179,216,.5)',
         borderRadius: 15,
         height: 30,
-        minWidth: 100,
         overflow: 'hidden',
         paddingHorizontal: 5,
-        width: 'auto',
+        width: 120,
     },
     homeBottomWrap: {
         bottom: 0,
