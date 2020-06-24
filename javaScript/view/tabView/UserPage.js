@@ -36,7 +36,7 @@ const MENU_LIST = [
     {
         icon: user8,
         title: '道具背包',
-        remark: '',
+        remark: '1个道具',
         path: 'CardPackagePage'
     },
     {
@@ -184,7 +184,7 @@ function RenderTaskMenu () {
                 N.navigate('MyTaskPage', { id: menu.id });
             }} style={styles.myTaskBtn} key={menu.id}>
                 <Image source={menu.icon} style={styles.myTaskBtnIcon}/>
-                <Text style={styles.myTaskBtnText}>{menu.label}<Text style={{ color: '#FF7751' }}></Text></Text>
+                <Text style={styles.myTaskBtnText}>{menu.label}<Text style={{ color: '#FF7751' }}>1</Text></Text>
             </TouchableOpacity>
         );
     });
