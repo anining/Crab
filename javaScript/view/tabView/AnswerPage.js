@@ -24,13 +24,15 @@ import Shadow from '../../components/Shadow';
 import { _if, _tc, bannerAction, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
 import { N } from '../../utils/router';
-import { getter } from '../../utils/store';
+import { getter, store } from '../../utils/store';
 import { getTask, newUserTask, sign, signLogs, taskReceiveDetail } from '../../utils/api';
 import Choice from '../../components/Choice';
 import toast from '../../utils/toast';
+import * as U from 'karet.util';
+
+// btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
 
 const { width } = Dimensions.get('window');
-// btnStatus: 状态: 1进行中2待领取3已完成4敬请期待
 
 const sprog = [
     {
@@ -118,23 +120,6 @@ export default function AnswerPage () {
         // !ret.error && setNewUser(ret.data);
     }
 
-    function formatTaskPlatform (list = taskPlatform.get()) {
-        console.log(list, '----');
-        try {
-            return list.map(item => {
-                const { accounts } = item;
-                return {
-                    minTitle: accounts.length ? JSON.stringify(item.accounts) : '您还未绑定账号',
-                    btnText: '去做任务',
-                    btnStatus: 2,
-                    ...item
-                };
-            });
-        } catch (e) {
-            return [];
-        }
-    }
-
     return (
         <SafeAreaView style={[{ flex: 1, paddingTop: 20, backgroundColor: '#fff' }]}>
             <ScrollView style={[{ flex: 1 }]}>
@@ -158,45 +143,74 @@ export default function AnswerPage () {
                     <ComTitle title={'新手福利'}/>
                     <RenderList list={sprog}/>
                 </View>
-                <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
-                <View style={styles.answerWrap} karet-lift>
-                    <ComTitle title={'领金币'}/>
-                    <RenderList list={formatTaskPlatform()}/>
-                </View>
+                <RenderTaskView />
                 <View style={{ height: 20, backgroundColor: '#f8f8f8' }}/>
             </ScrollView>
         </SafeAreaView>
     );
 }
 
-function RenderList ({ list = [] }) {
-    const view = [];
-
-    function _getTask (category) {
-        try {
-            getTask(category).then(r => {
-                if (r.error) {
-                    toast(r.msg || '操作失败');
-                    if (error === 9) {
-                        N.navigate('AccountHomePage');
-                    }
-                } else {
-                    const { receive_task_id } = r.data;
-                    taskReceiveDetail(receive_task_id).then(r => {
-                        if (r.error) {
-                            toast(r.msg || '操作失败');
-                        } else {
-                            N.navigate('TaskDetailPage', { detail: r.data });
-                        }
-                    });
+function RenderTaskView () {
+    function searchAccount (accounts, need_bind) {
+        let name = '绑定做单账号';
+        let btnText = '绑定账号';
+        let btnStatus = 6;
+        if (need_bind) {
+            accounts.forEach(account => {
+                const { is_current, nickname } = account;
+                if (is_current) {
+                    name = `做单账号：${nickname}`;
+                    btnText = '去做任务';
+                    btnStatus = 5;
                 }
             });
+        } else {
+            name = '';
+            btnText = '去做任务';
+            btnStatus = 5;
+        }
+
+        return { name, btnText, btnStatus };
+    }
+
+    function formatTaskPlatform (list = taskPlatform.get()) {
+        try {
+            return list.map(item => {
+                const { accounts = [], need_bind } = item;
+                const { name, btnText, btnStatus } = searchAccount(accounts, need_bind);
+                return {
+                    minTitle: name,
+                    btnText,
+                    btnStatus,
+                    ...item
+                };
+            });
         } catch (e) {
-            console.log(e);
+            return [];
         }
     }
 
+    const authorization = U.view(['authorization'], store).get();
+
+    if (authorization) {
+        return (
+            <>
+                <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
+                <View style={styles.answerWrap} karet-lift>
+                    <ComTitle title={'领金币'}/>
+                    <RenderList list={formatTaskPlatform()}/>
+                </View>
+            </>
+        );
+    }
+    return <></>;
+}
+
+function RenderList ({ list = [] }) {
+    const view = [];
+
     list.forEach((item, index) => {
+        const { minTitle, btnStatus, btnText } = item;
         view.push(
             <View style={[styles.answerItemWrap, css.flex, css.sp, { borderBottomWidth: index + 1 >= list.length ? 0 : 1 }]} key={`${index}list`}>
                 <View style={[css.flex, styles.aiwLeft, css.js]}>
@@ -209,22 +223,14 @@ function RenderList ({ list = [] }) {
                                 numberOfLines={1}> +{res}</Text>)}
                             {_if(item.money, res => <ImageAuto source={answer14} width={20}/>)}
                         </View>
-                        <Text style={[styles.labelText, styles.labelMinTitle]} numberOfLines={1}>{item.minTitle}</Text>
+                        <Text style={[styles.labelText, styles.labelMinTitle, { color: btnStatus === 5 ? '#999' : '#53C23B' }]} numberOfLines={1}>{minTitle}</Text>
                     </View>
                 </View>
-                {_if(item.btnStatus === 2, res => <Text style={styles.todoTaskText} karet-lift onPress={ () => { _getTask(item.platform_category); }}>{item.btnText}</Text>, () => (
-                    <Shadow style={styles.todoBtn} color={'#d43912'}>
-                        <Text style={styles.todoBtnText} karet-lift>{item.btnText}</Text>
-                    </Shadow>
-                ))}
+                <RenderBtn item={item}/>
             </View>
         );
     });
-    return (
-        <>
-            {view}
-        </>
-    );
+    return <>{view}</>;
 }
 
 function RenderSignList ({ signDay }) {
@@ -288,9 +294,11 @@ function RenderDaySign ({ signDay, setSignDay }) {
     const userInfo = user.get();
     const today_task_num = userInfo.today_task_num || 0;
     const view = [];
-    view.push(<RenderSignList signDay={signDay}/>);
     view.push(
-        <View key={'signWrap'} style={[css.flex, css.sp, styles.signAllWrap]}>
+        <RenderSignList signDay={signDay} key="RenderDaySign-1"/>
+    );
+    view.push(
+        <View style={[css.flex, css.sp, styles.signAllWrap]} key="RenderDaySign-2">
             <View style={[css.flex, css.fw, styles.signTipsWrap]}>
                 <Text style={[styles.signTipsText, styles.maxSTT]}>完成进度: <Text style={{ color: '#FF6C00' }}>{today_task_num}</Text>/10</Text>
                 <Text style={[styles.signTipsText]}>提交并通过10单任务即可签到</Text>
@@ -336,6 +344,52 @@ function RenderActivity () {
         </View>,
     );
     return <View style={[css.flex, css.sp, { paddingHorizontal: 10 }]} key={'activity'}>{view}</View>;
+}
+
+function RenderBtn ({ item }) {
+    const { btnStatus, btnText, platform_category } = item;
+    function _getTask (category) {
+        try {
+            getTask(category).then(r => {
+                if (r.error) {
+                    toast(r.msg || '操作失败');
+                    if (error === 9) {
+                        N.navigate('AccountHomePage');
+                    }
+                } else {
+                    const { receive_task_id } = r.data;
+                    taskReceiveDetail(receive_task_id).then(r => {
+                        if (r.error) {
+                            toast(r.msg || '操作失败');
+                        } else {
+                            N.navigate('TaskDetailPage', { detail: r.data });
+                        }
+                    });
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    switch (btnStatus) {
+    case 2:
+    case 5:return (
+        <Text style={styles.todoTaskText} karet-lift onPress={ () => {
+            _getTask(platform_category);
+        }}>{btnText}</Text>
+    );
+    case 6:return (
+        <Text style={[styles.todoTaskText, { borderColor: '#53C23B', color: '#53C23B' }]} karet-lift onPress={ () => {
+            N.navigate('AccountHomePage');
+        }}>{btnText}</Text>
+    );
+    default:return (
+        <Shadow style={styles.todoBtn} color={'#d43912'}>
+            <Text style={styles.todoBtnText} karet-lift>{btnText}</Text>
+        </Shadow>
+    );
+    }
 }
 
 const styles = StyleSheet.create({
