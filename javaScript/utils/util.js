@@ -1,4 +1,4 @@
-import { PermissionsAndroid, Linking } from 'react-native';
+import { PermissionsAndroid, Linking, Animated } from 'react-native';
 import { store } from './store';
 import * as U from 'karet.util';
 import CryptoJS from 'crypto-js';
@@ -298,6 +298,16 @@ export async function bannerAction (action, link, label) {
     } catch (e) {
         console.log(e);
     }
+}
+
+export function setAndroidTime (callback, duration = 1000) {
+    Animated.timing(new Animated.Value(0), {
+        toValue: 1,
+        duration: duration,
+        useNativeDriver: true,
+    }).start(() => {
+        callback();
+    });
 }
 
 export { getRequestParameter, requestPermission, transformTime, initializationStore, buildStr, parameterTransform, AesDecrypt, transformMoney };

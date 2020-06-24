@@ -28,6 +28,7 @@ import ShiftView from '../../components/ShiftView';
 import { N } from '../../utils/router';
 import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
+import { setAndroidTime } from '../../utils/util';
 const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
@@ -40,7 +41,7 @@ export default class HomePage extends PureComponent {
 
     componentDidMount () {
         this.startLottie = DeviceEventEmitter.addListener('startLottie', () => {
-            this.timer = setTimeout(() => {
+            setAndroidTime(() => {
                 this.timer = clearTimeout(this.timer);
                 this.lottie && this.lottie.play();
                 this.shiftView && this.shiftView.start();
@@ -56,7 +57,7 @@ export default class HomePage extends PureComponent {
 
     componentWillUnmount () {
         this.lottie && this.lottie.pause();
-        this.timer && clearTimeout(this.timer);
+        // this.timer && clearTimeout(this.timer);
         this.startLottie && this.startLottie.remove();
         this.stopLottie && this.stopLottie.remove();
     }

@@ -52,10 +52,10 @@ export default class Lamp extends Component {
             this.setState({
                 stop: false
             }, () => {
-                this.AnimationStart.call(this, index, this.state.LampList.length);
+                this.AnimationStart.call(this, 0, this.state.LampList.length);
             });
         } else {
-            this.AnimationStart.call(this, index, this.state.LampList.length);
+            this.AnimationStart.call(this, 0, this.state.LampList.length);
         }
     }
 

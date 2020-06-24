@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { Dimensions, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
+import {
+    Dimensions,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    ImageBackground,
+    Animated, Easing,
+} from 'react-native';
 import { css } from '../../assets/style/css';
 import game14 from '../../assets/icon/game/game14.png';
 import game9 from '../../assets/icon/game/game9.png';
@@ -12,7 +21,7 @@ import game54 from '../../assets/icon/game/game54.png';
 import game55 from '../../assets/icon/game/game55.png';
 import ImageAuto from '../../components/ImageAuto';
 import { N } from '../../utils/router';
-import { _gv, _if, _tc } from '../../utils/util';
+import { _gv, _if, _tc, setAndroidTime } from '../../utils/util';
 import { getGame } from '../../utils/api';
 import ShiftView from '../../components/ShiftView';
 
@@ -259,8 +268,8 @@ export default class GamePage extends Component {
                             }, () => {
                                 // console.log(this.state.fillArray);
                                 if (item.key === this.state.selectSite) {
-                                    item.idiomPointArray.forEach(moveKey => {
-                                        this[`cube${moveKey}`] && this[`cube${moveKey}`].start();
+                                    item.idiomPointArray.forEach((moveKey, moveIndex) => {
+                                        setAndroidTime(() => { this[`cube${moveKey}`] && this[`cube${moveKey}`].start(); }, 50 * moveIndex);
                                     });
                                 }
                             });
