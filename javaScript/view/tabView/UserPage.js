@@ -278,7 +278,6 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     menuIcon: {
-        fontSize: 15,
         height: 20,
         marginRight: 5,
         width: 20
