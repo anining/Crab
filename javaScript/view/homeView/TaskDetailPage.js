@@ -66,10 +66,9 @@ export default function TaskDetailPage (props) {
             activityDetail(activityObj.get()[1].activity_id).then(r => {
                 const { data, error } = r;
                 if (!error) {
-                    const { logs } = data;
-                    if (logs.length) {
-                        toast('敬请期待');
-                    }
+                    const { logs, setting } = data;
+                    const { rule } = setting;
+                    format(rule, logs);
                 }
             });
         } catch (e) {
@@ -77,11 +76,27 @@ export default function TaskDetailPage (props) {
         }
     }, []);
 
+    function format (rule, logs) {
+        let level = 0;
+        logs.forEach(log => {
+            if (Number(log.level) > level) {
+                level = Number(log.level);
+            }
+        });
+        if (level === 0) {
+            setNum(Number(rule[1].need_task_num));
+        } else if (level === rule.length) {
+            setNum(999999);
+        } else {
+            setNum(Number(rule[level + 1].need_task_num));
+        }
+    }
+
     function backClick () {
         const { status } = detail;
         if (status === 1) {
             const { today_pass_num } = getter(['user.today_pass_num']);
-            const number = today_pass_num.get() - num > 0 ? today_pass_num.get() - num : false;
+            const number = today_pass_num.get() - num < 0 ? num - today_pass_num.get() : false;
             if (number) {
                 DeviceEventEmitter.emit('showPop',
                     <Choice info={{
