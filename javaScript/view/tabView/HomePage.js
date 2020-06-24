@@ -38,6 +38,29 @@ export default class HomePage extends PureComponent {
         this.state = {};
     }
 
+    componentDidMount () {
+        this.startLottie = DeviceEventEmitter.addListener('startLottie', () => {
+            this.timer = setTimeout(() => {
+                this.timer = clearTimeout(this.timer);
+                this.lottie && this.lottie.play();
+                this.shiftView && this.shiftView.start();
+                this.lamp && this.lamp.start();
+            }, 1000);
+        });
+        this.stopLottie = DeviceEventEmitter.addListener('stopLottie', () => {
+            this.lottie && this.lottie.pause();
+            this.shiftView && this.shiftView.stop();
+            this.lamp && this.lamp.stop();
+        });
+    }
+
+    componentWillUnmount () {
+        this.lottie && this.lottie.pause();
+        this.timer && clearTimeout(this.timer);
+        this.startLottie && this.startLottie.remove();
+        this.stopLottie && this.stopLottie.remove();
+    }
+
     render () {
         return (
             <SafeAreaProvider>
@@ -53,9 +76,10 @@ export default class HomePage extends PureComponent {
                     {/* eslint-disable-next-line no-return-assign */}
                     <LottieView ref={ref => this.lottie = ref} key={'lottie'} renderMode={'HARDWARE'} style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1} loop={true} autoPlay={true} speed={1}/>
                     <View style={[css.pa, css.cover]}>
-                        {/* <ShiftView autoPlay={true} loop={true} duration={1000} delay={1200} startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}> */}
-                        {/*    <ImageAuto source={game22} width={33}/> */}
-                        {/* </ShiftView> */}
+                        {/* eslint-disable-next-line no-return-assign */}
+                        <ShiftView ref={ref => this.shiftView = ref} autoPlay={true} loop={true} duration={800} delay={1000} startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}>
+                            <ImageAuto source={game22} width={33}/>
+                        </ShiftView>
                         {/* 头部显示区域 */}
                         <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
                             <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex]} onPress={() => {
@@ -96,7 +120,8 @@ export default class HomePage extends PureComponent {
                             <ImageBackground source={game35} style={[css.pa, styles.noticeIcon]}>
                                 <Text style={[css.pa, styles.noticeNumber]}>10</Text>
                             </ImageBackground>
-                            {/* <Lamp width={'100%'} backgroundColor={'rgba(0,179,216,.5)'} color={'#005262'} color1={'#FF6C00'}/> */}
+                            {/* eslint-disable-next-line no-return-assign */}
+                            <Lamp ref={ref => this.lamp = ref} width={'100%'} backgroundColor={'rgba(0,179,216,.5)'} color={'#005262'} color1={'#FF6C00'}/>
                         </View>
                         {/* 底部显示区域 */}
                         <ImageBackground source={game12} style={[css.flex, css.pa, styles.homeBottomWrap, css.fw, css.afs]}>
@@ -105,6 +130,7 @@ export default class HomePage extends PureComponent {
                             </View>
                             {/* 主页答题按钮 */}
                             <TouchableOpacity style={styles.homeBtn} activeOpacity={1} onPress={() => {
+                                // this.lottie && this.lottie.pause();
                                 N.navigate('GamePage');
                             }}><ImageAuto source={game1} width={width * 0.5}/></TouchableOpacity>
                             <Text style={styles.accuracyText}>正确率: <Text style={{ color: '#FF6C00' }}>95%</Text></Text>

@@ -15,6 +15,7 @@ export default class Lamp extends Component {
         this.state = {
             translateValue: new Animated.Value(0), // 定位初始值为0
             LampList: [{}, {}, {}],
+            stop: false // 是否暂停
         };
         this.width = this.props.width;
         this.backgroundColor = this.props.backgroundColor;
@@ -23,7 +24,8 @@ export default class Lamp extends Component {
     }
 
     async componentDidMount () {
-        this.AnimationStart.call(this, 0, this.state.LampList.length);
+        // this.AnimationStart.call(this, 0, this.state.LampList.length);
+        this.start();
     }
 
     AnimationStart (index, count) {
@@ -39,7 +41,27 @@ export default class Lamp extends Component {
                 index = 0;
                 this.state.translateValue.setValue(0);
             }
+            if (!this.state.stop) {
+                this.AnimationStart.call(this, index, this.state.LampList.length);
+            }
+        });
+    }
+
+    start () {
+        if (this.state.stop) {
+            this.setState({
+                stop: false
+            }, () => {
+                this.AnimationStart.call(this, index, this.state.LampList.length);
+            });
+        } else {
             this.AnimationStart.call(this, index, this.state.LampList.length);
+        }
+    }
+
+    stop () {
+        this.setState({
+            stop: true
         });
     }
 

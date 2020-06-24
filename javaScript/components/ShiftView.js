@@ -1,13 +1,30 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, View, LayoutAnimation, NativeModules, Animated, Easing } from 'react-native';
+import {
+    Dimensions,
+    StyleSheet,
+    View,
+    LayoutAnimation,
+    NativeModules,
+    Animated,
+    Easing,
+    UIManager,
+    Platform,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import { css } from '../assets/style/css';
+
+if (Platform.OS === 'android') {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 /**
  * <ShiftView startSite={[0,0]} endSite={[0,0]} duration={1000} delay={1000}/>
  * **/
 export default class ShiftView extends Component {
     constructor (props) {
         super(props);
+        this.state = {
+            stop: false// 是否暂停
+        };
         this.autoPlay = this.props.autoPlay;
         this.loop = this.props.loop;
         this.style = this.props.style;
@@ -32,7 +49,7 @@ export default class ShiftView extends Component {
                 delay: this.duration - 100,
                 useNativeDriver: true,
                 easing: Easing.ease,
-            })
+            }),
         ];
         this.transformXStart = [
             Animated.timing(this.translateX, {
@@ -73,15 +90,37 @@ export default class ShiftView extends Component {
     }
 
     start () {
+        if (this.state.stop) {
+            this.setState({
+                stop: false
+            }, this._animationStart.bind(this));
+        } else {
+            this._animationStart();
+        }
+    }
+
+    _animationStart () {
         Animated.parallel([Animated.sequence(this.opacityStart), Animated.sequence(this.transformXStart), Animated.sequence(this.transformYStart)]).start(() => {
-            if (this.loop && this.delay) {
+            if (this.loop && this.delay && !this.state.stop) {
                 this.start();
             }
         });
     }
 
+    stop () {
+        this.setState({
+            stop: true
+        });
+    }
+
     render () {
-        return <Animated.View style={[css.pa, { left: this.left, top: this.top, opacity: this.modelOpacity, transform: [{ translateX: this.translateX }, { translateY: this.translateY }], ...this.style }]}>
+        return <Animated.View style={[css.pa, {
+            left: this.left,
+            top: this.top,
+            opacity: this.modelOpacity,
+            transform: [{ translateX: this.translateX }, { translateY: this.translateY }],
+            ...this.style,
+        }]}>
             {this.props.children}
         </Animated.View>;
     }
@@ -93,7 +132,7 @@ ShiftView.propTypes = {
     loop: PropTypes.bool,
     delay: PropTypes.number,
     duration: PropTypes.number,
-    autoPlay: PropTypes.bool
+    autoPlay: PropTypes.bool,
 };
 ShiftView.defaultProps = {
     startSite: [100, 100],
@@ -102,6 +141,6 @@ ShiftView.defaultProps = {
     duration: 400,
     style: {},
     loop: false,
-    autoPlay: false
+    autoPlay: false,
 };
 const styles = StyleSheet.create({});

@@ -286,7 +286,19 @@ function AppStackNavigator () {
     }, []);
     if (keys) {
         return (
-            <NavigationContainer>
+            <NavigationContainer onStateChange={(e) => {
+                // 优化动画开启关闭
+                console.log(e);
+                _tc(() => {
+                    if ([...e.routes].pop().state && [...e.routes].pop().state.index === 0) {
+                        DeviceEventEmitter.emit('startLottie');
+                    } else {
+                        if ([...e.routes].shift().state.index === 0) {
+                            DeviceEventEmitter.emit('stopLottie');
+                        }
+                    }
+                });
+            }}>
                 <Prompt/>
                 <Stack.Navigator screenOptions={{
                     cardStyle: {},
