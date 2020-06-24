@@ -24,7 +24,7 @@ import task8 from '../../assets/icon/task/task8.png';
 import task9 from '../../assets/icon/task/task9.png';
 import Upload from '../../components/Upload';
 import { N } from '../../utils/router';
-import { giveUp, taskSubmit } from '../../utils/api';
+import { activityDetail, giveUp, taskSubmit } from '../../utils/api';
 import toast from '../../utils/toast';
 import { getUrl, requestPermission, transformMoney } from '../../utils/util';
 import { captureRef } from 'react-native-view-shot';
@@ -45,6 +45,7 @@ export default function TaskDetailPage (props) {
     const { images: submitImages } = detail;
     const [images, setImages] = useState([]);
     const [name, setName] = useState('');
+    const [num, setNum] = useState(0);
     submitImages && setImages(submitImages);
 
     useFocusEffect(() => {
@@ -59,23 +60,43 @@ export default function TaskDetailPage (props) {
         return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     });
 
+    useFocusEffect(() => {
+        const { activityObj } = getter(['activityObj']);
+        try {
+            activityDetail(activityObj.get()[1].activity_id).then(r => {
+                const { data, error } = r;
+                if (!error) {
+                    const { logs } = data;
+                    if (logs.length) {
+                        toast('敬请期待');
+                    }
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }, []);
+
     function backClick () {
         const { status } = detail;
         if (status === 1) {
-            const { activityObj } = getter(['activityObj']);
             const { today_pass_num } = getter(['user.today_pass_num']);
-            console.log(activityObj.get());
-            const number = today_pass_num.get() - 1 < 1 ? 1 : today_pass_num.get() - 1;
-            DeviceEventEmitter.emit('showPop', <Choice info={{
-                icon: pop3,
-                tips: `再做 ${number} 个任务就可以拆红包了！`,
-                minTips: '您确定要返回首页(自动放弃任务)吗？',
-                lt: '返回首页',
-                lc: () => {
-                    N.goBack();
-                },
-                rt: '继续任务'
-            }} />);
+            const number = today_pass_num.get() - num > 0 ? today_pass_num.get() - num : false;
+            if (number) {
+                DeviceEventEmitter.emit('showPop',
+                    <Choice info={{
+                        icon: pop3,
+                        tips: `再做 ${number} 个任务就可以拆红包了！`,
+                        minTips: '您确定要返回首页(自动放弃任务)吗？',
+                        lt: '返回首页',
+                        lc: () => {
+                            N.goBack();
+                        },
+                        rt: '继续任务'
+                    }} />);
+            } else {
+                N.goBack();
+            }
         }
     }
 
