@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
 import { _if, djangoTime, msecsTransform } from '../utils/util';
+import { css } from '../assets/style/css';
 let millisecond = 9;
 export default class CountDown extends Component {
     constructor (props) {
@@ -28,19 +29,12 @@ export default class CountDown extends Component {
         }, 1000);
         this.props.millisecond && (this.milliTimer = setInterval(() => {
             if (this.props.time && +new Date(djangoTime(this.props.time)) >= +new Date()) {
-                if (millisecond > 0) {
-                    millisecond--;
-                    this.setState({
-                        millisecond: millisecond
-                    });
-                } else {
-                    millisecond = 9;
-                    this.setState({
-                        millisecond: millisecond
-                    });
-                }
+                if (millisecond > 0) { millisecond--; } else { millisecond = 9; }
+                this.millisecondText.setNativeProps({
+                    text: `.${millisecond}`
+                });
             } else {
-                this.setState({ millisecond: 0 });
+                this.millisecondText.setNativeProps({ text: '.0' });
             }
         }, 100));
     }
@@ -54,11 +48,17 @@ export default class CountDown extends Component {
         if (this.props.time) {
             try {
                 return (
-                    <Text style={[(this.props.style || {})]}>
-                        {msecsTransform(+new Date(djangoTime(this.props.time)) - this.state.nowTime)}
-                        {_if(this.props.millisecond, res => `.${this.state.millisecond}`)}
-                        {this.props.tips}
-                    </Text>
+                    <View style={[css.flex, css.pr]}>
+                        {/* <View style={[css.pa, css.afs, { backgroundColor: 'red', flex: 1 }]}/> */}
+                        <Text style={[(this.props.style || {})]}>{msecsTransform(+new Date(djangoTime(this.props.time)) - this.state.nowTime)}</Text>
+                        {/* eslint-disable-next-line no-return-assign */}
+                        {_if(this.props.millisecond, res =>
+                            // eslint-disable-next-line no-return-assign
+                            <TextInput disableFullscreenUI={false} style={[{ marginLeft: -2, marginRight: -12 }, (this.props.style || {})]} enablesReturnKeyAutomatically={true} ref={ref => this.millisecondText = ref} defaultValue={'.9'} onFocus={() => {
+                                this.millisecondText.blur();
+                            }}/>)}
+                        <Text style={[(this.props.style || {})]}>{this.props.tips}</Text>
+                    </View>
                 );
             } catch (e) {
                 console.log(e);

@@ -69,7 +69,7 @@ export default class DailyMoneyPage extends Component {
                     }}/>
                     <Lamp/>
                     <View style={[css.flex, css.fw, styles.redPackageWrap, css.afs]}>
-                        <CountDown time={+new Date('2020/06/20')} style={{ color: '#999', fontSize: 13 }} millisecond={true} tips={'后现金消失'}/>
+                        <CountDown time={+new Date('2020/06/26')} style={{ color: '#999', fontSize: 13 }} millisecond={true} tips={'后现金消失'}/>
                         <Text style={styles.redMaxText}> 29.69 <Text style={{ fontSize: 20 }}>元</Text></Text>
                         <Animatable.View useNativeDriver={true} iterationCount="infinite" animation="pulse" style={[css.auto]}>
                             <Shadow style={[styles.shareBtn]}>
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
         color: '#E13020',
         fontSize: 50,
         fontWeight: '900',
-        lineHeight: width * 0.33,
+        lineHeight: width * 0.27,
         textAlign: 'center',
         width: '100%',
         // eslint-disable-next-line react-native/sort-styles
@@ -162,9 +162,10 @@ const styles = StyleSheet.create({
         height: width * 0.72,
         width: '80%',
         ...css.auto,
-        marginTop: width * 0.03,
+        // backgroundColor: 'red',
+        // marginTop: width * 0.03,
         paddingHorizontal: 10,
-        paddingVertical: 10
+        // paddingVertical: 10
     },
     riwInfoWrap: {
         flex: 1,
@@ -186,18 +187,18 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     shareBtn: {
-        borderRadius: 25,
-        height: 50,
-        width: width * 0.65
+        borderRadius: 22,
+        height: 44,
+        width: width * 0.63
     },
     shareBtnText: {
         backgroundColor: '#FFE164',
-        borderRadius: 25,
+        borderRadius: 22,
         color: '#E13120',
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: '600',
         height: '100%',
-        lineHeight: 50,
+        lineHeight: 44,
         overflow: 'hidden',
         textAlign: 'center',
         width: '100%'

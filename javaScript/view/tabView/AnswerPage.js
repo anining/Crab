@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import * as React from 'karet';
 import * as U from 'karet.util';
 import { Dimensions, SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity, DeviceEventEmitter } from 'react-native';
@@ -89,7 +89,7 @@ const sprogObj = {
 //     cls.task: "做任务得奖励",
 // }
 const { banner, signConfig, activityObj, user, taskPlatform } = getter(['banner', 'signConfig', 'activityObj', 'user', 'taskPlatform']);
-export default class AnswerPage extends Component {
+export default class AnswerPage extends PureComponent {
     constructor (props) {
         super(props);
         this.state = {
@@ -308,7 +308,7 @@ export default class AnswerPage extends Component {
                         <ImageAuto source={answer6} width={width * 0.9 * 0.48}/>
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={1} style={styles.arItemWrap} onPress={() => {
-                        _tc(() => N.navigate('OpenMoneyPage', {
+                        _tc(() => N.navigate('DailyMoneyPage', {
                             activity_id: (activityObj.get() || {})[2].activity_id
                         }));
                     }} key={'OpenMoneyPage'}>

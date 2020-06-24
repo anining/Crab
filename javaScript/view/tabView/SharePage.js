@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import * as React from 'karet';
 import {
     SafeAreaView,
@@ -50,7 +50,7 @@ const cashBack = [{
     label: '师傅得3元',
 }];
 const { invite_code } = getter(['user.invite_code']);
-export default class SharePage extends Component {
+export default class SharePage extends PureComponent {
     constructor (props) {
         super(props);
         this.state = {

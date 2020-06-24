@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
     SafeAreaView,
     NativeModules,
@@ -31,31 +31,25 @@ import Lamp from '../../components/Lamp';
 const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
-export default class HomePage extends Component {
+export default class HomePage extends PureComponent {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
         super(props);
         this.state = {};
     }
 
-    componentDidMount () {
-        // this.startLottie = DeviceEventEmitter.addListener('startHomeLottieView', () => {
-        //     this.lottie && this.lottie.resume();
-        // });
-        // this.stopLottie = DeviceEventEmitter.addListener('stopHomeLottieView', () => {
-        //     this.lottie && this.lottie.pause();
-        // });
-    }
-
-    componentWillUnmount () {
-        this.startLottie && this.startLottie.remove();
-        this.stopLottie && this.stopLottie.remove();
-    }
-
     render () {
         return (
             <SafeAreaProvider>
                 <ImageBackground source={game41} style={[css.flex, css.pr, css.cover, css.afs]}>
+                    {/* eslint-disable-next-line no-return-assign */}
+                    {/* <View renderToHardwareTextureAndroid={true}> */}
+                    {/*    /!* renderToHardwareTextureAndroid *!/ */}
+                    {/*    /!* 决定这个视图是否要把它自己（以及所有的子视图）渲染到一个 GPU 上的硬件纹理中。 *!/ */}
+                    {/*    /!* 在 Android 上，这对于只修改不透明度、旋转、位移、或缩放的动画和交互十分有用：在这些情况下，视图不必每次都重新绘制，显示列表也不需要重新执行。纹理可以被重用于不同的参数。负面作用是这会大量消耗显存，所以当交互/动画结束后应该把此属性设置回 false。 *!/ */}
+                    {/*    /!* eslint-disable-next-line no-return-assign *!/ */}
+                    {/*    <LottieView ref={ref => this.lottie = ref} key={'lottie'} renderMode={'HARDWARE'} style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1} loop={true} autoPlay={true} speed={1}/> */}
+                    {/* </View> */}
                     {/* eslint-disable-next-line no-return-assign */}
                     <LottieView ref={ref => this.lottie = ref} key={'lottie'} renderMode={'HARDWARE'} style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1} loop={true} autoPlay={true} speed={1}/>
                     <View style={[css.pa, css.cover]}>
