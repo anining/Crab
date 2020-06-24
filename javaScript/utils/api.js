@@ -104,8 +104,8 @@ export function activityDetail (activity_id) {
 }
 
 // 领取完成任务红包
-export function getReceiveTaskAward () {
-    return transformFetch('POST', '/activity/receive_task_award');
+export function getReceiveTaskAward (level, activity_id) {
+    return transformFetch('POST', '/activity/receive_task_award', { level, activity_id });
 }
 
 // 提取拼多多红包
