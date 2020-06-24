@@ -39,13 +39,13 @@ import { getter, store } from '../../utils/store';
 import * as U from 'karet.util';
 import { useFocusEffect } from '@react-navigation/native';
 import { Down } from '../../components/Down';
-import ImageAuto from '../../components/ImageAuto';
 
 export default function TaskDetailPage (props) {
     const { detail } = props.route.params;
     const { images: submitImages } = detail;
-    const [images, setImages] = useState(submitImages);
+    const [images, setImages] = useState([]);
     const [name, setName] = useState('');
+    submitImages && setImages(submitImages);
 
     useFocusEffect(() => {
         const onBackPress = () => {
@@ -244,16 +244,16 @@ function RenderView ({ name, setImages, status, images, item, setName }) {
             <>
                 <Text style={styles.taskCourseText}>{label}</Text>
                 <TouchableOpacity onPress={() => {
-                    DeviceEventEmitter.emit('showPop', {
-
-                        //注释
-                        dom: <ImageAuto source={{ uri: content }} style={ {width: 200}}/>,
-                        close: () => {},
-                    });
+                    if (status === 1) {
+                        DeviceEventEmitter.emit('showPop', {
+                            dom: <Image source={{ uri: content }} style={[styles.saveBtn, { width: 312, height: 398, backgroundColor: '#fff' }]}/>,
+                            close: () => {}
+                        });
+                    }
                 }} style={{ marginTop: 10 }}>
                     <ImageBackground source={{ uri: content }} style={styles.saveBtn} ref={ref => setView(ref)}>
                         <TouchableOpacity onPress={() => {
-                            save();
+                            status === 1 && save();
                         }} style={{ marginBottom: '10%' }}>
                             <Text style={styles.saveBtnText}>保存图片</Text>
                         </TouchableOpacity>
@@ -416,7 +416,7 @@ function Btn ({ images, detail, name }) {
     );
 }
 
-function RenderImage ({ images = [], setImages, status, sourceImage }) {
+function RenderImage ({ images, setImages, status, sourceImage }) {
     const view = <Image source={task8} style={ styles.uploadImage}/>;
     if (images.length && status !== 1) {
         const localImages = images;
@@ -425,7 +425,12 @@ function RenderImage ({ images = [], setImages, status, sourceImage }) {
         return (
             <View style={css.flexRCSB}>
                 <TouchableOpacity onPress={() => {
-                    alert('1');
+                    if (status === 1) {
+                        DeviceEventEmitter.emit('showPop', {
+                            dom: <Image source={{ uri: sourceImage }} style={[styles.saveBtn, { width: 312, height: 398, backgroundColor: '#fff' }]}/>,
+                            close: () => {}
+                        });
+                    }
                 }} style={{ marginTop: 10 }}>
                     <Image source={{ uri: sourceImage }} style={[styles.uploadImage, { marginTop: 0 }]}/>
                 </TouchableOpacity>
@@ -436,7 +441,12 @@ function RenderImage ({ images = [], setImages, status, sourceImage }) {
     return (
         <View style={css.flexRCSB}>
             <TouchableOpacity onPress={() => {
-                alert('1');
+                if (status === 1) {
+                    DeviceEventEmitter.emit('showPop', {
+                        dom: <Image source={{ uri: sourceImage }} style={[styles.saveBtn, { width: 312, height: 398, backgroundColor: '#fff' }]}/>,
+                        close: () => {}
+                    });
+                }
             }} style={{ marginTop: 10 }}>
                 <Image source={{ uri: sourceImage }} style={[styles.uploadImage, { marginTop: 0 }]}/>
             </TouchableOpacity>
