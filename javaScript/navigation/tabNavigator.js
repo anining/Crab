@@ -1,6 +1,7 @@
 import * as React from 'karet';
 import { Image } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomePage from '../view/tabView/HomePage';
 import UserPage from '../view/tabView/UserPage';
 import AnswerPage from '../view/tabView/AnswerPage';
@@ -18,13 +19,21 @@ import icon8 from '../assets/icon/tab/tab8.png';
 import icon9 from '../assets/icon/tab/tab9.png';
 import icon10 from '../assets/icon/tab/tab10.png';
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function TabNavigator ({ navigation }) {
     proxyRouter(navigation, ['MaterialTopTabNavigator', 'LoginPage'], 'VerificationStackNavigator');
     return (
         <Tab.Navigator
+            allowFontScaling={false}
+            keyboardHidesTabBar={true}
+            safeAreaInsets={{ top: 20 }}
+            backBehavior={'order'}
+            removeClippedSubviews={true}
             tabBarPosition="bottom"
+            keyboardDismissMode={'none'}
+            swipeEnabled={false}
+            scrollEnabled={false}
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused }) => {
                     let iconPath;
@@ -45,6 +54,7 @@ export default function TabNavigator ({ navigation }) {
                 },
             })}
             tabBarOptions={{
+                scrollEnabled: false,
                 // 是否显示标签图标
                 showIcon: true,
                 // 活动标签的标签和图标颜色
@@ -66,13 +76,13 @@ export default function TabNavigator ({ navigation }) {
                     width: 0,
                 },
                 tabStyle: {
-                    backgroundColor: '#fff'
-                }
+                    backgroundColor: '#fff',
+                },
             }}
         >
-            <Tab.Screen name="HomePage" component={HomePage} options={{ title: '主页' }}/>
+            <Tab.Screen name="HomePage" component={HomePage} options={{ title: '主页', tabBarVisible: true, unmountOnBlur: true }}/>
             <Tab.Screen name="AnswerPage" component={AnswerPage} options={{ title: '活动' }}/>
-            <Tab.Screen name="SharePage" component={SharePage} options={{ title: '躺赚' }}/>
+            <Tab.Screen name="SharePage" component={SharePage} options={{ title: '躺赚', unmountOnBlur: true }}/>
             <Tab.Screen name="UserPage" component={UserPage} options={{ title: '我的' }}/>
         </Tab.Navigator>
     );

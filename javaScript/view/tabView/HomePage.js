@@ -11,6 +11,7 @@ import {
     TouchableOpacity,
     DeviceEventEmitter,
 } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { css } from '../../assets/style/css';
 import LottieView from 'lottie-react-native';
 import whole1 from '../../lottie/whole1';
@@ -37,69 +38,86 @@ export default class HomePage extends Component {
         this.state = {};
     }
 
+    componentDidMount () {
+        // this.startLottie = DeviceEventEmitter.addListener('startHomeLottieView', () => {
+        //     this.lottie && this.lottie.resume();
+        // });
+        // this.stopLottie = DeviceEventEmitter.addListener('stopHomeLottieView', () => {
+        //     this.lottie && this.lottie.pause();
+        // });
+    }
+
+    componentWillUnmount () {
+        this.startLottie && this.startLottie.remove();
+        this.stopLottie && this.stopLottie.remove();
+    }
+
     render () {
         return (
-            <ImageBackground source={game41} style={[css.flex, css.pr, css.cover, css.afs]}>
-                <LottieView style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1} loop={true} autoPlay={true} speed={1}/>
-                <View style={[css.pa, css.cover]}>
-                    <ShiftView autoPlay={true} loop={true} duration={800} delay={1000} startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}>
-                        <ImageAuto source={game22} width={33}/>
-                    </ShiftView>
-                    {/* 头部显示区域 */}
-                    <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
-                        <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex]} onPress={() => {
-                            DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
-                                N.navigate('AnswerPage');
-                            }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个
-                                最多同时持有
-                            <Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>}/>);
-                        }}>
-                            <ImageAuto source={game25} width={33}/>
-                            <View style={styles.hdnTextWrap}>
-                                <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }}>6</Text>/10</Text>
-                            </View>
-                            <ImageAuto source={game31} width={22}/>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex, css.sp, { width: 180 }]}>
-                            <ImageAuto source={game22} width={33}/>
-                            <View style={styles.hdnTextWrap}>
-                                <Text style={styles.hdnText}>32132131</Text>
-                            </View>
-                            <Text style={styles.withdrawBtn} onPress={() => {
-                                N.navigate('WithdrawPage');
-                            }}>提现</Text>
-                        </TouchableOpacity>
-                    </View>
-                    {/* 中部显示区域 */}
-                    <View style={[css.flex, css.pa, styles.homeMidWrap, css.afs]}>
-                        <TouchableOpacity style={[css.pa, styles.outputWrap]} activeOpacity={1} onPress={() => {
-                            DeviceEventEmitter.emit('showPop', <GameDialog btn={'我知道了'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个
-                                最多同时持有
-                            <Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>}/>);
-                        }}>
-                            <ImageBackground source={game5} style={[css.flex, css.fw, styles.outputWrapImg]}>
-                                <Text style={[styles.outputText]}>金币产量</Text>
-                                <Text style={[styles.outputText, { fontWeight: '900' }]}>110%</Text>
-                            </ImageBackground>
-                        </TouchableOpacity>
-                        <ImageBackground source={game35} style={[css.pa, styles.noticeIcon]}>
-                            <Text style={[css.pa, styles.noticeNumber]}>10</Text>
-                        </ImageBackground>
-                        <Lamp width={'100%'} backgroundColor={'rgba(0,179,216,.5)'} color={'#005262'} color1={'#FF6C00'}/>
-                    </View>
-                    {/* 底部显示区域 */}
-                    <ImageBackground source={game12} style={[css.flex, css.pa, styles.homeBottomWrap, css.fw, css.afs]}>
-                        {/* 主页进度显示 */}
-                        <View style={styles.progressWrap}>
+            <SafeAreaProvider>
+                <ImageBackground source={game41} style={[css.flex, css.pr, css.cover, css.afs]}>
+                    {/* eslint-disable-next-line no-return-assign */}
+                    <LottieView ref={ref => this.lottie = ref} key={'lottie'} renderMode={'HARDWARE'} style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1} loop={true} autoPlay={true} speed={1}/>
+                    <View style={[css.pa, css.cover]}>
+                        {/* <ShiftView autoPlay={true} loop={true} duration={1000} delay={1200} startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}> */}
+                        {/*    <ImageAuto source={game22} width={33}/> */}
+                        {/* </ShiftView> */}
+                        {/* 头部显示区域 */}
+                        <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
+                            <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex]} onPress={() => {
+                                DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
+                                    N.navigate('AnswerPage');
+                                }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个
+                                    最多同时持有
+                                <Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>}/>);
+                            }}>
+                                <ImageAuto source={game25} width={33}/>
+                                <View style={styles.hdnTextWrap}>
+                                    <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }}>6</Text>/10</Text>
+                                </View>
+                                <ImageAuto source={game31} width={22}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex, css.sp, { width: 180 }]}>
+                                <ImageAuto source={game22} width={33}/>
+                                <View style={styles.hdnTextWrap}>
+                                    <Text style={styles.hdnText}>32132131</Text>
+                                </View>
+                                <Text style={styles.withdrawBtn} onPress={() => {
+                                    N.navigate('WithdrawPage');
+                                }}>提现</Text>
+                            </TouchableOpacity>
                         </View>
-                        {/* 主页答题按钮 */}
-                        <TouchableOpacity style={styles.homeBtn} activeOpacity={1} onPress={() => {
-                            N.navigate('GamePage');
-                        }}><ImageAuto source={game1} width={width * 0.5}/></TouchableOpacity>
-                        <Text style={styles.accuracyText}>正确率: <Text style={{ color: '#FF6C00' }}>95%</Text></Text>
-                    </ImageBackground>
-                </View>
-            </ImageBackground>
+                        {/* 中部显示区域 */}
+                        <View style={[css.flex, css.pa, styles.homeMidWrap, css.afs]}>
+                            <TouchableOpacity style={[css.pa, styles.outputWrap]} activeOpacity={1} onPress={() => {
+                                DeviceEventEmitter.emit('showPop', <GameDialog btn={'我知道了'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个
+                                    最多同时持有
+                                <Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>}/>);
+                            }}>
+                                <ImageBackground source={game5} style={[css.flex, css.fw, styles.outputWrapImg]}>
+                                    <Text style={[styles.outputText]}>金币产量</Text>
+                                    <Text style={[styles.outputText, { fontWeight: '900' }]}>110%</Text>
+                                </ImageBackground>
+                            </TouchableOpacity>
+                            <ImageBackground source={game35} style={[css.pa, styles.noticeIcon]}>
+                                <Text style={[css.pa, styles.noticeNumber]}>10</Text>
+                            </ImageBackground>
+                            {/* <Lamp width={'100%'} backgroundColor={'rgba(0,179,216,.5)'} color={'#005262'} color1={'#FF6C00'}/> */}
+                        </View>
+                        {/* 底部显示区域 */}
+                        <ImageBackground source={game12} style={[css.flex, css.pa, styles.homeBottomWrap, css.fw, css.afs]}>
+                            {/* 主页进度显示 */}
+                            <View style={styles.progressWrap}>
+                            </View>
+                            {/* 主页答题按钮 */}
+                            <TouchableOpacity style={styles.homeBtn} activeOpacity={1} onPress={() => {
+                                N.navigate('GamePage');
+                            }}><ImageAuto source={game1} width={width * 0.5}/></TouchableOpacity>
+                            <Text style={styles.accuracyText}>正确率: <Text style={{ color: '#FF6C00' }}>95%</Text></Text>
+                        </ImageBackground>
+                    </View>
+                </ImageBackground>
+            </SafeAreaProvider>
         );
     }
 }

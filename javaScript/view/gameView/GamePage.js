@@ -251,14 +251,18 @@ export default class GamePage extends Component {
                     const item = this.state.answerObj[key];
                     view.push(
                         <TouchableOpacity acityOpacity={1} style={[styles.cubeItemAnswer]} key={`answers${item.key}`} onPress={() => {
-                            console.log('====');
                             this.setState({
                                 fillArray: {
                                     ...this.state.fillArray,
                                     [this.state.selectSite]: item
                                 }
                             }, () => {
-                                console.log(this.state.fillArray);
+                                // console.log(this.state.fillArray);
+                                if (item.key === this.state.selectSite) {
+                                    item.idiomPointArray.forEach(moveKey => {
+                                        this[`cube${moveKey}`] && this[`cube${moveKey}`].start();
+                                    });
+                                }
                             });
                         }}>
                             <View style={{ width: '100%', height: '100%', padding: 2 }}>
@@ -266,7 +270,7 @@ export default class GamePage extends Component {
                                     <Text style={{ fontSize: 16, color: '#353535' }}>{item.word}</Text>
                                 </ImageBackground>
                             </View>
-                        </TouchableOpacity>,
+                        </TouchableOpacity>
                     );
                 }
                 return view;

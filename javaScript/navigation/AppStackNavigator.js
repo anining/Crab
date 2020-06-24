@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StatusBar } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { SafeAreaView, StatusBar, DeviceEventEmitter, YellowBox } from 'react-native';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import codePush from 'react-native-code-push';
 import TabNavigator from './tabNavigator';
@@ -40,12 +40,13 @@ import NewbiePage from '../view/homeView/NewbiePage';
 import TaskDetailPage from '../view/homeView/TaskDetailPage';
 import { css } from '../assets/style/css';
 import asyncStorage from '../utils/asyncStorage';
-import { initializationStore } from '../utils/util';
+import { _tc, initializationStore } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
 import Prompt from '../components/Prompt';
 import { getSignConfig, getTaskPlatform, updateActivity, updateApp, updateBanner } from '../utils/update';
 import OpenMoneyPage from '../view/activityView/OpenMoneyPage';
 import GamePage from '../view/gameView/GamePage';
+import { CONSOLE_LOG } from '../utils/config';
 
 const Stack = createStackNavigator();
 
@@ -219,7 +220,7 @@ const stackScreens = [
         name: 'GamePage',
         component: GamePage,
         title: '答题',
-    }
+    },
 ];
 
 function setStatusBar () {
@@ -236,12 +237,34 @@ function initNetInfo () {
     getTaskPlatform();
 }
 
+function setConsole () {
+    try {
+        if (!CONSOLE_LOG) {
+            console.log = () => {
+            };
+        }
+        console.error = () => {
+        };
+        console.warn = () => {
+        };
+        console.info = () => {
+        };
+        console.debug = () => {
+        };
+        YellowBox.ignoreWarnings(['Remote debugger']);
+        console.disableYellowBox = true;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 function AppStackNavigator () {
     const [keys, setKeys] = useState();
     const GenerateScreen = stackScreens.map(screen =>
         <Stack.Screen name={screen.name} component={screen.component} options={{ title: screen.title }}
             key={screen.name}/>);
     useEffect(() => {
+        setConsole();
         asyncStorage.getAllKeys()
             .then(response => {
                 asyncStorage.multiGet(response)
@@ -266,6 +289,9 @@ function AppStackNavigator () {
             <NavigationContainer>
                 <Prompt/>
                 <Stack.Navigator screenOptions={{
+                    cardStyle: {},
+                    gestureEnabled: true,
+                    ...TransitionPresets.SlideFromRightIOS,
                     header: ({ scene, previous, navigation }) => <Header scene={scene} previous={previous}
                         navigation={navigation}/>,
                 }}>
