@@ -321,7 +321,7 @@ function RenderActivity () {
     view.push(
         <TouchableOpacity onPress={() => {
             _tc(() => N.navigate('DailyRedPackagePage', {
-                activity_id: (activityObj.get() || {})[1].activity_id
+                activityId: (activityObj.get() || {})[1].activity_id
             }));
         }} key={'DailyRedPackagePage'}>
             <ImageAuto source={answer5} width={width * 0.9 * 0.48}/>
