@@ -135,6 +135,20 @@ export function getValue (obj, key) {
     }
 }
 
+export function getUrl (src) {
+    try {
+        const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g;
+        const srcMatch = src.match(reg);
+        if (srcMatch == null) {
+            return '';
+        } else {
+            return srcMatch[0];
+        }
+    } catch (e) {
+        return '';
+    }
+}
+
 function transformMoney (money, digits = 0) {
     try {
         if (isNaN(money)) {

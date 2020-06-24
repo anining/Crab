@@ -25,7 +25,6 @@ import CardPackageRecordsPage from '../view/userView/CardPackageRecordsPage';
 import CardPackagePage from '../view/userView/CardPackagePage';
 import BlackHousePage from '../view/userView/BlackHousePage';
 import AccountHomePage from '../view/userView/AccountHomePage';
-import AccountBindCoursePage from '../view/userView/AccountBindCoursePage';
 import AccountBindPage from '../view/userView/AccountBindPage';
 import AcceptQRCodePage from '../view/shareView/AcceptQRCodePage';
 import AcceptUrlPage from '../view/shareView/AcceptUrlPage';
@@ -125,11 +124,6 @@ const stackScreens = [
         name: 'AccountHomePage',
         component: AccountHomePage,
         title: '绑定账号',
-    },
-    {
-        name: 'AccountBindCoursePage',
-        component: AccountBindCoursePage,
-        title: '绑定教程',
     },
     {
         name: 'AccountBindPage',

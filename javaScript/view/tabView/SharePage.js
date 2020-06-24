@@ -132,15 +132,16 @@ export default class SharePage extends PureComponent {
         try {
             const view = [];
             cashBack.forEach((item, index) => {
-                view.push(<Animatable.View useNativeDriver={true} iterationDelay={4000} delay={(index + 1) * 2000}
-                    iterationCount={5} animation="bounce" style={[css.pr, styles.cashBackItem]}>
-                    <ImageAuto source={share7} style={{
-                        width: width * 0.9 * 0.25,
-                        ...css.pa,
-                    }}/>
-                    <Text style={[css.pa, styles.cashTitle]}>徒弟第{_if(this.state.detailInfo, res => res.children_withdraw_award_config[index].times, () => 0)}次提现</Text>
-                    <Text style={[css.pa, styles.cashLabel]}>师傅得{_if(this.state.detailInfo, res => res.children_withdraw_award_config[index].money, () => 0)}元</Text>
-                </Animatable.View>);
+                view.push(
+                    <Animatable.View useNativeDriver={true} iterationDelay={4000} delay={(index + 1) * 2000} key={item.title} iterationCount={5} animation="bounce" style={[css.pr, styles.cashBackItem]}>
+                        <ImageAuto source={share7} style={{
+                            width: width * 0.9 * 0.25,
+                            ...css.pa,
+                        }}/>
+                        <Text style={[css.pa, styles.cashTitle]}>徒弟第{_if(this.state.detailInfo, res => res.children_withdraw_award_config[index].times, () => 0)}次提现</Text>
+                        <Text style={[css.pa, styles.cashLabel]}>师傅得{_if(this.state.detailInfo, res => res.children_withdraw_award_config[index].money, () => 0)}元</Text>
+                    </Animatable.View>
+                );
             });
             return <View
                 style={[css.flex, css.sp, { marginTop: 20, width: '100%', paddingHorizontal: 10 }]}>{view}</View>;

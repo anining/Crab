@@ -104,8 +104,8 @@ export function activityDetail (activity_id) {
 }
 
 // 领取完成任务红包
-export function getReceiveTaskAward () {
-    return transformFetch('POST', '/activity/receive_task_award');
+export function getReceiveTaskAward (level, activity_id) {
+    return transformFetch('POST', '/activity/receive_task_award', { level, activity_id });
 }
 
 // 提取拼多多红包
@@ -179,8 +179,8 @@ export function childDetail () {
 }
 
 // 阿里云oss上传token
-export function uploadToken () {
-    return transformFetch('GET', '/upload/token');
+export function uploadToken (bucket, upload_dir) {
+    return transformFetch('GET', '/upload/token', { bucket, upload_dir });
 }
 
 // 反馈
@@ -211,6 +211,11 @@ export function taskSubmit (receive_task_id, images, nickname) {
 // 接任务列表
 export function taskReceive (page, size, status) {
     return transformFetch('GET', '/task/receive', { page, size, status });
+}
+
+// 接任务详情
+export function taskReceiveDetail (receive_task_id) {
+    return transformFetch('GET', '/task/receive/detail', { receive_task_id });
 }
 
 // 放弃任务

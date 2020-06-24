@@ -1,101 +1,169 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-    DeviceEventEmitter, Dimensions,
+    DeviceEventEmitter,
+    Dimensions,
     ImageBackground,
     SafeAreaView,
     ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
-    View
+    View,
 } from 'react-native';
 import { css } from '../../assets/style/css';
 import activity8 from '../../assets/icon/activity/activity8.png';
 import activity9 from '../../assets/icon/activity/activity9.png';
 import activity10 from '../../assets/icon/activity/activity10.png';
 import activity11 from '../../assets/icon/activity/activity11.png';
+import activity12 from '../../assets/icon/activity/activity12.png';
 import activity13 from '../../assets/icon/activity/activity13.png';
+import task11 from '../../assets/icon/task/task11.png';
 import Header from '../../components/Header';
 import header3 from '../../assets/icon/header/header3.png';
 import ImageAuto from '../../components/ImageAuto';
 import CountDown from '../../components/CountDown';
-import { _gv } from '../../utils/util';
-import {activityDetail} from '../../utils/api';
-const { height, width } = Dimensions.get('window');
-const redList = [{}, {}, {}, {}, {}, {}];
-export default class DailyRedPackagePage extends Component {
-    constructor (props) {
-        super(props);
-        this.state = {};
-        this.active_id = _gv(this.props, 'route.params.activity_id');
-    }
+import { N } from '../../utils/router';
+import { activityDetail, getReceiveTaskAward } from '../../utils/api';
+import { transformMoney } from '../../utils/util';
+import { getter } from '../../utils/store';
+import toast from '../../utils/toast';
 
-    componentDidMount () {
-        // console.log(_gv(this.props, 'route.params.activity_id'));
-        this._activityDetail();
-    }
+const { width } = Dimensions.get('window');
 
-    async _activityDetail () {
-        try {
-            console.log(this.active_id, 'activity_id');
-            const ret = await activityDetail(this.active_id);
-            console.log(ret, '???');
-        } catch (e) {
-            console.log(e);
-        }
-    }
+export default function DailyRedPackagePage (props) {
+    const { activityId } = props.route.params;
+    const [rule, setRule] = useState([]);
 
-    _renderRedItem () {
-        try {
-            const view = [];
-            redList.forEach((item, index) => {
-                view.push(<TouchableOpacity activeOpacity={1} onPress={() => {}}>
-                    <ImageBackground key={`${index}list`} source={activity10} style={[styles.redItemBg, css.flex, css.afs, css.fw]}>
-                        <Text style={[styles.redItemText, {
-                            color: 'rgba(255,255,255,.7)'
-                        }]} numberOfLines={1}>最低6000金币</Text>
-                        <Text style={[styles.redItemText]} numberOfLines={1}>完成进度10/200</Text>
-                    </ImageBackground>
-                </TouchableOpacity>);
+    function format (rule, logs) {
+        const arr = [];
+        for (const r in rule) {
+            const obj = { isOpen: false };
+            logs.forEach(log => {
+                if (Number(log.level) === Number(r)) {
+                    obj.isOpen = true;
+                }
             });
-            return view;
-        } catch (e) {
-            console.log(e);
-            return null;
+            arr.push(Object.assign({ level: Number(r) }, obj, rule[r]));
         }
+        return arr;
     }
 
-    render () {
-        return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
+    useEffect(() => {
+        detail();
+    }, []);
+
+    function detail () {
+        activityDetail(activityId).then(r => {
+            try {
+                const { data, error } = r;
+                if (error) {
+                    N.goBack();
+                } else {
+                    const { logs, setting } = data;
+                    const { rule } = setting;
+                    setRule(format(rule, logs));
+                }
+            } catch (e) {
+                N.goBack();
+            }
+        });
+    }
+
+    return (
+        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
             <ScrollView style={[{ flex: 1, backgroundColor: '#FF6123', ...css.pr }]}>
-                <ImageAuto source={activity8} style={{
-                    width: width,
-                    ...css.pa,
-                    zIndex: -1
-                }}/>
+                <ImageAuto source={activity8} style={{ width: width, ...css.pa, zIndex: -1 }}/>
                 <Header color={'#fff'} label={'天天领红包'} style={{ backgroundColor: 'rgba(0,0,0,0)', borderBottomWidth: 0 }} icon={header3}/>
                 <View style={[styles.allRedPackWrap, css.pr]}>
-                    {/* 864 - 249 */}
                     <ImageBackground source={activity9} style={[css.pa, styles.arpImage, css.flex]}>
                         <View style={[styles.activeTitleWrap, css.flex, css.fw]}>
                             <Text style={styles.atwTitle}>活动倒计时</Text>
-                            <CountDown time={+new Date('2020/06/21')} style={{ color: '#fff', fontSize: 15, letterSpacing: 4 }}/>
+                            <CountDown time={+new Date('2020/06/25')} style={{ color: '#fff', fontSize: 15, letterSpacing: 4 }}/>
                         </View>
                     </ImageBackground>
-                    {/* <ImageAuto source={activity9} style={[css.pa, styles.arpImage]}/> */}
-                    <View style={[styles.arpInnerWrap, css.flex, css.fw, css.sp]}>
-                        {this._renderRedItem()}
-                    </View>
+                    <RenderRedItem rule={rule} activityId={activityId} detail={detail}/>
                 </View>
-                <ImageAuto source={activity13} style={{
-                    width: width * 0.94,
-                    ...css.auto
-                }}/>
+                <ImageAuto source={activity13} style={{ width: width * 0.94, ...css.auto }}/>
                 <View style={{ height: 20 }}/>
             </ScrollView>
-        </SafeAreaView>;
+        </SafeAreaView>
+    );
+}
+
+function RenderRedItem ({ rule, activityId, detail }) {
+    const view = [];
+    const { today_pass_num } = getter(['user.today_pass_num']);
+
+    function ReceiveTaskAward (level) {
+        getReceiveTaskAward(level, activityId).then(r => {
+            const { error, data } = r;
+            if (error) {
+                toast(r.msg || '打开失败');
+            } else {
+                detail();
+                const { add_balance } = data;
+                DeviceEventEmitter.emit('showPop', { dom: <Popup money={add_balance} twice={level === 6 ? 0 : rule[level - 1].min_add_balance}/> });
+            }
+        });
+    }
+
+    rule.forEach(item => {
+        const { min_add_balance, isOpen, level, need_task_num } = item;
+        view.push(
+            <TouchableOpacity onPress={() => {
+                if (!isOpen && Number(need_task_num) <= Number(today_pass_num.get())) {
+                    ReceiveTaskAward(level);
+                }
+            }} key={need_task_num} >
+                <RenderBg isOpen={isOpen} last={level === rule.length} min_add_balance={min_add_balance} today_pass_num={today_pass_num} need_task_num={need_task_num}/>
+            </TouchableOpacity>
+        );
+    });
+    return (
+        <View style={[styles.arpInnerWrap, css.flex, css.fw, css.sp]}>
+            {view}
+        </View>
+    );
+}
+
+function RenderBg ({ isOpen, last, today_pass_num, need_task_num, min_add_balance }) {
+    const source = last ? activity11 : activity10;
+    if (isOpen) {
+        return (
+            <ImageBackground source={activity12} style={[styles.redItemBg, css.flex, css.afs, css.fw]}>
+                <Text style={[styles.redItemText, { fontSize: 13, lineHeight: 70, color: '#FF4A0A', fontWeight: '800' }]} numberOfLines={1}>已领取</Text>
+            </ImageBackground>
+        );
+    }
+    return (
+        <ImageBackground source={source} style={[styles.redItemBg, css.flex, css.afs, css.fw]}>
+            <Text style={[styles.redItemText, { color: 'rgba(255,255,255,.7)' }]} numberOfLines={1}>最低{transformMoney(min_add_balance)}金币</Text>
+            <Text style={[styles.redItemText]} numberOfLines={1}>完成进度<Text style={{ color: last ? '#FE2E43' : '#fff' }}>{today_pass_num.get()}</Text>/{need_task_num}</Text>
+        </ImageBackground>
+    );
+}
+
+function Popup ({ money = 0, twice = 0 }) {
+    if (twice) {
+        return (
+            <ImageBackground source={task11} style={{ height: width * 0.8 * 416 / 322, width: width * 0.8 }}>
+                <Text numberOfLines={1} style={styles.popupTitle}>{money} <Text style={{ fontSize: 18, fontWeight: '400' }}>元</Text></Text>
+                <Text numberOfLines={1} style={styles.popupText}>加油哦！再做10个任务</Text>
+                <Text numberOfLines={1} style={styles.popupText}>至少还能再开<Text style={{ color: '#FF3B00' }}>{twice}元</Text></Text>
+            </ImageBackground>
+        );
+    } else {
+        return (
+            <ImageBackground source={task11} style={{ height: width * 0.8 * 416 / 322, width: width * 0.8 }}>
+                <Text numberOfLines={1} style={styles.popupTitle}>{money} <Text style={{ fontSize: 18, fontWeight: '400' }}>元</Text></Text>
+                <Text numberOfLines={1} style={styles.popupText}>您太棒了！</Text>
+                <Text numberOfLines={1} style={styles.popupText}>您打开了今天的全部红包！</Text>
+                <Text numberOfLines={1} style={styles.popupText}>快去参加其他活动吧~</Text>
+            </ImageBackground>
+        );
     }
 }
+
 const styles = StyleSheet.create({
     activeTitleWrap: {
         backgroundColor: '#F95433',
@@ -123,11 +191,9 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         height: '100%',
         overflow: 'hidden',
-        paddingHorizontal: 20,
-        // paddingVertical: 20,
-        paddingTop: 30,
-        // eslint-disable-next-line react-native/sort-styles
         paddingBottom: 10,
+        paddingHorizontal: 20,
+        paddingTop: 30,
         width: '100%',
     },
     atwTitle: {
@@ -141,6 +207,20 @@ const styles = StyleSheet.create({
     dmWrap: {
         height: 1281 / 1125 * width,
         width: width
+    },
+    popupText: {
+        color: '#80120F',
+        fontSize: 16,
+        lineHeight: 25,
+        textAlign: 'center'
+    },
+    popupTitle: {
+        color: '#FF3B00',
+        fontSize: 36,
+        fontWeight: '600',
+        lineHeight: 70,
+        marginTop: '30%',
+        textAlign: 'center'
     },
     redItemBg: {
         height: width * 0.25 * 327 / 249,
