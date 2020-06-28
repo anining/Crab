@@ -43,22 +43,9 @@ import { Down } from '../../components/Down';
 export default function TaskDetailPage (props) {
     const { detail } = props.route.params;
     const { images: submitImages } = detail;
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState(submitImages || []);
     const [name, setName] = useState('');
     const [num, setNum] = useState(0);
-    submitImages && setImages(submitImages);
-
-    useFocusEffect(() => {
-        const onBackPress = () => {
-            const { status } = detail;
-            if (status === 1) {
-                backClick();
-                return true;
-            }
-        };
-        BackHandler.addEventListener('hardwareBackPress', onBackPress);
-        return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    });
 
     useFocusEffect(() => {
         const { activityObj } = getter(['activityObj']);
