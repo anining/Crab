@@ -236,6 +236,11 @@ export function gameErrorLog () {
     return transformFetch('GET', '/game/error', {});
 }
 
+// 打错题目
+export function gameError (idiom) {
+    return transformFetch('POST', '/game/error', { idiom });
+}
+
 // 资金记录
 export function income (page, size, source) {
     let data = {

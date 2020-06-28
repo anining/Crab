@@ -1,4 +1,5 @@
-import React, { PureComponent } from 'react';
+import { Component } from 'react';
+import * as React from 'karet';
 import {
     SafeAreaView,
     NativeModules,
@@ -28,16 +29,22 @@ import ShiftView from '../../components/ShiftView';
 import { N } from '../../utils/router';
 import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
-import { setAndroidTime } from '../../utils/util';
+import { _toFixed, setAndroidTime } from '../../utils/util';
 import EnlargeView from '../../components/EnlargeView';
+import { updateUser } from '../../utils/update';
+import { getter } from '../../utils/store';
 const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
-export default class HomePage extends PureComponent {
+// const { correct_rate } = getter(['user.correct_rate']);
+export default class HomePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
         super(props);
-        this.state = {};
+        this.state = {
+            correct_rate: getter(['user.correct_rate']).correct_rate
+        };
+        // this.correct_rate = getter(['user.correct_rate']).correct_rate;
     }
 
     componentDidMount () {
@@ -47,6 +54,11 @@ export default class HomePage extends PureComponent {
                 this.lottie && this.lottie.play();
                 this.shiftView && this.shiftView.start();
                 this.lamp && this.lamp.start();
+                updateUser(() => {
+                    this.setState({
+                        correct_rate: getter(['user.correct_rate']).correct_rate
+                    });
+                });
             }, 800);
         });
         this.stopLottie = DeviceEventEmitter.addListener('stopLottie', () => {
@@ -141,7 +153,7 @@ export default class HomePage extends PureComponent {
                                 // this.lottie && this.lottie.pause();
                                 N.navigate('GamePage');
                             }}><ImageAuto source={game1} width={width * 0.5}/></TouchableOpacity>
-                            <Text style={styles.accuracyText}>正确率: <Text style={{ color: '#FF6C00' }}>95%</Text></Text>
+                            <Text style={styles.accuracyText}>正确率: <Text style={{ color: '#FF6C00' }} karet-lift>{_toFixed(this.state.correct_rate.get() * 100)}%</Text></Text>
                         </ImageBackground>
                     </View>
                 </ImageBackground>

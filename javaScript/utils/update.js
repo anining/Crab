@@ -1,7 +1,7 @@
 import { activity, app, banner, signConfig, taskPlatform, user } from './api';
 import { _tc, transformMoney } from './util';
 import { setter } from './store';
-export const updateUser = () => {
+export const updateUser = (callback) => {
     user().then(res => _tc(() => {
         if (!res.error && res.data) {
             const { data } = res;
@@ -11,6 +11,7 @@ export const updateUser = () => {
             data.balance = transformMoney(balance);
             console.log(res, 'user');
             setter([['user', data]], true);
+            callback && callback();
         }
     }));
 };
