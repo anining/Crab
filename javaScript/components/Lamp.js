@@ -16,7 +16,7 @@ export default class Lamp extends Component {
             translateValue: new Animated.Value(0), // 定位初始值为0
             // stop: false // 是否暂停
         };
-        this.LampList = [{}, {}, {}];
+        this.LampList = this.props.LampList;
         this._stop = false; // 是否暂停
         this.width = this.props.width;
         this.backgroundColor = this.props.backgroundColor;
@@ -78,13 +78,13 @@ export default class Lamp extends Component {
                 <View style={styles.animatedWrap}>
                     <Animated.View style={{ ...styles.lampContent, transform: [{ translateY: this.state.translateValue, }] }}>
                         {(() => {
-                            if (this.LampList && this.LampList.length) {
+                            if (this.LampList.length) {
                                 const lampView = [];
                                 this.LampList.forEach((item, index) => {
                                     lampView.push(
                                         <Text style={[styles.lampItem, {
                                             color: this.color
-                                        }]} key={index} numberOfLines={1} > 恭喜 <Text style={{ color: this.color1 }}> xxx </Text>成功领取现金 <Text style={{ color: this.color1 }}> xxx 元 </Text></Text>,
+                                        }]} key={index} numberOfLines={1} > 恭喜 <Text style={{ color: this.color1 }}> {item.name} </Text>成功领取现金 <Text style={{ color: this.color1 }}> {item.money} 元 </Text></Text>,
                                     );
                                 });
                                 return lampView;
@@ -107,12 +107,14 @@ Lamp.propTypes = {
     backgroundColor: PropTypes.string,
     color: PropTypes.string,
     color1: PropTypes.string,
+    LampList: PropTypes.array
 };
 Lamp.defaultProps = {
     width: '70%',
     backgroundColor: '#F02E21',
     color: '#fff',
-    color1: '#ffebc1'
+    color1: '#ffebc1',
+    LampList: [{ name: 'xxx', money: 'xxx' }, { name: 'xxx', money: 'xxx' }]
 };
 
 const styles = StyleSheet.create({

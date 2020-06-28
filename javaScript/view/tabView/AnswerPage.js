@@ -336,7 +336,7 @@ function RenderActivity () {
             </TouchableOpacity>
             <TouchableOpacity style={styles.arItemWrap} onPress={() => {
                 _tc(() => N.navigate('OpenMoneyPage', {
-                    activity_id: (activityObj.get() || {})[2].activity_id
+                    activityId: (activityObj.get() || {})[2].activity_id
                 }));
             }} key={'OpenMoneyPage'}>
                 <ImageAuto source={answer8} width={width * 0.9 * 0.48}/>

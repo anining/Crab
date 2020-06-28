@@ -93,6 +93,11 @@ export function withdrawLogs (page, size) {
     return transformFetch('GET', '/withdraw/logs', { page, size });
 }
 
+// 提现跑马灯
+export function withdrawLogsLatest (page = 1, size = 10) {
+    return transformFetch('GET', '/withdraw/logs', { page, size });
+}
+
 // 活动
 export function activity (page = 1, size = 10) {
     return transformFetch('GET', '/activity', { page, size });
@@ -109,8 +114,8 @@ export function getReceiveTaskAward (level, activity_id) {
 }
 
 // 提取拼多多红包
-export function getRedPackage () {
-    return transformFetch('PUT', '/activity/red_package');
+export function getRedPackage (activity_id) {
+    return transformFetch('PUT', '/activity/red_package', { activity_id });
 }
 
 // 打开拼多多红包

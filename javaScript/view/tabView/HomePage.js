@@ -1,11 +1,8 @@
 import { Component } from 'react';
 import * as React from 'karet';
 import {
-    SafeAreaView,
-    NativeModules,
     Dimensions,
     ImageBackground,
-    LayoutAnimation,
     StyleSheet,
     View,
     Text,

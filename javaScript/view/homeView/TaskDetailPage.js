@@ -43,22 +43,9 @@ import { Down } from '../../components/Down';
 export default function TaskDetailPage (props) {
     const { detail } = props.route.params;
     const { images: submitImages } = detail;
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState(submitImages || []);
     const [name, setName] = useState('');
     const [num, setNum] = useState(0);
-    submitImages && setImages(submitImages);
-
-    useFocusEffect(() => {
-        const onBackPress = () => {
-            const { status } = detail;
-            if (status === 1) {
-                backClick();
-                return true;
-            }
-        };
-        BackHandler.addEventListener('hardwareBackPress', onBackPress);
-        return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    });
 
     useFocusEffect(() => {
         const { activityObj } = getter(['activityObj']);
@@ -382,7 +369,7 @@ function Btn ({ images, detail, name }) {
             if (r.error) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: pop12,
-                    tips: 'r.msg' || '提交失败',
+                    tips: r.msg || '提交失败',
                     type: 'oneBtn',
                     rt: '我知道了'
                 }} />);
