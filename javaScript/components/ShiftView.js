@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { css } from '../assets/style/css';
+import { _tc } from '../utils/util';
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -22,9 +23,9 @@ if (Platform.OS === 'android') {
 export default class ShiftView extends Component {
     constructor (props) {
         super(props);
-        this.state = {
-            stop: false// 是否暂停
-        };
+        this.animation = null;
+        this.callback = this.props.callback;
+        this._stop = false;
         this.autoPlay = this.props.autoPlay;
         this.loop = this.props.loop;
         this.style = this.props.style;
@@ -45,8 +46,8 @@ export default class ShiftView extends Component {
             }),
             Animated.timing(this.modelOpacity, {
                 toValue: 0,
-                duration: 50,
-                delay: this.duration - 100,
+                duration: this.duration,
+                delay: 0,
                 useNativeDriver: true,
                 easing: Easing.ease,
             }),
@@ -89,28 +90,31 @@ export default class ShiftView extends Component {
         this.autoPlay && this.start();
     }
 
+    componentWillMount () {
+        this._stop = true;
+        this.animation && this.animation.stop();
+    }
+
     start () {
-        if (this.state.stop) {
-            this.setState({
-                stop: false
-            }, this._animationStart.bind(this));
-        } else {
-            this._animationStart();
+        if (this._stop) {
+            this._stop = false;
         }
+        this._animationStart();
     }
 
     _animationStart () {
-        Animated.parallel([Animated.sequence(this.opacityStart), Animated.sequence(this.transformXStart), Animated.sequence(this.transformYStart)]).start(() => {
-            if (this.loop && this.delay && !this.state.stop) {
-                this.start();
-            }
+        requestAnimationFrame(() => {
+            this.animation = Animated.parallel([Animated.sequence(this.opacityStart), Animated.sequence(this.transformXStart), Animated.sequence(this.transformYStart)]).start(() => {
+                _tc(() => { this.callback && this.callback(); });
+                if (this.loop && this.delay && !this._stop) {
+                    this.start();
+                }
+            });
         });
     }
 
     stop () {
-        this.setState({
-            stop: true
-        });
+        this._stop = true;
     }
 
     render () {
@@ -133,6 +137,7 @@ ShiftView.propTypes = {
     delay: PropTypes.number,
     duration: PropTypes.number,
     autoPlay: PropTypes.bool,
+    callback: PropTypes.func,
 };
 ShiftView.defaultProps = {
     startSite: [100, 100],
@@ -142,5 +147,6 @@ ShiftView.defaultProps = {
     style: {},
     loop: false,
     autoPlay: false,
+    callback: () => {},
 };
 const styles = StyleSheet.create({});

@@ -315,12 +315,14 @@ export async function bannerAction (action, link, label) {
 }
 
 export function setAndroidTime (callback, duration = 1000) {
-    Animated.timing(new Animated.Value(0), {
+    let timer = Animated.timing(new Animated.Value(0), {
         toValue: 1,
         duration: duration,
         useNativeDriver: true,
     }).start(() => {
         callback();
+        timer && timer.stop();
+        timer = null;
     });
 }
 

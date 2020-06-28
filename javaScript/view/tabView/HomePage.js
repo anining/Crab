@@ -26,6 +26,7 @@ import { N } from '../../utils/router';
 import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
 import { setAndroidTime } from '../../utils/util';
+import EnlargeView from '../../components/EnlargeView';
 const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
@@ -43,7 +44,7 @@ export default class HomePage extends PureComponent {
                 this.lottie && this.lottie.play();
                 this.shiftView && this.shiftView.start();
                 this.lamp && this.lamp.start();
-            }, 1000);
+            }, 800);
         });
         this.stopLottie = DeviceEventEmitter.addListener('stopLottie', () => {
             this.lottie && this.lottie.pause();
@@ -75,7 +76,10 @@ export default class HomePage extends PureComponent {
                     <LottieView ref={ref => this.lottie = ref} key={'lottie'} renderMode={'HARDWARE'} style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1} loop={true} autoPlay={true} speed={1}/>
                     <View style={[css.pa, css.cover]}>
                         {/* eslint-disable-next-line no-return-assign */}
-                        <ShiftView ref={ref => this.shiftView = ref} autoPlay={true} loop={true} duration={800} delay={1000} startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}>
+                        <ShiftView callback={() => {
+                            this.enlarge && this.enlarge.start();
+                            // eslint-disable-next-line no-return-assign
+                        }} ref={ref => this.shiftView = ref} autoPlay={true} loop={true} duration={800} delay={1000} startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}>
                             <ImageAuto source={game22} width={33}/>
                         </ShiftView>
                         {/* 头部显示区域 */}
@@ -93,15 +97,18 @@ export default class HomePage extends PureComponent {
                                 </View>
                                 <ImageAuto source={game31} width={22}/>
                             </TouchableOpacity>
-                            <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex, css.sp, { width: 180 }]}>
-                                <ImageAuto source={game22} width={33}/>
-                                <View style={styles.hdnTextWrap}>
-                                    <Text style={styles.hdnText}>32132131</Text>
-                                </View>
-                                <Text style={styles.withdrawBtn} onPress={() => {
-                                    N.navigate('WithdrawPage');
-                                }}>提现</Text>
-                            </TouchableOpacity>
+                            {/* eslint-disable-next-line no-return-assign */}
+                            <EnlargeView ref={ref => this.enlarge = ref}>
+                                <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex, css.sp, { width: 180 }]}>
+                                    <ImageAuto source={game22} width={33}/>
+                                    <View style={styles.hdnTextWrap}>
+                                        <Text style={styles.hdnText}>32132131</Text>
+                                    </View>
+                                    <Text style={styles.withdrawBtn} onPress={() => {
+                                        N.navigate('WithdrawPage');
+                                    }}>提现</Text>
+                                </TouchableOpacity>
+                            </EnlargeView>
                         </View>
                         {/* 中部显示区域 */}
                         <View style={[css.flex, css.pa, styles.homeMidWrap, css.afs]}>
