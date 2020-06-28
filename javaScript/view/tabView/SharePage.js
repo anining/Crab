@@ -1,17 +1,6 @@
 import { PureComponent } from 'react';
 import * as React from 'karet';
-import {
-    SafeAreaView,
-    Text,
-    Image,
-    View,
-    Dimensions,
-    ScrollView,
-    StyleSheet,
-    ImageBackground,
-    DeviceEventEmitter,
-    TouchableOpacity,
-} from 'react-native';
+import { SafeAreaView, Text, Image, View, Dimensions, ScrollView, StyleSheet, ImageBackground, DeviceEventEmitter, TouchableOpacity } from 'react-native';
 import { css } from '../../assets/style/css';
 import share1 from '../../assets/icon/share/share1.png';
 import share2 from '../../assets/icon/share/share2.png';
@@ -34,7 +23,7 @@ import toast from '../../utils/toast';
 import { awardDetail } from '../../utils/api';
 import { _gv, _if } from '../../utils/util';
 
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
 const SHARE_ITEM_RADIUS = 10; // welfare
 const WALFARE_ONE_height = 190;
@@ -91,15 +80,17 @@ export default class SharePage extends PureComponent {
                 get_type: 1,
             });
             if (info) {
-                view.push(<View style={[styles.welfareProgressWrap, css.flex, css.fw, css.afs]} key={`shareLevel${index}`}>
-                    <View style={[css.flex, css.js, styles.wpiTitleWrap]}>
-                        <ImageAuto source={item.icon} style={{ width: 32, marginRight: 10 }}/>
-                        <Text style={[styles.welfareTitleText]}>{info.label}</Text>
+                view.push(
+                    <View style={[styles.welfareProgressWrap, css.flex, css.fw, css.afs]} key={`shareLevel${index}`}>
+                        <View style={[css.flex, css.js, styles.wpiTitleWrap]}>
+                            <ImageAuto source={item.icon} style={{ width: 32, marginRight: 10 }}/>
+                            <Text style={[styles.welfareTitleText]}>{info.label}</Text>
+                        </View>
+                        {<Text numberOfLines={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>{info.min_money}{info.max_money > info.min_money ? `-${info.max_money}` : ''}元</Text>现金红包，永久获得{info.first_rebate * 100 + '%'}徒弟{info.second_rebate * 100 + '%'}徒孙提现返佣。</Text>}
+                        {SharePage._renderProgress(validNumber / parseInt(info.need_children_num))}
+                        <Text numberOfLines={1} style={styles.welfareTargetText}>要求{info.need_children_num}徒弟提现，已提现的徒弟 {validNumber}/{info.need_children_num}</Text>
                     </View>
-                    {<Text numberOfLines={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>{info.min_money}{info.max_money > info.min_money ? `-${info.max_money}` : ''}元</Text>现金红包，永久获得{info.first_rebate * 100 + '%'}徒弟{info.second_rebate * 100 + '%'}徒孙提现返佣。</Text>}
-                    {SharePage._renderProgress(validNumber / parseInt(info.need_children_num))}
-                    <Text numberOfLines={1} style={styles.welfareTargetText}>要求{info.need_children_num}徒弟提现，已提现的徒弟 {validNumber}/{info.need_children_num}</Text>
-                </View>);
+                );
             }
         });
         return view;
@@ -118,14 +109,19 @@ export default class SharePage extends PureComponent {
         }
     }
 
-    static _renderShareTitle (title) {
-        return <View style={[css.flex, css.js, styles.wShareTitle, css.pr]}>
-            <ImageAuto source={share8} style={{
-                width: 20,
-                ...css.pa,
-            }}/>
-            {title || <Text>自定义标题</Text>}
-        </View>;
+    static _renderShareTitle (left, right) {
+        return (
+            <View style={[styles.wShareTitle, css.flexRCSB]}>
+                <View style={[css.flex, css.js, css.pr]}>
+                    <ImageAuto source={share8} style={{
+                        width: 20,
+                        ...css.pa,
+                    }}/>
+                    {left || <Text>自定义标题</Text>}
+                </View>
+                {right}
+            </View>
+        );
     }
 
     _renderCashBack () {
@@ -160,7 +156,7 @@ export default class SharePage extends PureComponent {
                             <Text style={styles.inviteCode}>我的邀请码：<Text style={styles.codeNumber}
                                 karet-lift>{invite_code}</Text> </Text>
                             <Text style={styles.copyBtn} onPress={() => {
-                                Clipboard.setString(invite_code.get());
+                                Clipboard.setString(invite_code.get().toString());
                                 toast('复制成功');
                             }}>复制</Text>
                         </View>
@@ -194,7 +190,7 @@ export default class SharePage extends PureComponent {
                                 <Text numberOfLines={1} style={styles.shareInfoTips}>
                                     当前提现返佣：徒弟提现反10%，徒孙提现反5%
                                 </Text>
-                                <Text style={styles.tipsBtn}>{'师徒信息>>'}</Text>
+                                <Text style={styles.tipsBtn}>师徒信息(26)</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={[styles.welfareWrap, css.auto, css.flex, css.fw]}>
@@ -208,9 +204,7 @@ export default class SharePage extends PureComponent {
                                         paddingTop: 30,
                                         paddingHorizontal: 10,
                                     }]}>
-                                        {SharePage._renderShareTitle(
-                                            <Text style={styles.wTitleText}>徒弟提现送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>,
-                                        )}
+                                        {SharePage._renderShareTitle(<Text style={styles.wTitleText}>徒弟提现送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>, <Text style={{ fontSize: 11, color: 'rgba(255,92,34,1)' }}>领取奖励(11)</Text>)}
                                         {this._renderCashBack()}
                                     </View>
                                 </Shadow>
@@ -367,7 +361,8 @@ const styles = StyleSheet.create({
         fontWeight: '900',
     },
     tipsBtn: {
-        // backgroundColor: '#fff',
+        borderBottomColor: '#FFFED567',
+        borderBottomWidth: 1,
         color: '#FED567',
         fontSize: 13,
         fontWeight: '900',
