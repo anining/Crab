@@ -7,8 +7,9 @@ import {
     View,
     TouchableOpacity,
     ImageBackground,
-    Animated, Easing,
+    Animated, Easing, DeviceEventEmitter,
 } from 'react-native';
+import { N } from '../../utils/router';
 import { css } from '../../assets/style/css';
 import game14 from '../../assets/icon/game/game14.png';
 import game9 from '../../assets/icon/game/game9.png';
@@ -24,13 +25,16 @@ import game57 from '../../assets/icon/game/game57.png';
 import game61 from '../../assets/icon/game/game61.png';
 import game62 from '../../assets/icon/game/game62.png';
 import ImageAuto from '../../components/ImageAuto';
-import { N } from '../../utils/router';
 import { _gv, _if, _tc, setAndroidTime } from '../../utils/util';
-import { gameError, getGame } from '../../utils/api';
+import { gameError, getGame, upgradeGameLevel } from '../../utils/api';
 import ShiftView from '../../components/ShiftView';
 import EnlargeView from '../../components/EnlargeView';
 import OpacityView from '../../components/OpacityView';
 import * as Animatable from 'react-native-animatable';
+import GameDialog from '../../components/GameDialog';
+import chest from '../../lottie/chest';
+import LottieView from 'lottie-react-native';
+import game22 from '../../assets/icon/game/game22.png';
 
 const { height, width } = Dimensions.get('window');
 const CANVAS_WIDTH = width - 20;
@@ -62,6 +66,8 @@ export default class GamePage extends Component {
             fillArray: {}, // 当前已完成的填词,可能对可能错，用于判断交互逻辑
             completedCharacterArray: [], // 已经变成绿色字的数组，不能有交互
         };
+        this.successNumber = 0;
+        // this.needToAnswer = 0;
         this.rightButAwait = {}; // 选对了，但是还在等待中的词语,用于判断后期是否触发动画
         this.rankType = Math.random() > 0.5 ? 0 : 1; // 0是横着排列，1是竖着排列
         // this.rankType = 0;
@@ -72,9 +78,16 @@ export default class GamePage extends Component {
     }
 
     async _gameError (str) {
-        const ret = await gameError(str);
+        await gameError(str);// 打错题目
+    }
+
+    async _upgradeGameLevel () {
+        const ret = await upgradeGameLevel(JSON.stringify(this.state.gameInfo.content));
+        console.log(ret, '???');
         if (ret && !ret.error) {
-            // console.log(ret, '===');
+            N.replace('PassGamePage', {
+                info: ret.data
+            });
         }
     }
 
@@ -346,13 +359,20 @@ export default class GamePage extends Component {
         }
     }
 
-    successAnimation (array, callback) {
+    successAnimation (array, callback) { // 每次答对都有动特效
         try {
             array.forEach((moveKey, moveIndex) => {
                 setAndroidTime(() => {
                     this[`cube${moveKey}`] && this[`cube${moveKey}`].start();
                     this[`enlarge${moveKey}`] && this[`enlarge${moveKey}`].start();
-                    callback && callback();
+                    if (moveIndex + 1 >= array.length) {
+                        callback && callback();
+                        this.successNumber++;// 答对次数加1
+                        if (this.successNumber >= Object.entries(this.state.answerObj).length) {
+                            // 通关逻辑
+                            this._upgradeGameLevel();
+                        }
+                    }
                 }, 64 * moveIndex);
             });
         } catch (e) {
@@ -464,6 +484,8 @@ export default class GamePage extends Component {
                             });
                         }
                     });
+                    // // 全部答对逻辑
+                    // console.log(this.state.completedCharacterArray, this.state.answerObj, '全部答对逻辑', this.state.coordinate);
                 } else {
                     if (rightChoice && !isSuccess) { // 选对了，但是尚未触发动画的
                         !this.rightButAwait[item.key] && (() => {

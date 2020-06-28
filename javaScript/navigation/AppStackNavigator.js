@@ -46,6 +46,7 @@ import { getSignConfig, getTaskPlatform, updateActivity, updateApp, updateBanner
 import OpenMoneyPage from '../view/activityView/OpenMoneyPage';
 import GamePage from '../view/gameView/GamePage';
 import { CONSOLE_LOG } from '../utils/config';
+import PassGamePage from '../view/gameView/PassGamePage';
 
 const Stack = createStackNavigator();
 
@@ -214,6 +215,11 @@ const stackScreens = [
         name: 'GamePage',
         component: GamePage,
         title: '答题',
+    },
+    {
+        name: 'PassGamePage',
+        component: PassGamePage,
+        title: '答题结算',
     },
 ];
 

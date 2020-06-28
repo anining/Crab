@@ -30,7 +30,7 @@ import { _toFixed, setAndroidTime } from '../../utils/util';
 import EnlargeView from '../../components/EnlargeView';
 import { updateUser } from '../../utils/update';
 import { getter } from '../../utils/store';
-const HEADER_HEIGHT = 70;
+export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
 // const { correct_rate } = getter(['user.correct_rate']);
@@ -45,29 +45,38 @@ export default class HomePage extends Component {
     }
 
     componentDidMount () {
+        // this._homeStart();
+        console.log('????');
         this.startLottie = DeviceEventEmitter.addListener('startLottie', () => {
-            setAndroidTime(() => {
-                this.timer = clearTimeout(this.timer);
-                this.lottie && this.lottie.play();
-                this.shiftView && this.shiftView.start();
-                this.lamp && this.lamp.start();
-                updateUser(() => {
-                    this.setState({
-                        correct_rate: getter(['user.correct_rate']).correct_rate
-                    });
-                });
-            }, 800);
+            this._homeStart();
         });
         this.stopLottie = DeviceEventEmitter.addListener('stopLottie', () => {
-            this.lottie && this.lottie.pause();
-            this.shiftView && this.shiftView.stop();
-            this.lamp && this.lamp.stop();
+            this._homeStop();
         });
     }
 
-    componentWillUnmount () {
+    _homeStart () {
+        setAndroidTime(() => {
+            this.lottie && this.lottie.play();
+            this.shiftView && this.shiftView.start();
+            this.lamp && this.lamp.start();
+            updateUser(() => {
+                this.setState({
+                    correct_rate: getter(['user.correct_rate']).correct_rate
+                });
+            });
+        }, 800);
+    }
+
+    _homeStop () {
         this.lottie && this.lottie.pause();
-        // this.timer && clearTimeout(this.timer);
+        this.shiftView && this.shiftView.stop();
+        this.lamp && this.lamp.stop();
+        this.enlarge && this.enlarge.stop();
+    }
+
+    componentWillUnmount () {
+        this._homeStop();
         this.startLottie && this.startLottie.remove();
         this.stopLottie && this.stopLottie.remove();
     }
