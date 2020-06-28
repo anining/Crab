@@ -203,6 +203,11 @@ export function userBaned (page, size) {
     return transformFetch('GET', '/user/baned', { page, size });
 }
 
+// 公告
+export function notice (page, size) {
+    return transformFetch('GET', '/notice', { page, size });
+}
+
 // 接任务
 export function getTask (task_platform_id) {
     return transformFetch('POST', '/task/receive', { task_platform_id });
