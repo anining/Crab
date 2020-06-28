@@ -14,13 +14,16 @@ export default class Lamp extends Component {
         super(props);
         this.state = {
             translateValue: new Animated.Value(0), // 定位初始值为0
-            LampList: [{}, {}, {}],
-            stop: false // 是否暂停
+            // stop: false // 是否暂停
         };
+        this.LampList = [{}, {}, {}];
+        this._stop = false; // 是否暂停
         this.width = this.props.width;
         this.backgroundColor = this.props.backgroundColor;
         this.color = this.props.color;
         this.color1 = this.props.color1;
+        this.index = 0;
+        this.animation = null;
     }
 
     async componentDidMount () {
@@ -28,41 +31,42 @@ export default class Lamp extends Component {
         this.start();
     }
 
-    AnimationStart (index, count) {
-        index++;
-        Animated.timing(this.state.translateValue, {
-            toValue: -LAMP_HEIGHT * index,
-            duration: LAMP_TIME,
-            easing: Easing.linear(),
-            delay: DELAY_TIME, // 文字停留时间
-            useNativeDriver: true,
-        }).start(() => {
-            if (index >= count) {
-                index = 0;
-                this.state.translateValue.setValue(0);
-            }
-            if (!this.state.stop) {
-                this.AnimationStart.call(this, index, this.state.LampList.length);
-            }
-        });
+    componentWillUnmount () {
+        this.animation && this.animation.stop();
     }
 
-    start () {
-        if (this.state.stop) {
-            this.setState({
-                stop: false
-            }, () => {
-                this.AnimationStart.call(this, 0, this.state.LampList.length);
+    AnimationStart (index, count) {
+        if (count) {
+            requestAnimationFrame(() => {
+                this.index++;
+                this.animation = Animated.timing(this.state.translateValue, {
+                    toValue: -LAMP_HEIGHT * this.index,
+                    duration: LAMP_TIME,
+                    easing: Easing.linear(),
+                    delay: DELAY_TIME, // 文字停留时间
+                    useNativeDriver: true,
+                }).start(() => {
+                    if (this.index >= count) {
+                        this.index = 0;
+                        this.state.translateValue.setValue(0);
+                    }
+                    if (!this._stop) {
+                        this.AnimationStart.call(this, this.index, this.LampList.length);
+                    }
+                });
             });
-        } else {
-            this.AnimationStart.call(this, 0, this.state.LampList.length);
         }
     }
 
+    start () {
+        if (this._stop) {
+            this._stop = false;
+        }
+        this.AnimationStart.call(this, this.index, this.LampList.length);
+    }
+
     stop () {
-        this.setState({
-            stop: true
-        });
+        this._stop = true;
     }
 
     render () {
@@ -71,15 +75,12 @@ export default class Lamp extends Component {
                 width: this.width,
                 backgroundColor: this.backgroundColor
             }]}>
-                {/* <View style={[css.flex, css.js, { width: LAMP_ICON_WIDTH, height: LAMP_HEIGHT }]} > */}
-                {/*    /!* <Image source={home2} style={styles.icon} /> *!/ */}
-                {/* </View> */}
                 <View style={styles.animatedWrap}>
                     <Animated.View style={{ ...styles.lampContent, transform: [{ translateY: this.state.translateValue, }] }}>
                         {(() => {
-                            if (this.state.LampList && this.state.LampList.length) {
+                            if (this.LampList && this.LampList.length) {
                                 const lampView = [];
-                                this.state.LampList.forEach((item, index) => {
+                                this.LampList.forEach((item, index) => {
                                     lampView.push(
                                         <Text style={[styles.lampItem, {
                                             color: this.color

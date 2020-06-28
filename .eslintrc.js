@@ -29,6 +29,7 @@ module.exports = {
         'camelcase': 0,
         'no-useless-call': 0,
         'comma-dangle': 0,
-        'no-undef': 0
+        'no-undef': 0,
+        'no-return-assign': 0,
     },
 };
