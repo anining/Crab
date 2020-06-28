@@ -326,4 +326,12 @@ export function setAndroidTime (callback, duration = 1000) {
     });
 }
 
+export function _toFixed (number, num = 2) {
+    try {
+        return Number(number).toFixed(num);
+    } catch (e) {
+        return 0;
+    }
+}
+
 export { getRequestParameter, requestPermission, transformTime, initializationStore, buildStr, parameterTransform, AesDecrypt, transformMoney };

@@ -26,7 +26,7 @@ import game62 from '../../assets/icon/game/game62.png';
 import ImageAuto from '../../components/ImageAuto';
 import { N } from '../../utils/router';
 import { _gv, _if, _tc, setAndroidTime } from '../../utils/util';
-import { getGame } from '../../utils/api';
+import { gameError, getGame } from '../../utils/api';
 import ShiftView from '../../components/ShiftView';
 import EnlargeView from '../../components/EnlargeView';
 import OpacityView from '../../components/OpacityView';
@@ -69,6 +69,13 @@ export default class GamePage extends Component {
 
     componentDidMount () {
         this._getGame();
+    }
+
+    async _gameError (str) {
+        const ret = await gameError(str);
+        if (ret && !ret.error) {
+            // console.log(ret, '===');
+        }
     }
 
     _getGame () {
@@ -467,6 +474,7 @@ export default class GamePage extends Component {
                             this.rightButAwait[item.key] = null;
                         })();
                         this[`animationText${this.state.selectSite}`] && this[`animationText${this.state.selectSite}`].tada();
+                        this._gameError(item.word);
                     }
                 }
             });
