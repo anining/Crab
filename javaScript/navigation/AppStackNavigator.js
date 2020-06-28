@@ -46,6 +46,7 @@ import { getSignConfig, getTaskPlatform, updateActivity, updateApp, updateBanner
 import OpenMoneyPage from '../view/activityView/OpenMoneyPage';
 import GamePage from '../view/gameView/GamePage';
 import { CONSOLE_LOG } from '../utils/config';
+import NoticeDetailPage from '../view/homeView/NoticeDetailPage';
 
 const Stack = createStackNavigator();
 
@@ -178,7 +179,12 @@ const stackScreens = [
     {
         name: 'NoticePage',
         component: NoticePage,
-        title: '公告通知',
+        title: '系统通知',
+    },
+    {
+        name: 'NoticeDetailPage',
+        component: NoticeDetailPage,
+        title: '通知详情',
     },
     {
         name: 'TaskDetailPage',
