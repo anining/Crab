@@ -369,7 +369,7 @@ function Btn ({ images, detail, name }) {
             if (r.error) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: pop12,
-                    tips: 'r.msg' || '提交失败',
+                    tips: r.msg || '提交失败',
                     type: 'oneBtn',
                     rt: '我知道了'
                 }} />);
