@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, View, ImageBackground, DeviceEventEmitter, TouchableOpacity } from 'react-native';
+import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, View, ImageBackground, DeviceEventEmitter, TouchableOpacity } from 'react-native';
 import { css } from '../../assets/style/css';
 import ImageAuto from '../../components/ImageAuto';
 import activity3 from '../../assets/icon/activity/activity3.png';
-import activity4 from '../../assets/icon/activity/activity4.png';
 import activity5 from '../../assets/icon/activity/activity5.png';
 import activity6 from '../../assets/icon/activity/activity6.png';
-import activity7 from '../../assets/icon/activity/activity7.png';
-import answer3 from '../../assets/icon/answer/answer3.png';
+import activity15 from '../../assets/icon/activity/activity15.png';
+import activity17 from '../../assets/icon/activity/activity17.png';
+import activity18 from '../../assets/icon/activity/activity18.png';
 import header3 from '../../assets/icon/header/header3.png';
 import Header from '../../components/Header';
 import Lamp from '../../components/Lamp';
 import CountDown from '../../components/CountDown';
 import Shadow from '../../components/Shadow';
-import LinearGradient from 'react-native-linear-gradient';
-import Choice from '../../components/Choice';
-import pop1 from '../../assets/icon/pop/pop1.png';
 import * as Animatable from 'react-native-animatable';
-import { _gv } from '../../utils/util';
-import { activityDetail, withdrawLogsLatest } from '../../utils/api';
+import { getRedPackage, openRedPackage, withdrawLogsLatest } from '../../utils/api';
+import { N } from '../../utils/router';
 const { width } = Dimensions.get('window');
 
 function DailyMoneyPage (props) {
@@ -33,17 +30,39 @@ function DailyMoneyPage (props) {
         });
     }, []);
 
-    // useEffect(() => {
-    //     _activityDetail();
-    // }, []);
-    //
-    // function _activityDetail () {
-    //     console.log(activityId);
-    //     console.log(pageInfo);
-    //     activityDetail(activityId).then(r => {
-    //         console.log(r);
-    //     });
-    // }
+    async function _openRedPackage () {
+        const ret = await openRedPackage(activityId);
+        if (!ret.error) {
+            const { money } = ret.data;
+            DeviceEventEmitter.emit('showPop', {
+                dom:
+                  <ImageBackground source={activity17} style={styles.lastPop}>
+                      <Text style={[styles.lastPopText, { fontSize: 17 }]}>运营商送给您<Text style={{ color: 'rgba(232,58,41,1)', fontSize: 19, fontWeight: '500' }}> {money} 元</Text></Text>
+                      <Text style={[styles.lastPopText, { fontSize: 12, marginTop: '7%', color: 'rgba(53,53,53,1)' }]}>当前已累积金额</Text>
+                      <Text style={[styles.lastPopText, { marginTop: '5%', fontSize: 38, fontWeight: '800', color: 'rgba(232,58,41,1)' }]}>0<Text style={{ fontSize: 15, fontWeight: '500' }}>元</Text></Text>
+                  </ImageBackground>,
+                close: () => {
+                    N.navigate('AnswerPage');
+                },
+            });
+        }
+    }
+
+    function apiRedPackage () {
+        getRedPackage(activityId).then(r => {
+            console.log(r);
+            if (!r.error) {
+                DeviceEventEmitter.emit('showPop', {
+                    dom:
+                      <ImageBackground source={activity3} style={styles.successPop}>
+                          <Text style={[styles.successPopText, { fontSize: 20, fontWeight: '500', color: 'rgba(232,58,41,1)' }]}>恭喜您，提现成功！</Text>
+                          <Text style={[styles.successPopText, { marginTop: '5%' }]}>现金已存入“我的 - 我的钱包”</Text>
+                      </ImageBackground>,
+                    close: () => _openRedPackage,
+                });
+            }
+        });
+    }
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
@@ -65,13 +84,13 @@ function DailyMoneyPage (props) {
                         <Animatable.View useNativeDriver={true} iterationCount="infinite" animation="pulse" style={[css.auto]}>
                             <Shadow style={[styles.shareBtn]}>
                                 <Text style={styles.shareBtnText} onPress={() => {
-                                    DeviceEventEmitter.emit('showPop', {
-                                        dom: <PopupView/>,
-                                        close,
-                                    });
-                                    return;
-                                    if (Number(money) >= 30) {
-
+                                    if (Number(money) < 30) {
+                                        DeviceEventEmitter.emit('showPop', {
+                                            dom: <PopupView money={money}/>,
+                                            close: () => {},
+                                        });
+                                    } else {
+                                        apiRedPackage();
                                     }
                                 }}>提现到我的钱包</Text>
                             </Shadow>
@@ -86,27 +105,40 @@ function DailyMoneyPage (props) {
     );
 }
 
-function PopupView () {
+function PopupView ({ money }) {
+    const scale = (Number(money) / 30).toFixed(2);
+    const localWidth = width * 0.9 * 0.64 * scale;
+    const localLeft = width * 0.9 * (0.63 * scale + 0.05);
     return (
-        <Text>111</Text>
+        <ImageBackground source={activity15} style={styles.popupView}>
+            <View style={styles.progress} />
+            <View style={[styles.progressT, { width: localWidth }]} />
+            <ImageBackground source={activity18} style={[styles.popupBg, { left: localLeft }]}>
+                <Text numberOfLines={1} style={styles.popText}>仅差{(30 - Number(money).toFixed(4))}W金币</Text>
+            </ImageBackground>
+            <TouchableOpacity onPress={() => {
+                DeviceEventEmitter.emit('hidePop');
+                N.navigate('AnswerPage');
+            }} style={styles.popupViewBtn}/>
+        </ImageBackground>
     );
 }
 
 function RenderList ({ history }) {
-    console.log(history);
     if (!history.length) {
         return <></>;
     }
     const view = [];
     history.forEach(item => {
+        const { receive_task_red_package_log_item_id, source, add_money, avatar, label } = item;
         view.push(
-            <View style={[styles.recordItemWrap, css.flex, css.sp]}>
-                <ImageAuto source={answer3} width={40}/>
+            <View style={[styles.recordItemWrap, css.flex, css.sp]} key={receive_task_red_package_log_item_id}>
+                <Image source={{ uri: avatar }} style={{ width: 40, height: 40, borderRadius: 20 }}/>
                 <View style={[css.flex, css.fw, styles.riwInfoWrap, css.js]}>
-                    <Text numberOfLine={1} style={[styles.riwText, { fontSize: 13 }]}>sandily</Text>
-                    <Text numberOfLine={1} style={styles.riwText}>打开红包</Text>
+                    <Text numberOfLine={1} style={[styles.riwText, { fontSize: 13 }]}>{label}</Text>
+                    <Text numberOfLine={1} style={styles.riwText}>{source}</Text>
                 </View>
-                <Text style={styles.riwMoneyText}>+22.9元</Text>
+                <Text style={styles.riwMoneyText}>+{add_money}元</Text>
             </View>
         );
     });
@@ -133,6 +165,62 @@ const styles = StyleSheet.create({
     dmWrap: {
         height: 1377 / 1125 * width,
         width: width
+    },
+    lastPop: {
+        alignItems: 'center',
+        height: width * 0.9 * (1035 / 1026),
+        justifyContent: 'flex-start',
+        position: 'relative',
+        transform: [{ translateX: -width * 0.05 }],
+        width: width * 0.9
+    },
+    lastPopText: {
+        marginLeft: '10%',
+        marginTop: '15%',
+    },
+    popText: {
+        color: 'rgba(232,58,41,1)',
+        fontSize: 12,
+        lineHeight: 25,
+        maxWidth: 110,
+        textAlign: 'center'
+    },
+    popupBg: {
+        bottom: '45%',
+        height: 32,
+        position: 'absolute',
+        width: 110
+    },
+    popupView: {
+        height: width * 0.9 * (1035 / 1026),
+        position: 'relative',
+        transform: [{ translateX: -width * 0.05 }],
+        width: width * 0.9,
+    },
+    popupViewBtn: {
+        bottom: '15%',
+        height: '15%',
+        left: '20%',
+        position: 'absolute',
+        width: '70%'
+    },
+    progress: {
+        backgroundColor: 'rgba(255,255,255,0.47)',
+        borderRadius: 6,
+        bottom: '40%',
+        height: 15,
+        left: width * 0.9 * 0.23,
+        position: 'absolute',
+        width: width * 0.9 * 0.64,
+    },
+    progressT: {
+        backgroundColor: 'rgba(253,205,1,1)',
+        borderRadius: 6,
+        bottom: '40%',
+        height: 15,
+        left: width * 0.9 * 0.23,
+        maxWidth: width * 0.9 * 0.64,
+        position: 'absolute'
     },
     recordItemWrap: {
         height: 50,
@@ -204,7 +292,20 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         textAlign: 'center',
         width: '100%'
-    }
+    },
+    successPop: {
+        alignItems: 'center',
+        height: width * 0.9 * (765 / 1011),
+        justifyContent: 'flex-start',
+        transform: [{ translateX: -width * 0.05 }],
+        width: width * 0.9,
+    },
+    successPopText: {
+        color: 'rgba(153,153,153,1)',
+        fontSize: 12,
+        marginLeft: '10%',
+        marginTop: '15%'
+    },
 });
 
 export default DailyMoneyPage;
