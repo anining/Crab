@@ -14,7 +14,6 @@ export default class Lamp extends Component {
         super(props);
         this.state = {
             translateValue: new Animated.Value(0), // 定位初始值为0
-            LampList: [{}, {}, {}],
             stop: false // 是否暂停
         };
         this.width = this.props.width;
@@ -24,7 +23,6 @@ export default class Lamp extends Component {
     }
 
     async componentDidMount () {
-        // this.AnimationStart.call(this, 0, this.state.LampList.length);
         this.start();
     }
 
@@ -42,7 +40,7 @@ export default class Lamp extends Component {
                 this.state.translateValue.setValue(0);
             }
             if (!this.state.stop) {
-                this.AnimationStart.call(this, index, this.state.LampList.length);
+                this.AnimationStart.call(this, index, this.props.LampList.length);
             }
         });
     }
@@ -52,10 +50,10 @@ export default class Lamp extends Component {
             this.setState({
                 stop: false
             }, () => {
-                this.AnimationStart.call(this, 0, this.state.LampList.length);
+                this.AnimationStart.call(this, 0, this.props.LampList.length);
             });
         } else {
-            this.AnimationStart.call(this, 0, this.state.LampList.length);
+            this.AnimationStart.call(this, 0, this.props.LampList.length);
         }
     }
 
@@ -77,13 +75,14 @@ export default class Lamp extends Component {
                 <View style={styles.animatedWrap}>
                     <Animated.View style={{ ...styles.lampContent, transform: [{ translateY: this.state.translateValue, }] }}>
                         {(() => {
-                            if (this.state.LampList && this.state.LampList.length) {
+                            if (this.props.LampList && this.props.LampList.length) {
                                 const lampView = [];
-                                this.state.LampList.forEach((item, index) => {
+                                this.props.LampList.forEach((item, index) => {
+                                    const { money = 'xxx', name = 'xxx' } = item;
                                     lampView.push(
                                         <Text style={[styles.lampItem, {
                                             color: this.color
-                                        }]} key={index} numberOfLines={1} > 恭喜 <Text style={{ color: this.color1 }}> xxx </Text>成功领取现金 <Text style={{ color: this.color1 }}> xxx 元 </Text></Text>,
+                                        }]} key={index} numberOfLines={1} > 恭喜 <Text style={{ color: this.color1 }}> {name} </Text>成功领取现金 <Text style={{ color: this.color1 }}> {money} 元 </Text></Text>,
                                     );
                                 });
                                 return lampView;
