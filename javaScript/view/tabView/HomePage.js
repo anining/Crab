@@ -1,10 +1,7 @@
 import React, { PureComponent } from 'react';
 import {
-    SafeAreaView,
-    NativeModules,
     Dimensions,
     ImageBackground,
-    LayoutAnimation,
     StyleSheet,
     View,
     Text,
