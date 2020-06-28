@@ -1,15 +1,5 @@
-import React, { Component } from 'react';
-import {
-    Dimensions,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-    ImageBackground,
-    DeviceEventEmitter,
-    TouchableOpacity
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, View, ImageBackground, DeviceEventEmitter, TouchableOpacity } from 'react-native';
 import { css } from '../../assets/style/css';
 import ImageAuto from '../../components/ImageAuto';
 import activity3 from '../../assets/icon/activity/activity3.png';
@@ -28,97 +18,115 @@ import Choice from '../../components/Choice';
 import pop1 from '../../assets/icon/pop/pop1.png';
 import * as Animatable from 'react-native-animatable';
 import { _gv } from '../../utils/util';
-import { activityDetail } from '../../utils/api';
-const { height, width } = Dimensions.get('window');
-export default class DailyMoneyPage extends Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            pageInfo: _gv(this.props, 'route.params.pageInfo')
-        };
-        this.active_id = _gv(this.props, 'route.params.activity_id');
-    }
+import { activityDetail, withdrawLogsLatest } from '../../utils/api';
+const { width } = Dimensions.get('window');
 
-    componentDidMount () {
-        // console.log(_gv(this.props, 'route.params.activity_id'));
-        this._activityDetail();
-    }
+function DailyMoneyPage (props) {
+    const { activityId, pageInfo } = props.route.params;
+    const { log, user_history } = pageInfo;
+    const { money, invalid_time } = log;
+    const [withdrawLogs, setWithdrawLogs] = useState([]);
 
-    async _activityDetail () {
-        try {
-            console.log(this.active_id, 'activity_id');
-            const ret = await activityDetail(this.active_id);
-            console.log(ret, '???');
-        } catch (e) {
-            console.log(e);
-        }
-    }
+    useEffect(() => {
+        withdrawLogsLatest().then(r => {
+            !r.error && setWithdrawLogs(r.data);
+        });
+    }, []);
 
-    render () {
-        return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
-            <ScrollView style={[{ flex: 1, backgroundColor: '#EA251E' }]}>
+    // useEffect(() => {
+    //     _activityDetail();
+    // }, []);
+    //
+    // function _activityDetail () {
+    //     console.log(activityId);
+    //     console.log(pageInfo);
+    //     activityDetail(activityId).then(r => {
+    //         console.log(r);
+    //     });
+    // }
+
+    return (
+        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
+            <ScrollView style={{ flex: 1, backgroundColor: '#EA251E' }}>
                 <ImageBackground source={activity5} style={[styles.dmWrap]}>
                     <Header color={'#fff'} label={'天天领现金'} style={{ backgroundColor: 'rgba(0,0,0,0)', borderBottomWidth: 0 }} icon={header3} headerRight={
                         <Text style={{ color: '#fff' }}>活动规则</Text>
                     } onPress={() => {
                         DeviceEventEmitter.emit('showPop',
-                            <TouchableOpacity activeOpacity={1} onPress={() => { DeviceEventEmitter.emit('hidePop'); }}>
+                            <TouchableOpacity onPress={() => { DeviceEventEmitter.emit('hidePop'); }}>
                                 <ImageAuto source={activity6} width={width * 0.8}/>
                             </TouchableOpacity>
                         );
                     }}/>
-                    <Lamp/>
+                    <Lamp LampList={withdrawLogs}/>
                     <View style={[css.flex, css.fw, styles.redPackageWrap, css.afs]}>
-                        <CountDown time={+new Date('2020/06/26')} style={{ color: '#999', fontSize: 13 }} millisecond={true} tips={'后现金消失'}/>
-                        <Text style={styles.redMaxText}> 29.69 <Text style={{ fontSize: 20 }}>元</Text></Text>
+                        <CountDown time={+new Date(invalid_time)} style={{ color: Number(money) >= 30 ? 'rgba(225,48,32,1)' : '#999', fontSize: 13, lineHeight: 70 }} millisecond={true} tips={Number(money) >= 30 ? '后未提现现金将失效' : '后现金失效'}/>
+                        <Text style={styles.redMaxText}> {money} <Text style={{ fontSize: 20 }}>元</Text></Text>
                         <Animatable.View useNativeDriver={true} iterationCount="infinite" animation="pulse" style={[css.auto]}>
                             <Shadow style={[styles.shareBtn]}>
                                 <Text style={styles.shareBtnText} onPress={() => {
-                                    // tips={'您有一个任务'}
-                                    DeviceEventEmitter.emit('showPop', <Choice info={{
-                                        icon: pop1,
-                                        tips: '您有一个任务',
-                                        minTips: '你好。。。。',
-                                        lt: '放弃任务',
-                                        lc: () => {},
-                                        rt: '继续任务',
-                                        rc: () => {},
-                                    }} />);
+                                    DeviceEventEmitter.emit('showPop', {
+                                        dom: <PopupView/>,
+                                        close,
+                                    });
+                                    return;
+                                    if (Number(money) >= 30) {
+
+                                    }
                                 }}>提现到我的钱包</Text>
                             </Shadow>
                         </Animatable.View>
                         <Text style={styles.dmMinTips} numberOfLines={1}>满30元既可以提现到钱包</Text>
                     </View>
                 </ImageBackground>
-                <View style={styles.recordWrap}>
-                    <Text style={styles.recordTitleText}>
-                        累计记录
-                        <Text style={styles.rttMinTitle}>（任务通过可以累计额外的零钱哦）</Text>
-                    </Text>
-                    <View style={[styles.recordItemWrap, css.flex, css.sp]}>
-                        <ImageAuto source={answer3} width={40}/>
-                        <View style={[css.flex, css.fw, styles.riwInfoWrap, css.js]}>
-                            <Text numberOfLine={1} style={[styles.riwText, { fontSize: 13 }]}>sandily</Text>
-                            <Text numberOfLine={1} style={styles.riwText}>打开红包</Text>
-                        </View>
-                        <Text style={styles.riwMoneyText}>+22.9元</Text>
-                    </View>
-                    <View style={[styles.recordItemWrap, css.flex, css.sp]}>
-                        <ImageAuto source={answer3} width={40}/>
-                        <View style={[css.flex, css.fw, styles.riwInfoWrap, css.js]}>
-                            <Text numberOfLine={1} style={[styles.riwText, { fontSize: 13 }]}>官方运营商</Text>
-                            <Text numberOfLine={1} style={styles.riwText}>打开红包</Text>
-                        </View>
-                        <Text style={styles.riwMoneyText}>+22.9元</Text>
-                    </View>
-                </View>
+                <RenderList history={user_history}/>
+                <Text style={styles.bottomTips}>参与更多送钱活动~</Text>
             </ScrollView>
-        </SafeAreaView>;
-    }
+        </SafeAreaView>
+    );
 }
+
+function PopupView () {
+    return (
+        <Text>111</Text>
+    );
+}
+
+function RenderList ({ history }) {
+    console.log(history);
+    if (!history.length) {
+        return <></>;
+    }
+    const view = [];
+    history.forEach(item => {
+        view.push(
+            <View style={[styles.recordItemWrap, css.flex, css.sp]}>
+                <ImageAuto source={answer3} width={40}/>
+                <View style={[css.flex, css.fw, styles.riwInfoWrap, css.js]}>
+                    <Text numberOfLine={1} style={[styles.riwText, { fontSize: 13 }]}>sandily</Text>
+                    <Text numberOfLine={1} style={styles.riwText}>打开红包</Text>
+                </View>
+                <Text style={styles.riwMoneyText}>+22.9元</Text>
+            </View>
+        );
+    });
+    return (
+        <View style={styles.recordWrap}>
+            <Text style={styles.recordTitleText}>累计记录 <Text style={styles.rttMinTitle}> 每单任务通过，可以累计额外的金币哦</Text></Text>
+            {view}
+        </View>
+    );
+}
+
 const styles = StyleSheet.create({
+    bottomTips: {
+        color: '#FFFFD9A0',
+        fontSize: 12,
+        lineHeight: 70,
+        textAlign: 'center'
+    },
     dmMinTips: {
-        color: '#ffebe1',
+        color: 'rgba(255,255,255,1)',
         fontSize: 11,
         marginTop: 10
     },
@@ -141,31 +149,25 @@ const styles = StyleSheet.create({
     recordWrap: {
         backgroundColor: '#F3462D',
         borderRadius: 4,
-        height: 200,
         width: width * 0.94,
         ...css.auto,
         marginTop: 20,
         padding: 15
     },
     redMaxText: {
-        // backgroundColor: 'red',
         color: '#E13020',
         fontSize: 50,
         fontWeight: '900',
-        lineHeight: width * 0.27,
+        lineHeight: width * 0.17,
+        marginBottom: width * 0.17,
         textAlign: 'center',
-        width: '100%',
-        // eslint-disable-next-line react-native/sort-styles
-        marginBottom: width * 0.07
+        width: '100%'
     },
     redPackageWrap: {
         height: width * 0.72,
         width: '80%',
         ...css.auto,
-        // backgroundColor: 'red',
-        // marginTop: width * 0.03,
-        paddingHorizontal: 10,
-        // paddingVertical: 10
+        paddingHorizontal: 10
     },
     riwInfoWrap: {
         flex: 1,
@@ -204,3 +206,5 @@ const styles = StyleSheet.create({
         width: '100%'
     }
 });
+
+export default DailyMoneyPage;
