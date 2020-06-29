@@ -10,6 +10,7 @@ import {
     DeviceEventEmitter,
 } from 'react-native';
 import * as U from 'karet.util';
+import * as R from 'kefir.ramda';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { css } from '../../assets/style/css';
 import LottieView from 'lottie-react-native';
@@ -36,10 +37,11 @@ import { getter } from '../../utils/store';
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
-const { correct_rate: correctRate } = getter(['user.correct_rate']);
-const trCorrectRate = U.mapValue((res) => {
-    return _toFixed(res * 100) + '%';
-}, correctRate);
+const { trCorrectRate, propNumsObj } = getter(['user.trCorrectRate', 'user.propNumsObj']);
+// const trCorrectRate = U.mapValue((res) => {
+//     return _toFixed(res * 100) + '%';
+// }, correctRate);
+const gameProp = R.path(['2'], propNumsObj); // 获取游戏道具的数量
 export default class HomePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
@@ -125,7 +127,7 @@ export default class HomePage extends Component {
                                 }}>
                                 <ImageAuto source={game25} width={33}/>
                                 <View style={styles.hdnTextWrap}>
-                                    <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }}>6</Text>/10</Text>
+                                    <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }} karet-lift>{gameProp}</Text>/10</Text>
                                 </View>
                                 <ImageAuto source={game31} width={22}/>
                             </TouchableOpacity>

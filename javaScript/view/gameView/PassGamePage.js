@@ -29,12 +29,16 @@ import { HEADER_HEIGHT } from '../tabView/HomePage';
 import LottieView from 'lottie-react-native';
 import chest from '../../lottie/chest';
 import PropTypes from 'prop-types';
-import { transformMoney } from '../../utils/util';
+import { _toFixed, transformMoney } from '../../utils/util';
 import ShiftView from '../../components/ShiftView';
 import game20 from '../../assets/icon/game/game20.png';
 import IdiomCard from '../../components/IdiomCard';
 
 const { height, width } = Dimensions.get('window');
+const { user_level: userLevel } = getter(['user.user_level']);
+// const trCorrectRate = U.mapValue((res) => {
+//     return _toFixed(res * 100) + '%';
+// }, correctRate);
 export default class PassGamePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
@@ -78,7 +82,8 @@ export default class PassGamePage extends Component {
                             style={[css.flex, styles.idiomItemWrap]} onPress={() => {
                                 DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
                                     // N.navigate('AnswerPage');
-                                }} btn={'加入生词本'} content={<IdiomCard/>}/>);
+                                    console.log(item);
+                                }} btn={'加入生词本'} content={<IdiomCard content={item} idiom={this.paramsInfo.idioms[item][0]}/>}/>);
                             }}>
                             <ImageAuto source={game37} style={{ width: 16, marginRight: 5 }}/>
                             <Text style={[css.gf, styles.lineIdiom]} numberOfLines={1}>{item}</Text>
@@ -133,7 +138,7 @@ export default class PassGamePage extends Component {
                     {/* 核心显示区域 */}
                     <View style={[styles.gameResWrap, css.pr]}>
                         <ImageBackground source={game4} style={[css.flex, css.pa, styles.gamePassHeader]}>
-                            <Text style={[styles.gamePassText]} numberOfLines={1}>恭喜通过1231关</Text>
+                            <Text style={styles.gamePassText} numberOfLines={1} karet-lift>恭喜通过{userLevel}关</Text>
                         </ImageBackground>
                         <View style={[styles.gameCanvasWrap]}>
                             <View style={[styles.gameCanvasInner, css.flex, css.fw, css.afs]}>

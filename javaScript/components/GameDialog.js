@@ -19,7 +19,9 @@ export default class GameDialog extends Component {
                 <ImageAuto source={game15} style={[styles.closeImage]}/>
             </TouchableOpacity>
             {_if(this.props.icon, res => <ImageAuto source={res} style={[css.pa, styles.dialogIcon]}/>)}
-            <View style={[css.flex, css.fw, styles.gameInner]}>
+            <View style={[css.flex, css.fw, styles.gameInner, {
+                paddingTop: this.props.icon ? width * 0.15 + 10 : 10
+            }]}>
                 {this.props.content}
                 {_if(this.props.icon, res => <Text style={styles.tipsText}>{res}</Text>)}
                 <View style={{ height: 20, width: '100%' }}/>

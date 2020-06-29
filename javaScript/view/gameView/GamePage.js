@@ -58,10 +58,10 @@ const matrix = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
-const { correct_rate: correctRate, user_level: userLevel } = getter(['user.correct_rate', 'user.user_level']);
-const trCorrectRate = U.mapValue((res) => {
-    return _toFixed(res * 100) + '%';
-}, correctRate);
+const { trCorrectRate, user_level: userLevel } = getter(['user.trCorrectRate', 'user.user_level']);
+// const trCorrectRate = U.mapValue((res) => {
+//     return _toFixed(res * 100) + '%';
+// }, correctRate);
 export default class GamePage extends Component {
     constructor (props) {
         super(props);
@@ -390,6 +390,37 @@ export default class GamePage extends Component {
         }
     }
 
+    _buildAnswerObj (item, success = false, isAwait = false, callback) {
+        try {
+            let answerObj = {
+                ...this.state.answerObj,
+                [item.key]: {
+                    ...item,
+                    success,
+                    isAwait,
+                    filled: true,
+                },
+            };
+            this.state.fillArray[this.state.selectSite] && (() => {
+                // 把本格原来选中的字还回去
+                const preItem = this.state.fillArray[this.state.selectSite];
+                answerObj = {
+                    ...answerObj,
+                    [preItem.key]: {
+                        ...preItem,
+                        filled: false, // 把本格原来选中的字还回去
+                        success: false,
+                        isAwait: false,
+                    },
+                };
+                callback && callback(preItem.key);
+            })();
+            return answerObj;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     _checkAnswer (item) {
         try {
             if (item.filled) {
@@ -397,14 +428,8 @@ export default class GamePage extends Component {
                 return false;
             }
             this[`answerOpacity${item.key}`] && this[`answerOpacity${item.key}`].hide();
-            const newAnswerObj = {
-                ...this.state.answerObj,
-                [item.key]: {
-                    ...item,
-                    filled: true,
-                },
-            };
-            console.log(newAnswerObj, '??===');
+            const newAnswerObj = this._buildAnswerObj(item);
+            console.log(newAnswerObj, '提前假设这样选的答案对象');
             const surplusAnswer = Object.entries(newAnswerObj).map(x => {
                 if (x && x[0] && !x[1].filled) {
                     return x[0];
@@ -414,31 +439,11 @@ export default class GamePage extends Component {
             }); // 未被填充答案的key数组
             const rightChoice = item.key === this.state.selectSite;
             const isSuccess = rightChoice && GamePage.comparisonArray(surplusAnswer, item.idiomPointArray);
-            console.log(surplusAnswer, surplusAnswer[0], '下一个数组第一项');
-            console.log(this.state.fillArray, item.key, '===12', this.state.selectSite);
-            let nextAnswerObj = {
-                ...this.state.answerObj,
-                [item.key]: {
-                    ...item,
-                    filled: true,
-                    success: isSuccess,
-                    isAwait: rightChoice && !isSuccess, // 选对但是等待
-                },
-            }; // 构造下一个画面的答案字
-            this.state.fillArray[this.state.selectSite] && (() => {
-                // 把本格原来选中的字还回去
-                const preItem = this.state.fillArray[this.state.selectSite];
-                this[`answerOpacity${preItem.key}`] && this[`answerOpacity${preItem.key}`].show();
-                nextAnswerObj = {
-                    ...nextAnswerObj,
-                    [preItem.key]: {
-                        ...preItem,
-                        filled: false, // 把本格原来选中的字还回去
-                        success: false,
-                        isAwait: false,
-                    },
-                };
-            })();
+            console.log(surplusAnswer, '下一个数组第一项');
+            console.log(this.state.fillArray, item.key, '======', this.state.selectSite);
+            const nextAnswerObj = this._buildAnswerObj(item, isSuccess, rightChoice && !isSuccess, (preItemKey) => {
+                this[`answerOpacity${preItemKey}`] && this[`answerOpacity${preItemKey}`].show();
+            });
             this.setState({
                 fillArray: {
                     ...this.state.fillArray,
@@ -506,7 +511,8 @@ export default class GamePage extends Component {
                             this.rightButAwait[item.key] = null;
                         })();
                         this[`animationText${this.state.selectSite}`] && this[`animationText${this.state.selectSite}`].tada();
-                        this._gameError(item.word);
+                        console.log(item, '???选错的字', this.state.coordinate, item.idiomPointArray.map((key) => { return this.state.coordinate[key].word; }).join(''));
+                        this._gameError(item.idiomPointArray.map((key) => { return this.state.coordinate[key].word; }).join(''));
                     }
                 }
             });
@@ -560,7 +566,10 @@ export default class GamePage extends Component {
                 </View>
                 <TouchableOpacity activeOpacity={1} onPress={() => {
                 }} style={[css.flex, css.fw, styles.ghRightBtn]}>
-                    <Text style={[styles.rightText, { color: '#FF3154', fontSize: 10 }]} karet-lift> {trCorrectRate} </Text>
+                    <Text style={{
+                        ...styles.rightText,
+                        ...{ color: '#FF3154', fontSize: 10 }
+                    }} karet-lift> {trCorrectRate} </Text>
                     <Text style={styles.rightText}> 答题正确率 </Text>
                 </TouchableOpacity>
             </View>
