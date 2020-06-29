@@ -62,24 +62,24 @@ export default class PassGamePage extends Component {
     }
 
     _showPop () {
-        // if (this.paramsInfo && this.paramsInfo.rate <= 1) { // rate 小于等于1是普通宝箱
-        //     DeviceEventEmitter.emit('showPop', <View
-        //         style={[css.flex, css.pr, css.flex, { transform: [{ translateY: -width * 0.2 }] }]}>
-        //         <LottieView ref={ref => this.lottie = ref} key={'chest'} renderMode={'HARDWARE'}
-        //             style={{ width: width * 0.8, height: 'auto' }} imageAssetsFolder={'chest'} source={chest}
-        //             loop={false} autoPlay={true} speed={1} onAnimationFinish={() => {
-        //                 DeviceEventEmitter.emit('hidePop');
-        //             }}/>
-        //         <View style={[styles.passDataNumber, css.flex, css.auto, css.pa, {
-        //             top: width * 0.8 - 50,
-        //             left: width * 0.4 - 50,
-        //         }]}>
-        //             <ImageAuto source={game22} width={33}/>
-        //             <Text style={styles.hdnText}>+{transformMoney(this.paramsInfo.add_balance)}</Text>
-        //         </View>
-        //     </View>);
-        // }
-        if (this.paramsInfo && this.paramsInfo.rate >= 1) {
+        if (this.paramsInfo && this.paramsInfo.rate <= 1) { // rate 小于等于1是普通宝箱
+            DeviceEventEmitter.emit('showPop', <View
+                style={[css.flex, css.pr, css.flex, { transform: [{ translateY: -width * 0.2 }] }]}>
+                <LottieView ref={ref => this.lottie = ref} key={'chest'} renderMode={'HARDWARE'}
+                    style={{ width: width * 0.8, height: 'auto' }} imageAssetsFolder={'chest'} source={chest}
+                    loop={false} autoPlay={true} speed={1} onAnimationFinish={() => {
+                        DeviceEventEmitter.emit('hidePop');
+                    }}/>
+                <View style={[styles.passDataNumber, css.flex, css.auto, css.pa, {
+                    top: width * 0.8 - 50,
+                    left: width * 0.4 - 50,
+                }]}>
+                    <ImageAuto source={game22} width={33}/>
+                    <Text style={styles.hdnText}>+{transformMoney(this.paramsInfo.add_balance)}</Text>
+                </View>
+            </View>);
+        }
+        if (this.paramsInfo && this.paramsInfo.rate > 1) {
             DeviceEventEmitter.emit('showPop', <ImageBackground source={game17} style={[styles.gameRedPackage, css.flex]}>
                 <Text style={styles.hdnRedPackageText}>+{transformMoney(this.paramsInfo.add_balance)}<Text style={{ fontSize: 15 }}>金币</Text></Text>
             </ImageBackground>);
