@@ -45,6 +45,10 @@ export const css = StyleSheet.create({
     fw: {
         flexWrap: 'wrap'
     },
+    gf: {
+        fontFamily: 'ZhongYuanTi-2'
+        // fontFamily: 'MYuenHKS-Light-1',
+    },
     header: {
         height: 63,
         paddingTop: 63,

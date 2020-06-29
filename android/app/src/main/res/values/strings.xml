@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RnCrab</string>
+    <string name="app_name">趣玩赚</string>
     <string name="CodePushDeploymentKey" moduleConfig="true">mh8So3cFB9LGSG9zTIP3Qf0QeYR34ksvOXqog</string>
     <string name="CodePushServerUrl" moduleConfig="true">https://code-push.librags.com</string>
 </resources>

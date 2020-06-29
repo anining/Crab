@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
+import * as React from 'karet';
 import {
     Dimensions,
     SafeAreaView,
@@ -25,7 +26,7 @@ import game57 from '../../assets/icon/game/game57.png';
 import game61 from '../../assets/icon/game/game61.png';
 import game62 from '../../assets/icon/game/game62.png';
 import ImageAuto from '../../components/ImageAuto';
-import { _gv, _if, _tc, setAndroidTime } from '../../utils/util';
+import { _gv, _if, _tc, _toFixed, setAndroidTime } from '../../utils/util';
 import { gameError, getGame, upgradeGameLevel } from '../../utils/api';
 import ShiftView from '../../components/ShiftView';
 import EnlargeView from '../../components/EnlargeView';
@@ -35,6 +36,8 @@ import GameDialog from '../../components/GameDialog';
 import chest from '../../lottie/chest';
 import LottieView from 'lottie-react-native';
 import game22 from '../../assets/icon/game/game22.png';
+import { getter } from '../../utils/store';
+import * as U from 'karet.util';
 
 const { height, width } = Dimensions.get('window');
 const CANVAS_WIDTH = width - 20;
@@ -55,6 +58,10 @@ const matrix = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
+const { correct_rate: correctRate, user_level: userLevel } = getter(['user.correct_rate', 'user.user_level']);
+const trCorrectRate = U.mapValue((res) => {
+    return _toFixed(res * 100) + '%';
+}, correctRate);
 export default class GamePage extends Component {
     constructor (props) {
         super(props);
@@ -86,10 +93,13 @@ export default class GamePage extends Component {
         console.log(ret, '???');
         if (ret && !ret.error) {
             N.replace('PassGamePage', {
-                info: ret.data
+                info: {
+                    ...ret.data,
+                    ...this.state.gameInfo
+                }
             });
         } else {
-            N.goBack();
+            // N.goBack();
         }
     }
 
@@ -269,8 +279,7 @@ export default class GamePage extends Component {
                                     }}>
                                     <ImageBackground source={game53}
                                         style={[css.flex, { width: '100%', height: '100%' }]}>
-                                        <Text
-                                            style={{ fontSize: FONT_SIZE, color: '#fff' }}>{keyCoordinateItem.word}</Text>
+                                        <Text style={[styles.squareText]}>{keyCoordinateItem.word}</Text>
                                     </ImageBackground>
                                 </TouchableOpacity>
                             </ShiftView>,
@@ -306,8 +315,7 @@ export default class GamePage extends Component {
                                         source={fillArray[masterKey] ? game61 : selectSite === masterKey ? game62 : game54}
                                         style={[css.flex, { width: '100%', height: '100%' }]}>
                                         {_if(fillArray[masterKey], res => <Animatable.View
-                                            ref={ref => this[`animationText${masterKey}`] = ref}><Text
-                                                style={{ fontSize: 16, color: 'red' }}>
+                                            ref={ref => this[`animationText${masterKey}`] = ref}><Text style={[styles.squareText, { color: 'red' }]}>
                                                 {res.word}</Text>
                                         </Animatable.View>)}
                                     </ImageBackground>
@@ -320,7 +328,7 @@ export default class GamePage extends Component {
                                         key={`GameWord${masterKey}`}>
                                         <ImageBackground source={game53}
                                             style={[css.flex, { width: '100%', height: '100%' }]}>
-                                            <Text style={{ fontSize: FONT_SIZE, color: '#fff' }}>{res.word}</Text>
+                                            <Text style={[styles.squareText]}>{res.word}</Text>
                                         </ImageBackground>
                                     </EnlargeView>;
                                 } else {
@@ -330,10 +338,10 @@ export default class GamePage extends Component {
                                         key={`GameWord${masterKey}`}>
                                         <ImageBackground source={game55}
                                             style={[css.flex, { width: '100%', height: '100%' }]}>
-                                            <Text style={{
-                                                fontSize: FONT_SIZE,
+                                            {/* [styles.squareText, { color: '#353535' }] */}
+                                            <Text style={[styles.squareText, {
                                                 color: answerItemInfo && answerItemInfo.isAwait ? 'red' : '#353535',
-                                            }}>{res.word}</Text>
+                                            }]}>{res.word}</Text>
                                         </ImageBackground>
                                     </EnlargeView>;
                                 }
@@ -444,7 +452,7 @@ export default class GamePage extends Component {
                 if (isSuccess) {
                     this.successAnimation(item.idiomPointArray, () => {
                         setAndroidTime(() => {
-                            this._chest.start();
+                            this._chest && this._chest.start();
                         }, 800);
                     });
                     // 已经触发了，应该从rightButAwait剔除
@@ -526,7 +534,7 @@ export default class GamePage extends Component {
                                 key={`answererViewKey${item.key}`}
                                 style={{ width: '100%', height: '100%', padding: 2 }}>
                                 <ImageBackground source={game55} style={[css.flex, { width: '100%', height: '100%' }]}>
-                                    <Text style={{ fontSize: FONT_SIZE, color: '#353535' }}>{item.word}</Text>
+                                    <Text style={[styles.squareText, { color: '#353535' }]}>{item.word}</Text>
                                 </ImageBackground>
                             </OpacityView>
                         </TouchableOpacity>,
@@ -548,14 +556,12 @@ export default class GamePage extends Component {
                     <ImageAuto source={game14} style={{ marginLeft: 10, width: 40, marginRight: 30 }}/>
                 </TouchableOpacity>
                 <View style={[css.flex, styles.titleWrap]}>
-                    <Text style={styles.gameLabel}>第127关</Text>
+                    <Text style={styles.gameLabel} karet-lift>第{userLevel}关</Text>
                 </View>
                 <TouchableOpacity activeOpacity={1} onPress={() => {
                 }} style={[css.flex, css.fw, styles.ghRightBtn]}>
-                    <Text style={[styles.rightText, { color: '#FF3154', fontSize: 12 }]}> 95% </Text>
-                    <Text style={styles.rightText}>
-                        答题正确率
-                    </Text>
+                    <Text style={[styles.rightText, { color: '#FF3154', fontSize: 10 }]} karet-lift> {trCorrectRate} </Text>
+                    <Text style={styles.rightText}> 答题正确率 </Text>
                 </TouchableOpacity>
             </View>
             <View style={[styles.animatedWrap, css.pr]}>
@@ -651,6 +657,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: '900',
+        ...css.gf
     },
     ghRightBtn: {
         backgroundColor: 'rgba(255,255,255, .5)',
@@ -664,6 +671,7 @@ const styles = StyleSheet.create({
     helpBtnText: {
         color: '#fff',
         fontSize: 14,
+        ...css.gf
     },
     helpBtnWrap: {
         backgroundColor: '#FF6C00',
@@ -689,6 +697,12 @@ const styles = StyleSheet.create({
         lineHeight: 14,
         textAlign: 'center',
         width: '100%',
+        ...css.gf
+    },
+    squareText: {
+        color: '#fff',
+        fontSize: FONT_SIZE,
+        ...css.gf
     },
     titleWrap: {
         // backgroundColor: 'red',

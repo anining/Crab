@@ -149,5 +149,6 @@ const styles = StyleSheet.create({
         height: LAMP_HEIGHT,
         lineHeight: LAMP_HEIGHT,
         textAlign: 'center',
+        ...css.gf
     },
 });
