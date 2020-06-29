@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, ImageBackground, Dimensions, TouchableOpacity, ScrollView, Image } from 'react-native';
+import {
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    View,
+    ImageBackground,
+    Dimensions,
+    TouchableOpacity,
+    ScrollView,
+    Image,
+    TextInput, DeviceEventEmitter,
+} from 'react-native';
 import { css } from '../../assets/style/css';
 import Header from '../../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import Clipboard from '@react-native-community/clipboard';
 import { N } from '../../utils/router';
 import pupil1 from '../../assets/icon/pupil/pupil1.png';
 import pupil2 from '../../assets/icon/pupil/pupil2.png';
@@ -13,13 +23,16 @@ import pupil5 from '../../assets/icon/pupil/pupil5.png';
 import pupil7 from '../../assets/icon/pupil/pupil7.png';
 import pupil8 from '../../assets/icon/pupil/pupil8.png';
 import pupil10 from '../../assets/icon/pupil/pupil10.png';
+import pupil12 from '../../assets/icon/pupil/pupil12.png';
 import ImageAuto from '../../components/ImageAuto';
-import { childDetail } from '../../utils/api';
+import { bindParent, childDetail } from '../../utils/api';
 import { transformTime } from '../../utils/util';
-import toast from '../../utils/toast';
+import Choice from '../../components/Choice';
+import { getter } from '../../utils/store';
 const { width } = Dimensions.get('window');
 const itemHeight = 135;
 const itemMarginTop = 10;
+const { is_valid } = getter(['user.is_valid']);
 
 function PupilInfoPage () {
     const [children, setChildren] = useState([]);
@@ -45,37 +58,13 @@ function PupilInfoPage () {
         });
     }
 
-    const { invite_code = 'xxx', avatar = 'xxx', nickname = 'xxx', qq_group = 'xxx', wx = 'xxx' } = parent;
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
             <Header label={'师徒信息'} onPress={() => { N.navigate('PupilSetPage'); }} headerRight={<Text style={{ color: '#FF5C22' }}>收徒设置</Text>}/>
             <ScrollView>
                 <View style={[styles.infoHeaderWrap, css.pr]}>
                     <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.infoHeaderBg]} />
-                    <ImageBackground source={pupil8} style={[styles.infoHeader, css.pa]}>
-                        <RenderShareTitle title="我的师傅" icon={pupil5}/>
-                        <View style={[styles.teacherWrap, css.flex, css.sp]}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Image source={{ uri: avatar }} style={{ width: 40, height: 40, borderRadius: 20 }}/>
-                                <Text style={{ color: 'rgba(53,53,53,1)', fontSize: 16, fontWeight: '500', marginLeft: 5 }}>{nickname}</Text>
-                            </View>
-                            <Text style={{ color: '#999', fontSize: 12 }}>他的邀请码：{invite_code} </Text>
-                        </View>
-                        <View style={[css.flex, styles.pupBtnWrap, css.auto, css.sp]}>
-                            <TouchableOpacity onPress={() => {
-                                Clipboard.setString(wx.toString());
-                                toast('复制成功');
-                            }}>
-                                <ImageAuto source={pupil7} width={width * 0.35}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => {
-                                Clipboard.setString(qq_group.toString());
-                                toast('复制成功');
-                            }}>
-                                <ImageAuto source={pupil10} width={width * 0.35}/>
-                            </TouchableOpacity>
-                        </View>
-                    </ImageBackground>
+                    <ParentView parent={parent} _childDetail={_childDetail}/>
                 </View>
                 <RenderData today={today} yesterday={yesterday} total={total}/>
                 <View style={[styles.pupListWrap, css.flex, css.sp]}>
@@ -174,7 +163,105 @@ function RenderForm ({ children_income, children_num, disciple_income, disciple_
     );
 }
 
+function ParentView ({ parent, _childDetail }) {
+    const [inviteCode, setInviteCode] = useState('');
+
+    function bind () {
+        if (!inviteCode) {
+            return;
+        }
+        DeviceEventEmitter.emit('showPop',
+            <Choice info={{
+                icon: pupil12,
+                tips: `确定绑定${inviteCode}为您的师父吗？`,
+                minTips: '绑定成功之后不可更改',
+                lt: '取消',
+                rc: () => {
+                    bindParent(inviteCode).then(r => {
+                        if (!r.error) {
+                            setInviteCode('');
+                            _childDetail();
+                        }
+                    });
+                },
+                rt: '确定'
+            }} />);
+    }
+
+    if (parent.invite_code) {
+        const { invite_code = 'xxx', avatar = 'xxx', nickname = 'xxx', qq_group = 'xxx', wx = 'xxx' } = parent;
+        return (
+            <ImageBackground source={pupil8} style={[styles.infoHeader, css.pa]}>
+                <RenderShareTitle title="我的师父" icon={pupil5}/>
+                <View style={[styles.teacherWrap, css.flex, css.sp]}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image source={{ uri: avatar }} style={{ width: 40, height: 40, borderRadius: 20 }}/>
+                        <Text style={{ color: 'rgba(53,53,53,1)', fontSize: 16, fontWeight: '500', marginLeft: 5 }}>{nickname}</Text>
+                    </View>
+                    <Text style={{ color: '#999', fontSize: 12 }}>他的邀请码：{invite_code} </Text>
+                </View>
+                <View style={[css.flex, styles.pupBtnWrap, css.auto, css.sp]}>
+                    <TouchableOpacity onPress={() => {
+                        Clipboard.setString(wx.toString());
+                        toast('复制成功');
+                    }}>
+                        <ImageAuto source={pupil7} width={width * 0.35}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        Clipboard.setString(qq_group.toString());
+                        toast('复制成功');
+                    }}>
+                        <ImageAuto source={pupil10} width={width * 0.35}/>
+                    </TouchableOpacity>
+                </View>
+            </ImageBackground>
+        );
+    } else if (is_valid.get()) {
+        return (
+            <ImageBackground source={pupil8} style={[styles.infoHeader, css.pa, { justifyContent: 'space-around' }]}>
+                <RenderShareTitle title="我的师父" icon={pupil5}/>
+                <View style={[css.flexRCSB, styles.bindView, { justifyContent: 'center' }]}>
+                    <Text style={{ fontWeight: '500', color: '#353535' }}>您没有绑定师父！您已提现过一次，不可绑定师父！</Text>
+                </View>
+            </ImageBackground>
+        );
+    }
+    return (
+        <ImageBackground source={pupil8} style={[styles.infoHeader, css.pa, { justifyContent: 'space-around' }]}>
+            <RenderShareTitle title="我的师父" icon={pupil5}/>
+            <View style={[css.flexRCSB, styles.bindView]}>
+                <TextInput style={styles.bindInput} maxLength={30} placeholder={'请填写师父邀请码'} placeholderTextColor={'#999'} onChangeText={e => setInviteCode(e)}/>
+                <TouchableOpacity style={styles.bindBtn} onPress={bind}>
+                    <Text style={{ fontSize: 13, color: '#fff' }}>绑定师父</Text>
+                </TouchableOpacity>
+            </View>
+        </ImageBackground>
+    );
+}
+
 const styles = StyleSheet.create({
+    bindBtn: {
+        alignItems: 'center',
+        backgroundColor: '#FF9C00',
+        borderRadius: 19,
+        height: 40,
+        justifyContent: 'center',
+        width: '35%'
+    },
+    bindInput: {
+        backgroundColor: '#fff',
+        borderRadius: 6,
+        height: 40,
+        width: '60%'
+    },
+    bindView: {
+        alignItems: 'center',
+        borderTopColor: '#fff',
+        borderTopWidth: 1,
+        paddingBottom: 30,
+        paddingTop: 30,
+        width: '100%'
+    },
     containerT: {
         alignItems: 'center',
         borderBottomColor: '#FFF2F2F2',
