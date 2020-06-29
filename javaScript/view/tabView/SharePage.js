@@ -10,17 +10,19 @@ import share5 from '../../assets/icon/share/share5.png';
 import share6 from '../../assets/icon/share/share6.png';
 import share7 from '../../assets/icon/share/share7.png';
 import share8 from '../../assets/icon/share/share8.png';
-import pop1 from '../../assets/icon/pop/pop1.png';
+import share9 from '../../assets/icon/share/share9.png';
+import share10 from '../../assets/icon/share/share10.png';
+import share11 from '../../assets/icon/share/share11.png';
+import share12 from '../../assets/icon/share/share12.png';
 import Shadow from '../../components/Shadow';
 import ImageAuto from '../../components/ImageAuto';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
-import Choice from '../../components/Choice';
 import { N } from '../../utils/router';
 import { getter } from '../../utils/store';
 import Clipboard from '@react-native-community/clipboard';
 import toast from '../../utils/toast';
-import { awardDetail } from '../../utils/api';
+import { awardDetail, getChildAward } from '../../utils/api';
 import { _gv, _if } from '../../utils/util';
 
 const { width } = Dimensions.get('window');
@@ -51,6 +53,35 @@ export default class SharePage extends PureComponent {
         const ret = await awardDetail();
         if (ret && !ret.error) {
             this.setState({ detailInfo: ret.data });
+        }
+    }
+
+    async getReward () {
+        const ret = await getChildAward();
+        if (ret && !ret.error) {
+            const { add_balance, num = 'xxx' } = ret.data;
+            DeviceEventEmitter.emit('showPop', {
+                dom:
+                  <View style={styles.popContainer}>
+                      <Image source={share9} style={styles.popImage}/>
+                      <Text style={[{ fontSize: 15, color: '#353535', fontWeight: '500', transform: [{ translateY: -40 }] }]}>您真的太棒了！</Text>
+                      <Text style={[{ fontSize: 13, color: '#353535', fontWeight: '500', transform: [{ translateY: -30 }] }]}>您又有 <Text style={[{ color: '#FF3B00' }]}>{num} 位</Text> 徒弟一共为你贡献了</Text>
+                      <Text style={[{ fontSize: 36, color: '#FF6C00', fontWeight: '800', transform: [{ translateY: -20 }] }]}>{add_balance}<Text style={[{ fontSize: 18 }]}>元</Text></Text>
+                      <TouchableOpacity onPress={() => {
+                          DeviceEventEmitter.emit('hidePop');
+                          N.navigate('PupilInfoPage');
+                      }}>
+                          <Text style={[{ fontSize: 10, color: '#999', borderBottomColor: '#999', borderBottomWidth: 1 }]}>{'查看此次贡献收益的徒弟>>'}</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => {
+                          DeviceEventEmitter.emit('hidePop');
+                      }} style={styles.popBtn}>
+                          <Text style={[{ fontSize: 15, color: '#fff' }]}>我知道了</Text>
+                      </TouchableOpacity>
+                      <Text style={[{ fontSize: 10, color: '#999' }]}>已存入“我的钱包”</Text>
+                  </View>,
+                close: () => {}
+            });
         }
     }
 
@@ -163,25 +194,19 @@ export default class SharePage extends PureComponent {
                         <View style={[styles.inviteWrap, css.auto]}>
                             <Animatable.View useNativeDriver={true} iterationDelay={5000} iterationCount="infinite"
                                 animation="tada" style={[css.auto]}>
-                                <Shadow style={[styles.shareBtn]}>
-                                    <LinearGradient colors={['#FEE581', '#FDC34A']} start={{ x: 1, y: 0 }}
-                                        end={{ x: 1, y: 1 }} style={[styles.shareBtnTextWrap]}>
-                                        <Text style={styles.shareBtnText} onPress={() => {
-                                            // tips={'您有一个任务'}
-                                            DeviceEventEmitter.emit('showPop', <Choice info={{
-                                                icon: pop1,
-                                                tips: '您有一个任务',
-                                                minTips: '你好。。。。',
-                                                lt: '放弃任务',
-                                                lc: () => {
-                                                },
-                                                rt: '继续任务',
-                                                rc: () => {
-                                                },
-                                            }}/>);
-                                        }}>立即收徒</Text>
-                                    </LinearGradient>
-                                </Shadow>
+                                <TouchableOpacity onPress={() => {
+                                    DeviceEventEmitter.emit('showPop', {
+                                        dom: <Share/>,
+                                        close: () => {}
+                                    });
+                                }}>
+                                    <Shadow style={[styles.shareBtn]}>
+                                        <LinearGradient colors={['#FEE581', '#FDC34A']} start={{ x: 1, y: 0 }}
+                                            end={{ x: 1, y: 1 }} style={[styles.shareBtnTextWrap]}>
+                                            <Text style={styles.shareBtnText} >立即收徒</Text>
+                                        </LinearGradient>
+                                    </Shadow>
+                                </TouchableOpacity>
                             </Animatable.View>
                             <TouchableOpacity activeOpacity={1} style={[css.flex, css.sp, styles.tipsWrap]}
                                 onPress={() => {
@@ -204,7 +229,7 @@ export default class SharePage extends PureComponent {
                                         paddingTop: 30,
                                         paddingHorizontal: 10,
                                     }]}>
-                                        {SharePage._renderShareTitle(<Text style={styles.wTitleText}>徒弟提现送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>, <Text style={{ fontSize: 11, color: 'rgba(255,92,34,1)' }}>领取奖励(11)</Text>)}
+                                        {SharePage._renderShareTitle(<Text style={styles.wTitleText}>徒弟提现送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>, <TouchableOpacity onPress={this.getReward}><Text style={{ fontSize: 11, color: 'rgba(255,92,34,1)' }}>领取奖励(11)</Text></TouchableOpacity>)}
                                         {this._renderCashBack()}
                                     </View>
                                 </Shadow>
@@ -236,6 +261,35 @@ export default class SharePage extends PureComponent {
             </SafeAreaView>
         );
     }
+}
+
+function Share () {
+    return (
+        <View style={styles.shareContainer}>
+            <TouchableOpacity onPress={() => {
+                N.navigate('ShareUrlPage');
+                DeviceEventEmitter.emit('hidePop');
+            }} style={styles.shareView}>
+                <Image source={share11} style={styles.shareImg}/>
+                <Text style={styles.shareText}>链接收徒</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+                N.navigate('ShareQRCodePage');
+                DeviceEventEmitter.emit('hidePop');
+            }} style={styles.shareView}>
+                <Image source={share10} style={styles.shareImg}/>
+                <Text style={styles.shareText}>二维码收徒</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+                Clipboard.setString(invite_code.get().toString());
+                DeviceEventEmitter.emit('hidePop');
+                toast('复制成功');
+            }} style={styles.shareView}>
+                <Image source={share12} style={styles.shareImg}/>
+                <Text style={styles.shareText}>邀请码收徒</Text>
+            </TouchableOpacity>
+        </View>
+    );
 }
 const styles = StyleSheet.create({
     cashBackItem: {
@@ -286,11 +340,33 @@ const styles = StyleSheet.create({
         fontSize: 13,
     },
     inviteWrap: {
-        // backgroundColor: 'red',
         height: width * 0.35,
         paddingHorizontal: 15,
         paddingTop: 10,
         width: width * 0.9,
+    },
+    popBtn: {
+        alignItems: 'center',
+        backgroundColor: '#FF3E00',
+        borderRadius: 22,
+        height: 44,
+        justifyContent: 'center',
+        marginBottom: 10,
+        marginTop: 20,
+        width: '70%'
+    },
+    popContainer: {
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        justifyContent: 'space-between',
+        paddingBottom: 10,
+        width: width * 0.8
+    },
+    popImage: {
+        height: 85,
+        transform: [{ translateY: -50 }],
+        width: 113
     },
     progressInner: {
         borderRadius: 6,
@@ -339,6 +415,18 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         width: '100%',
     },
+    shareContainer: {
+        backgroundColor: '#fff',
+        bottom: 0,
+        flexDirection: 'row',
+        height: 80,
+        position: 'absolute',
+        width: '100%'
+    },
+    shareImg: {
+        height: 35,
+        width: 35
+    },
     shareInfoImage: {
         height: width * 0.93 * 951 / 1065,
         width: width * 0.93,
@@ -348,6 +436,10 @@ const styles = StyleSheet.create({
     shareInfoTips: {
         color: '#fff',
         fontSize: 10,
+    },
+    shareText: {
+        color: '#666',
+        fontSize: 12
     },
     shareTitle: {
         height: width * 0.45 * 93 / 522,
@@ -359,6 +451,12 @@ const styles = StyleSheet.create({
         color: '#803000',
         fontSize: 15,
         fontWeight: '900',
+    },
+    shareView: {
+        alignItems: 'center',
+        height: 80,
+        justifyContent: 'center',
+        width: '33.333%'
     },
     tipsBtn: {
         borderBottomColor: '#FFFED567',

@@ -26,8 +26,6 @@ import CardPackagePage from '../view/userView/CardPackagePage';
 import BlackHousePage from '../view/userView/BlackHousePage';
 import AccountHomePage from '../view/userView/AccountHomePage';
 import AccountBindPage from '../view/userView/AccountBindPage';
-import AcceptQRCodePage from '../view/shareView/AcceptQRCodePage';
-import AcceptUrlPage from '../view/shareView/AcceptUrlPage';
 import PupilInfoPage from '../view/shareView/PupilInfoPage';
 import PupilSetPage from '../view/shareView/PupilSetPage';
 import DailyMoneyPage from '../view/activityView/DailyMoneyPage';
@@ -47,6 +45,8 @@ import OpenMoneyPage from '../view/activityView/OpenMoneyPage';
 import GamePage from '../view/gameView/GamePage';
 import { CONSOLE_LOG } from '../utils/config';
 import NoticeDetailPage from '../view/homeView/NoticeDetailPage';
+import ShareUrlPage from '../view/shareView/ShareUrlPage';
+import ShareQRCodePage from '../view/shareView/ShareQRCodePage';
 
 const Stack = createStackNavigator();
 
@@ -60,6 +60,16 @@ const stackScreens = [
         name: 'WithdrawPage',
         component: WithdrawPage,
         title: '我的收益',
+    },
+    {
+        name: 'ShareUrlPage',
+        component: ShareUrlPage,
+        title: '分享链接收徒',
+    },
+    {
+        name: 'ShareQRCodePage',
+        component: ShareQRCodePage,
+        title: '分享海报',
     },
     {
         name: 'AnswerDetailPage',
@@ -130,16 +140,6 @@ const stackScreens = [
         name: 'AccountBindPage',
         component: AccountBindPage,
         title: '账号绑定',
-    },
-    {
-        name: 'AcceptQRCodePage',
-        component: AcceptQRCodePage,
-        title: '二维码收徒',
-    },
-    {
-        name: 'AcceptUrlPage',
-        component: AcceptUrlPage,
-        title: '链接收徒',
     },
     {
         name: 'PupilInfoPage',
