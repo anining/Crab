@@ -47,6 +47,7 @@ import { CONSOLE_LOG } from '../utils/config';
 import NoticeDetailPage from '../view/homeView/NoticeDetailPage';
 import ShareUrlPage from '../view/shareView/ShareUrlPage';
 import ShareQRCodePage from '../view/shareView/ShareQRCodePage';
+import PassGamePage from '../view/gameView/PassGamePage';
 
 const Stack = createStackNavigator();
 
@@ -220,6 +221,11 @@ const stackScreens = [
         name: 'GamePage',
         component: GamePage,
         title: '答题',
+    },
+    {
+        name: 'PassGamePage',
+        component: PassGamePage,
+        title: '答题结算',
     },
 ];
 

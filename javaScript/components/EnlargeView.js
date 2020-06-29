@@ -42,6 +42,10 @@ export default class EnlargeView extends Component {
         this.animation && this.animation.stop();
     }
 
+    stop () {
+        this.animation && this.animation.stop();
+    }
+
     start () {
         this.animation = Animated.sequence(this.scaleStart).start(() => {
             this.animation && this.animation.stop();
