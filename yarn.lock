@@ -4751,6 +4751,14 @@ kefir.atom@^5.5.1:
     infestines "^0.4.10"
     partial.lenses ">=2.2.0"
 
+kefir.ramda@^0.26.0:
+  version "0.26.0"
+  resolved "https://registry.npmjs.org/kefir.ramda/-/kefir.ramda-0.26.0.tgz#43496a2410e70bdf6844a4068b061e6a8bf8cb6a"
+  integrity sha512-J3gSk1HL3K9Za38rXgeHMl0RvBkXm0iBHlMzTP7Zy4Pbu2cZw/T9WiA7gd7fUSnFG9+X19oRtqWdDdhGc9crUA==
+  dependencies:
+    karet.lift "^2.1.0"
+    ramda "^0.26.0"
+
 kefir@^3.8.7:
   version "3.8.7"
   resolved "https://registry.yarnpkg.com/kefir/-/kefir-3.8.7.tgz#8fa8ffa3620c6c3713838c33d92af4d976ccfce8"
@@ -6084,6 +6092,11 @@ query-string@^6.12.1:
     decode-uri-component "^0.2.0"
     split-on-first "^1.0.0"
     strict-uri-encode "^2.0.0"
+
+ramda@^0.26.0:
+  version "0.26.1"
+  resolved "https://registry.npmjs.org/ramda/-/ramda-0.26.1.tgz#8d41351eb8111c55353617fc3bbffad8e4d35d06"
+  integrity sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==
 
 range-parser@~1.2.1:
   version "1.2.1"

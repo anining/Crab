@@ -22,6 +22,7 @@ import game22 from '../../assets/icon/game/game22.png';
 import game31 from '../../assets/icon/game/game31.png';
 import game35 from '../../assets/icon/game/game35.png';
 import game12 from '../../assets/icon/game/game12.png';
+import game20 from '../../assets/icon/game/game20.png';
 import ImageAuto from '../../components/ImageAuto';
 import ShiftView from '../../components/ShiftView';
 import { N } from '../../utils/router';
@@ -31,6 +32,7 @@ import { _toFixed, setAndroidTime } from '../../utils/util';
 import EnlargeView from '../../components/EnlargeView';
 import { updateUser } from '../../utils/update';
 import { getter } from '../../utils/store';
+
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
@@ -42,8 +44,8 @@ export default class HomePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
         super(props);
-        this.state = {
-        };
+        this.state = {};
+        this.loadingToGame = false;// 准备去往游戏页面
     }
 
     componentDidMount () {
@@ -92,28 +94,35 @@ export default class HomePage extends Component {
                     {/*    <LottieView ref={ref => this.lottie = ref} key={'lottie'} renderMode={'HARDWARE'} style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1} loop={true} autoPlay={true} speed={1}/> */}
                     {/* </View> */}
                     {/* eslint-disable-next-line no-return-assign */}
-                    <LottieView ref={ref => this.lottie = ref} key={'lottie'} renderMode={'HARDWARE'} style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1} loop={true} autoPlay={true} speed={1}/>
+                    <LottieView ref={ref => this.lottie = ref} key={'lottie'} renderMode={'HARDWARE'}
+                        style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1}
+                        loop={true} autoPlay={true} speed={1}/>
                     <View style={[css.pa, css.cover]}>
                         {/* eslint-disable-next-line no-return-assign */}
                         <ShiftView callback={() => {
                             this.enlarge && this.enlarge.start();
-                            // eslint-disable-next-line no-return-assign
-                        }} ref={ref => this.shiftView = ref} autoPlay={true} loop={true} duration={800} delay={1000} startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}>
+                        }} ref={ref => this.shiftView = ref} autoPlay={true} loop={true} duration={800} delay={1000}
+                        startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}>
                             <ImageAuto source={game22} width={33}/>
                         </ShiftView>
                         <ShiftView callback={() => {
-                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} delay={0} startSite={[20, HEADER_HEIGHT - 28]} endSite={[width * 0.5 + 50, height - width * 0.05]}>
+                            this.loadingToGame = false;
+                            N.navigate('GamePage');
+                            // N.navigate('PassGamePage');
+                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} delay={0}
+                        startSite={[25, HEADER_HEIGHT - 28]}
+                        endSite={[width * 0.5 + 50, height - width * 0.05]}>
                             <ImageAuto source={game25} width={33}/>
                         </ShiftView>
                         {/* 头部显示区域 */}
                         <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
-                            <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex]} onPress={() => {
-                                DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
-                                    N.navigate('AnswerPage');
-                                }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个
-                                    最多同时持有
-                                <Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>}/>);
-                            }}>
+                            <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex]}
+                                onPress={() => {
+                                    DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
+                                        N.navigate('AnswerPage');
+                                    }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个 最多同时持有
+                                        <Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>} icon={game20}/>);
+                                }}>
                                 <ImageAuto source={game25} width={33}/>
                                 <View style={styles.hdnTextWrap}>
                                     <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }}>6</Text>/10</Text>
@@ -122,7 +131,8 @@ export default class HomePage extends Component {
                             </TouchableOpacity>
                             {/* eslint-disable-next-line no-return-assign */}
                             <EnlargeView ref={ref => this.enlarge = ref}>
-                                <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex, css.sp, { width: 180 }]}>
+                                <TouchableOpacity activeOpacity={1}
+                                    style={[styles.headerDataNumber, css.flex, css.sp, { width: 180 }]}>
                                     <ImageAuto source={game22} width={33}/>
                                     <View style={styles.hdnTextWrap}>
                                         <Text style={styles.hdnText}>32132131</Text>
@@ -136,7 +146,8 @@ export default class HomePage extends Component {
                         {/* 中部显示区域 */}
                         <View style={[css.flex, css.pa, styles.homeMidWrap, css.afs]}>
                             <TouchableOpacity style={[css.pa, styles.outputWrap]} activeOpacity={1} onPress={() => {
-                                DeviceEventEmitter.emit('showPop', <GameDialog btn={'我知道了'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个
+                                DeviceEventEmitter.emit('showPop', <GameDialog btn={'我知道了'} tips={<Text>道具每 <Text
+                                    style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个
                                     最多同时持有
                                 <Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>}/>);
                             }}>
@@ -149,17 +160,21 @@ export default class HomePage extends Component {
                                 <Text style={[css.pa, styles.noticeNumber]}>10</Text>
                             </ImageBackground>
                             {/* eslint-disable-next-line no-return-assign */}
-                            <Lamp ref={ref => this.lamp = ref} width={'100%'} backgroundColor={'rgba(0,179,216,.5)'} color={'#005262'} color1={'#FF6C00'}/>
+                            <Lamp ref={ref => this.lamp = ref} width={'100%'} backgroundColor={'rgba(0,179,216,.5)'}
+                                color={'#005262'} color1={'#FF6C00'}/>
                         </View>
                         {/* 底部显示区域 */}
-                        <ImageBackground source={game12} style={[css.flex, css.pa, styles.homeBottomWrap, css.fw, css.afs]}>
+                        <ImageBackground source={game12}
+                            style={[css.flex, css.pa, styles.homeBottomWrap, css.fw, css.afs]}>
                             {/* 主页进度显示 */}
                             <View style={styles.progressWrap}>
                             </View>
                             {/* 主页答题按钮 */}
                             <TouchableOpacity style={styles.homeBtn} activeOpacity={1} onPress={() => {
-                                // N.navigate('GamePage');
-                                this.startGame && this.startGame.start();
+                                if (!this.loadingToGame) {
+                                    this.loadingToGame = true;
+                                    this.startGame && this.startGame.start();
+                                }
                             }}><ImageAuto source={game1} width={width * 0.5}/></TouchableOpacity>
                             <Text style={styles.accuracyText}>正确率: <Text style={{ color: '#FF6C00' }} karet-lift>{trCorrectRate}</Text></Text>
                         </ImageBackground>
@@ -207,7 +222,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingTop: 35,
         top: 0,
-        width
+        width,
     },
     homeMidWrap: {
         height: MID_HEIGHT,
@@ -244,7 +259,7 @@ const styles = StyleSheet.create({
         lineHeight: 12,
         textAlign: 'center',
         transform: [{ scale: 0.9 }],
-        width: '100%'
+        width: '100%',
     },
     outputWrap: {
         right: 15,
@@ -254,7 +269,7 @@ const styles = StyleSheet.create({
         height: width * 0.185 * 171 / 207,
         overflow: 'hidden',
         paddingTop: width * 0.06,
-        width: width * 0.185
+        width: width * 0.185,
     },
     progressWrap: {
         height: width * 0.35,

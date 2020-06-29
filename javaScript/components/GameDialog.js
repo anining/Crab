@@ -3,9 +3,9 @@ import { Dimensions, StyleSheet, View, Text, DeviceEventEmitter, TouchableOpacit
 import { css } from '../assets/style/css';
 import game15 from '../assets/icon/game/game15.png';
 import game39 from '../assets/icon/game/game39.png';
-import game20 from '../assets/icon/game/game20.png';
 import ImageAuto from './ImageAuto';
 import PropTypes from 'prop-types';
+import { _if } from '../utils/util';
 const { width, height } = Dimensions.get('window');
 export default class GameDialog extends Component {
     constructor (props) {
@@ -18,9 +18,10 @@ export default class GameDialog extends Component {
             <TouchableOpacity activeOpacity={1} style={[css.pa, styles.closeImageWrap]} onPress={() => { DeviceEventEmitter.emit('hidePop'); }}>
                 <ImageAuto source={game15} style={[styles.closeImage]}/>
             </TouchableOpacity>
-            <ImageAuto source={game20} style={[css.pa, styles.dialogIcon]}/>
+            {_if(this.props.icon, res => <ImageAuto source={res} style={[css.pa, styles.dialogIcon]}/>)}
             <View style={[css.flex, css.fw, styles.gameInner]}>
-                <Text style={styles.tipsText}>{this.props.tips}</Text>
+                {this.props.content}
+                {_if(this.props.icon, res => <Text style={styles.tipsText}>{res}</Text>)}
                 <View style={{ height: 20, width: '100%' }}/>
                 <TouchableOpacity activeOpacity={1} onPress={() => {
                     this.props.callback();
@@ -40,8 +41,9 @@ GameDialog.propTypes = {
 };
 GameDialog.defaultProps = {
     btn: '我知道了',
-    tips: <Text>我是提示弹窗</Text>,
-    icon: game20,
+    tips: null,
+    content: null,
+    icon: null,
     callback: () => {}
 };
 const styles = StyleSheet.create({
