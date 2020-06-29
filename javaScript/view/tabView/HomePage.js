@@ -9,6 +9,7 @@ import {
     TouchableOpacity,
     DeviceEventEmitter,
 } from 'react-native';
+import * as U from 'karet.util';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { css } from '../../assets/style/css';
 import LottieView from 'lottie-react-native';
@@ -33,15 +34,16 @@ import { getter } from '../../utils/store';
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
-// const { correct_rate } = getter(['user.correct_rate']);
+const { correct_rate: correctRate } = getter(['user.correct_rate']);
+const trCorrectRate = U.mapValue((res) => {
+    return _toFixed(res * 100) + '%';
+}, correctRate);
 export default class HomePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
         super(props);
         this.state = {
-            correct_rate: getter(['user.correct_rate']).correct_rate
         };
-        // this.correct_rate = getter(['user.correct_rate']).correct_rate;
     }
 
     componentDidMount () {
@@ -60,11 +62,7 @@ export default class HomePage extends Component {
             this.lottie && this.lottie.play();
             this.shiftView && this.shiftView.start();
             this.lamp && this.lamp.start();
-            updateUser(() => {
-                this.setState({
-                    correct_rate: getter(['user.correct_rate']).correct_rate
-                });
-            });
+            updateUser();
         }, 800);
     }
 
@@ -102,6 +100,10 @@ export default class HomePage extends Component {
                             // eslint-disable-next-line no-return-assign
                         }} ref={ref => this.shiftView = ref} autoPlay={true} loop={true} duration={800} delay={1000} startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}>
                             <ImageAuto source={game22} width={33}/>
+                        </ShiftView>
+                        <ShiftView callback={() => {
+                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} delay={0} startSite={[20, HEADER_HEIGHT - 28]} endSite={[width * 0.5 + 50, height - width * 0.05]}>
+                            <ImageAuto source={game25} width={33}/>
                         </ShiftView>
                         {/* 头部显示区域 */}
                         <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
@@ -156,10 +158,10 @@ export default class HomePage extends Component {
                             </View>
                             {/* 主页答题按钮 */}
                             <TouchableOpacity style={styles.homeBtn} activeOpacity={1} onPress={() => {
-                                // this.lottie && this.lottie.pause();
-                                N.navigate('GamePage');
+                                // N.navigate('GamePage');
+                                this.startGame && this.startGame.start();
                             }}><ImageAuto source={game1} width={width * 0.5}/></TouchableOpacity>
-                            <Text style={styles.accuracyText}>正确率: <Text style={{ color: '#FF6C00' }} karet-lift>{_toFixed(this.state.correct_rate.get() * 100)}%</Text></Text>
+                            <Text style={styles.accuracyText}>正确率: <Text style={{ color: '#FF6C00' }} karet-lift>{trCorrectRate}</Text></Text>
                         </ImageBackground>
                     </View>
                 </ImageBackground>

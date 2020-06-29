@@ -46,7 +46,7 @@ export default class ShiftView extends Component {
             }),
             Animated.timing(this.modelOpacity, {
                 toValue: 0,
-                duration: this.duration,
+                duration: this.duration - 50,
                 delay: 0,
                 useNativeDriver: true,
                 easing: Easing.ease,
@@ -119,11 +119,12 @@ export default class ShiftView extends Component {
 
     render () {
         return <Animated.View style={[css.pa, {
+            ...this.style,
             left: this.left,
             top: this.top,
             opacity: this.modelOpacity,
             transform: [{ translateX: this.translateX }, { translateY: this.translateY }],
-            ...this.style,
+            zIndex: 999,
         }]}>
             {this.props.children}
         </Animated.View>;

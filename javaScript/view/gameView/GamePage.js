@@ -88,6 +88,8 @@ export default class GamePage extends Component {
             N.replace('PassGamePage', {
                 info: ret.data
             });
+        } else {
+            N.goBack();
         }
     }
 

@@ -251,6 +251,21 @@ export function upgradeGameLevel (content) {
     return transformFetch('POST', '/game/level', { content });
 }
 
+// 生词本
+export function getNoteBook () {
+    return transformFetch('GET', '/notebook', { });
+}
+
+// 增加生词
+export function addNoteBook (idiom_id) {
+    return transformFetch('POST', '/notebook', { idiom_id });
+}
+
+// 删除生词
+export function deleteNoteBook (idiom_id) {
+    return transformFetch('DELETE', '/notebook', { idiom_id });
+}
+
 // 资金记录
 export function income (page, size, source) {
     let data = {

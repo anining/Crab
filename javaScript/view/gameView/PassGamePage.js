@@ -39,7 +39,9 @@ export default class PassGamePage extends Component {
         // console.log()
         if (this.props.info) {
             DeviceEventEmitter.emit('showPop', <View style={[css.flex, css.pr, css.flex, { transform: [{ translateY: -width * 0.2 }] }]}>
-                <LottieView ref={ref => this.lottie = ref} key={'chest'} renderMode={'HARDWARE'} style={{ width: width * 0.8, height: 'auto' }} imageAssetsFolder={'chest'} source={chest} loop={false} autoPlay={true} speed={1}/>
+                <LottieView ref={ref => this.lottie = ref} key={'chest'} renderMode={'HARDWARE'} style={{ width: width * 0.8, height: 'auto' }} imageAssetsFolder={'chest'} source={chest} loop={false} autoPlay={true} speed={1} onAnimationFinish={() => {
+                    DeviceEventEmitter.emit('hidePop');
+                }}/>
                 <View style={[styles.passDataNumber, css.flex, css.auto, css.pa, { top: width * 0.8 - 50, left: width * 0.4 - 50 }]}>
                     <ImageAuto source={game22} width={33}/>
                     <Text style={styles.hdnText}>+{transformMoney(this.props.info.add_balance)}</Text>
@@ -51,7 +53,7 @@ export default class PassGamePage extends Component {
     render () {
         return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
             {/* 头部显示区域 */}
-            <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
+            <View style={[css.flex, styles.homeHeaderWrap, css.sp]}>
                 <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex]} onPress={() => {
                     DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
                         N.navigate('AnswerPage');
@@ -78,6 +80,13 @@ export default class PassGamePage extends Component {
                     </TouchableOpacity>
                 </EnlargeView>
             </View>
+            {/* 核心显示区域 */}
+            <View style={[styles.gameResWrap, css.pa]}>
+                <View style={[styles.gameCanvasWrap]}>
+                    <View style={[styles.gameCanvasInner, css.flex, css.fw]}>
+                    </View>
+                </View>
+            </View>
         </SafeAreaView>;
     }
 }
@@ -91,6 +100,26 @@ PassGamePage.defaultProps = {
     },
 };
 const styles = StyleSheet.create({
+    gameCanvasInner: {
+        backgroundColor: '#FFF7A9',
+        borderRadius: 10,
+        height: '100%',
+        overflow: 'hidden',
+        width: '100%',
+    },
+    gameCanvasWrap: {
+        backgroundColor: '#FFDF7A',
+        height: width * 1.2,
+        width: width - 20,
+        ...css.auto,
+        borderRadius: 10,
+        overflow: 'hidden',
+        paddingBottom: 10,
+    },
+    gameResWrap: {
+        paddingTop: width * 0.2,
+        width,
+    },
     hdnText: {
         color: '#ffffff',
         fontSize: 15,
