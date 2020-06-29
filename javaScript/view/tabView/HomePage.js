@@ -41,7 +41,9 @@ const { trCorrectRate, propNumsObj } = getter(['user.trCorrectRate', 'user.propN
 // const trCorrectRate = U.mapValue((res) => {
 //     return _toFixed(res * 100) + '%';
 // }, correctRate);
-const gameProp = R.path(['2'], propNumsObj); // 获取游戏道具的数量
+const gameProp = U.mapValue((res) => {
+    return res || 0;
+}, R.path(['2'], propNumsObj)); // 获取游戏道具的数量
 export default class HomePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
@@ -51,8 +53,6 @@ export default class HomePage extends Component {
     }
 
     componentDidMount () {
-        // this._homeStart();
-        console.log('????');
         this.startLottie = DeviceEventEmitter.addListener('startLottie', () => {
             this._homeStart();
         });
@@ -110,8 +110,7 @@ export default class HomePage extends Component {
                         <ShiftView callback={() => {
                             this.loadingToGame = false;
                             N.navigate('GamePage');
-                            // N.navigate('PassGamePage');
-                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} delay={0}
+                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
                         startSite={[25, HEADER_HEIGHT - 28]}
                         endSite={[width * 0.5 + 50, height - width * 0.05]}>
                             <ImageAuto source={game25} width={33}/>
@@ -120,6 +119,7 @@ export default class HomePage extends Component {
                         <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
                             <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex]}
                                 onPress={() => {
+                                    console.log(gameProp._currentEvent.value, '??做任务获取道具');
                                     DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
                                         N.navigate('AnswerPage');
                                     }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个 最多同时持有

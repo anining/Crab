@@ -25,6 +25,7 @@ import game8 from '../../assets/icon/game/game8.png';
 import game37 from '../../assets/icon/game/game37.png';
 import game14 from '../../assets/icon/game/game14.png';
 import game16 from '../../assets/icon/game/game16.png';
+import game17 from '../../assets/icon/game/game17.png';
 import { HEADER_HEIGHT } from '../tabView/HomePage';
 import LottieView from 'lottie-react-native';
 import chest from '../../lottie/chest';
@@ -33,6 +34,9 @@ import { _toFixed, transformMoney } from '../../utils/util';
 import ShiftView from '../../components/ShiftView';
 import game20 from '../../assets/icon/game/game20.png';
 import IdiomCard from '../../components/IdiomCard';
+import { addNoteBook } from '../../utils/api';
+import toast from '../../utils/toast';
+import * as U from 'karet.util';
 
 const { height, width } = Dimensions.get('window');
 const { user_level: userLevel } = getter(['user.user_level']);
@@ -48,28 +52,43 @@ export default class PassGamePage extends Component {
         this.paramsInfo = this.props.route.params.info;
     }
 
+    async _addNoteBook (str) {
+        const ret = await addNoteBook(str);
+        console.log(ret);
+        if (ret && !ret.error) {
+            console.log('加入成功');
+            toast('加入成功');
+        }
+    }
+
+    _showPop () {
+        // if (this.paramsInfo && this.paramsInfo.rate <= 1) { // rate 小于等于1是普通宝箱
+        //     DeviceEventEmitter.emit('showPop', <View
+        //         style={[css.flex, css.pr, css.flex, { transform: [{ translateY: -width * 0.2 }] }]}>
+        //         <LottieView ref={ref => this.lottie = ref} key={'chest'} renderMode={'HARDWARE'}
+        //             style={{ width: width * 0.8, height: 'auto' }} imageAssetsFolder={'chest'} source={chest}
+        //             loop={false} autoPlay={true} speed={1} onAnimationFinish={() => {
+        //                 DeviceEventEmitter.emit('hidePop');
+        //             }}/>
+        //         <View style={[styles.passDataNumber, css.flex, css.auto, css.pa, {
+        //             top: width * 0.8 - 50,
+        //             left: width * 0.4 - 50,
+        //         }]}>
+        //             <ImageAuto source={game22} width={33}/>
+        //             <Text style={styles.hdnText}>+{transformMoney(this.paramsInfo.add_balance)}</Text>
+        //         </View>
+        //     </View>);
+        // }
+        if (this.paramsInfo && this.paramsInfo.rate >= 1) {
+            DeviceEventEmitter.emit('showPop', <ImageBackground source={game17} style={[styles.gameRedPackage, css.flex]}>
+                <Text style={styles.hdnRedPackageText}>+{transformMoney(this.paramsInfo.add_balance)}<Text style={{ fontSize: 15 }}>金币</Text></Text>
+            </ImageBackground>);
+        }
+    }
+
     componentDidMount () {
         console.log(this);
-        if (this.paramsInfo) {
-            DeviceEventEmitter.emit('showPop', <View
-                style={[css.flex, css.pr, css.flex, { transform: [{ translateY: -width * 0.2 }] }]}>
-                <LottieView ref={ref => this.lottie = ref} key={'chest'} renderMode={'HARDWARE'}
-                    style={{ width: width * 0.8, height: 'auto' }} imageAssetsFolder={'chest'} source={chest}
-                    loop={false} autoPlay={true} speed={1} onAnimationFinish={() => {
-                        DeviceEventEmitter.emit('hidePop');
-                    }}/>
-                <View style={[styles.passDataNumber, css.flex, css.auto, css.pa, {
-                    top: width * 0.8 - 50,
-                    left: width * 0.4 - 50,
-                }]}>
-                    <ImageAuto source={game22} width={33}/>
-                    <Text style={styles.hdnText}>+{transformMoney(this.paramsInfo.add_balance)}</Text>
-                </View>
-            </View>);
-        } else {
-            // N.goBack();
-            console.log('??');
-        }
+        this._showPop();
     }
 
     _renderIdiomList () {
@@ -83,6 +102,7 @@ export default class PassGamePage extends Component {
                                 DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
                                     // N.navigate('AnswerPage');
                                     console.log(item);
+                                    this._addNoteBook(item);
                                 }} btn={'加入生词本'} content={<IdiomCard content={item} idiom={this.paramsInfo.idioms[item][0]}/>}/>);
                             }}>
                             <ImageAuto source={game37} style={{ width: 16, marginRight: 5 }}/>
@@ -130,8 +150,8 @@ export default class PassGamePage extends Component {
                         </EnlargeView>
                     </View>
                     <ShiftView callback={() => {
-                        // N.navigate('GamePage');
-                    }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} delay={0}
+                        N.replace('GamePage');
+                    }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
                     startSite={[25, HEADER_HEIGHT - 28]} endSite={[width * 0.5 + 90, width * 1.4]}>
                         <ImageAuto source={game25} width={33}/>
                     </ShiftView>
@@ -225,9 +245,19 @@ const styles = StyleSheet.create({
         color: '#353535',
         fontSize: 17,
     },
+    gameRedPackage: {
+        height: width * 0.8 * 1173 / 885,
+        paddingTop: 20,
+        width: width * 0.8
+    },
     gameResWrap: {
         paddingTop: width * 0.2,
         width,
+    },
+    hdnRedPackageText: {
+        color: '#F5E385',
+        fontSize: 20,
+        ...css.gf
     },
     hdnText: {
         color: '#ffffff',

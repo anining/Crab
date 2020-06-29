@@ -38,6 +38,8 @@ import LottieView from 'lottie-react-native';
 import game22 from '../../assets/icon/game/game22.png';
 import { getter } from '../../utils/store';
 import * as U from 'karet.util';
+import * as R from 'kefir.ramda';
+import toast from '../../utils/toast';
 
 const { height, width } = Dimensions.get('window');
 const CANVAS_WIDTH = width - 20;
@@ -58,10 +60,13 @@ const matrix = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
-const { trCorrectRate, user_level: userLevel } = getter(['user.trCorrectRate', 'user.user_level']);
+const { trCorrectRate, user_level: userLevel, propNumsObj } = getter(['user.trCorrectRate', 'user.user_level', 'user.propNumsObj']);
 // const trCorrectRate = U.mapValue((res) => {
 //     return _toFixed(res * 100) + '%';
 // }, correctRate);
+const gameTipsProp = U.mapValue((res) => {
+    return res || 0;
+}, R.path(['3'], propNumsObj)); // 获取游戏提醒的数量
 export default class GamePage extends Component {
     constructor (props) {
         super(props);
@@ -106,6 +111,7 @@ export default class GamePage extends Component {
     _getGame () {
         _tc(async () => {
             const ret = await getGame();
+            console.log(ret, '游戏详情');
             if (ret && !ret.error) {
                 this.setState({
                     gameInfo: ret.data,
@@ -500,7 +506,6 @@ export default class GamePage extends Component {
                         }
                     });
                     // // 全部答对逻辑
-                    // console.log(this.state.completedCharacterArray, this.state.answerObj, '全部答对逻辑', this.state.coordinate);
                 } else {
                     if (rightChoice && !isSuccess) { // 选对了，但是尚未触发动画的
                         !this.rightButAwait[item.key] && (() => {
@@ -577,6 +582,35 @@ export default class GamePage extends Component {
                 {/* 字体动画画布 */}
                 <View style={[styles.animatedCanvas, css.pa]}>
                     {this._renderMatrixAnimation()}
+                    {/* 帮助栏目 */}
+                    <View style={[css.flex, styles.helpWrap, css.js, css.pa, styles.helpWrapPosition]}>
+                        {/* eslint-disable-next-line no-return-assign */}
+                        <EnlargeView ref={ref => this._chest = ref}>
+                            <ImageAuto source={game56} width={30} style={{ width: 30, marginRight: 10 }}/>
+                        </EnlargeView>
+                        <TouchableOpacity activeOpacity={1} style={[css.flex, styles.helpBtnWrap]} onPress={() => {
+                            // GlossaryPage
+                            N.navigate('GlossaryPage');
+                        }}>
+                            <ImageAuto source={game29} style={{ width: 22, marginRight: 5 }}/>
+                            <Text style={styles.helpBtnText} numberOfLines={1}>生词本</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={1} style={[css.flex, styles.helpBtnWrap]} onPress={() => {
+                            // gameTipsProp
+                            console.log(gameTipsProp._currentEvent.value, typeof gameTipsProp._currentEvent.value);
+                            if (gameTipsProp._currentEvent.value) {
+
+                            } else {
+                                toast('提示次数不足');
+                            }
+                        }}>
+                            <ImageAuto source={game9} style={{ width: 22, marginRight: 5 }}/>
+                            <Text style={styles.helpBtnText} numberOfLines={1} karet-lift>剩{gameTipsProp}次</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={1} style={[css.pa, { right: 0 }]}>
+                            <ImageAuto source={game57} style={{ width: 34, marginRight: 5, top: 8 }}/>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 {/* 游戏画布 */}
                 <View style={[styles.gameCanvasWrap]}>
@@ -584,24 +618,7 @@ export default class GamePage extends Component {
                         {this._renderMatrix()}
                     </View>
                 </View>
-                {/* 帮助栏目 */}
-                <View style={[css.flex, styles.helpWrap, css.js, css.pr]}>
-                    {/* eslint-disable-next-line no-return-assign */}
-                    <EnlargeView ref={ref => this._chest = ref}>
-                        <ImageAuto source={game56} width={30} style={{ width: 30, marginRight: 10 }}/>
-                    </EnlargeView>
-                    <TouchableOpacity activeOpacity={1} style={[css.flex, styles.helpBtnWrap]}>
-                        <ImageAuto source={game29} style={{ width: 22, marginRight: 5 }}/>
-                        <Text style={styles.helpBtnText} numberOfLines={1}>生词本</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={1} style={[css.flex, styles.helpBtnWrap]}>
-                        <ImageAuto source={game9} style={{ width: 22, marginRight: 5 }}/>
-                        <Text style={styles.helpBtnText} numberOfLines={1}>剩1次</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={1} style={[css.pa, { right: 0 }]}>
-                        <ImageAuto source={game57} style={{ width: 34, marginRight: 5, top: 8 }}/>
-                    </TouchableOpacity>
-                </View>
+                <View style={[css.flex, styles.helpWrap, css.js, css.pr]} />
             </View>
             {/* 底部答案选择区域 */}
             <View style={[css.flex, styles.answerWrap, css.js, css.pr]}>
@@ -699,6 +716,9 @@ const styles = StyleSheet.create({
         width: width - 20,
         ...css.auto,
         overflow: 'hidden',
+    },
+    helpWrapPosition: {
+        top: width - 10,
     },
     rightText: {
         color: '#353535',

@@ -23,7 +23,7 @@ export default class GameDialog extends Component {
                 paddingTop: this.props.icon ? width * 0.15 + 10 : 10
             }]}>
                 {this.props.content}
-                {_if(this.props.icon, res => <Text style={styles.tipsText}>{res}</Text>)}
+                {_if(this.props.tips, res => <Text style={styles.tipsText}>{res}</Text>)}
                 <View style={{ height: 20, width: '100%' }}/>
                 <TouchableOpacity activeOpacity={1} onPress={() => {
                     this.props.callback();
