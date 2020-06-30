@@ -46,19 +46,22 @@ const STATUS_DATA = [
     {
         id: 9,
         label: '游戏闯关'
+    },
+    {
+        id: 10,
+        label: '每秒奖励'
     }
 ];
-export default function FundingRecordsPage () {
+
+function FundingRecordsPage () {
     const [source, setSource] = useState(0);
     const [listRef, setListRef] = useState();
 
     useEffect(() => {
-        if (source) {
-            DeviceEventEmitter.emit('showPop', {
-                dom: <RenderSelect setSource={setSource} source={source}/>,
-                close,
-            });
-        }
+        source && DeviceEventEmitter.emit('showPop', {
+            dom: <RenderSelect setSource={setSource} source={source}/>,
+            close,
+        });
     }, [source]);
 
     function close () {
@@ -78,11 +81,9 @@ export default function FundingRecordsPage () {
                     ref={ref => setListRef(ref)}
                     itemHeight={itemHeight}
                     itemMarginTop={itemMarginTop}
-                    getList={async (page, num, callback) => {
+                    getList={ (page, num, callback) => {
                         income(page, num, source).then(r => {
-                            if (!r.error) {
-                                callback(r.data);
-                            }
+                            !r.error && callback(r.data);
                         });
                     }}
                     renderItem={item => {
@@ -92,10 +93,10 @@ export default function FundingRecordsPage () {
                                 <View style={styles.itemView} key={income_log_id}>
                                     <View style={[css.flexRCSB, styles.item, { borderBottomWidth: 1, borderBottomColor: '#EDEDED' }]}>
                                         <Text numberOfLines={1} style={{ fontSize: 12, color: '#999' }}>变动时间：{transformTime(created_at)}</Text>
-                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>{transformMoney(change_balance)}<Text style={{ fontSize: 14, fontWeight: '600' }}>金币</Text></Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>{transformMoney(change_balance)}<Text style={{ fontSize: 14, fontWeight: '600' }}> 金币</Text></Text>
                                     </View>
                                     <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-                                        <Text numberOfLines={1} style={ { color: '#353535', fontSize: 14, fontWeight: '500' }}>变动来源：{STATUS_DATA[source - 1].label}</Text>
+                                        <Text numberOfLines={1} style={ { color: '#353535', fontWeight: '500' }}>变动来源：{(STATUS_DATA[source - 1] && STATUS_DATA[source - 1].label) || '基本来源'}</Text>
                                     </View>
                                 </View>
                             </>
@@ -108,22 +109,22 @@ export default function FundingRecordsPage () {
 }
 
 function RenderSelect ({ setSource, source }) {
-    const components = [];
+    const view = [];
+
     STATUS_DATA.forEach(item => {
-        components.push(
-            <TouchableOpacity onPress={() => {
-                setSource(item.id);
-            }} style={[styles.selectBtn, { backgroundColor: source === item.id ? '#FFEBDC' : '#F5F5F5' }]} key={item.id}>
+        view.push(
+            <TouchableOpacity onPress={() => setSource(item.id)} style={[styles.selectBtn, { backgroundColor: source === item.id ? '#FFEBDC' : '#F5F5F5' }]} key={item.id}>
                 <Text style={[styles.selectBtnText, { color: source === item.id ? '#FF6C00' : '#333' }]}>{item.label}</Text>
             </TouchableOpacity>
         );
     });
+
     return (
         <View style={{ position: 'absolute', width: '100%', top: 0 }}>
             <View style={styles.selectView}>
                 <Text style={styles.selectMenu}>变动来源</Text>
                 <View style={styles.select}>
-                    {components}
+                    {view}
                 </View>
             </View>
         </View>
@@ -190,3 +191,5 @@ const styles = StyleSheet.create({
         fontSize: 14
     }
 });
+
+export default FundingRecordsPage;
