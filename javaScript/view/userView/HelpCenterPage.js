@@ -12,6 +12,7 @@ export default function HelpCenterPage () {
     const helpCenterView = [];
     useEffect(() => {
         helpCenter().then(r => {
+            console.log(r);
             if (!r.error) {
                 const local = [
                     {
@@ -27,6 +28,11 @@ export default function HelpCenterPage () {
                     {
                         id: 3,
                         title: '做单教程',
+                        children: []
+                    },
+                    {
+                        id: 4,
+                        title: '绑定教程',
                         children: []
                     }
                 ];
@@ -59,10 +65,10 @@ export default function HelpCenterPage () {
 function RenderAnswerItem ({ children }) {
     const answersView = [];
     children.forEach(child => {
-        const { content, help_center_id, title } = child;
+        const { content, help_center_id, title, video_url } = child;
         answersView.push(
             <TouchableOpacity onPress={() => {
-                N.navigate('HelpCenterDetailPage', { content });
+                N.navigate('HelpCenterDetailPage', { content, video_url });
             }} style={styles.item} key={help_center_id}>
                 <Text style={{ color: '#666', fontSize: 14 }}>{title}</Text>
                 <Image source={help1} style={{ height: 13, width: 6 }}/>
