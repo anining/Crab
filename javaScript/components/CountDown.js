@@ -54,7 +54,7 @@ export default class CountDown extends Component {
                         {/* eslint-disable-next-line no-return-assign */}
                         {_if(this.props.millisecond, res =>
                             // eslint-disable-next-line no-return-assign
-                            <TextInput disableFullscreenUI={false} style={[{ marginLeft: -2, marginRight: -12 }, (this.props.style || {})]} enablesReturnKeyAutomatically={true} ref={ref => this.millisecondText = ref} defaultValue={'.9'} onFocus={() => {
+                            <TextInput disableFullscreenUI={false} style={[{ padding: 0, }, (this.props.style || {})]} enablesReturnKeyAutomatically={true} ref={ref => this.millisecondText = ref} defaultValue={'.9'} onFocus={() => {
                                 this.millisecondText.blur();
                             }}/>)}
                         <Text style={[(this.props.style || {})]}>{this.props.tips}</Text>

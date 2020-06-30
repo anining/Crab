@@ -559,6 +559,15 @@ export default class GamePage extends Component {
     }
 
     render () {
+        const gameTipsPropFn = U.mapValue((res) => {
+            return () => {
+                if (res) {
+                    // console.log('???');
+                } else {
+                    toast('提示次数不足');
+                }
+            };
+        }, R.path(['3'], propNumsObj));
         return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
             <View style={[styles.gameHeader, css.flex, css.sp]}>
                 <TouchableOpacity activeOpacity={1} onPress={() => {
@@ -595,15 +604,7 @@ export default class GamePage extends Component {
                             <ImageAuto source={game29} style={{ width: 22, marginRight: 5 }}/>
                             <Text style={styles.helpBtnText} numberOfLines={1}>生词本</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={1} style={[css.flex, styles.helpBtnWrap]} onPress={() => {
-                            // gameTipsProp
-                            console.log(gameTipsProp._currentEvent.value, typeof gameTipsProp._currentEvent.value);
-                            if (gameTipsProp._currentEvent.value) {
-
-                            } else {
-                                toast('提示次数不足');
-                            }
-                        }}>
+                        <TouchableOpacity activeOpacity={1} style={{ ...css.flex, ...styles.helpBtnWrap }} karet-lift onPress={gameTipsPropFn}>
                             <ImageAuto source={game9} style={{ width: 22, marginRight: 5 }}/>
                             <Text style={styles.helpBtnText} numberOfLines={1} karet-lift>剩{gameTipsProp}次</Text>
                         </TouchableOpacity>

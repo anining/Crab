@@ -1,6 +1,7 @@
-import { activity, app, banner, signConfig, taskPlatform, user } from './api';
-import {_tc, _toFixed, transformMoney} from './util';
-import { setter } from './store';
+import { activity, app, banner, getSecondIncome, gradeSetting, signConfig, taskPlatform, user } from './api';
+import { _tc, _toFixed, rangeLevel, transformMoney } from './util';
+import { getter, setter } from './store';
+
 export const updateUser = (callback) => {
     user().then(res => _tc(() => {
         if (!res.error && res.data) {
@@ -12,6 +13,8 @@ export const updateUser = (callback) => {
 };
 function formatUserInfo (data) {
     try {
+        const { gradeSetting, gradeRange } = getter(['gradeSetting', 'gradeRange']);
+        const gradeSettingObj = gradeSetting.get() || {};
         const { balance, today_income, total_income } = data;
         data.today_income = transformMoney(today_income);
         data.total_income = transformMoney(total_income);
@@ -23,6 +26,7 @@ function formatUserInfo (data) {
         });
         data.trCorrectRate = _toFixed(data.correct_rate * 100) + '%';
         data.propNumsObj = propNumsObj;
+        data.myGrade = gradeSettingObj[rangeLevel(data.user_level, gradeRange.get())];
         return data;
     } catch (e) {
         return data;
@@ -92,3 +96,36 @@ export const getTaskPlatform = () => {
         }
     }));
 };
+export const getGradeSetting = () => {
+    gradeSetting().then(res => _tc(() => {
+        console.log(res, 'getGradeSetting');
+        if (!res.error && res.data) {
+            setter([['gradeSetting', (formatGrade(res.data))]], true);
+            setter([['gradeRange', (formatGradeRange(res.data))]], true);
+        }
+    }));
+};
+function formatGrade (array) {
+    try {
+        const gradeObj = {};
+        array.forEach(item => {
+            gradeObj[item.grade] = item;
+        });
+        return gradeObj;
+    } catch (e) {
+        return {};
+    }
+}
+function formatGradeRange (array) {
+    try {
+        return array.map(item => item.level);
+    } catch (e) {
+        return [];
+    }
+}
+
+export function updateSecondIncome () {
+    getSecondIncome().then(res => {
+        console.log(res, '领取的金币');
+    });
+}

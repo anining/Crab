@@ -251,6 +251,16 @@ export function upgradeGameLevel (content) {
     return transformFetch('POST', '/game/level', { content });
 }
 
+// 等级配置
+export function gradeSetting () {
+    return transformFetch('GET', '/game/grade', { });
+}
+
+// 获取每秒奖励
+export function getSecondIncome () {
+    return transformFetch('POST', '/game/get_second_income', { });
+}
+
 // 生词本
 export function getNoteBook () {
     return transformFetch('GET', '/notebook', { });
@@ -289,7 +299,7 @@ const transformFetch = async (method, url, data = {}) => {
         });
         const request = { method, headers: HEADER };
         (method === 'POST' || method === 'PUT') && (request.body = POST_DATA);
-        let loadingEnd = 0; // 是否执行完成
+        let loadingEnd = false; // 是否执行完成
         return Promise.race([
             new Promise((resolve, reject) => {
                 // 接口超时10s
@@ -298,7 +308,7 @@ const transformFetch = async (method, url, data = {}) => {
                         resolve({ error: 999, msg: '请求超时' });
                         toast('请求超时');
                         console.log(loadingEnd, '请求超时==', url, method, data);
-                        loadingEnd = 2;
+                        loadingEnd = true;
                     }
                 }, 8000);
             }),
@@ -315,8 +325,9 @@ const transformFetch = async (method, url, data = {}) => {
                     } else {
                         resolve({ error: 999, msg: '请求失败' });
                     }
-                    loadingEnd = 1;
+                    loadingEnd = true;
                 } catch (e) {
+                    loadingEnd = true;
                     resolve({ error: 999, msg: '请求失败' });
                 }
             })

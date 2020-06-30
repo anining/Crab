@@ -4,6 +4,7 @@ import * as U from 'karet.util';
 import CryptoJS from 'crypto-js';
 import { API_URL, PRIVATE_KEY } from './config';
 import { BALANCE_RATE } from './data';
+import { setDefaultGlobal } from '../global/global';
 
 const initializationStore = keys => {
     const localStore = store.get();
@@ -16,6 +17,7 @@ const initializationStore = keys => {
         }
     });
     U.set(store, localStore);
+    setDefaultGlobal(localStore);
 };
 
 /**
@@ -331,6 +333,22 @@ export function _toFixed (number, num = 2) {
         return Number(number).toFixed(num);
     } catch (e) {
         return 0;
+    }
+}
+
+export function rangeLevel (level, rangeArray) {
+    try {
+        let grade = 1;
+        for (let i = 0; i < rangeArray.length; i++) {
+            const item = rangeArray[i];
+            if (level < item) {
+                grade = i + 1;
+                break;
+            }
+        }
+        return grade;
+    } catch (e) {
+        return 1;
     }
 }
 

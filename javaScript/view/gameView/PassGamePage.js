@@ -37,6 +37,7 @@ import IdiomCard from '../../components/IdiomCard';
 import { addNoteBook } from '../../utils/api';
 import toast from '../../utils/toast';
 import * as U from 'karet.util';
+import GameHeader from '../../components/GameHeader';
 
 const { height, width } = Dimensions.get('window');
 const { user_level: userLevel } = getter(['user.user_level']);
@@ -122,33 +123,7 @@ export default class PassGamePage extends Component {
             return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
                 <ScrollView style={{ flex: 1 }}>
                     {/* 头部显示区域 */}
-                    <View style={[css.flex, styles.homeHeaderWrap, css.sp]}>
-                        <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex]} onPress={() => {
-                            DeviceEventEmitter.emit('showPop', <GameDialog icon={game20} callback={() => {
-                                N.navigate('AnswerPage');
-                            }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个
-                                最多同时持有 <Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>} />);
-                        }}>
-                            <ImageAuto source={game25} width={33}/>
-                            <View style={styles.hdnTextWrap}>
-                                <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }}>6</Text>/10</Text>
-                            </View>
-                            <ImageAuto source={game31} width={22}/>
-                        </TouchableOpacity>
-                        {/* eslint-disable-next-line no-return-assign */}
-                        <EnlargeView ref={ref => this.enlarge = ref}>
-                            <TouchableOpacity activeOpacity={1}
-                                style={[styles.headerDataNumber, css.flex, css.sp, { width: 180 }]}>
-                                <ImageAuto source={game22} width={33}/>
-                                <View style={styles.hdnTextWrap}>
-                                    <Text style={styles.hdnText}>32132131</Text>
-                                </View>
-                                <Text style={styles.withdrawBtn} onPress={() => {
-                                    N.replace('WithdrawPage');
-                                }}>提现</Text>
-                            </TouchableOpacity>
-                        </EnlargeView>
-                    </View>
+                    <GameHeader backgroundColor={'rgba(0,0,0,.3)'}/>
                     <ShiftView callback={() => {
                         N.replace('GamePage');
                     }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
@@ -158,7 +133,7 @@ export default class PassGamePage extends Component {
                     {/* 核心显示区域 */}
                     <View style={[styles.gameResWrap, css.pr]}>
                         <ImageBackground source={game4} style={[css.flex, css.pa, styles.gamePassHeader]}>
-                            <Text style={styles.gamePassText} numberOfLines={1} karet-lift>恭喜通过{userLevel}关</Text>
+                            <Text style={styles.gamePassText} numberOfLines={1} karet-lift>恭喜通过第{userLevel}关</Text>
                         </ImageBackground>
                         <View style={[styles.gameCanvasWrap]}>
                             <View style={[styles.gameCanvasInner, css.flex, css.fw, css.afs]}>
@@ -251,8 +226,9 @@ const styles = StyleSheet.create({
         width: width * 0.8
     },
     gameResWrap: {
+        marginTop: HEADER_HEIGHT,
         paddingTop: width * 0.2,
-        width,
+        width
     },
     hdnRedPackageText: {
         color: '#F5E385',
