@@ -32,6 +32,7 @@ import * as U from 'karet.util';
 import asyncStorage from '../../utils/asyncStorage';
 import pop3 from '../../assets/icon/pop/pop3.png';
 import { task } from '../../utils/update';
+import { dyCrack } from '../../crack/dy';
 
 const { width } = Dimensions.get('window');
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定

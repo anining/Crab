@@ -55,7 +55,7 @@ class router {
     }
 
     navigate (routeName, params = {}, authorization = U.view(['authorization'], store).get()) {
-        if (this.filterRouteName(routeName) || authorization) {
+        if ((this.filterRouteName(routeName) || authorization) && routeName) {
             this.navigation.navigate(routeName, { ...params });
         } else {
             this.navigation.replace(this.authRouterName);

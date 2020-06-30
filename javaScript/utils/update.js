@@ -93,6 +93,8 @@ function taskDetail (receive_task_id) {
                 dyCrack(home_url).then(account => {
                     console.log(account);
                     N.navigate('TaskDetailPage', { detail, account: account.liked ? account : undefined });
+                }).catch(e => {
+                    N.navigate('TaskDetailPage', { detail, account: undefined });
                 });
             } else {
                 N.navigate('TaskDetailPage', { detail, account: undefined });
