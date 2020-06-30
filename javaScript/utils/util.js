@@ -1,7 +1,10 @@
-import { PermissionsAndroid, Linking, Animated } from 'react-native';
+import { PermissionsAndroid, Linking, Animated, Platform } from 'react-native';
 import { store } from './store';
+import RNFetchBlob from 'rn-fetch-blob';
+import CameraRoll from '@react-native-community/cameraroll';
 import * as U from 'karet.util';
 import CryptoJS from 'crypto-js';
+import RN_FS from 'react-native-fs';
 import { API_URL, PRIVATE_KEY } from './config';
 import { BALANCE_RATE } from './data';
 import { setDefaultGlobal } from '../global/global';
@@ -110,6 +113,30 @@ export function _if (value, callback, elseCallBack) {
     } catch (e) {
         console.log(e, '_if');
         return null;
+    }
+}
+
+export function saveBase64ImageToCameraRoll (base64Img, success, fail) {
+    try {
+        const dirs = Platform.OS === 'ios' ? RN_FS.LibraryDirectoryPath : RN_FS.ExternalDirectoryPath; // 外部文件，共享目录的绝对路径（仅限android）
+        const downloadDest = `${dirs}/${(Math.random() * 10000000) | 0}.png`;
+        RNFetchBlob.fs.writeFile(downloadDest, base64Img, 'base64').then(async rst => {
+            try {
+                await requestPermission(() => {
+                    CameraRoll && CameraRoll.saveToCameraRoll(downloadDest)
+                        .then(() => {
+                            success && success();
+                        })
+                        .catch(() => {
+                            fail && fail();
+                        });
+                });
+            } catch (err) {
+                fail && fail();
+            }
+        });
+    } catch (e) {
+        console.log(e);
     }
 }
 

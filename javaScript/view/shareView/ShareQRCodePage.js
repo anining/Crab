@@ -6,18 +6,20 @@ import share13 from '../../assets/icon/share/share13.png';
 import share14 from '../../assets/icon/share/share14.png';
 import share15 from '../../assets/icon/share/share15.png';
 import share16 from '../../assets/icon/share/share16.png';
-import { requestPermission } from '../../utils/util';
+import { requestPermission, saveBase64ImageToCameraRoll } from '../../utils/util';
 import { captureRef } from 'react-native-view-shot';
-import CameraRoll from '@react-native-community/cameraroll';
 import toast from '../../utils/toast';
 import QRCode from 'react-native-qrcode-svg';
-import { getter } from '../../utils/store';
+import { getter, store } from '../../utils/store';
+import * as U from 'karet.util';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const { invite_code } = getter(['user.invite_code']);
 const { width } = Dimensions.get('window');
 
 function ShareQRCodePage () {
-    const [view, setView] = useState();
+    const view = U.atom([]);
+    const [capture, setCapture] = useState();
 
     async function onShare () {
         try {
@@ -36,22 +38,21 @@ function ShareQRCodePage () {
     }
 
     function save () {
+        const localView = view.get();
         try {
-            requestPermission(() => {
-                if (view) {
-                    captureRef(view, {
+            if (capture) {
+                requestPermission(() => {
+                    captureRef(localView[capture.currentIndex], {
                         format: 'jpg',
                         quality: 1.0,
-                    }).then(
-                        uri => {
-                            CameraRoll.saveToCameraRoll(uri)
-                                .then(() => toast('保存成功,请到相册查看'))
-                                .catch(() => toast('保存失败'));
-                        },
-                        () => () => toast('保存失败'),
+                        result: 'base64',
+                    }).then(uri => {
+                        saveBase64ImageToCameraRoll(uri, () => toast('保存成功,请到相册查看'), () => toast('保存失败'));
+                    },
+                    () => toast('保存失败'),
                     );
-                }
-            }).then(r => console.log(r));
+                });
+            }
         } catch (e) {
             toast('保存失败');
         }
@@ -59,7 +60,7 @@ function ShareQRCodePage () {
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#fff', justifyContent: 'space-around', paddingBottom: 10 }]}>
-            <Slider setView={setView}/>
+            <Slider view={view} setCapture={setCapture} capture={capture}/>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                 <TouchableOpacity style={styles.btn} onPress={onShare}>
                     <Text style={{ fontSize: 16, fontWeight: '500', color: '#fff' }}>分享给好友</Text>
@@ -72,7 +73,7 @@ function ShareQRCodePage () {
     );
 }
 
-function Slider ({ setView }) {
+function Slider ({ view, setCapture }) {
     const height = width * 0.7 * (1368 / 864);
     const data = [
         {
@@ -108,17 +109,18 @@ function Slider ({ setView }) {
     return (
         <View>
             <Carousel
+                ref={ref => setCapture(ref) }
                 data={data}
                 renderItem={({ item }) => {
                     const { source, id, size, left, top } = item;
                     return (
                         <TouchableOpacity key={id} style={{ borderRadius: 8, overflow: 'hidden' }}>
-                            <ImageBackground source={source} style={{ width: width * 0.7, height, position: 'relative' }} ref={ref => setView(ref)}>
-                                <View style={{
-                                    position: 'absolute',
-                                    top,
-                                    left
-                                }}>
+                            <ImageBackground source={source} style={{ width: width * 0.7, height, position: 'relative' }} ref={ref => {
+                                let localView = view.get();
+                                localView = [...localView, ...[ref]].slice(0, 4);
+                                U.set(view, localView);
+                            }}>
+                                <View style={{ position: 'absolute', top, left }}>
                                     <QRCode
                                         value={`?invite=${invite_code.get()}`}
                                         size={size}
