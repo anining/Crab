@@ -54,7 +54,7 @@ function ShareQRCodePage () {
     }
 
     return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#312B2A', justifyContent: 'space-around', paddingBottom: 10 }]}>
+        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#fff', justifyContent: 'space-around', paddingBottom: 10 }]}>
             <Slider setView={setView}/>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
                 <TouchableOpacity style={styles.btn} onPress={onShare}>
