@@ -29,7 +29,7 @@ import ShiftView from '../../components/ShiftView';
 import { N } from '../../utils/router';
 import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
-import { _toFixed, setAndroidTime, transformMoney } from '../../utils/util';
+import { _if, _toFixed, setAndroidTime, transformMoney } from '../../utils/util';
 import EnlargeView from '../../components/EnlargeView';
 import { updateUser } from '../../utils/update';
 import { getter } from '../../utils/store';
@@ -148,9 +148,14 @@ export default class HomePage extends Component {
                                     <Text style={styles.outputText} karet-lift>{secondIncome}币/秒</Text>
                                 </ImageBackground>
                             </TouchableOpacity>
-                            <ImageBackground source={game35} style={[css.pa, styles.noticeIcon]}>
-                                <Text style={[css.pa, styles.noticeNumber]}>10</Text>
-                            </ImageBackground>
+                            {/* NoticePage */}
+                            <TouchableOpacity activeOpacity={1} style={[css.pa, styles.noticeIcon]} onPress={() => {
+                                N.navigate('NoticePage');
+                            }}>
+                                <ImageBackground source={game35} style={[{ width: '100%', height: '100%' }]}>
+                                    {_if(false, res => <Text style={[css.pa, styles.noticeNumber]}>10</Text>)}
+                                </ImageBackground>
+                            </TouchableOpacity>
                             {/* eslint-disable-next-line no-return-assign */}
                             <Lamp ref={ref => this.lamp = ref} width={'100%'} backgroundColor={'rgba(0,179,216,.5)'}
                                 color={'#005262'} color1={'#FF6C00'}/>

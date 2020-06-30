@@ -5,14 +5,17 @@ import ListGeneral from '../../components/ListGeneral';
 import { notice } from '../../utils/api';
 import { N } from '../../utils/router';
 import { transformTime } from '../../utils/util';
+import header3 from '../../assets/icon/header/header3.png';
+import Header from '../../components/Header';
 
 const itemHeight = 150;
 const itemMarginTop = 10;
 
 function NoticePage () {
     return (
-        <SafeAreaView style={css.safeAreaView}>
-            <View style={{ paddingLeft: 15, paddingRight: 15, flex: 1, backgroundColor: '#F8F8F8' }}>
+        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
+            <Header color={'#fff'} label={'系统通知'} style={[{ backgroundColor: '#FED465', borderBottomWidth: 0 }]} icon={header3}/>
+            <View style={{ paddingLeft: 15, paddingRight: 15, flex: 1 }}>
                 <ListGeneral
                     itemHeight={itemHeight}
                     itemMarginTop={itemMarginTop}
