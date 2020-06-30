@@ -10,7 +10,6 @@ import {
     StyleSheet,
     ScrollView,
     TextInput,
-    BackHandler,
     DeviceEventEmitter,
 } from 'react-native';
 import { css } from '../../assets/style/css';
@@ -441,7 +440,7 @@ function Btn ({ images, detail, name }) {
 
 function RenderImage ({ images, setImages, status, sourceImage }) {
     const view = <Image source={task8} style={ styles.uploadImage}/>;
-    if (images.length && status !== 1) {
+    if (images.length) {
         const localImages = images;
         const uri = localImages.shift();
         setImages(localImages);
@@ -457,7 +456,7 @@ function RenderImage ({ images, setImages, status, sourceImage }) {
                 }} style={{ marginTop: 10 }}>
                     <Image source={{ uri: sourceImage }} style={[styles.uploadImage, { marginTop: 0 }]}/>
                 </TouchableOpacity>
-                <Image source={{ uri }} style={ styles.uploadImage}/>
+                <Image source={{ uri: status !== 1 ? uri : `data:${uri.mime};base64,${uri.data}` }} style={ styles.uploadImage}/>
             </View>
         );
     }

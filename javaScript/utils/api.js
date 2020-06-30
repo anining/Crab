@@ -174,8 +174,13 @@ export function getPromoteAward () {
 }
 
 // 绑定父级
-export function bindParent () {
-    return transformFetch('PUT', '/children/parent');
+export function bindParent (invite_code) {
+    return transformFetch('PUT', '/children/parent', { invite_code });
+}
+
+// 获取收徒链接
+export function childrenLink () {
+    return transformFetch('GET', '/children/link');
 }
 
 // 徒弟详情
@@ -203,6 +208,11 @@ export function userBaned (page, size) {
     return transformFetch('GET', '/user/baned', { page, size });
 }
 
+// 公告
+export function notice (page, size) {
+    return transformFetch('GET', '/notice', { page, size });
+}
+
 // 接任务
 export function getTask (task_platform_id) {
     return transformFetch('POST', '/task/receive', { task_platform_id });
@@ -211,6 +221,11 @@ export function getTask (task_platform_id) {
 // 提交任务
 export function taskSubmit (receive_task_id, images, nickname) {
     return transformFetch('POST', '/task/submit', { receive_task_id, images, nickname });
+}
+
+// 收徒设置
+export function childrenSetting (qq_group, wx, need_invite_num, need_income) {
+    return transformFetch('PUT', '/children/setting', { qq_group, wx, need_invite_num, need_income });
 }
 
 // 接任务列表
