@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { css } from '../assets/style/css';
-import { _tc } from '../utils/util';
+import { _tc, setAndroidTime } from '../utils/util';
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -91,31 +91,32 @@ export default class ShiftView extends Component {
     }
 
     componentWillMount () {
-        this._stop = true;
-        this.animation && this.animation.stop();
+        this.stop();
     }
 
     start () {
-        if (this._stop) {
-            this._stop = false;
-        }
+        this.animation && this.animation.stop();
         this._animationStart();
-        // _tc(() => { this.callback && this.callback(); });
     }
 
     _animationStart () {
         requestAnimationFrame(() => {
             this.animation = Animated.parallel([Animated.sequence(this.opacityStart), Animated.sequence(this.transformXStart), Animated.sequence(this.transformYStart)]).start(() => {
-                _tc(() => { this.callback && this.callback(); });
-                if (this.loop && this.delay && !this._stop) {
+                if (this.loop && this.duration) {
                     this.start();
                 }
             });
+            setAndroidTime(() => {
+                _tc(() => { this.callback && this.callback(); });
+            }, this.duration - 100);
         });
     }
 
     stop () {
-        this._stop = true;
+        this.animation && (() => {
+            this.animation.stop();
+            this.animation = null;
+        })();
     }
 
     render () {

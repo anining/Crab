@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, ImageBackground } from 'react-native';
 import { css } from '../assets/style/css';
 import PropTypes from 'prop-types';
 import game6 from '../assets/icon/game/game6.png';
 import game30 from '../assets/icon/game/game30.png';
+import game64 from '../assets/icon/game/game64.png';
 import ImageAuto from './ImageAuto';
 
 export default class IdiomCard extends Component {
@@ -18,9 +19,9 @@ export default class IdiomCard extends Component {
         try {
             const view = [];
             this.content.split('').forEach((item) => {
-                view.push(<View style={[css.flex, styles.contentItemWrap]}>
+                view.push(<ImageBackground source={game64} style={[css.flex, styles.contentItemWrap]}>
                     <Text style={[styles.contentItemText, css.gf]}>{item}</Text>
-                </View>);
+                </ImageBackground>);
             });
             return <View style={[css.flex, css.sp, styles.contentWrap]}>{view}</View>;
         } catch (e) {
@@ -32,14 +33,14 @@ export default class IdiomCard extends Component {
         try {
             return <View style={[css.flex, styles.idiomAllWrap, css.fw, css.afs]}>
                 <View style={[css.flex, css.js, styles.idiomAllTitleWrap]}>
-                    <ImageAuto source={game6} style={{ width: 20, marginRight: 5 }}/>
+                    <ImageAuto source={game30} style={{ width: 20, marginRight: 5 }}/>
                     <Text style={styles.idiomAllTitle}>释义</Text>
                 </View>
                 <Text style={[styles.idiomInnerText]}>
                     {this.idiom.meaning}
                 </Text>
                 <View style={[css.flex, css.js, styles.idiomAllTitleWrap]}>
-                    <ImageAuto source={game30} style={{ width: 20, marginRight: 5 }}/>
+                    <ImageAuto source={game6} style={{ width: 20, marginRight: 5 }}/>
                     <Text style={styles.idiomAllTitle}>出处</Text>
                 </View>
                 <Text style={[styles.idiomInnerText]}>
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     contentItemWrap: {
-        backgroundColor: '#FFEBCC',
+        // backgroundColor: '#FFEBCC',
         height: 44,
         overflow: 'hidden',
         width: 44

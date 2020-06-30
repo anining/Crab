@@ -115,9 +115,8 @@ export default class HomePage extends Component {
                     <View style={[css.pa, css.cover]}>
                         {/* eslint-disable-next-line no-return-assign */}
                         <ShiftView callback={() => {
-                            console.log('调用一次');
                             this.gameHeader && this.gameHeader.start();
-                        }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={800} delay={1000}
+                        }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={1000}
                         startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}>
                             <ImageAuto source={game22} width={33}/>
                         </ShiftView>

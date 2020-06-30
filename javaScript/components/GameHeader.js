@@ -50,6 +50,7 @@ export default class GameHeader extends Component {
     async componentDidMount () {
         this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user));
         nowBalance = parseFloat(this.state.user.goldCoin || 0);
+        console.log(this.state.user, this.state.user.phone, '=========初始化、、======');
         this.secondText && this.secondText.setNativeProps({
             text: `${_toFixed(nowBalance, 4)}`
         });
@@ -115,7 +116,7 @@ export default class GameHeader extends Component {
             </TouchableOpacity>
             <EnlargeView ref={ref => this.enlarge = ref}>
                 <View style={[styles.headerDataNumber, css.flex, css.sp, css.pr, {
-                    width: 180,
+                    width: 190,
                     backgroundColor: this.props.backgroundColor
                 }]}>
                     <TouchableOpacity activeOpacity={1} style={[css.pa, styles.topHDN]} onPress={() => {
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
     hdnText: {
         // backgroundColor: 'red',
         color: '#ffffff',
-        fontSize: 16,
+        fontSize: 15,
         padding: 0,
         ...css.gf
     },

@@ -6,7 +6,7 @@ import { N } from '../utils/router';
 import ImageAuto from './ImageAuto';
 
 const { width } = Dimensions.get('window');
-const HEIGHT = 63;
+export const MAIN_HEADER_HEIGHT = 63;
 
 function RenderHeaderRight ({ headerRight, onPress }) {
     if (headerRight) {
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         borderBottomColor: 'rgba(221,221,221,1)',
         borderBottomWidth: 1,
         flexDirection: 'row',
-        height: HEIGHT,
+        height: MAIN_HEADER_HEIGHT,
         paddingTop: 7,
         width
     },
@@ -76,24 +76,24 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 16,
         fontWeight: '500',
-        height: HEIGHT,
-        lineHeight: HEIGHT,
+        height: MAIN_HEADER_HEIGHT,
+        lineHeight: MAIN_HEADER_HEIGHT,
         textAlign: 'center'
     },
     headerLeft: {
-        height: HEIGHT,
+        height: MAIN_HEADER_HEIGHT,
         width: 70,
     },
     headerRight: {
-        height: HEIGHT,
-        lineHeight: HEIGHT,
+        height: MAIN_HEADER_HEIGHT,
+        lineHeight: MAIN_HEADER_HEIGHT,
         paddingRight: 10,
         textAlign: 'center',
         width: 70
     },
     returnBtn: {
         alignItems: 'flex-start',
-        height: HEIGHT,
+        height: MAIN_HEADER_HEIGHT,
         justifyContent: 'center',
         paddingLeft: 20,
         width: 70,
