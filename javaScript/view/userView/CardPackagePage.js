@@ -6,24 +6,24 @@ import Header from '../../components/Header';
 import Null from '../../components/Null';
 import { prop } from '../../utils/api';
 
-export default function CardPackagePage () {
+function CardPackagePage () {
     const [cards, setCards] = useState([]);
     const [item, setItem] = useState({});
+    const headerRight = <Text style={{ color: '#FF6C00' }}>道具记录</Text>;
+
     useEffect(() => {
         prop().then(r => {
-            if (!r.error) {
+            console.log(r);
+            if (!r.error && r.data.length) {
                 setCards(r.data);
-                r.data.length && setItem(r.data[0]);
+                setItem(r.data[0]);
             }
         });
     }, []);
-    const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>道具记录</Text>;
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
-            <Header scene={{ descriptor: { options: {} }, route: { name: '道具背包' } }} navigation={N} onPress={() => {
-                N.navigate('CardPackageRecordsPage');
-            }} headerRight={headerRight}/>
+            <Header scene={{ descriptor: { options: {} }, route: { name: '道具背包' } }} navigation={N} onPress={() => N.navigate('CardPackageRecordsPage')} headerRight={headerRight}/>
             <RenderView cards={cards} item={item} setItem={setItem}/>
         </SafeAreaView>
     );
@@ -114,3 +114,5 @@ const styles = StyleSheet.create({
         marginBottom: 10
     }
 });
+
+export default CardPackagePage;

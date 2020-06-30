@@ -1,8 +1,11 @@
-import { activity, app, banner, getSecondIncome, gradeSetting, signConfig, taskPlatform, user } from './api';
+import { activity, app, banner, getSecondIncome, getTask, gradeSetting, taskReceiveDetail, signConfig, taskPlatform, user } from './api';
 import { _tc, _toFixed, rangeLevel, toGoldCoin, transformMoney } from './util';
 import { getter, setter } from './store';
 import { getPath } from '../global/global';
 
+import toast from './toast';
+import { N } from './router';
+import { dyCrack } from '../crack/dy';
 export const updateUser = (callback) => {
     return new Promise((resolve, reject) => {
         user().then(res => _tc(() => {
@@ -116,6 +119,40 @@ export const getTaskPlatform = () => {
         }));
     });
 };
+function taskDetail (receive_task_id) {
+    taskReceiveDetail(receive_task_id).then(r => {
+        if (r.error) {
+            toast(r.msg || '当前做任务人数过多！稍后再试！');
+        } else {
+            const { data: detail } = r;
+            const { home_url, platform_category } = detail;
+            if (platform_category === 1) {
+                dyCrack(home_url).then(account => {
+                    console.log(account);
+                    N.navigate('TaskDetailPage', { detail, account: account.liked ? account : undefined });
+                }).catch(e => {
+                    N.navigate('TaskDetailPage', { detail, account: undefined });
+                });
+            } else {
+                N.navigate('TaskDetailPage', { detail, account: undefined });
+            }
+        }
+    });
+}
+export function task (category, receive_task_id) {
+    if (category) {
+        getTask(category).then(r => {
+            if (r.error) {
+                toast(r.msg || '当前做任务人数过多！稍后再试！');
+                error === 9 && N.navigate('AccountHomePage');
+            } else {
+                taskDetail(r.data.receive_task_id);
+            }
+        });
+    } else {
+        taskDetail(receive_task_id);
+    }
+}
 export const getGradeSetting = () => {
     return new Promise((resolve, reject) => {
         gradeSetting().then(res => _tc(() => {

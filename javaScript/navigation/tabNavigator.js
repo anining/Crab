@@ -1,6 +1,5 @@
 import * as React from 'karet';
 import { Image } from 'react-native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomePage from '../view/tabView/HomePage';
 import UserPage from '../view/tabView/UserPage';
@@ -10,8 +9,6 @@ import { proxyRouter } from '../utils/router';
 import { css } from '../assets/style/css';
 import icon1 from '../assets/icon/tab/tab1.png';
 import icon2 from '../assets/icon/tab/tab2.png';
-import icon3 from '../assets/icon/tab/tab3.png';
-import icon4 from '../assets/icon/tab/tab4.png';
 import icon5 from '../assets/icon/tab/tab5.png';
 import icon6 from '../assets/icon/tab/tab6.png';
 import icon7 from '../assets/icon/tab/tab7.png';

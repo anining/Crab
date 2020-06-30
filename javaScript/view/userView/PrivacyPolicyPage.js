@@ -5,6 +5,7 @@ import { getter } from '../../utils/store';
 import HTML from 'react-native-render-html';
 
 const { width } = Dimensions.get('window');
+
 export default function PrivacyPolicyPage () {
     const { privacy } = getter(['app.privacy']);
 

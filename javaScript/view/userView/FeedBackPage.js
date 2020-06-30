@@ -10,46 +10,38 @@ import { feedback } from '../../utils/api';
 import toast from '../../utils/toast';
 
 const { width } = Dimensions.get('window');
-export default function FeedBackPage () {
+
+function FeedBackPage () {
     const [images, setImages] = useState([]);
     const [text, setText] = useState('');
     const [phone, setPhone] = useState('');
     const [selectId, setSelectId] = useState(1);
     const view = <Image source={feed2} style={{ height: 50, width: 50 }}/>;
-    const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>反馈记录</Text>;
+    const headerRight = <Text style={{ color: '#FF6C00' }}>反馈记录</Text>;
 
     function apiFeedback () {
-        if (!text || !phone) {
-            toast('操作失败');
+        if (!text || !phone || !images.length) {
+            toast('请填写完整的问题描述!');
             return;
         }
-        feedback(selectId, text, images, phone)
-            .then(r => {
-                if (r.error) {
-                    toast('操作失败');
-                } else {
-                    toast('操作成功');
-                    N.goBack();
-                }
-            });
+        feedback(selectId, text, images, phone).then(r => {
+            if (!r.error) {
+                toast('成功提交问题!');
+                N.goBack();
+            }
+        });
     }
 
     return (
         <SafeAreaView style={[css.safeAreaView, css.pr, { backgroundColor: '#F8F8F8' }]}>
-            <Header scene={{ descriptor: { options: {} }, route: { name: '意见反馈' } }} navigation={N} onPress={() => {
-                N.navigate('FeedBackRecordsPage');
-            }} headerRight={headerRight}/>
+            <Header scene={{ descriptor: { options: {} }, route: { name: '意见反馈' } }} navigation={N} onPress={() => N.navigate('FeedBackRecordsPage')} headerRight={headerRight}/>
             <View style={styles.container}>
                 <View style={styles.selectView}>
-                    <TouchableOpacity activeOpacity={1} onPress={() => {
-                        setSelectId(1);
-                    }} style={[styles.select, { backgroundColor: selectId === 1 ? '#FFF7F4' : '#fff', }]}>
+                    <TouchableOpacity onPress={() => setSelectId(1)} style={[styles.select, { backgroundColor: selectId === 1 ? '#FFF7F4' : '#fff' }]}>
                         <Text style={styles.selectTopBtn}>功能建议</Text>
                         <RenderSelectView select={selectId === 1}/>
                     </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={1} onPress={() => {
-                        setSelectId(2);
-                    }} style={[styles.select, { backgroundColor: selectId !== 1 ? '#FFF7F4' : '#fff', }]}>
+                    <TouchableOpacity onPress={() => setSelectId(2)} style={[styles.select, { backgroundColor: selectId !== 1 ? '#FFF7F4' : '#fff' }]}>
                         <Text style={styles.selectTopBtn}>发现bug</Text>
                         <RenderSelectView select={selectId !== 1}/>
                     </TouchableOpacity>
@@ -217,3 +209,5 @@ const styles = StyleSheet.create({
         width,
     }
 });
+
+export default FeedBackPage;

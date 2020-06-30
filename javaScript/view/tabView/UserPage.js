@@ -21,7 +21,6 @@ import user16 from '../../assets/icon/user/user16.png';
 import user17 from '../../assets/icon/user/user17.png';
 import { getter, clear } from '../../utils/store';
 import toast from '../../utils/toast';
-import { useEffect } from 'react';
 import * as U from 'karet.util';
 import { updateUser } from '../../utils/update';
 
@@ -36,7 +35,7 @@ const MENU_LIST = [
     {
         icon: user8,
         title: '道具背包',
-        remark: '1个道具',
+        remark: '',
         path: 'CardPackagePage'
     },
     {
@@ -84,49 +83,47 @@ const MENU_LIST = [
 ];
 const TASK_MENU = [
     {
-        id: 0,
+        id: 1,
         label: '进行中',
         icon: user3
     },
     {
-        id: 1,
+        id: 4,
         label: '审核中',
         icon: user4
     },
     {
-        id: 2,
+        id: 5,
         label: '已通过',
         icon: user5
     },
     {
-        id: 3,
+        id: 6,
         label: '未通过',
         icon: user6
     }
 ];
-export default function UserPage () {
-    useEffect(() => {
-        updateUser();
-    }, []);
-    const { today_income, total_income, balance, phone, user_id, avatar, invite_code } = getter(['user.today_income', 'user.total_income', 'user.balance', 'user.phone', 'user.user_id', 'user.avatar', 'user.invite_code']);
+const { today_income, total_income, nickname, balance, phone, avatar, invite_code, receive_task_status } = getter(['user.red_point.receive_task_status', 'user.today_income', 'user.nickname', 'user.total_income', 'user.balance', 'user.phone', 'user.avatar', 'user.invite_code']);
+
+function UserPage () {
+    updateUser();
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8', paddingTop: 20 }]}>
             <ScrollView>
                 <View style={styles.userDetailView}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        {/* <LocalView url={U.template({ uri: avatar })}/> */}
                         <Image karet-lift source={U.template({ uri: avatar })} style={styles.avatarIcon}/>
                         <View>
                             <View style={styles.userCardTop}>
-                                <Text karet-lift numberOfLines={1} style={styles.userPhone}>{phone}</Text>
-                                <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{user_id}</Text>
+                                <Text karet-lift numberOfLines={1} style={styles.userPhone}>{nickname}</Text>
+                                <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{phone}</Text>
                             </View>
                             <View style={styles.userCardBottom}>
                                 <Text karet-lift numberOfLines={1} style={styles.inviteCode}>邀请码:{invite_code}</Text>
                                 <TouchableOpacity onPress={() => {
                                     Clipboard.setString(invite_code.get());
-                                    toast('复制成功');
+                                    toast('复制成功!');
                                 }} style={styles.copyBtn}>
                                     <Text style={styles.copyText}>复制</Text>
                                 </TouchableOpacity>
@@ -177,30 +174,31 @@ export default function UserPage () {
 }
 
 function RenderTaskMenu () {
-    const components = [];
-    TASK_MENU.forEach(menu => {
-        components.push(
-            <TouchableOpacity onPress={() => {
-                N.navigate('MyTaskPage', { id: menu.id });
-            }} style={styles.myTaskBtn} key={menu.id}>
-                <Image source={menu.icon} style={styles.myTaskBtnIcon}/>
-                <Text style={styles.myTaskBtnText}>{menu.label}<Text style={{ color: '#FF7751' }}>1</Text></Text>
+    const view = [];
+    const read = receive_task_status.get();
+    TASK_MENU.forEach((menu, index) => {
+        const { id, icon, label } = menu;
+        view.push(
+            <TouchableOpacity onPress={() => N.navigate('MyTaskPage', { id: index })} style={styles.myTaskBtn} key={id}>
+                <Image source={icon} style={styles.myTaskBtnIcon}/>
+                <Text style={styles.myTaskBtnText}>{label}<Text style={{ color: '#FF7751' }}> {(read && read[id]) || 0}</Text></Text>
             </TouchableOpacity>
         );
     });
     return (
         <View style={styles.myTaskViewBottom}>
-            {components}
+            {view}
         </View>
     );
 }
 
 function RenderMenu () {
-    const components = [];
+    const view = [];
     MENU_LIST.forEach(menu => {
-        components.push(
+        const { title, icon, path, remark } = menu;
+        view.push(
             <TouchableOpacity onPress={() => {
-                if (menu.path === 'VerificationStackNavigator') {
+                if (path === 'VerificationStackNavigator') {
                     clear();
                     N.replace(menu.path);
                 } else {
@@ -208,11 +206,11 @@ function RenderMenu () {
                 }
             }} style={styles.btn} key={menu.path}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image source={menu.icon} style={styles.menuIcon}/>
-                    <Text>{menu.title}</Text>
+                    <Image source={icon} style={styles.menuIcon}/>
+                    <Text>{title}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ fontSize: 13, color: '#999', marginRight: 5 }}>{menu.remark}</Text>
+                    <Text style={{ fontSize: 13, color: '#999', marginRight: 5 }}>{remark}</Text>
                     <Image source={user13} style={{ height: 13, width: 6 }}/>
                 </View>
             </TouchableOpacity>
@@ -220,7 +218,7 @@ function RenderMenu () {
     });
     return (
         <View style={{ backgroundColor: '#fff' }}>
-            {components}
+            {view}
         </View>
     );
 }
@@ -402,3 +400,5 @@ const styles = StyleSheet.create({
         width: 78
     }
 });
+
+export default UserPage;

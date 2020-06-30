@@ -31,7 +31,8 @@ import toast from '../../utils/toast';
 import * as U from 'karet.util';
 import asyncStorage from '../../utils/asyncStorage';
 import pop3 from '../../assets/icon/pop/pop3.png';
-import with10 from '../../assets/icon/withdraw/withdraw10.png';
+import { task } from '../../utils/update';
+import { dyCrack } from '../../crack/dy';
 
 const { width } = Dimensions.get('window');
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
@@ -57,12 +58,10 @@ export default function AnswerPage () {
     }
 
     async function _newUserTask () {
-        // asyncStorage.setItem(`NEW_USER_TASK_TYPE1${user.get()}`, 'true');
-        // asyncStorage.setItem(`NEW_USER_TASK_TYPE2${user.get()}`, 'true');
-        // asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user.get()}`, 'true');
-        const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user.get()}`);
-        const local2 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE2${user.get()}`);
-        const local3 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE3${user.get()}`);
+        // asyncStorage.setItem(`NEW_USER_TASK_TYPE1${user_id.get()}`, 'true');
+        const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
+        const local2 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE2${user_id.get()}`);
+        const local3 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE3${user_id.get()}`);
         const ret = await newUserTask();
         if (!ret.error) {
             const NEW_USER_TASK_TYPE = {
@@ -390,35 +389,12 @@ function RenderNewBtn ({ item, _newUserTask }) {
 
 function RenderBtn ({ item }) {
     const { btnStatus, btnText, platform_category } = item;
-    function _getTask (category) {
-        try {
-            getTask(category).then(r => {
-                if (r.error) {
-                    toast(r.msg || '操作失败');
-                    if (error === 9) {
-                        N.navigate('AccountHomePage');
-                    }
-                } else {
-                    const { receive_task_id } = r.data;
-                    taskReceiveDetail(receive_task_id).then(r => {
-                        if (r.error) {
-                            toast(r.msg || '操作失败');
-                        } else {
-                            N.navigate('TaskDetailPage', { detail: r.data });
-                        }
-                    });
-                }
-            });
-        } catch (e) {
-            console.log(e);
-        }
-    }
 
     switch (btnStatus) {
     case 2:
     case 5:return (
         <Text style={styles.todoTaskText} karet-lift onPress={ () => {
-            _getTask(platform_category);
+            task(platform_category);
         }}>{btnText}</Text>
     );
     case 6:return (
