@@ -1,7 +1,5 @@
 import { activity, app, banner, getSecondIncome, getTask, gradeSetting, taskReceiveDetail, signConfig, taskPlatform, user } from './api';
 import { _tc, _toFixed, rangeLevel, toGoldCoin, transformMoney } from './util';
-import { activity, app, banner, getSecondIncome, gradeSetting, signConfig, taskPlatform, user } from './api';
-import { _tc, _toFixed, rangeLevel, toGoldCoin, transformMoney } from './util';
 import { getter, setter } from './store';
 import toast from './toast';
 import { N } from './router';
