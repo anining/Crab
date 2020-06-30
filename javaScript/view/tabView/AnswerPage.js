@@ -25,81 +25,22 @@ import { _if, _tc, bannerAction, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
 import { N } from '../../utils/router';
 import { getter, store } from '../../utils/store';
-import { getTask, newUserTask, sign, signLogs, taskReceiveDetail } from '../../utils/api';
+import { getNewUserTask, getTask, newUserTask, sign, signLogs, taskReceiveDetail } from '../../utils/api';
 import Choice from '../../components/Choice';
 import toast from '../../utils/toast';
 import * as U from 'karet.util';
-
-// btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
+import asyncStorage from '../../utils/asyncStorage';
+import pop3 from '../../assets/icon/pop/pop3.png';
+import with10 from '../../assets/icon/withdraw/withdraw10.png';
 
 const { width } = Dimensions.get('window');
+// btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
 
-const sprog = [
-    {
-        icon: answer1,
-        label: '绑定账号，领金币',
-        minTitle: '看视频还有很多小攻略',
-        money: 5000,
-        btnText: '领取奖励',
-        btnStatus: 1,
-    }, {
-        icon: answer3,
-        label: '看视频，领金币',
-        minTitle: '看视频还有很多小攻略',
-        money: 5000,
-        btnText: '领取奖励',
-        btnStatus: 1,
-    }, {
-        icon: answer13,
-        label: '做任务，领金币',
-        minTitle: '看视频还有很多小攻略',
-        money: 5000,
-        btnText: '领取奖励',
-        btnStatus: 1,
-    }
-];
-
-// const sprogObj = {
-//     1: {
-//         icon: answer3,
-//         label: '看视频，领金币',
-//         minTitle: '看视频还有很多小攻略',
-//         money: 0,
-//         btnText: '领取奖励',
-//         btnStatus: 1,
-//     },
-//     2: {
-//         icon: answer1,
-//         label: '绑定账号，领金币',
-//         minTitle: '看视频还有很多小攻略',
-//         money: 0,
-//         btnText: '领取奖励',
-//         btnStatus: 1,
-//     },
-//     3: {
-//         icon: answer13,
-//         label: '做任务，领金币',
-//         minTitle: '看视频还有很多小攻略',
-//         money: 0,
-//         btnText: '领取奖励',
-//         btnStatus: 1,
-//     }
-// };
-
-// video = 1
-// account = 2
-// task = 3
-// return {
-//     cls.video: "看视频领金币",
-//     cls.account: "绑定账号领金币",
-//     cls.task: "做任务得奖励",
-// }
-
-const { banner, signConfig, activityObj, user, taskPlatform } = getter(['banner', 'signConfig', 'activityObj', 'user', 'taskPlatform']);
+const { banner, signConfig, activityObj, user, taskPlatform, user_id } = getter(['banner', 'signConfig', 'activityObj', 'user', 'user.user_id', 'taskPlatform']);
 
 export default function AnswerPage () {
     const [signDay, setSignDay] = useState(0);
-    // const [newUser, setNewUser] = useState([]);
+    const [newUser, setNewUser] = useState([]);
 
     useEffect(() => {
         init();
@@ -116,8 +57,47 @@ export default function AnswerPage () {
     }
 
     async function _newUserTask () {
+        // asyncStorage.setItem(`NEW_USER_TASK_TYPE1${user.get()}`, 'true');
+        // asyncStorage.setItem(`NEW_USER_TASK_TYPE2${user.get()}`, 'true');
+        // asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user.get()}`, 'true');
+        const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user.get()}`);
+        const local2 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE2${user.get()}`);
+        const local3 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE3${user.get()}`);
         const ret = await newUserTask();
-        // !ret.error && setNewUser(ret.data);
+        if (!ret.error) {
+            const NEW_USER_TASK_TYPE = {
+                1: {
+                    label: '看视频领金币',
+                    icon: answer1,
+                    path: ''
+                },
+                2: {
+                    label: '绑定账号领金币',
+                    icon: answer3,
+                    path: ''
+                },
+                3: {
+                    label: '做任务得奖励',
+                    icon: answer13,
+                    path: ''
+                }
+            };
+            const { data } = ret;
+            const localData = data.map(task => {
+                const { add_balance, is_finish, new_user_task_id, task_type, level } = task;
+                return {
+                    balance: add_balance,
+                    id: new_user_task_id,
+                    label: NEW_USER_TASK_TYPE[task_type].label,
+                    minTitle: NEW_USER_TASK_TYPE[task_type].label,
+                    icon: NEW_USER_TASK_TYPE[task_type].icon,
+                    path: NEW_USER_TASK_TYPE[task_type].path,
+                    btnText: is_finish ? '已完成' : `local${task_type}` ? '领取奖励' : '去完成',
+                    btnStatus: is_finish ? 3 : `local${task_type}` ? 2 : 5,
+                };
+            });
+            setNewUser(localData);
+        }
     }
 
     return (
@@ -141,7 +121,7 @@ export default function AnswerPage () {
                 <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
                 <View style={styles.answerWrap}>
                     <ComTitle title={'新手福利'}/>
-                    <RenderList list={sprog}/>
+                    <RenderNewList list={newUser} _newUserTask={_newUserTask}/>
                 </View>
                 <RenderTaskView />
                 <View style={{ height: 20, backgroundColor: '#f8f8f8' }}/>
@@ -206,11 +186,36 @@ function RenderTaskView () {
     return <></>;
 }
 
+function RenderNewList ({ list = [], _newUserTask }) {
+    const view = [];
+
+    list.forEach((item, index) => {
+        const { minTitle, btnStatus, icon, balance, label, id } = item;
+        view.push(
+            <View style={[styles.answerItemWrap, css.flex, css.sp, { borderBottomWidth: index + 1 >= list.length ? 0 : 1 }]} key={id}>
+                <View style={[css.flex, styles.aiwLeft, css.js]}>
+                    <ImageAuto source={icon} width={40}/>
+                    <View style={[css.flex, css.fw, styles.aiwText]}>
+                        <View style={[css.flex, css.js, { width: '100%' }]}>
+                            <Text style={[styles.labelText, { width: 'auto' }]} numberOfLines={1}>{label}</Text>
+                            <Text style={styles.labelMoney} numberOfLines={1}> +{balance}</Text>
+                            <ImageAuto source={answer14} width={20}/>
+                        </View>
+                        <Text style={[styles.labelText, styles.labelMinTitle, { color: btnStatus === 5 ? '#999' : '#53C23B' }]} numberOfLines={1}>{minTitle}</Text>
+                    </View>
+                </View>
+                <RenderNewBtn _newUserTask={_newUserTask} item={item}/>
+            </View>
+        );
+    });
+    return <>{view}</>;
+}
+
 function RenderList ({ list = [] }) {
     const view = [];
 
     list.forEach((item, index) => {
-        const { minTitle, btnStatus, btnText } = item;
+        const { minTitle, btnStatus, money, label } = item;
         view.push(
             <View style={[styles.answerItemWrap, css.flex, css.sp, { borderBottomWidth: index + 1 >= list.length ? 0 : 1 }]} key={`${index}list`}>
                 <View style={[css.flex, styles.aiwLeft, css.js]}>
@@ -218,10 +223,10 @@ function RenderList ({ list = [] }) {
                     <View style={[css.flex, css.fw, styles.aiwText]}>
                         <View style={[css.flex, css.js, { width: '100%' }]}>
                             <Text style={[styles.labelText, { width: 'auto' }]}
-                                numberOfLines={1}>{item.label}</Text>
-                            {_if(item.money, res => <Text style={styles.labelMoney}
+                                numberOfLines={1}>{label}</Text>
+                            {_if(money, res => <Text style={styles.labelMoney}
                                 numberOfLines={1}> +{res}</Text>)}
-                            {_if(item.money, res => <ImageAuto source={answer14} width={20}/>)}
+                            {_if(money, res => <ImageAuto source={answer14} width={20}/>)}
                         </View>
                         <Text style={[styles.labelText, styles.labelMinTitle, { color: btnStatus === 5 ? '#999' : '#53C23B' }]} numberOfLines={1}>{minTitle}</Text>
                     </View>
@@ -344,6 +349,43 @@ function RenderActivity () {
         </View>,
     );
     return <View style={[css.flex, css.sp, { paddingHorizontal: 10 }]} key={'activity'}>{view}</View>;
+}
+
+function RenderNewBtn ({ item, _newUserTask }) {
+    const { btnStatus, btnText, path, id, balance } = item;
+
+    function getReward () {
+        getNewUserTask(id).then(r => {
+            if (!r.error) {
+                _newUserTask();
+                DeviceEventEmitter.emit('showPop',
+                    <Choice info={{
+                        icon: pop3,
+                        tips: '太棒了～',
+                        minTips: `你成功获得${balance}奖励`,
+                        type: 1,
+                        rt: '我知道了',
+                        fontSize: 15
+                    }} />);
+            }
+        });
+    }
+
+    switch (btnStatus) {
+    case 2:return ( // 领取奖励
+        <Text style={styles.todoTaskText} karet-lift onPress={getReward}>{btnText}</Text>
+    );
+    case 5:return ( // 去完成
+        <Text style={styles.todoTaskText} onPress={ () => {
+            N.navigate(path);
+        }}>{btnText}</Text>
+    );
+    default:return ( // 已完成
+        <Shadow style={styles.todoBtn} color={'#d43912'}>
+            <Text style={styles.todoBtnText}>{btnText}</Text>
+        </Shadow>
+    );
+    }
 }
 
 function RenderBtn ({ item }) {
