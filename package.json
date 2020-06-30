@@ -25,7 +25,6 @@
     "@react-navigation/material-top-tabs": "^5.2.10",
     "@react-navigation/native": "^5.5.1",
     "@react-navigation/stack": "^5.5.1",
-    "ali-oss": "^6.9.1",
     "cheerio-without-node-native": "0.20.2",
     "crypto-js": "3.3.0",
     "karet": "^4.1.0",
