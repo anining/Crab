@@ -36,21 +36,25 @@ function ShareQRCodePage () {
     }
 
     function save () {
-        requestPermission(() => {
-            if (view) {
-                captureRef(view, {
-                    format: 'jpg',
-                    quality: 1.0,
-                }).then(
-                    uri => {
-                        CameraRoll.saveToCameraRoll(uri)
-                            .then(() => toast('保存成功,请到相册查看'))
-                            .catch(() => toast('保存失败'));
-                    },
-                    () => () => toast('保存失败'),
-                );
-            }
-        }).then(r => console.log(r));
+        try {
+            requestPermission(() => {
+                if (view) {
+                    captureRef(view, {
+                        format: 'jpg',
+                        quality: 1.0,
+                    }).then(
+                        uri => {
+                            CameraRoll.saveToCameraRoll(uri)
+                                .then(() => toast('保存成功,请到相册查看'))
+                                .catch(() => toast('保存失败'));
+                        },
+                        () => () => toast('保存失败'),
+                    );
+                }
+            }).then(r => console.log(r));
+        } catch (e) {
+            toast('保存失败');
+        }
     }
 
     return (
