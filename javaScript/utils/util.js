@@ -4,6 +4,7 @@ import * as U from 'karet.util';
 import CryptoJS from 'crypto-js';
 import { API_URL, PRIVATE_KEY } from './config';
 import { BALANCE_RATE } from './data';
+import { setDefaultGlobal } from '../global/global';
 
 const initializationStore = keys => {
     const localStore = store.get();
@@ -16,6 +17,7 @@ const initializationStore = keys => {
         }
     });
     U.set(store, localStore);
+    setDefaultGlobal(localStore);
 };
 
 /**
@@ -149,20 +151,37 @@ export function getUrl (src) {
     }
 }
 
-function transformMoney (money, digits = 0) {
+function transformMoney (money, digits = 2) {
     try {
-        if (isNaN(money)) {
-            return 0;
-        }
-        if (money >= (BALANCE_RATE / 10000)) {
-            return `${money.toFixed(2)}w`;
-        }
-        return (money * BALANCE_RATE).toFixed(digits);
+        return unitConversion(toGoldCoin(money), digits);
     } catch (e) {
         return 0;
     }
 }
 
+export function toGoldCoin (money) {
+    try {
+        if (isNaN(money)) {
+            return 0;
+        }
+        return (money * BALANCE_RATE);
+    } catch (e) {
+        return 0;
+    }
+}
+export function unitConversion (gold, digits = 2) {
+    try {
+        if (isNaN(gold)) {
+            return 0;
+        }
+        if (gold >= 10000) {
+            return `${_toFixed(gold / 10000, digits)}w`;
+        }
+        return _toFixed(gold, digits);
+    } catch (e) {
+        return 0;
+    }
+}
 function transformTime (time, start = 10, end = 11) {
     if (!time) {
         return '00:00:00';
@@ -331,6 +350,22 @@ export function _toFixed (number, num = 2) {
         return Number(number).toFixed(num);
     } catch (e) {
         return 0;
+    }
+}
+
+export function rangeLevel (level, rangeArray) {
+    try {
+        let grade = 1;
+        for (let i = 0; i < rangeArray.length; i++) {
+            const item = rangeArray[i];
+            if (level < item) {
+                grade = i + 1;
+                break;
+            }
+        }
+        return grade;
+    } catch (e) {
+        return 1;
     }
 }
 

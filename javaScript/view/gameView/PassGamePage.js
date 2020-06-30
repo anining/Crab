@@ -25,16 +25,25 @@ import game8 from '../../assets/icon/game/game8.png';
 import game37 from '../../assets/icon/game/game37.png';
 import game14 from '../../assets/icon/game/game14.png';
 import game16 from '../../assets/icon/game/game16.png';
+import game17 from '../../assets/icon/game/game17.png';
 import { HEADER_HEIGHT } from '../tabView/HomePage';
 import LottieView from 'lottie-react-native';
 import chest from '../../lottie/chest';
 import PropTypes from 'prop-types';
-import { transformMoney } from '../../utils/util';
+import { _toFixed, transformMoney } from '../../utils/util';
 import ShiftView from '../../components/ShiftView';
 import game20 from '../../assets/icon/game/game20.png';
 import IdiomCard from '../../components/IdiomCard';
+import { addNoteBook } from '../../utils/api';
+import toast from '../../utils/toast';
+import * as U from 'karet.util';
+import GameHeader from '../../components/GameHeader';
 
 const { height, width } = Dimensions.get('window');
+const { user_level: userLevel } = getter(['user.user_level']);
+// const trCorrectRate = U.mapValue((res) => {
+//     return _toFixed(res * 100) + '%';
+// }, correctRate);
 export default class PassGamePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
@@ -44,9 +53,17 @@ export default class PassGamePage extends Component {
         this.paramsInfo = this.props.route.params.info;
     }
 
-    componentDidMount () {
-        console.log(this);
-        if (this.paramsInfo) {
+    async _addNoteBook (str) {
+        const ret = await addNoteBook(str);
+        console.log(ret);
+        if (ret && !ret.error) {
+            console.log('加入成功');
+            toast('加入成功');
+        }
+    }
+
+    _showPop () {
+        if (this.paramsInfo && this.paramsInfo.rate <= 1) { // rate 小于等于1是普通宝箱
             DeviceEventEmitter.emit('showPop', <View
                 style={[css.flex, css.pr, css.flex, { transform: [{ translateY: -width * 0.2 }] }]}>
                 <LottieView ref={ref => this.lottie = ref} key={'chest'} renderMode={'HARDWARE'}
@@ -62,10 +79,17 @@ export default class PassGamePage extends Component {
                     <Text style={styles.hdnText}>+{transformMoney(this.paramsInfo.add_balance)}</Text>
                 </View>
             </View>);
-        } else {
-            // N.goBack();
-            console.log('??');
         }
+        if (this.paramsInfo && this.paramsInfo.rate > 1) {
+            DeviceEventEmitter.emit('showPop', <ImageBackground source={game17} style={[styles.gameRedPackage, css.flex]}>
+                <Text style={styles.hdnRedPackageText}>+{transformMoney(this.paramsInfo.add_balance)}<Text style={{ fontSize: 15 }}>金币</Text></Text>
+            </ImageBackground>);
+        }
+    }
+
+    componentDidMount () {
+        console.log(this);
+        this._showPop();
     }
 
     _renderIdiomList () {
@@ -78,7 +102,9 @@ export default class PassGamePage extends Component {
                             style={[css.flex, styles.idiomItemWrap]} onPress={() => {
                                 DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
                                     // N.navigate('AnswerPage');
-                                }} btn={'加入生词本'} content={<IdiomCard/>}/>);
+                                    console.log(item);
+                                    this._addNoteBook(item);
+                                }} btn={'加入生词本'} content={<IdiomCard content={item} idiom={this.paramsInfo.idioms[item][0]}/>}/>);
                             }}>
                             <ImageAuto source={game37} style={{ width: 16, marginRight: 5 }}/>
                             <Text style={[css.gf, styles.lineIdiom]} numberOfLines={1}>{item}</Text>
@@ -97,43 +123,17 @@ export default class PassGamePage extends Component {
             return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
                 <ScrollView style={{ flex: 1 }}>
                     {/* 头部显示区域 */}
-                    <View style={[css.flex, styles.homeHeaderWrap, css.sp]}>
-                        <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex]} onPress={() => {
-                            DeviceEventEmitter.emit('showPop', <GameDialog icon={game20} callback={() => {
-                                N.navigate('AnswerPage');
-                            }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个
-                                最多同时持有 <Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>} />);
-                        }}>
-                            <ImageAuto source={game25} width={33}/>
-                            <View style={styles.hdnTextWrap}>
-                                <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }}>6</Text>/10</Text>
-                            </View>
-                            <ImageAuto source={game31} width={22}/>
-                        </TouchableOpacity>
-                        {/* eslint-disable-next-line no-return-assign */}
-                        <EnlargeView ref={ref => this.enlarge = ref}>
-                            <TouchableOpacity activeOpacity={1}
-                                style={[styles.headerDataNumber, css.flex, css.sp, { width: 180 }]}>
-                                <ImageAuto source={game22} width={33}/>
-                                <View style={styles.hdnTextWrap}>
-                                    <Text style={styles.hdnText}>32132131</Text>
-                                </View>
-                                <Text style={styles.withdrawBtn} onPress={() => {
-                                    N.replace('WithdrawPage');
-                                }}>提现</Text>
-                            </TouchableOpacity>
-                        </EnlargeView>
-                    </View>
+                    <GameHeader backgroundColor={'rgba(0,0,0,.3)'}/>
                     <ShiftView callback={() => {
-                        // N.navigate('GamePage');
-                    }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} delay={0}
+                        N.replace('GamePage');
+                    }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
                     startSite={[25, HEADER_HEIGHT - 28]} endSite={[width * 0.5 + 90, width * 1.4]}>
                         <ImageAuto source={game25} width={33}/>
                     </ShiftView>
                     {/* 核心显示区域 */}
                     <View style={[styles.gameResWrap, css.pr]}>
                         <ImageBackground source={game4} style={[css.flex, css.pa, styles.gamePassHeader]}>
-                            <Text style={[styles.gamePassText]} numberOfLines={1}>恭喜通过1231关</Text>
+                            <Text style={styles.gamePassText} numberOfLines={1} karet-lift>恭喜通过第{userLevel}关</Text>
                         </ImageBackground>
                         <View style={[styles.gameCanvasWrap]}>
                             <View style={[styles.gameCanvasInner, css.flex, css.fw, css.afs]}>
@@ -220,9 +220,20 @@ const styles = StyleSheet.create({
         color: '#353535',
         fontSize: 17,
     },
+    gameRedPackage: {
+        height: width * 0.8 * 1173 / 885,
+        paddingTop: 20,
+        width: width * 0.8
+    },
     gameResWrap: {
+        marginTop: HEADER_HEIGHT,
         paddingTop: width * 0.2,
-        width,
+        width
+    },
+    hdnRedPackageText: {
+        color: '#F5E385',
+        fontSize: 20,
+        ...css.gf
     },
     hdnText: {
         color: '#ffffff',

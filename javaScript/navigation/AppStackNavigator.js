@@ -40,7 +40,14 @@ import asyncStorage from '../utils/asyncStorage';
 import { _tc, initializationStore } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
 import Prompt from '../components/Prompt';
-import { getSignConfig, getTaskPlatform, updateActivity, updateApp, updateBanner } from '../utils/update';
+import {
+    getGradeSetting,
+    getSignConfig,
+    getTaskPlatform,
+    updateActivity,
+    updateApp,
+    updateBanner, updateSecondIncome, updateUser,
+} from '../utils/update';
 import OpenMoneyPage from '../view/activityView/OpenMoneyPage';
 import GamePage from '../view/gameView/GamePage';
 import { CONSOLE_LOG } from '../utils/config';
@@ -236,11 +243,14 @@ function setStatusBar () {
 }
 
 function initNetInfo () {
+    updateUser();
     updateApp();
     updateBanner();
     updateActivity();
     getSignConfig();
     getTaskPlatform();
+    getGradeSetting();
+    updateSecondIncome();
 }
 
 function setConsole () {

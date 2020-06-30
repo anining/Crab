@@ -38,6 +38,8 @@ import LottieView from 'lottie-react-native';
 import game22 from '../../assets/icon/game/game22.png';
 import { getter } from '../../utils/store';
 import * as U from 'karet.util';
+import * as R from 'kefir.ramda';
+import toast from '../../utils/toast';
 
 const { height, width } = Dimensions.get('window');
 const CANVAS_WIDTH = width - 20;
@@ -58,10 +60,13 @@ const matrix = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
-const { correct_rate: correctRate, user_level: userLevel } = getter(['user.correct_rate', 'user.user_level']);
-const trCorrectRate = U.mapValue((res) => {
-    return _toFixed(res * 100) + '%';
-}, correctRate);
+const { trCorrectRate, user_level: userLevel, propNumsObj } = getter(['user.trCorrectRate', 'user.user_level', 'user.propNumsObj']);
+// const trCorrectRate = U.mapValue((res) => {
+//     return _toFixed(res * 100) + '%';
+// }, correctRate);
+const gameTipsProp = U.mapValue((res) => {
+    return res || 0;
+}, R.path(['3'], propNumsObj)); // 获取游戏提醒的数量
 export default class GamePage extends Component {
     constructor (props) {
         super(props);
@@ -106,6 +111,7 @@ export default class GamePage extends Component {
     _getGame () {
         _tc(async () => {
             const ret = await getGame();
+            console.log(ret, '游戏详情');
             if (ret && !ret.error) {
                 this.setState({
                     gameInfo: ret.data,
@@ -390,6 +396,37 @@ export default class GamePage extends Component {
         }
     }
 
+    _buildAnswerObj (item, success = false, isAwait = false, callback) {
+        try {
+            let answerObj = {
+                ...this.state.answerObj,
+                [item.key]: {
+                    ...item,
+                    success,
+                    isAwait,
+                    filled: true,
+                },
+            };
+            this.state.fillArray[this.state.selectSite] && (() => {
+                // 把本格原来选中的字还回去
+                const preItem = this.state.fillArray[this.state.selectSite];
+                answerObj = {
+                    ...answerObj,
+                    [preItem.key]: {
+                        ...preItem,
+                        filled: false, // 把本格原来选中的字还回去
+                        success: false,
+                        isAwait: false,
+                    },
+                };
+                callback && callback(preItem.key);
+            })();
+            return answerObj;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     _checkAnswer (item) {
         try {
             if (item.filled) {
@@ -397,14 +434,8 @@ export default class GamePage extends Component {
                 return false;
             }
             this[`answerOpacity${item.key}`] && this[`answerOpacity${item.key}`].hide();
-            const newAnswerObj = {
-                ...this.state.answerObj,
-                [item.key]: {
-                    ...item,
-                    filled: true,
-                },
-            };
-            console.log(newAnswerObj, '??===');
+            const newAnswerObj = this._buildAnswerObj(item);
+            console.log(newAnswerObj, '提前假设这样选的答案对象');
             const surplusAnswer = Object.entries(newAnswerObj).map(x => {
                 if (x && x[0] && !x[1].filled) {
                     return x[0];
@@ -414,31 +445,11 @@ export default class GamePage extends Component {
             }); // 未被填充答案的key数组
             const rightChoice = item.key === this.state.selectSite;
             const isSuccess = rightChoice && GamePage.comparisonArray(surplusAnswer, item.idiomPointArray);
-            console.log(surplusAnswer, surplusAnswer[0], '下一个数组第一项');
-            console.log(this.state.fillArray, item.key, '===12', this.state.selectSite);
-            let nextAnswerObj = {
-                ...this.state.answerObj,
-                [item.key]: {
-                    ...item,
-                    filled: true,
-                    success: isSuccess,
-                    isAwait: rightChoice && !isSuccess, // 选对但是等待
-                },
-            }; // 构造下一个画面的答案字
-            this.state.fillArray[this.state.selectSite] && (() => {
-                // 把本格原来选中的字还回去
-                const preItem = this.state.fillArray[this.state.selectSite];
-                this[`answerOpacity${preItem.key}`] && this[`answerOpacity${preItem.key}`].show();
-                nextAnswerObj = {
-                    ...nextAnswerObj,
-                    [preItem.key]: {
-                        ...preItem,
-                        filled: false, // 把本格原来选中的字还回去
-                        success: false,
-                        isAwait: false,
-                    },
-                };
-            })();
+            console.log(surplusAnswer, '下一个数组第一项');
+            console.log(this.state.fillArray, item.key, '======', this.state.selectSite);
+            const nextAnswerObj = this._buildAnswerObj(item, isSuccess, rightChoice && !isSuccess, (preItemKey) => {
+                this[`answerOpacity${preItemKey}`] && this[`answerOpacity${preItemKey}`].show();
+            });
             this.setState({
                 fillArray: {
                     ...this.state.fillArray,
@@ -495,7 +506,6 @@ export default class GamePage extends Component {
                         }
                     });
                     // // 全部答对逻辑
-                    // console.log(this.state.completedCharacterArray, this.state.answerObj, '全部答对逻辑', this.state.coordinate);
                 } else {
                     if (rightChoice && !isSuccess) { // 选对了，但是尚未触发动画的
                         !this.rightButAwait[item.key] && (() => {
@@ -506,7 +516,8 @@ export default class GamePage extends Component {
                             this.rightButAwait[item.key] = null;
                         })();
                         this[`animationText${this.state.selectSite}`] && this[`animationText${this.state.selectSite}`].tada();
-                        this._gameError(item.word);
+                        console.log(item, '???选错的字', this.state.coordinate, item.idiomPointArray.map((key) => { return this.state.coordinate[key].word; }).join(''));
+                        this._gameError(item.idiomPointArray.map((key) => { return this.state.coordinate[key].word; }).join(''));
                     }
                 }
             });
@@ -548,6 +559,15 @@ export default class GamePage extends Component {
     }
 
     render () {
+        const gameTipsPropFn = U.mapValue((res) => {
+            return () => {
+                if (res) {
+                    // console.log('???');
+                } else {
+                    toast('提示次数不足');
+                }
+            };
+        }, R.path(['3'], propNumsObj));
         return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
             <View style={[styles.gameHeader, css.flex, css.sp]}>
                 <TouchableOpacity activeOpacity={1} onPress={() => {
@@ -560,7 +580,10 @@ export default class GamePage extends Component {
                 </View>
                 <TouchableOpacity activeOpacity={1} onPress={() => {
                 }} style={[css.flex, css.fw, styles.ghRightBtn]}>
-                    <Text style={[styles.rightText, { color: '#FF3154', fontSize: 10 }]} karet-lift> {trCorrectRate} </Text>
+                    <Text style={{
+                        ...styles.rightText,
+                        ...{ color: '#FF3154', fontSize: 10 }
+                    }} karet-lift> {trCorrectRate} </Text>
                     <Text style={styles.rightText}> 答题正确率 </Text>
                 </TouchableOpacity>
             </View>
@@ -568,6 +591,27 @@ export default class GamePage extends Component {
                 {/* 字体动画画布 */}
                 <View style={[styles.animatedCanvas, css.pa]}>
                     {this._renderMatrixAnimation()}
+                    {/* 帮助栏目 */}
+                    <View style={[css.flex, styles.helpWrap, css.js, css.pa, styles.helpWrapPosition]}>
+                        {/* eslint-disable-next-line no-return-assign */}
+                        <EnlargeView ref={ref => this._chest = ref}>
+                            <ImageAuto source={game56} width={30} style={{ width: 30, marginRight: 10 }}/>
+                        </EnlargeView>
+                        <TouchableOpacity activeOpacity={1} style={[css.flex, styles.helpBtnWrap]} onPress={() => {
+                            // GlossaryPage
+                            N.navigate('GlossaryPage');
+                        }}>
+                            <ImageAuto source={game29} style={{ width: 22, marginRight: 5 }}/>
+                            <Text style={styles.helpBtnText} numberOfLines={1}>生词本</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={1} style={{ ...css.flex, ...styles.helpBtnWrap }} karet-lift onPress={gameTipsPropFn}>
+                            <ImageAuto source={game9} style={{ width: 22, marginRight: 5 }}/>
+                            <Text style={styles.helpBtnText} numberOfLines={1} karet-lift>剩{gameTipsProp}次</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={1} style={[css.pa, { right: 0 }]}>
+                            <ImageAuto source={game57} style={{ width: 34, marginRight: 5, top: 8 }}/>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 {/* 游戏画布 */}
                 <View style={[styles.gameCanvasWrap]}>
@@ -575,24 +619,7 @@ export default class GamePage extends Component {
                         {this._renderMatrix()}
                     </View>
                 </View>
-                {/* 帮助栏目 */}
-                <View style={[css.flex, styles.helpWrap, css.js, css.pr]}>
-                    {/* eslint-disable-next-line no-return-assign */}
-                    <EnlargeView ref={ref => this._chest = ref}>
-                        <ImageAuto source={game56} width={30} style={{ width: 30, marginRight: 10 }}/>
-                    </EnlargeView>
-                    <TouchableOpacity activeOpacity={1} style={[css.flex, styles.helpBtnWrap]}>
-                        <ImageAuto source={game29} style={{ width: 22, marginRight: 5 }}/>
-                        <Text style={styles.helpBtnText} numberOfLines={1}>生词本</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={1} style={[css.flex, styles.helpBtnWrap]}>
-                        <ImageAuto source={game9} style={{ width: 22, marginRight: 5 }}/>
-                        <Text style={styles.helpBtnText} numberOfLines={1}>剩1次</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={1} style={[css.pa, { right: 0 }]}>
-                        <ImageAuto source={game57} style={{ width: 34, marginRight: 5, top: 8 }}/>
-                    </TouchableOpacity>
-                </View>
+                <View style={[css.flex, styles.helpWrap, css.js, css.pr]} />
             </View>
             {/* 底部答案选择区域 */}
             <View style={[css.flex, styles.answerWrap, css.js, css.pr]}>
@@ -690,6 +717,9 @@ const styles = StyleSheet.create({
         width: width - 20,
         ...css.auto,
         overflow: 'hidden',
+    },
+    helpWrapPosition: {
+        top: width - 10,
     },
     rightText: {
         color: '#353535',

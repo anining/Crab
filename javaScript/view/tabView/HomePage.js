@@ -10,6 +10,7 @@ import {
     DeviceEventEmitter,
 } from 'react-native';
 import * as U from 'karet.util';
+import * as R from 'kefir.ramda';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { css } from '../../assets/style/css';
 import LottieView from 'lottie-react-native';
@@ -28,18 +29,22 @@ import ShiftView from '../../components/ShiftView';
 import { N } from '../../utils/router';
 import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
-import { _toFixed, setAndroidTime } from '../../utils/util';
+import { _toFixed, setAndroidTime, transformMoney } from '../../utils/util';
 import EnlargeView from '../../components/EnlargeView';
 import { updateUser } from '../../utils/update';
 import { getter } from '../../utils/store';
+import GameHeader from '../../components/GameHeader';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
-const { correct_rate: correctRate } = getter(['user.correct_rate']);
-const trCorrectRate = U.mapValue((res) => {
-    return _toFixed(res * 100) + '%';
-}, correctRate);
+const { trCorrectRate, myGrade } = getter(['user.trCorrectRate', 'user.propNumsObj', 'user.myGrade']);
+// const gameProp = U.mapValue((res) => {
+//     return res || 0;
+// }, R.path(['2'], propNumsObj)); // 获取游戏道具的数量
+const secondIncome = U.mapValue((res) => {
+    return transformMoney(res || 0);
+}, R.path(['second_income'], myGrade)); // 每秒金币产量
 export default class HomePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
@@ -48,18 +53,24 @@ export default class HomePage extends Component {
         this.loadingToGame = false;// 准备去往游戏页面
     }
 
+    delayEmitter () {
+        setAndroidTime(() => {
+            this.startLottie = DeviceEventEmitter.addListener('startLottie', () => {
+                this._homeStart();
+            });
+            this.stopLottie = DeviceEventEmitter.addListener('stopLottie', () => {
+                this._homeStop();
+            });
+        }, 1000);
+    }
+
     componentDidMount () {
-        // this._homeStart();
-        console.log('????');
-        this.startLottie = DeviceEventEmitter.addListener('startLottie', () => {
-            this._homeStart();
-        });
-        this.stopLottie = DeviceEventEmitter.addListener('stopLottie', () => {
-            this._homeStop();
-        });
+        this.delayEmitter();
+        this._homeStart();
     }
 
     _homeStart () {
+        this._homeStop();
         setAndroidTime(() => {
             this.lottie && this.lottie.play();
             this.shiftView && this.shiftView.start();
@@ -72,7 +83,6 @@ export default class HomePage extends Component {
         this.lottie && this.lottie.pause();
         this.shiftView && this.shiftView.stop();
         this.lamp && this.lamp.stop();
-        this.enlarge && this.enlarge.stop();
     }
 
     componentWillUnmount () {
@@ -96,64 +106,35 @@ export default class HomePage extends Component {
                     {/* eslint-disable-next-line no-return-assign */}
                     <LottieView ref={ref => this.lottie = ref} key={'lottie'} renderMode={'HARDWARE'}
                         style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1}
-                        loop={true} autoPlay={true} speed={1}/>
+                        loop={true} autoPlay={false} speed={1}/>
                     <View style={[css.pa, css.cover]}>
                         {/* eslint-disable-next-line no-return-assign */}
                         <ShiftView callback={() => {
-                            this.enlarge && this.enlarge.start();
-                        }} ref={ref => this.shiftView = ref} autoPlay={true} loop={true} duration={800} delay={1000}
+                            console.log('调用一次');
+                            this.gameHeader && this.gameHeader.start();
+                        }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={800} delay={1000}
                         startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}>
                             <ImageAuto source={game22} width={33}/>
                         </ShiftView>
                         <ShiftView callback={() => {
                             this.loadingToGame = false;
                             N.navigate('GamePage');
-                            // N.navigate('PassGamePage');
-                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} delay={0}
+                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
                         startSite={[25, HEADER_HEIGHT - 28]}
                         endSite={[width * 0.5 + 50, height - width * 0.05]}>
                             <ImageAuto source={game25} width={33}/>
                         </ShiftView>
-                        {/* 头部显示区域 */}
-                        <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
-                            <TouchableOpacity activeOpacity={1} style={[styles.headerDataNumber, css.flex]}
-                                onPress={() => {
-                                    DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
-                                        N.navigate('AnswerPage');
-                                    }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个 最多同时持有
-                                        <Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>} icon={game20}/>);
-                                }}>
-                                <ImageAuto source={game25} width={33}/>
-                                <View style={styles.hdnTextWrap}>
-                                    <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }}>6</Text>/10</Text>
-                                </View>
-                                <ImageAuto source={game31} width={22}/>
-                            </TouchableOpacity>
-                            {/* eslint-disable-next-line no-return-assign */}
-                            <EnlargeView ref={ref => this.enlarge = ref}>
-                                <TouchableOpacity activeOpacity={1}
-                                    style={[styles.headerDataNumber, css.flex, css.sp, { width: 180 }]}>
-                                    <ImageAuto source={game22} width={33}/>
-                                    <View style={styles.hdnTextWrap}>
-                                        <Text style={styles.hdnText}>32132131</Text>
-                                    </View>
-                                    <Text style={styles.withdrawBtn} onPress={() => {
-                                        N.navigate('WithdrawPage');
-                                    }}>提现</Text>
-                                </TouchableOpacity>
-                            </EnlargeView>
-                        </View>
+                        {/* /!* 头部显示区域 *!/ */}
+                        <GameHeader ref={ref => this.gameHeader = ref}/>
                         {/* 中部显示区域 */}
                         <View style={[css.flex, css.pa, styles.homeMidWrap, css.afs]}>
                             <TouchableOpacity style={[css.pa, styles.outputWrap]} activeOpacity={1} onPress={() => {
-                                DeviceEventEmitter.emit('showPop', <GameDialog btn={'我知道了'} tips={<Text>道具每 <Text
-                                    style={{ color: '#FF6C00' }}>30分钟</Text> 系统赠送1个
-                                    最多同时持有
-                                <Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>}/>);
+                                DeviceEventEmitter.emit('showPop', <GameDialog btn={'我知道了'} tips={<Text>
+                                    渔船等级越高，产金币越多</Text>}/>);
                             }}>
                                 <ImageBackground source={game5} style={[css.flex, css.fw, styles.outputWrapImg]}>
                                     <Text style={[styles.outputText]}>金币产量</Text>
-                                    <Text style={[styles.outputText, { fontWeight: '900' }]}>110%</Text>
+                                    <Text style={styles.outputText} karet-lift>{secondIncome}币/秒</Text>
                                 </ImageBackground>
                             </TouchableOpacity>
                             <ImageBackground source={game35} style={[css.pa, styles.noticeIcon]}>
@@ -260,6 +241,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         transform: [{ scale: 0.9 }],
         width: '100%',
+        ...css.gf
     },
     outputWrap: {
         right: 15,
@@ -275,16 +257,5 @@ const styles = StyleSheet.create({
         height: width * 0.35,
         paddingHorizontal: '5%',
         width,
-    },
-    withdrawBtn: {
-        backgroundColor: '#FF6C00',
-        borderRadius: 12,
-        color: '#fff',
-        fontSize: 12,
-        height: 24,
-        lineHeight: 24,
-        overflow: 'hidden',
-        textAlign: 'center',
-        width: 46,
     },
 });
