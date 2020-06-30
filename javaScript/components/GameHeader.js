@@ -26,7 +26,7 @@ import * as U from 'karet.util';
 import * as R from 'kefir.ramda';
 import { getSecondIncome } from '../utils/api';
 import { bindData, getPath } from '../global/global';
-import { _toFixed, transformMoney } from '../utils/util';
+import { _toFixed, setAndroidTime, toGoldCoin, transformMoney, unitConversion } from '../utils/util';
 import ShiftView from './ShiftView';
 
 export const HEADER_HEIGHT = 70;
@@ -35,23 +35,25 @@ const { height, width } = Dimensions.get('window');
 const { propNumsObj } = getter(['user.propNumsObj']);
 const gameProp = U.mapValue((res) => { return res || 0; }, R.path(['2'], propNumsObj)); // 获取游戏道具的数量
 let nowBalance = 0;
+const addFrequency = 10; // 动画快慢频率
 export default class GameHeader extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
         super(props);
         this.state = {
             user: bindData('user', this),
-            nowBalance: 0
         };
         this._start = false;
     }
 
     async componentDidMount () {
         this.setState({
-            nowBalance: this.state.user.balance,
-            secondIncome: transformMoney(getPath(['myGrade', 'second_income'], this.state.user))
+            secondIncome: toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user))
         });
-        nowBalance = parseFloat(this.state.user.balance);
+        nowBalance = parseFloat(this.state.user.goldCoin);
+        this.secondText && this.secondText.setNativeProps({
+            text: `${_toFixed(nowBalance, 4)}`
+        });
         this._start = true;
     }
 
@@ -60,15 +62,26 @@ export default class GameHeader extends Component {
         this.enlarge && this.enlarge.stop();
     }
 
-    start () {
+    start (addIncome = this.state.secondIncome) {
         try {
             if (this._start) {
                 this.enlarge && this.enlarge.start();
-                console.log('每秒金币增加', this.state.secondIncome);
-                nowBalance += parseFloat(this.state.secondIncome);
-                this.secondText && this.secondText.setNativeProps({
-                    text: `${_toFixed(nowBalance)}`
-                });
+                const minAddUnit = parseFloat(addIncome / addFrequency);
+                const baseNowBalance = nowBalance;
+                nowBalance += parseFloat(addIncome);
+                for (let i = 0; i < addFrequency; i++) {
+                    setAndroidTime(() => {
+                        if ((i + 1) === addFrequency) {
+                            this.secondText && this.secondText.setNativeProps({
+                                text: `${_toFixed(nowBalance, 4)}`
+                            });
+                        } else {
+                            this.secondText && this.secondText.setNativeProps({
+                                text: `${_toFixed(baseNowBalance + minAddUnit * i, 4)}`
+                            });
+                        }
+                    }, 50 * i);
+                }
             }
         } catch (e) {
             console.log(e);
@@ -106,7 +119,7 @@ export default class GameHeader extends Component {
                         N.navigate('WithdrawPage');
                     }}/>
                     <ImageAuto source={game22} width={33}/>
-                    <TextInput multiline={false} style={[styles.hdnText]} ref={ref => this.secondText = ref} defaultValue={this.state.nowBalance} onFocus={() => {
+                    <TextInput multiline={false} style={[styles.hdnText]} ref={ref => this.secondText = ref} onFocus={() => {
                         this.secondText.blur();
                     }}/>
                     <Text style={styles.withdrawBtn}>提现</Text>

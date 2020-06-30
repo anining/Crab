@@ -1,5 +1,5 @@
 import { activity, app, banner, getSecondIncome, gradeSetting, signConfig, taskPlatform, user } from './api';
-import { _tc, _toFixed, rangeLevel, transformMoney } from './util';
+import {_tc, _toFixed, rangeLevel, toGoldCoin, transformMoney} from './util';
 import { getter, setter } from './store';
 
 export const updateUser = (callback) => {
@@ -18,6 +18,7 @@ function formatUserInfo (data) {
         const { balance, today_income, total_income } = data;
         data.today_income = transformMoney(today_income);
         data.total_income = transformMoney(total_income);
+        data.goldCoin = toGoldCoin(data.balance); // 0.01 * 1000
         data.balance = transformMoney(balance);
         const propNums = data.prop_nums || [];
         const propNumsObj = {};

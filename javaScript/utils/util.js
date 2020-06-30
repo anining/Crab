@@ -151,20 +151,37 @@ export function getUrl (src) {
     }
 }
 
-function transformMoney (money, digits = 0) {
+function transformMoney (money, digits = 2) {
     try {
-        if (isNaN(money)) {
-            return 0;
-        }
-        if (money >= (BALANCE_RATE / 10000)) {
-            return `${money.toFixed(2)}w`;
-        }
-        return (money * BALANCE_RATE).toFixed(digits);
+        return unitConversion(toGoldCoin(money), digits);
     } catch (e) {
         return 0;
     }
 }
 
+export function toGoldCoin (money) {
+    try {
+        if (isNaN(money)) {
+            return 0;
+        }
+        return (money * BALANCE_RATE);
+    } catch (e) {
+        return 0;
+    }
+}
+export function unitConversion (gold, digits = 2) {
+    try {
+        if (isNaN(gold)) {
+            return 0;
+        }
+        if (gold >= 10000) {
+            return `${_toFixed(gold / 10000, digits)}w`;
+        }
+        return _toFixed(gold, digits);
+    } catch (e) {
+        return 0;
+    }
+}
 function transformTime (time, start = 10, end = 11) {
     if (!time) {
         return '00:00:00';

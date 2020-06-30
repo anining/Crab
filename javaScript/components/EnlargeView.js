@@ -19,8 +19,6 @@ export default class EnlargeView extends Component {
         this.state = {
             scale: new Animated.Value(1),
         };
-        this._start = false;
-        // this.scale = new Animated.Value(1);
         this.scaleStart = [
             Animated.timing(this.state.scale, {
                 toValue: 1.15,
@@ -44,15 +42,11 @@ export default class EnlargeView extends Component {
     }
 
     stop () {
-        this._start = false;
         this.animation && this.animation.stop();
     }
 
     start () {
-        if (!this._start) {
-            this._start = true;
-            this.animation = Animated.sequence(this.scaleStart).start();
-        }
+        this.animation = Animated.sequence(this.scaleStart).start();
     }
 
     render () {
