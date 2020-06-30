@@ -7,14 +7,14 @@ import { helpCenter } from '../../utils/api';
 
 const { width } = Dimensions.get('window');
 
-export default function HelpCenterPage () {
+function HelpCenterPage () {
     const [answers, setAnswers] = useState([]);
     const helpCenterView = [];
+
     useEffect(() => {
         helpCenter().then(r => {
-            console.log(r);
             if (!r.error) {
-                const local = [
+                const localArray = [
                     {
                         id: 1,
                         title: '新人必看',
@@ -36,11 +36,12 @@ export default function HelpCenterPage () {
                         children: []
                     }
                 ];
-                r.data.forEach(item => local[item.category - 1].children.push(item));
-                setAnswers(local);
+                r.data.forEach(item => localArray[item.category - 1].children.push(item));
+                setAnswers(localArray);
             }
         });
     }, []);
+
     answers.forEach(answer => {
         const { id, title, children } = answer;
         if (children.length === 0) {
@@ -53,6 +54,7 @@ export default function HelpCenterPage () {
             </View>
         );
     });
+
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <ScrollView >
@@ -62,7 +64,7 @@ export default function HelpCenterPage () {
     );
 }
 
-function RenderAnswerItem ({ children }) {
+function RenderAnswerItem ({ children = [] }) {
     const answersView = [];
     children.forEach(child => {
         const { content, help_center_id, title, video_url } = child;
@@ -70,7 +72,7 @@ function RenderAnswerItem ({ children }) {
             <TouchableOpacity onPress={() => {
                 N.navigate('HelpCenterDetailPage', { content, video_url });
             }} style={styles.item} key={help_center_id}>
-                <Text style={{ color: '#666', fontSize: 14 }}>{title}</Text>
+                <Text style={{ color: '#666' }}>{title}</Text>
                 <Image source={help1} style={{ height: 13, width: 6 }}/>
             </TouchableOpacity>
         );
@@ -104,3 +106,5 @@ const styles = StyleSheet.create({
         width: '100%'
     }
 });
+
+export default HelpCenterPage;

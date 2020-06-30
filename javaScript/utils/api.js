@@ -69,12 +69,12 @@ export function withdraw () {
 
 // 道具
 export function prop () {
-    return transformFetch('GET', '/prop/prop');
+    return transformFetch('GET', '/prop');
 }
 
 // 道具记录
 export function propLogs () {
-    return transformFetch('GET', '/prop/prop/logs');
+    return transformFetch('GET', '/prop/logs');
 }
 
 // 提现

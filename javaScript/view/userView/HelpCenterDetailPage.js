@@ -12,25 +12,20 @@ function HelpCenterDetailPage (props) {
     if (uri) {
         return (
             <SafeAreaView style={[css.safeAreaView, { position: 'relative' }]}>
-                <Video source={{ uri }}
+                <Video
+                    source={{ uri }}
                     controls={true}
                     fullscreen={true}
                     posterResizeMode={'center'}
                     resizeMode={'contain'}
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        bottom: 0,
-                        right: 0
-                    }} />
+                    style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }} />
             </SafeAreaView>
         );
     }
     return (
         <SafeAreaView style={[css.safeAreaView, css.RichText]}>
             <ScrollView >
-                <HTML html={content} imagesMaxWidth={width} tagsStyles={{ p: { lineHeight: 24 } }}/>
+                <HTML html={content} imagesMaxWidth={width} tagsStyles={{ p: { lineHeight: 25 } }}/>
             </ScrollView>
         </SafeAreaView>
     );
