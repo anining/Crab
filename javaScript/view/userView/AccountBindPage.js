@@ -6,6 +6,10 @@ import { N } from '../../utils/router';
 import bind1 from '../../assets/icon/bind/bind1.png';
 import { postAccount } from '../../utils/api';
 import toast from '../../utils/toast';
+import asyncStorage from '../../utils/asyncStorage';
+import { getter } from '../../utils/store';
+
+const { user_id } = getter(['user.user_id']);
 
 export default function AccountBindPage (props) {
     const [url, setUrl] = useState('');
@@ -17,6 +21,7 @@ export default function AccountBindPage (props) {
         postAccount(props.route.params.id, url).then(r => {
             console.log(r);
             if (!r.error) {
+                asyncStorage.setItem(`NEW_USER_TASK_TYPE2${user_id.get()}`, 'true');
                 toast('操作成功');
                 N.goBack();
             } else {
