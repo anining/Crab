@@ -74,8 +74,8 @@ export function prop () {
 }
 
 // 道具记录
-export function propLogs () {
-    return transformFetch('GET', '/prop/logs');
+export function propLogs (page, size) {
+    return transformFetch('GET', '/prop/logs', { page, size });
 }
 
 // 提现

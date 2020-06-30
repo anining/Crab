@@ -13,7 +13,6 @@ function CardPackagePage () {
 
     useEffect(() => {
         prop().then(r => {
-            console.log(r);
             if (!r.error && r.data.length) {
                 setCards(r.data);
                 setItem(r.data[0]);
@@ -31,7 +30,7 @@ function CardPackagePage () {
 
 function RenderView ({ cards, setItem, item }) {
     if (!cards.length) {
-        return <Null text='您还没有道具哦～'/>;
+        return <Null text='你还没有道具哦～'/>;
     }
     const { label, usage_range, function: f, usage, num } = item;
     return (
@@ -50,23 +49,22 @@ function RenderView ({ cards, setItem, item }) {
 }
 
 function RenderCard ({ cards, setItem, item }) {
-    const components = [];
+    const view = [];
     cards.forEach(card => {
-        const { prop_id, label, icon, num } = card;
+        const { prop_id, label, icon: uri, num } = card;
         const { prop_id: id } = item;
-        components.push(
-            <TouchableOpacity activeOpacity={1} onPress={() => {
-                setItem(card);
-            }} key={prop_id} style={[styles.cardItem, { borderColor: prop_id === id ? '#FFE06F' : '#F1F1F1', backgroundColor: prop_id === id ? '#FFF6D7' : '#F1F1F1' }]}>
-                <Text numberOfLines={1} style={{ color: '#353535', fontSize: 14, fontWeight: '500' }}>{label}</Text>
-                <Image source={{ uri: icon }} style={{ height: 43 / 1.3, width: 34 / 1.3 }}/>
-                <Text style={{ color: '#FF6C00', fontSize: 14 }}>x{num}</Text>
+        const value = prop_id === id;
+        view.push(
+            <TouchableOpacity onPress={() => setItem(card)} key={prop_id} style={[styles.cardItem, { borderColor: value ? '#FFE06F' : '#F1F1F1', backgroundColor: value ? '#FFF6D7' : '#F1F1F1' }]}>
+                <Text numberOfLines={1} style={{ color: '#353535', fontWeight: '500' }}>{label}</Text>
+                <Image source={{ uri }} style={{ height: 43 / 1.3, width: 34 / 1.3 }}/>
+                <Text style={{ color: '#FF6C00' }}>x{num}</Text>
             </TouchableOpacity>
         );
     });
     return (
         <View style={styles.cardView}>
-            {components}
+            {view}
         </View>
     );
 }
