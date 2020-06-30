@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StatusBar, DeviceEventEmitter, YellowBox } from 'react-native';
+import { SafeAreaView, StatusBar, DeviceEventEmitter } from 'react-native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import codePush from 'react-native-code-push';
@@ -37,25 +37,16 @@ import NewbiePage from '../view/homeView/NewbiePage';
 import TaskDetailPage from '../view/homeView/TaskDetailPage';
 import { css } from '../assets/style/css';
 import asyncStorage from '../utils/asyncStorage';
-import { _tc, initializationStore } from '../utils/util';
+import { _tc, initializationStore, setConsole } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
 import Prompt from '../components/Prompt';
-import {
-    getGradeSetting,
-    getSignConfig,
-    getTaskPlatform,
-    updateActivity,
-    updateApp,
-    updateBanner, updateSecondIncome, updateUser,
-} from '../utils/update';
+import { getGradeSetting, getSignConfig, getTaskPlatform, updateActivity, updateApp, updateBanner, updateSecondIncome, updateUser } from '../utils/update';
 import OpenMoneyPage from '../view/activityView/OpenMoneyPage';
 import GamePage from '../view/gameView/GamePage';
-import { CONSOLE_LOG } from '../utils/config';
 import NoticeDetailPage from '../view/homeView/NoticeDetailPage';
 import ShareUrlPage from '../view/shareView/ShareUrlPage';
 import ShareQRCodePage from '../view/shareView/ShareQRCodePage';
 import PassGamePage from '../view/gameView/PassGamePage';
-import toast from '../utils/toast';
 
 const Stack = createStackNavigator();
 
@@ -234,7 +225,7 @@ const stackScreens = [
         name: 'PassGamePage',
         component: PassGamePage,
         title: '答题结算',
-    },
+    }
 ];
 
 function setStatusBar () {
@@ -247,32 +238,10 @@ function initNetInfo () {
     return Promise.all([updateUser(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome()]);
 }
 
-function setConsole () {
-    try {
-        if (!CONSOLE_LOG) {
-            console.log = () => {
-            };
-        }
-        console.error = () => {
-        };
-        console.warn = () => {
-        };
-        console.info = () => {
-        };
-        console.debug = () => {
-        };
-        YellowBox.ignoreWarnings(['Remote debugger']);
-        console.disableYellowBox = true;
-    } catch (e) {
-        console.log(e);
-    }
-}
-
 function AppStackNavigator () {
     const [keys, setKeys] = useState();
     const GenerateScreen = stackScreens.map(screen =>
-        <Stack.Screen name={screen.name} component={screen.component} options={{ title: screen.title }}
-            key={screen.name}/>);
+        <Stack.Screen name={screen.name} component={screen.component} options={{ title: screen.title }} key={screen.name}/>);
     useEffect(() => {
         setConsole();
         asyncStorage.getAllKeys()
@@ -290,7 +259,7 @@ function AppStackNavigator () {
                         SplashScreen.hide();
                     });
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
                 setKeys([]);
             });
@@ -314,17 +283,9 @@ function AppStackNavigator () {
                 });
             }}>
                 <Prompt/>
-                <Stack.Navigator screenOptions={{
-                    cardStyle: {},
-                    gestureEnabled: true,
-                    ...TransitionPresets.SlideFromRightIOS,
-                    header: ({ scene, previous, navigation }) => <Header scene={scene} previous={previous}
-                        navigation={navigation}/>,
-                }}>
-                    <Stack.Screen name="MaterialTopTabNavigator" options={{ headerShown: false }}
-                        component={TabNavigator}/>
-                    <Stack.Screen name="VerificationStackNavigator" component={StackNavigator}
-                        options={{ headerShown: false }}/>
+                <Stack.Navigator screenOptions={{ cardStyle: {}, gestureEnabled: true, ...TransitionPresets.SlideFromRightIOS, header: ({ scene, previous, navigation }) => <Header scene={scene} previous={previous} navigation={navigation}/> }}>
+                    <Stack.Screen name="MaterialTopTabNavigator" options={{ headerShown: false }} component={TabNavigator}/>
+                    <Stack.Screen name="VerificationStackNavigator" component={StackNavigator} options={{ headerShown: false }}/>
                     {GenerateScreen}
                 </Stack.Navigator>
             </NavigationContainer>

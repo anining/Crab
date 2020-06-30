@@ -84,31 +84,32 @@ const MENU_LIST = [
 ];
 const TASK_MENU = [
     {
-        id: 0,
+        id: 1,
         label: '进行中',
         icon: user3
     },
     {
-        id: 1,
+        id: 4,
         label: '审核中',
         icon: user4
     },
     {
-        id: 2,
+        id: 5,
         label: '已通过',
         icon: user5
     },
     {
-        id: 3,
+        id: 6,
         label: '未通过',
         icon: user6
     }
 ];
+const { today_income, total_income, balance, phone, user_id, avatar, invite_code, receive_task_status } = getter(['user.red_point.receive_task_status', 'user.today_income', 'user.total_income', 'user.balance', 'user.phone', 'user.user_id', 'user.avatar', 'user.invite_code']);
+
 export default function UserPage () {
     useEffect(() => {
         updateUser();
     }, []);
-    const { today_income, total_income, balance, phone, user_id, avatar, invite_code } = getter(['user.today_income', 'user.total_income', 'user.balance', 'user.phone', 'user.user_id', 'user.avatar', 'user.invite_code']);
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8', paddingTop: 20 }]}>
@@ -178,13 +179,15 @@ export default function UserPage () {
 
 function RenderTaskMenu () {
     const components = [];
-    TASK_MENU.forEach(menu => {
+    const redPoint = receive_task_status.get();
+    TASK_MENU.forEach((menu, index) => {
+        const { id, icon, label } = menu;
         components.push(
             <TouchableOpacity onPress={() => {
-                N.navigate('MyTaskPage', { id: menu.id });
-            }} style={styles.myTaskBtn} key={menu.id}>
-                <Image source={menu.icon} style={styles.myTaskBtnIcon}/>
-                <Text style={styles.myTaskBtnText}>{menu.label}<Text style={{ color: '#FF7751' }}>1</Text></Text>
+                N.navigate('MyTaskPage', { id: index });
+            }} style={styles.myTaskBtn} key={id}>
+                <Image source={icon} style={styles.myTaskBtnIcon}/>
+                <Text style={styles.myTaskBtnText}>{label}<Text style={{ color: '#FF7751' }}>{redPoint[id]}</Text></Text>
             </TouchableOpacity>
         );
     });

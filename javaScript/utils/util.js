@@ -1,11 +1,11 @@
-import { PermissionsAndroid, Linking, Animated, Platform } from 'react-native';
+import { PermissionsAndroid, Linking, Animated, Platform, YellowBox } from 'react-native';
 import { store } from './store';
 import RNFetchBlob from 'rn-fetch-blob';
 import CameraRoll from '@react-native-community/cameraroll';
 import * as U from 'karet.util';
 import CryptoJS from 'crypto-js';
 import RN_FS from 'react-native-fs';
-import { API_URL, PRIVATE_KEY } from './config';
+import { API_URL, CONSOLE_LOG, PRIVATE_KEY } from './config';
 import { BALANCE_RATE } from './data';
 import { setDefaultGlobal } from '../global/global';
 
@@ -22,6 +22,27 @@ const initializationStore = keys => {
     U.set(store, localStore);
     setDefaultGlobal(localStore);
 };
+
+export function setConsole () {
+    try {
+        if (!CONSOLE_LOG) {
+            console.log = () => {
+            };
+        }
+        console.error = () => {
+        };
+        console.warn = () => {
+        };
+        console.info = () => {
+        };
+        console.debug = () => {
+        };
+        YellowBox.ignoreWarnings(['Remote debugger']);
+        console.disableYellowBox = true;
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 /**
  * @Description fetch parameter transform
