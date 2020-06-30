@@ -62,10 +62,7 @@ const matrix = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
-const { trCorrectRate, user_level: userLevel, propNumsObj } = getter(['user.trCorrectRate', 'user.user_level', 'user.propNumsObj']);
-// const trCorrectRate = U.mapValue((res) => {
-//     return _toFixed(res * 100) + '%';
-// }, correctRate);
+const { trCorrectRate, level_num: userLevel, propNumsObj } = getter(['user.trCorrectRate', 'user.user_level.level_num', 'user.propNumsObj']);
 const gameTipsProp = U.mapValue((res) => {
     return res || 0;
 }, R.path(['3'], propNumsObj)); // 获取游戏提醒的数量

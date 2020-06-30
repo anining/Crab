@@ -1,6 +1,7 @@
 import { activity, app, banner, getSecondIncome, gradeSetting, signConfig, taskPlatform, user } from './api';
 import { _tc, _toFixed, rangeLevel, toGoldCoin, transformMoney } from './util';
 import { getter, setter } from './store';
+import { getPath } from '../global/global';
 
 export const updateUser = (callback) => {
     return new Promise((resolve, reject) => {
@@ -30,7 +31,7 @@ function formatUserInfo (data) {
         });
         data.trCorrectRate = _toFixed(data.correct_rate * 100) + '%';
         data.propNumsObj = propNumsObj;
-        data.myGrade = gradeSettingObj[rangeLevel(data.user_level, gradeRange.get())];
+        data.myGrade = gradeSettingObj[rangeLevel(getPath(['user_level', 'level_num'], data), gradeRange.get())];
         return data;
     } catch (e) {
         return data;

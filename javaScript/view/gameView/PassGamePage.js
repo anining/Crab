@@ -41,7 +41,7 @@ import GameHeader from '../../components/GameHeader';
 import { updateUser } from '../../utils/update';
 
 const { height, width } = Dimensions.get('window');
-const { user_level: userLevel } = getter(['user.user_level']);
+const { level_num: userLevel } = getter(['user.user_level.level_num']);
 // const trCorrectRate = U.mapValue((res) => {
 //     return _toFixed(res * 100) + '%';
 // }, correctRate);
