@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, View, StyleSheet, TouchableOpacity, TextInput, Text, Image } from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
@@ -6,22 +6,16 @@ import login1 from '../../assets/icon/login/login1.png';
 import login2 from '../../assets/icon/login/login2.png';
 import toast from '../../utils/toast';
 import { apiLogin, verifyCode } from '../../utils/api';
-// import Android from '../../components/Android';
-import { getter, setter, store } from '../../utils/store';
+import { setter } from '../../utils/store';
 
-export default function LoginPage () {
+function LoginPage () {
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('');
     const [codeText, setCodeText] = useState('获取验证码');
-    // const [inviteCode, setInviteCode] = useState('');
-
-    // useEffect(() => {
-    // const r = await Android.verifyLogin();
-    // }, []);
 
     async function login () {
         if (!phone || !code) {
-            toast('请完善信息');
+            toast('请填写完整的账号和密码!');
             return;
         }
         const r = await apiLogin(phone, code);
@@ -29,8 +23,6 @@ export default function LoginPage () {
             const { access_token, token_type } = r.data;
             setter([['authorization', `${token_type} ${access_token}`]], true);
             N.replace('MaterialTopTabNavigator');
-        } else {
-            toast(r.msg || '登录失败');
         }
     }
 
@@ -39,7 +31,7 @@ export default function LoginPage () {
             return;
         }
         if (phone.length !== 11) {
-            toast('账号错误');
+            toast('账号错误!');
             return;
         }
         let second = 60;
@@ -52,11 +44,7 @@ export default function LoginPage () {
             }
         }, 1000);
         const r = await verifyCode(phone);
-        if (!r.error) {
-            toast('验证码发送成功');
-        } else {
-            toast(r.msg || '验证码发送失败');
-        }
+        !r.error && toast('发送成功!');
     }
 
     return (
@@ -168,3 +156,5 @@ const styles = StyleSheet.create({
         fontWeight: '500'
     }
 });
+
+export default LoginPage;
