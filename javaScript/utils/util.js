@@ -12,7 +12,9 @@ const initializationStore = keys => {
     keys.forEach(key => {
         try {
             localStore[key[0]] = JSON.parse(key[1]);
+            console.log(key[0], JSON.parse(key[1]), '===========');
         } catch (e) {
+            console.log(e, key[0], key[1], '===========');
             localStore[key[0]] = key[1];
         }
     });

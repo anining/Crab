@@ -100,10 +100,10 @@ export default class PassGamePage extends Component {
                     view.push(
                         <TouchableOpacity key={`content${index}`} activeOpacity={1}
                             style={[css.flex, styles.idiomItemWrap]} onPress={() => {
-                                DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
+                                DeviceEventEmitter.emit('showPop', <GameDialog callback={async () => {
                                     // N.navigate('AnswerPage');
                                     console.log(item);
-                                    this._addNoteBook(item);
+                                    await this._addNoteBook(item);
                                 }} btn={'加入生词本'} content={<IdiomCard content={item} idiom={this.paramsInfo.idioms[item][0]}/>}/>);
                             }}>
                             <ImageAuto source={game37} style={{ width: 16, marginRight: 5 }}/>
@@ -123,7 +123,7 @@ export default class PassGamePage extends Component {
             return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
                 <ScrollView style={{ flex: 1 }}>
                     {/* 头部显示区域 */}
-                    <GameHeader backgroundColor={'rgba(0,0,0,.3)'}/>
+                    <GameHeader ref={ref => this.gameHeader = ref} backgroundColor={'rgba(0,0,0,.3)'}/>
                     <ShiftView callback={() => {
                         N.replace('GamePage');
                     }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}

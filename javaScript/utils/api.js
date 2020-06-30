@@ -5,6 +5,7 @@ import { _tc, AesDecrypt, buildStr, parameterTransform, setAndroidTime } from '.
 import * as U from 'karet.util';
 import { store } from './store';
 import { N } from './router';
+import { getGlobal } from '../global/global';
 
 // login
 export function apiLogin (phone, code, invite_code) {
@@ -304,10 +305,17 @@ export function income (page, size, source) {
 
 const transformFetch = async (method, url, data = {}) => {
     try {
+        // console.log(getGlobal('authorization'), getGlobal('authorization').toString());
+        let authorization = null;
+        try {
+            authorization = JSON.parse(getGlobal('authorization'));
+        } catch (e) {
+            authorization = getGlobal('authorization');
+        }
         const TIME_STAMP = Math.round(Date.now() / 1000).toString();
         const POST_DATA = JSON.stringify(data);
         const HEADER = new Headers({
-            authorization: U.view(['authorization'], store).get(),
+            authorization: authorization,
             'x-uaid': UA_ID,
             'x-timestamp': TIME_STAMP,
             'x-signature': CryptoJS.HmacSHA256(((method === 'GET' || method === 'DELETE') ? buildStr(data) : POST_DATA) + '.' + TIME_STAMP, PRIVATE_KEY).toString(),
@@ -325,7 +333,7 @@ const transformFetch = async (method, url, data = {}) => {
                         console.log(loadingEnd, '请求超时==', url, method, data);
                         loadingEnd = true;
                     }
-                }, 8000);
+                }, 10000);
             }),
             // eslint-disable-next-line no-async-promise-executor
             new Promise(async (resolve, reject) => {

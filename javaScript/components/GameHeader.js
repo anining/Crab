@@ -43,14 +43,13 @@ export default class GameHeader extends Component {
         this.state = {
             user: bindData('user', this),
         };
+        this.secondIncome = 0;
         this._start = false;
     }
 
     async componentDidMount () {
-        this.setState({
-            secondIncome: toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user))
-        });
-        nowBalance = parseFloat(this.state.user.goldCoin);
+        this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user));
+        nowBalance = parseFloat(this.state.user.goldCoin || 0);
         this.secondText && this.secondText.setNativeProps({
             text: `${_toFixed(nowBalance, 4)}`
         });
@@ -62,13 +61,14 @@ export default class GameHeader extends Component {
         this.enlarge && this.enlarge.stop();
     }
 
-    start (addIncome = this.state.secondIncome) {
+    start (addIncome = this.secondIncome) {
         try {
-            if (this._start) {
+            if (this._start && addIncome) {
                 this.enlarge && this.enlarge.start();
                 const minAddUnit = parseFloat(addIncome / addFrequency);
                 const baseNowBalance = nowBalance;
                 nowBalance += parseFloat(addIncome);
+                // console.log(minAddUnit, nowBalance, addIncome, '每秒加金币');
                 for (let i = 0; i < addFrequency; i++) {
                     setAndroidTime(() => {
                         if ((i + 1) === addFrequency) {
@@ -92,16 +92,19 @@ export default class GameHeader extends Component {
         this.enlarge && this.enlarge.stop();
     }
 
+    showPop () {
+        DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
+            N.navigate('AnswerPage');
+        }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text>系统赠送1个最多同时持有<Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>} icon={game20}/>);
+    }
+
     render () {
         return <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
             <TouchableOpacity karet-lift activeOpacity={1} style={[styles.headerDataNumber, css.flex, {
                 backgroundColor: this.props.backgroundColor
             }]}
             onPress={() => {
-                DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
-                    N.navigate('AnswerPage');
-                }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text>系统赠送1个最多同时持有<Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>}
-                icon={game20}/>);
+                this.showPop();
             }}>
                 <ImageAuto source={game25} width={33}/>
                 <View style={styles.hdnTextWrap}>

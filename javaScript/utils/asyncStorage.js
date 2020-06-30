@@ -11,9 +11,13 @@ export default class asyncStorage {
 
     static setItem = (key, value) => {
         try {
-            AsyncStorage.setItem(key, JSON.stringify(value));
+            if (typeof value === 'string') {
+                AsyncStorage.setItem(key, JSON.stringify(value));
+            } else {
+                AsyncStorage.setItem(key, value);
+            }
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     };
 
