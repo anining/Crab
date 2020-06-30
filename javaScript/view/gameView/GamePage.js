@@ -95,7 +95,6 @@ export default class GamePage extends Component {
 
     async _upgradeGameLevel () {
         const ret = await upgradeGameLevel(JSON.stringify(this.state.gameInfo.content));
-        console.log(ret, '???');
         if (ret && !ret.error) {
             N.replace('PassGamePage', {
                 info: {

@@ -30,7 +30,7 @@ import { HEADER_HEIGHT } from '../tabView/HomePage';
 import LottieView from 'lottie-react-native';
 import chest from '../../lottie/chest';
 import PropTypes from 'prop-types';
-import { _toFixed, transformMoney } from '../../utils/util';
+import { _toFixed, toGoldCoin, transformMoney } from '../../utils/util';
 import ShiftView from '../../components/ShiftView';
 import game20 from '../../assets/icon/game/game20.png';
 import IdiomCard from '../../components/IdiomCard';
@@ -38,6 +38,7 @@ import { addNoteBook } from '../../utils/api';
 import toast from '../../utils/toast';
 import * as U from 'karet.util';
 import GameHeader from '../../components/GameHeader';
+import { updateUser } from '../../utils/update';
 
 const { height, width } = Dimensions.get('window');
 const { user_level: userLevel } = getter(['user.user_level']);
@@ -53,11 +54,10 @@ export default class PassGamePage extends Component {
         this.paramsInfo = this.props.route.params.info;
     }
 
-    async _addNoteBook (str) {
+    static async _addNoteBook (str) {
         const ret = await addNoteBook(str);
         console.log(ret);
         if (ret && !ret.error) {
-            console.log('加入成功');
             toast('加入成功');
         }
     }
@@ -70,6 +70,7 @@ export default class PassGamePage extends Component {
                     style={{ width: width * 0.8, height: 'auto' }} imageAssetsFolder={'chest'} source={chest}
                     loop={false} autoPlay={true} speed={1} onAnimationFinish={() => {
                         DeviceEventEmitter.emit('hidePop');
+                        this.gameHeader && this.gameHeader.start(toGoldCoin(this.paramsInfo.add_balance));
                     }}/>
                 <View style={[styles.passDataNumber, css.flex, css.auto, css.pa, {
                     top: width * 0.8 - 50,
@@ -90,6 +91,7 @@ export default class PassGamePage extends Component {
     componentDidMount () {
         console.log(this);
         this._showPop();
+        updateUser();
     }
 
     _renderIdiomList () {
@@ -100,10 +102,10 @@ export default class PassGamePage extends Component {
                     view.push(
                         <TouchableOpacity key={`content${index}`} activeOpacity={1}
                             style={[css.flex, styles.idiomItemWrap]} onPress={() => {
-                                DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
+                                DeviceEventEmitter.emit('showPop', <GameDialog callback={async () => {
                                     // N.navigate('AnswerPage');
                                     console.log(item);
-                                    this._addNoteBook(item);
+                                    await PassGamePage._addNoteBook(item);
                                 }} btn={'加入生词本'} content={<IdiomCard content={item} idiom={this.paramsInfo.idioms[item][0]}/>}/>);
                             }}>
                             <ImageAuto source={game37} style={{ width: 16, marginRight: 5 }}/>
@@ -123,7 +125,7 @@ export default class PassGamePage extends Component {
             return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
                 <ScrollView style={{ flex: 1 }}>
                     {/* 头部显示区域 */}
-                    <GameHeader backgroundColor={'rgba(0,0,0,.3)'}/>
+                    <GameHeader ref={ref => this.gameHeader = ref} backgroundColor={'rgba(0,0,0,.3)'}/>
                     <ShiftView callback={() => {
                         N.replace('GamePage');
                     }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
@@ -176,15 +178,6 @@ export default class PassGamePage extends Component {
         }
     }
 }
-
-// PassGamePage.propTypes = {
-//     info: PropTypes.object
-// };
-// PassGamePage.defaultProps = {
-//     info: {
-//         add_balance: 0.01
-//     },
-// };
 const styles = StyleSheet.create({
     gameCanvasInner: {
         backgroundColor: '#FFF7A9',

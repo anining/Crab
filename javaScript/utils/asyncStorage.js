@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import {JsonParse} from './util';
 
 export default class asyncStorage {
     static getItem = (key) => {
         try {
-            return JSON.parse(AsyncStorage.getItem(key));
+            return JsonParse(AsyncStorage.getItem(key));
         } catch (e) {
             return AsyncStorage.getItem(key);
         }
@@ -11,9 +12,13 @@ export default class asyncStorage {
 
     static setItem = (key, value) => {
         try {
-            AsyncStorage.setItem(key, JSON.stringify(value));
+            if (typeof value === 'string') {
+                AsyncStorage.setItem(key, value);
+            } else {
+                AsyncStorage.setItem(key, JSON.stringify(value));
+            }
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     };
 

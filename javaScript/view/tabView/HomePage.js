@@ -34,6 +34,9 @@ import EnlargeView from '../../components/EnlargeView';
 import { updateUser } from '../../utils/update';
 import { getter } from '../../utils/store';
 import GameHeader from '../../components/GameHeader';
+import { bind } from 'kefir.ramda';
+import { bindData, getPath } from '../../global/global';
+import toast from '../../utils/toast';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
@@ -49,7 +52,9 @@ export default class HomePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
         super(props);
-        this.state = {};
+        this.state = {
+            user: bindData('user', this),
+        };
         this.loadingToGame = false;// 准备去往游戏页面
     }
 
@@ -110,15 +115,21 @@ export default class HomePage extends Component {
                     <View style={[css.pa, css.cover]}>
                         {/* eslint-disable-next-line no-return-assign */}
                         <ShiftView callback={() => {
-                            console.log('调用一次');
                             this.gameHeader && this.gameHeader.start();
-                        }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={800} delay={1000}
+                        }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={1000}
                         startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}>
                             <ImageAuto source={game22} width={33}/>
                         </ShiftView>
                         <ShiftView callback={() => {
                             this.loadingToGame = false;
-                            N.navigate('GamePage');
+                            // N.navigate('GamePage');
+                            if (getPath(['propNumsObj', '2'], this.state.user)) {
+                                N.navigate('GamePage');
+                                // this.gameHeader && this.gameHeader.showPop();
+                            } else {
+                                toast('游戏道具不足');
+                                this.gameHeader && this.gameHeader.showPop();
+                            }
                         }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
                         startSite={[25, HEADER_HEIGHT - 28]}
                         endSite={[width * 0.5 + 50, height - width * 0.05]}>

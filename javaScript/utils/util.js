@@ -13,15 +13,23 @@ const initializationStore = keys => {
     const localStore = store.get();
     keys = [...keys, [{ channel: 'default' }]];
     keys.forEach(key => {
-        try {
-            localStore[key[0]] = JSON.parse(key[1]);
-        } catch (e) {
-            localStore[key[0]] = key[1];
-        }
+        localStore[key[0]] = JsonParse(key[1]);
     });
     U.set(store, localStore);
     setDefaultGlobal(localStore);
 };
+
+export function JsonParse (value, maxNumber = 5) {
+    let ret = value;
+    for (let i = 0; i < maxNumber; i++) {
+        try {
+            ret = JSON.parse(ret);
+        } catch (e) {
+            break;
+        }
+    }
+    return ret;
+}
 
 export function setConsole () {
     try {
@@ -85,7 +93,7 @@ const AesDecrypt = word => {
             padding: CryptoJS.pad.Pkcs7,
         });
         const decryptedStr = decrypt.toString(CryptoJS.enc.Utf8);
-        return JSON.parse(decryptedStr.toString());
+        return JsonParse(decryptedStr.toString());
     } catch (e) {
         console.log(word, e);
         return {};
@@ -382,15 +390,17 @@ export async function bannerAction (action, link, label) {
 }
 
 export function setAndroidTime (callback, duration = 1000) {
-    let timer = Animated.timing(new Animated.Value(0), {
-        toValue: 1,
-        duration: duration,
-        useNativeDriver: true,
-    }).start(() => {
-        callback();
-        timer && timer.stop();
-        timer = null;
-    });
+    if (duration > 0) {
+        let timer = Animated.timing(new Animated.Value(0), {
+            toValue: 1,
+            duration: duration,
+            useNativeDriver: true,
+        }).start(() => {
+            callback();
+            timer && timer.stop();
+            timer = null;
+        });
+    }
 }
 
 export function _toFixed (number, num = 2) {

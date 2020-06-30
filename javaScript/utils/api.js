@@ -1,10 +1,11 @@
 import { DEVELOPER, PRIVATE_KEY, UA_ID } from './config';
 import CryptoJS from 'crypto-js';
 import toast from './toast';
-import { _tc, AesDecrypt, buildStr, parameterTransform, setAndroidTime } from './util';
+import { _tc, AesDecrypt, buildStr, JsonParse, parameterTransform, setAndroidTime } from './util';
 import * as U from 'karet.util';
 import { store } from './store';
 import { N } from './router';
+import { getGlobal } from '../global/global';
 
 // login
 export function apiLogin (phone, code, invite_code) {
@@ -304,10 +305,11 @@ export function income (page, size, source) {
 
 const transformFetch = async (method, url, data = {}) => {
     try {
+        // console.log(getGlobal('authorization'), getGlobal('authorization').toString());
         const TIME_STAMP = Math.round(Date.now() / 1000).toString();
         const POST_DATA = JSON.stringify(data);
         const HEADER = new Headers({
-            authorization: U.view(['authorization'], store).get(),
+            authorization: JsonParse(getGlobal('authorization')),
             'x-uaid': UA_ID,
             'x-timestamp': TIME_STAMP,
             'x-signature': CryptoJS.HmacSHA256(((method === 'GET' || method === 'DELETE') ? buildStr(data) : POST_DATA) + '.' + TIME_STAMP, PRIVATE_KEY).toString(),
@@ -325,7 +327,7 @@ const transformFetch = async (method, url, data = {}) => {
                         console.log(loadingEnd, '请求超时==', url, method, data);
                         loadingEnd = true;
                     }
-                }, 8000);
+                }, 10000);
             }),
             // eslint-disable-next-line no-async-promise-executor
             new Promise(async (resolve, reject) => {
@@ -333,7 +335,7 @@ const transformFetch = async (method, url, data = {}) => {
                     const FETCH_DATA = await fetch(parameterTransform(method, url, data), request);
                     const DATA_TEXT = await FETCH_DATA.text();
                     console.log(DATA_TEXT);
-                    const localDate = DEVELOPER === 'Production' ? JSON.parse(AesDecrypt(DATA_TEXT)) : JSON.parse(DATA_TEXT);
+                    const localDate = DEVELOPER === 'Production' ? JsonParse(AesDecrypt(DATA_TEXT)) : JsonParse(DATA_TEXT);
                     localDate.error && toast(localDate.msg);
                     if ('error' in localDate) {
                         resolve(localDate);

@@ -1,5 +1,6 @@
 export const DEFAULT_USER = {
     balance: 0,
+    goldCoin: 0,
     today_income: 0,
     total_income: 0,
     phone: '000***000',
