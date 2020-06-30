@@ -26,7 +26,7 @@ import * as U from 'karet.util';
 import * as R from 'kefir.ramda';
 import { getSecondIncome } from '../utils/api';
 import { bindData, getPath } from '../global/global';
-import { transformMoney } from '../utils/util';
+import { _toFixed, transformMoney } from '../utils/util';
 import ShiftView from './ShiftView';
 
 export const HEADER_HEIGHT = 70;
@@ -43,6 +43,7 @@ export default class GameHeader extends Component {
             user: bindData('user', this),
             nowBalance: 0
         };
+        this._start = false;
     }
 
     async componentDidMount () {
@@ -51,16 +52,24 @@ export default class GameHeader extends Component {
             secondIncome: transformMoney(getPath(['myGrade', 'second_income'], this.state.user))
         });
         nowBalance = parseFloat(this.state.user.balance);
+        this._start = true;
+    }
+
+    componentWillUnmount () {
+        this._start = false;
+        this.enlarge && this.enlarge.stop();
     }
 
     start () {
         try {
-            this.enlarge && this.enlarge.start();
-            console.log('每秒金币增加', this.state.secondIncome);
-            nowBalance += parseFloat(this.state.secondIncome);
-            this.secondText && this.secondText.setNativeProps({
-                text: `${nowBalance}`
-            });
+            if (this._start) {
+                this.enlarge && this.enlarge.start();
+                console.log('每秒金币增加', this.state.secondIncome);
+                nowBalance += parseFloat(this.state.secondIncome);
+                this.secondText && this.secondText.setNativeProps({
+                    text: `${_toFixed(nowBalance)}`
+                });
+            }
         } catch (e) {
             console.log(e);
         }

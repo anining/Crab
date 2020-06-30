@@ -27,8 +27,9 @@ export default class Lamp extends Component {
     }
 
     async componentDidMount () {
-        // this.AnimationStart.call(this, 0, this.state.LampList.length);
-        this.start();
+        if (this.props.autoPlay) {
+            this.start();
+        }
     }
 
     componentWillUnmount () {
@@ -107,14 +108,16 @@ Lamp.propTypes = {
     backgroundColor: PropTypes.string,
     color: PropTypes.string,
     color1: PropTypes.string,
-    LampList: PropTypes.array
+    LampList: PropTypes.array,
+    autoPlay: PropTypes.bool,
 };
 Lamp.defaultProps = {
     width: '70%',
     backgroundColor: '#F02E21',
     color: '#fff',
     color1: '#ffebc1',
-    LampList: [{ name: 'xxx', money: 'xxx' }, { name: 'xxx', money: 'xxx' }]
+    LampList: [{ name: 'xxx', money: 'xxx' }, { name: 'xxx', money: 'xxx' }],
+    autoPlay: false
 };
 
 const styles = StyleSheet.create({

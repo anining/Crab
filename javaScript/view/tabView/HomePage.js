@@ -53,17 +53,24 @@ export default class HomePage extends Component {
         this.loadingToGame = false;// 准备去往游戏页面
     }
 
+    delayEmitter () {
+        setAndroidTime(() => {
+            this.startLottie = DeviceEventEmitter.addListener('startLottie', () => {
+                this._homeStart();
+            });
+            this.stopLottie = DeviceEventEmitter.addListener('stopLottie', () => {
+                this._homeStop();
+            });
+        }, 1000);
+    }
+
     componentDidMount () {
-        this.startLottie = DeviceEventEmitter.addListener('startLottie', () => {
-            this._homeStart();
-        });
-        this.stopLottie = DeviceEventEmitter.addListener('stopLottie', () => {
-            this._homeStop();
-        });
-        console.log(myGrade.get(), '用户数据');
+        this.delayEmitter();
+        this._homeStart();
     }
 
     _homeStart () {
+        this._homeStop();
         setAndroidTime(() => {
             this.lottie && this.lottie.play();
             this.shiftView && this.shiftView.start();
@@ -76,7 +83,6 @@ export default class HomePage extends Component {
         this.lottie && this.lottie.pause();
         this.shiftView && this.shiftView.stop();
         this.lamp && this.lamp.stop();
-        // this.enlarge && this.enlarge.stop();
     }
 
     componentWillUnmount () {
@@ -100,12 +106,13 @@ export default class HomePage extends Component {
                     {/* eslint-disable-next-line no-return-assign */}
                     <LottieView ref={ref => this.lottie = ref} key={'lottie'} renderMode={'HARDWARE'}
                         style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1}
-                        loop={true} autoPlay={true} speed={1}/>
+                        loop={true} autoPlay={false} speed={1}/>
                     <View style={[css.pa, css.cover]}>
                         {/* eslint-disable-next-line no-return-assign */}
                         <ShiftView callback={() => {
+                            console.log('调用一次');
                             this.gameHeader && this.gameHeader.start();
-                        }} ref={ref => this.shiftView = ref} autoPlay={true} loop={true} duration={800} delay={1000}
+                        }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={800} delay={1000}
                         startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}>
                             <ImageAuto source={game22} width={33}/>
                         </ShiftView>
@@ -123,7 +130,7 @@ export default class HomePage extends Component {
                         <View style={[css.flex, css.pa, styles.homeMidWrap, css.afs]}>
                             <TouchableOpacity style={[css.pa, styles.outputWrap]} activeOpacity={1} onPress={() => {
                                 DeviceEventEmitter.emit('showPop', <GameDialog btn={'我知道了'} tips={<Text>
-                                    学校等级越高，产出金币越多;</Text>}/>);
+                                    渔船等级越高，产金币越多</Text>}/>);
                             }}>
                                 <ImageBackground source={game5} style={[css.flex, css.fw, styles.outputWrapImg]}>
                                     <Text style={[styles.outputText]}>金币产量</Text>
