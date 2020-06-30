@@ -42,14 +42,14 @@ export default class ShiftView extends Component {
                 duration: 50,
                 delay: this.delay,
                 useNativeDriver: true,
-                easing: Easing.ease,
+                easing: Easing.linear,
             }),
             Animated.timing(this.modelOpacity, {
                 toValue: 0,
                 duration: this.duration - 50,
                 delay: 0,
                 useNativeDriver: true,
-                easing: Easing.ease,
+                easing: Easing.linear,
             }),
         ];
         this.transformXStart = [
@@ -58,14 +58,14 @@ export default class ShiftView extends Component {
                 duration: this.duration,
                 delay: this.delay,
                 useNativeDriver: true,
-                easing: Easing.ease,
+                easing: Easing.linear,
             }),
             Animated.timing(this.translateX, {
                 toValue: 0,
                 duration: 0,
                 delay: 100,
                 useNativeDriver: true,
-                easing: Easing.ease,
+                easing: Easing.linear,
             }),
         ];
         this.transformYStart = [
@@ -74,14 +74,14 @@ export default class ShiftView extends Component {
                 duration: this.duration,
                 delay: this.delay,
                 useNativeDriver: true,
-                easing: Easing.ease,
+                easing: Easing.linear,
             }),
             Animated.timing(this.translateY, {
                 toValue: 0,
                 duration: 0,
                 delay: 100,
                 useNativeDriver: true,
-                easing: Easing.ease,
+                easing: Easing.linear,
             }),
         ];
     }

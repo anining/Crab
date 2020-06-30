@@ -292,6 +292,11 @@ export function deleteNoteBook (notebook_id) {
     return transformFetch('DELETE', '/notebook', { notebook_id });
 }
 
+// 使用游戏题型道具
+export function useProp (prop_log_id) {
+    return transformFetch('PUT', '/prop', { prop_log_id });
+}
+
 // 资金记录
 export function income (page, size, source) {
     let data = {

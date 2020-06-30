@@ -56,6 +56,7 @@ import ShareUrlPage from '../view/shareView/ShareUrlPage';
 import ShareQRCodePage from '../view/shareView/ShareQRCodePage';
 import PassGamePage from '../view/gameView/PassGamePage';
 import toast from '../utils/toast';
+import RightProPage from '../view/gameView/RightProPage';
 
 const Stack = createStackNavigator();
 
@@ -234,6 +235,11 @@ const stackScreens = [
         name: 'PassGamePage',
         component: PassGamePage,
         title: '答题结算',
+    },
+    {
+        name: 'RightProPage',
+        component: RightProPage,
+        title: '答题正确率',
     },
 ];
 

@@ -132,7 +132,7 @@ export default class HomePage extends Component {
                             }
                         }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
                         startSite={[25, HEADER_HEIGHT - 28]}
-                        endSite={[width * 0.5 + 50, height - width * 0.05]}>
+                        endSite={[width - 240, height - width * 0.05]}>
                             <ImageAuto source={game25} width={33}/>
                         </ShiftView>
                         {/* /!* 头部显示区域 *!/ */}
@@ -183,6 +183,7 @@ const styles = StyleSheet.create({
         lineHeight: 30,
         textAlign: 'center',
         width,
+        ...css.gf
     },
     hdnText: {
         color: '#ffffff',
