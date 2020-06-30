@@ -9,7 +9,13 @@ export default class asyncStorage {
         }
     };
 
-    static setItem = (key, value) => AsyncStorage.setItem(key, value);
+    static setItem = (key, value) => {
+        try {
+            AsyncStorage.setItem(key, JSON.stringify(value));
+        } catch (e) {
+            console.log(e)
+        }
+    };
 
     //清空全部的AsyncStorage数据
     static clear = () => AsyncStorage.clear();

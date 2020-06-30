@@ -1,15 +1,18 @@
 import { activity, app, banner, getSecondIncome, gradeSetting, signConfig, taskPlatform, user } from './api';
-import {_tc, _toFixed, rangeLevel, toGoldCoin, transformMoney} from './util';
+import { _tc, _toFixed, rangeLevel, toGoldCoin, transformMoney } from './util';
 import { getter, setter } from './store';
 
 export const updateUser = (callback) => {
-    user().then(res => _tc(() => {
-        if (!res.error && res.data) {
-            console.log(res, 'user');
-            setter([['user', formatUserInfo(res.data)]], true);
-            callback && callback();
-        }
-    }));
+    return new Promise((resolve, reject) => {
+        user().then(res => _tc(() => {
+            resolve();
+            if (!res.error && res.data) {
+                console.log(res, 'user');
+                setter([['user', formatUserInfo(res.data)]], true);
+                callback && callback();
+            }
+        }));
+    });
 };
 function formatUserInfo (data) {
     try {
@@ -34,30 +37,39 @@ function formatUserInfo (data) {
     }
 }
 export const updateApp = () => {
-    app().then(res => _tc(() => {
-        if (!res.error && res.data) {
-            console.log(res, 'app');
-            setter([['app', (res.data)]], true);
-        }
-    }));
+    return new Promise((resolve, reject) => {
+        app().then(res => _tc(() => {
+            resolve();
+            if (!res.error && res.data) {
+                console.log(res, 'app');
+                setter([['app', (res.data)]], true);
+            }
+        }));
+    });
 };
 
 export const updateBanner = () => {
-    banner().then(res => _tc(() => {
-        if (!res.error && res.data) {
-            console.log(res, 'banner');
-            setter([['banner', res.data]], true);
-        }
-    }));
+    return new Promise((resolve, reject) => {
+        banner().then(res => _tc(() => {
+            resolve();
+            if (!res.error && res.data) {
+                console.log(res, 'banner');
+                setter([['banner', res.data]], true);
+            }
+        }));
+    });
 };
 export const updateActivity = () => {
-    activity().then(res => _tc(() => {
-        if (!res.error && res.data) {
-            console.log(res, 'activity');
-            setter([['activity', res.data]]);
-            setter([['activityObj', formatActivity(res.data)]], true);
-        }
-    }));
+    return new Promise((resolve, reject) => {
+        activity().then(res => _tc(() => {
+            resolve();
+            if (!res.error && res.data) {
+                console.log(res, 'activity');
+                setter([['activity', res.data]]);
+                setter([['activityObj', formatActivity(res.data)]], true);
+            }
+        }));
+    });
 };
 function formatActivity (list) {
     try {
@@ -71,12 +83,15 @@ function formatActivity (list) {
     }
 }
 export const getSignConfig = () => {
-    signConfig().then(res => _tc(() => {
-        if (!res.error && res.data) {
-            console.log(res, 'signConfig');
-            setter([['signConfig', formatSignConfig(res.data)]], true);
-        }
-    }));
+    return new Promise((resolve, reject) => {
+        signConfig().then(res => _tc(() => {
+            resolve();
+            if (!res.error && res.data) {
+                console.log(res, 'signConfig');
+                setter([['signConfig', formatSignConfig(res.data)]], true);
+            }
+        }));
+    });
 };
 function formatSignConfig (config) {
     try {
@@ -90,21 +105,27 @@ function formatSignConfig (config) {
     }
 }
 export const getTaskPlatform = () => {
-    taskPlatform().then(res => _tc(() => {
-        console.log(res, 'taskPlatform');
-        if (!res.error && res.data) {
-            setter([['taskPlatform', (res.data)]], true);
-        }
-    }));
+    return new Promise((resolve, reject) => {
+        taskPlatform().then(res => _tc(() => {
+            console.log(res, 'taskPlatform');
+            resolve();
+            if (!res.error && res.data) {
+                setter([['taskPlatform', (res.data)]], true);
+            }
+        }));
+    });
 };
 export const getGradeSetting = () => {
-    gradeSetting().then(res => _tc(() => {
-        console.log(res, 'getGradeSetting');
-        if (!res.error && res.data) {
-            setter([['gradeSetting', (formatGrade(res.data))]], true);
-            setter([['gradeRange', (formatGradeRange(res.data))]], true);
-        }
-    }));
+    return new Promise((resolve, reject) => {
+        gradeSetting().then(res => _tc(() => {
+            console.log(res, 'getGradeSetting');
+            resolve();
+            if (!res.error && res.data) {
+                setter([['gradeSetting', (formatGrade(res.data))]], true);
+                setter([['gradeRange', (formatGradeRange(res.data))]], true);
+            }
+        }));
+    });
 };
 function formatGrade (array) {
     try {
@@ -126,7 +147,12 @@ function formatGradeRange (array) {
 }
 
 export function updateSecondIncome () {
-    getSecondIncome().then(res => {
-        console.log(res, '领取的金币');
+    return new Promise((resolve, reject) => {
+        getSecondIncome().then(res => {
+            resolve();
+            console.log(res, '领取的金币');
+            // eslint-disable-next-line no-unused-expressions
+            asyncStorage.setItem('', value);
+        });
     });
 }

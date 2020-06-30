@@ -55,6 +55,7 @@ import NoticeDetailPage from '../view/homeView/NoticeDetailPage';
 import ShareUrlPage from '../view/shareView/ShareUrlPage';
 import ShareQRCodePage from '../view/shareView/ShareQRCodePage';
 import PassGamePage from '../view/gameView/PassGamePage';
+import toast from '../utils/toast';
 
 const Stack = createStackNavigator();
 
@@ -243,14 +244,7 @@ function setStatusBar () {
 }
 
 function initNetInfo () {
-    updateUser();
-    updateApp();
-    updateBanner();
-    updateActivity();
-    getSignConfig();
-    getTaskPlatform();
-    getGradeSetting();
-    updateSecondIncome();
+    return Promise.all([updateUser(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome()]);
 }
 
 function setConsole () {
@@ -283,10 +277,14 @@ function AppStackNavigator () {
         setConsole();
         asyncStorage.getAllKeys()
             .then(response => {
-                asyncStorage.multiGet(response)
-                    .then(r => {
+                asyncStorage.multiGet(response.filter(x => !new RegExp('[0-9]').test(x))) // 去除含有数字的key值
+                    .then(async r => {
                         initializationStore(r);
-                        initNetInfo();
+                        if (r && r.length) {
+                            const ret = initNetInfo();
+                        } else {
+                            await initNetInfo();
+                        }
                         setStatusBar();
                         setKeys([]);
                         SplashScreen.hide();
