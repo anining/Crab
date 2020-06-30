@@ -7,7 +7,7 @@ import ListGeneral from '../../components/ListGeneral';
 import toast from '../../utils/toast';
 import task10 from '../../assets/icon/task/task10.png';
 import { N } from '../../utils/router';
-import { giveUp, taskReceive, taskReceiveDetail } from '../../utils/api';
+import { giveUp, taskReceive } from '../../utils/api';
 import { transformMoney, transformTime } from '../../utils/util';
 import { Down } from '../../components/Down';
 import { task } from '../../utils/update';
@@ -36,27 +36,23 @@ const HEADER_DATA = [
     }
 ];
 
-export default function MyTaskPage (props) {
-    return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
-            <RenderHeader id={props.route.params.id}/>
-        </SafeAreaView>
-    );
-}
+function MyTaskPage (props) {
+    const view = [];
 
-function RenderHeader ({ id }) {
-    const components = [];
     HEADER_DATA.forEach(header => {
-        components.push(
+        view.push(
             <View tabLabel={header.tabLabel} key={header.tabLabel}>
                 <L type={header.type} itemHeight={header.itemHeight}/>
             </View>
         );
     });
+
     return (
-        <ListHeader value={id}>
-            {components}
-        </ListHeader>
+        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
+            <ListHeader value={id}>
+                {view}
+            </ListHeader>
+        </SafeAreaView>
     );
 }
 
@@ -69,11 +65,9 @@ function L ({ type, itemHeight }) {
                 ref={ref => setListRef(ref)}
                 itemHeight={itemHeight}
                 itemMarginTop={itemMarginTop}
-                getList={async (page, num, callback) => {
+                getList={ (page, num, callback) => {
                     taskReceive(page, num, type).then(r => {
-                        if (!r.error) {
-                            callback(r.data);
-                        }
+                        !r.error && callback(r.data);
                     });
                 }}
                 renderItem={item => {
@@ -87,18 +81,18 @@ function L ({ type, itemHeight }) {
                                     <Text style={{ color: '#353535', fontSize: 15, fontWeight: '500' }}>任务类型：{category}</Text>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                         <Image source={task10} style={{ height: 20, width: 19, marginRight: 5 }}/>
-                                        <Text style={{ color: '#FF6C00', fontSize: 24, fontWeight: '600' }}>{transformMoney(money)}<Text style={{ fontSize: 14 }}>金币</Text></Text>
+                                        <Text style={{ color: '#FF6C00', fontSize: 24, fontWeight: '600' }}>{transformMoney(money)} <Text style={{ fontSize: 14 }}>金币</Text></Text>
                                     </View>
                                 </View>
                                 <View style={styles.viewCenter}>
-                                    <Text style={styles.itemViewTopName}>做单账号：{account}</Text>
-                                    <Text style={{ fontSize: 12, color: '#999' }}>当前账号任务通过率：<Text style={{ color: '#FF6C00' }}>{Number.parseInt(success_rate * 100)}</Text>%</Text>
+                                    <Text style={styles.itemViewTopName} numberOfLines={1}>做单账号：{account}</Text>
+                                    <Text style={{ fontSize: 12, color: '#999' }}>当前账号任务通过率：<Text style={{ color: '#FF6C00' }}>{Number.parseInt(success_rate * 100)}</Text> %</Text>
                                 </View>
                                 <View style={styles.itemViewCenter}>
                                     <Text style={{ color: '#353535', fontSize: 14 }}>接任务ID：{receive_task_id}</Text>
                                     <TouchableOpacity onPress={() => {
                                         Clipboard.setString(receive_task_id.toString());
-                                        toast('复制成功');
+                                        toast('复制成功!');
                                     }} style={styles.copyBtn}>
                                         <Text style={{ fontSize: 12, color: '#FF6C00', lineHeight: 25, textAlign: 'center' }}>复制ID值</Text>
                                     </TouchableOpacity>
@@ -115,58 +109,59 @@ function L ({ type, itemHeight }) {
 
 function RenderItem ({ type, updated_at, receive_task_id, reason, finish_deadline, listRef }) {
     function apiGiveUp () {
-        giveUp(receive_task_id)
-            .then(r => {
-                if (r.error) {
-                    toast(r.msg || '操作失败');
-                } else {
-                    toast('操作成功');
-                    listRef._onRefresh();
-                }
-            });
+        giveUp(receive_task_id).then(r => {
+            if (!r.error) {
+                toast('操作成功');
+                listRef._onRefresh();
+            }
+        });
     }
     switch (type) {
-    case 1:return (
-        <>
-            <View style={[css.flex, css.js, styles.viewBottom]}>
-                <Text style={styles.deadline}>剩余时间：</Text>
-                <Down time={finish_deadline} style={styles.deadline}/>
-            </View>
-            <TouchableOpacity activeOpacity={1} onPress={() => {
-                apiGiveUp();
-            }} style={styles.giveUpBtn}>
-                <Text style={{ fontSize: 17, color: '#FF6C00', lineHeight: 42, textAlign: 'center' }}>放弃任务</Text>
-            </TouchableOpacity>
-        </>
-    );
-    case 4:return (
-        <View style={styles.viewBottomBtn}>
-            <Text style={{ color: '#353535', fontSize: 14 }}>提交时间：{transformTime(updated_at)}</Text>
-            <Text style={{ color: '#2D6DFF', fontSize: 14, fontWeight: '500' }}>审核中(24小时内审核)</Text>
-        </View>
-    );
-    case 5:return (
-        <View style={styles.viewBottomBtn}>
-            <Text style={{ color: '#353535', fontSize: 14 }}>审核时间：{transformTime(updated_at)}</Text>
-            <Text style={{ color: '#53C23B', fontSize: 14, fontWeight: '500' }}>已通过</Text>
-        </View>
-    );
-    default:return (
-        <>
-            <View style={[styles.viewBottomBtn, { height: 50 }]}>
-                <Text style={{ color: '#353535', fontSize: 14 }}>审核时间：{transformTime(updated_at)}</Text>
-                <Text style={{ color: '#FF3154', fontSize: 14, fontWeight: '500' }}>未通过</Text>
-            </View>
-            <View style={styles.defaultView}>
-                <Text style={{ color: '#353535', fontSize: 14 }}>未通过原因：<Text style={{ color: '#FF3154' }}>{reason}</Text></Text>
-                <TouchableOpacity activeOpacity={1} onPress={() => {
-                    N.navigate('FeedBackPage');
-                }} style={styles.answerBtn}>
-                    <Text style={styles.feedBtn}>我有疑问</Text>
+    case 1:
+        return (
+            <>
+                <View style={[css.flex, css.js, styles.viewBottom]}>
+                    <Text style={styles.deadline}>剩余时间：</Text>
+                    <Down time={finish_deadline} style={styles.deadline}/>
+                </View>
+                <TouchableOpacity onPress={() => {
+                    apiGiveUp();
+                }} style={styles.giveUpBtn}>
+                    <Text style={{ fontSize: 17, color: '#FF6C00', lineHeight: 42, textAlign: 'center' }}>放弃任务</Text>
                 </TouchableOpacity>
+            </>
+        );
+    case 4:
+        return (
+            <View style={styles.viewBottomBtn}>
+                <Text style={{ color: '#353535' }}>提交时间：{transformTime(updated_at)}</Text>
+                <Text style={{ color: '#2D6DFF', fontWeight: '500' }}>审核中(24小时内审核)</Text>
             </View>
-        </>
-    );
+        );
+    case 5:
+        return (
+            <View style={styles.viewBottomBtn}>
+                <Text style={{ color: '#353535' }}>审核时间：{transformTime(updated_at)}</Text>
+                <Text style={{ color: '#53C23B', fontWeight: '500' }}>已通过</Text>
+            </View>
+        );
+    default:
+        return (
+            <>
+                <View style={[styles.viewBottomBtn, { height: 50 }]}>
+                    <Text style={{ color: '#353535' }}>审核时间：{transformTime(updated_at)}</Text>
+                    <Text style={{ color: '#FF3154', fontWeight: '500' }}>未通过</Text>
+                </View>
+                <View style={styles.defaultView}>
+                    <Text style={{ color: '#353535', fontSize: 14 }}>未通过原因：<Text style={{ color: '#FF3154' }}>{reason}</Text></Text>
+                    <TouchableOpacity onPress={() => {
+                        N.navigate('FeedBackPage');
+                    }} style={styles.answerBtn}>
+                        <Text style={styles.feedBtn}>我有疑问</Text>
+                    </TouchableOpacity>
+                </View>
+            </>
+        );
     }
 }
 
@@ -239,6 +234,7 @@ const styles = StyleSheet.create({
     itemViewTopName: {
         color: '#353535',
         fontSize: 14,
+        maxWidth: 120
     },
     viewBottom: {
         borderBottomColor: '#EDEDED',
@@ -268,3 +264,5 @@ const styles = StyleSheet.create({
         paddingRight: 10
     }
 });
+
+export default MyTaskPage;
