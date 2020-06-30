@@ -10,6 +10,7 @@ import { N } from '../../utils/router';
 import { giveUp, taskReceive, taskReceiveDetail } from '../../utils/api';
 import { transformMoney, transformTime } from '../../utils/util';
 import { Down } from '../../components/Down';
+import { task } from '../../utils/update';
 
 const itemMarginTop = 10;
 const HEADER_DATA = [
@@ -80,13 +81,7 @@ function L ({ type, itemHeight }) {
                     return (
                         <>
                             <TouchableOpacity style={[styles.itemView, { height: itemHeight }]} key={receive_task_id} onPress={() => {
-                                taskReceiveDetail(receive_task_id).then(r => {
-                                    if (r.error) {
-                                        toast(r.msg || '操作失败');
-                                    } else {
-                                        N.navigate('TaskDetailPage', { detail: r.data });
-                                    }
-                                });
+                                task(null, receive_task_id);
                             }}>
                                 <View style={styles.itemViewTop}>
                                     <Text style={{ color: '#353535', fontSize: 15, fontWeight: '500' }}>任务类型：{category}</Text>

@@ -1,6 +1,9 @@
-import { activity, app, banner, signConfig, taskPlatform, user } from './api';
+import { activity, app, banner, getTask, signConfig, taskPlatform, taskReceiveDetail, user } from './api';
 import { _tc, transformMoney } from './util';
 import { setter } from './store';
+import toast from './toast';
+import { N } from './router';
+import { dyCrack } from '../crack/dy';
 export const updateUser = (callback) => {
     user().then(res => _tc(() => {
         if (!res.error && res.data) {
@@ -79,3 +82,35 @@ export const getTaskPlatform = () => {
         }
     }));
 };
+function taskDetail (receive_task_id) {
+    taskReceiveDetail(receive_task_id).then(r => {
+        if (r.error) {
+            toast(r.msg || '当前做任务人数过多！稍后再试！');
+        } else {
+            const { data: detail } = r;
+            const { home_url, platform_category } = detail;
+            if (platform_category === 1) {
+                dyCrack(home_url).then(account => {
+                    console.log(account);
+                    N.navigate('TaskDetailPage', { detail, account: account.liked ? account : undefined });
+                });
+            } else {
+                N.navigate('TaskDetailPage', { detail, account: undefined });
+            }
+        }
+    });
+}
+export function task (category, receive_task_id) {
+    if (category) {
+        getTask(category).then(r => {
+            if (r.error) {
+                toast(r.msg || '当前做任务人数过多！稍后再试！');
+                error === 9 && N.navigate('AccountHomePage');
+            } else {
+                taskDetail(r.data.receive_task_id);
+            }
+        });
+    } else {
+        taskDetail(receive_task_id);
+    }
+}
