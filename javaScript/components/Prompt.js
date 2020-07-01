@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     },
     view: {
         alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.3)',
+        backgroundColor: 'rgba(0,0,0,0.5)',
         flex: 1,
         justifyContent: 'center',
     },

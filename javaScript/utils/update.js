@@ -8,12 +8,11 @@ import {
     taskReceiveDetail,
     signConfig,
     taskPlatform,
-    user,
-    nextRedLevel,
+    user, getNextRedLevel,
 } from './api';
 import { _tc, _toFixed, rangeLevel, toGoldCoin, transformMoney } from './util';
 import { getter, setter } from './store';
-import { getPath } from '../global/global';
+import { getGlobal, getPath } from '../global/global';
 
 import toast from './toast';
 import { N } from './router';
@@ -181,7 +180,12 @@ export const getGradeSetting = () => {
 function formatGrade (array) {
     try {
         const gradeObj = {};
+        let baseIncome = null;
         array.forEach(item => {
+            if (!baseIncome) {
+                baseIncome = item.second_income;
+            }
+            item.incomeRate = _toFixed((item.second_income / baseIncome) * 100, 0) + '%';
             gradeObj[item.grade] = item;
         });
         return gradeObj;
@@ -202,17 +206,24 @@ export function updateSecondIncome () {
         getSecondIncome().then(res => {
             resolve();
             console.log(res, '领取的金币');
-            // eslint-disable-next-line no-unused-expressions
-            asyncStorage.setItem('', value);
+            const coin = getPath(['data', 'balance'], res);
+            if (coin) {
+                asyncStorage.setItem(`${getPath(['phone'], getGlobal('user'))}coin`, {
+                    coin: toGoldCoin(coin),
+                    time: +new Date()
+                });
+            }
         });
     });
 }
 
 export function updateNextRedLevel () {
     return new Promise((resolve, reject) => {
-        nextRedLevel().then(res => {
+        getNextRedLevel().then(res => {
             resolve();
-            setter([['nextRedLevel', getPath(['data', 'next_red_level'], res)]], true);
+            if (res && !res.error && res.data) {
+                setter([['nextRedLevel', getPath(['data', 'next_red_level'], res)]], true);
+            }
         });
     });
 }

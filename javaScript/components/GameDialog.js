@@ -14,13 +14,24 @@ export default class GameDialog extends Component {
     }
 
     render () {
-        return <TouchableOpacity activeOpacity={1} style={[styles.gameWrap, css.pr]}>
+        return <TouchableOpacity activeOpacity={1} style={[styles.gameWrap, css.pr, {
+            backgroundColor: this.props.transparent ? 'rgba(0,0,0,0)' : '#DDDDDD'
+        }]}>
             <TouchableOpacity activeOpacity={1} style={[css.pa, styles.closeImageWrap]} onPress={() => { DeviceEventEmitter.emit('hidePop'); }}>
                 <ImageAuto source={game15} style={[styles.closeImage]}/>
             </TouchableOpacity>
-            {_if(this.props.icon, res => <ImageAuto source={res} style={[css.pa, styles.dialogIcon]}/>)}
+            {_if(this.props.icon, res => {
+                if (typeof res === 'object') {
+                    return <View style={[css.pa, styles.dialogIconWrap]}>
+                        {this.props.icon}
+                    </View>;
+                } else {
+                    return <ImageAuto source={res} style={[css.pa, styles.dialogIcon]}/>;
+                }
+            })}
             <View style={[css.flex, css.fw, styles.gameInner, {
-                paddingTop: this.props.icon ? width * 0.15 + 10 : 10
+                paddingTop: this.props.icon ? width * 0.15 + 10 : 10,
+                backgroundColor: this.props.transparent ? 'rgba(0,0,0,0)' : '#fff'
             }]}>
                 {this.props.content}
                 {_if(this.props.tips, res => <Text style={styles.tipsText}>{res}</Text>)}
@@ -39,14 +50,16 @@ export default class GameDialog extends Component {
 }
 GameDialog.propTypes = {
     btn: PropTypes.string,
-    callback: PropTypes.func
+    callback: PropTypes.func,
+    transparent: PropTypes.bool,
 };
 GameDialog.defaultProps = {
     btn: '我知道了',
     tips: null,
     content: null,
     icon: null,
-    callback: () => {}
+    callback: () => {},
+    transparent: false
 };
 const styles = StyleSheet.create({
     btnText: {
@@ -74,6 +87,9 @@ const styles = StyleSheet.create({
         top: -width * 0.15,
         transform: [{ translateX: -width * 0.2 }],
         width: width * 0.4
+    },
+    dialogIconWrap: {
+        top: -width * 0.15,
     },
     gameInner: {
         backgroundColor: '#fff',

@@ -24,11 +24,9 @@ import game22 from '../assets/icon/game/game22.png';
 import { getter } from '../utils/store';
 import * as U from 'karet.util';
 import * as R from 'kefir.ramda';
-import { getSecondIncome } from '../utils/api';
 import { bindData, getPath } from '../global/global';
-import { _toFixed, setAndroidTime, toGoldCoin, transformMoney, unitConversion } from '../utils/util';
-import ShiftView from './ShiftView';
-
+import { _toFixed, JsonParse, setAndroidTime, toGoldCoin, transformMoney, unitConversion } from '../utils/util';
+import asyncStorage from '../utils/asyncStorage';
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
@@ -52,11 +50,20 @@ export default class GameHeader extends Component {
     async componentDidMount () {
         this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user));
         nowBalance = parseFloat(this.state.user.goldCoin || 0);
-        console.log(this.state.user, this.state.user.phone, '=========初始化、、======');
+        await this.getCoin();
         this.secondText && this.secondText.setNativeProps({
             text: `${_toFixed(nowBalance, 4)}`
         });
         this._start = true;
+    }
+
+    async getCoin () {
+        try {
+            const ret = await asyncStorage.getItem(`${getPath(['phone'], this.state.user)}coin`);
+            nowBalance = JsonParse(ret).coin || parseFloat(this.state.user.goldCoin || 0);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     componentWillUnmount () {
@@ -71,12 +78,16 @@ export default class GameHeader extends Component {
                 const minAddUnit = parseFloat(addIncome / addFrequency);
                 const baseNowBalance = nowBalance;
                 nowBalance += parseFloat(addIncome);
-                // console.log(minAddUnit, nowBalance, addIncome, '每秒加金币');
                 for (let i = 0; i < addFrequency; i++) {
                     setAndroidTime(() => {
                         if ((i + 1) === addFrequency) {
+                            // 最后一次加的时候存入内存
                             this.secondText && this.secondText.setNativeProps({
                                 text: `${_toFixed(nowBalance, 4)}`
+                            });
+                            asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
+                                coin: nowBalance,
+                                time: +new Date()
                             });
                         } else {
                             this.secondText && this.secondText.setNativeProps({

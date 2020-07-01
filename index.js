@@ -15,4 +15,8 @@ TextInput.defaultProps = Object.assign({}, TextInput.defaultProps, {
 Text.defaultProps = Object.assign({}, Text.defaultProps, {
     allowFontScaling: false,
 });
+const sourceRender = Text.render;
+Text.render = function render (props, ref) {
+    return sourceRender.apply(this, [{ ...props, style: [{ fontFamily: 'sy-bold' }, props.style] }, ref]);
+}; // 全局修改字体
 AppRegistry.registerComponent(appName, () => AppStackNavigator);

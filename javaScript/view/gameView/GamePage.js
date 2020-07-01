@@ -104,7 +104,7 @@ export default class GamePage extends Component {
                         ...this.state.gameInfo
                     }
                 });
-            }, 500);
+            }, 1000);
         } else {
             // N.goBack();
         }

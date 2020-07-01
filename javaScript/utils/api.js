@@ -299,11 +299,14 @@ export function useProp () {
     return transformFetch('PUT', '/prop', { });
 }
 
-// 红包官咖
-export function nextRedLevel () {
+// 红包关卡数组
+export function getNextRedLevel () {
     return transformFetch('GET', '/game/next_red_level', {});
 }
-
+// 选择领取奖励
+export function choseGetAward (is_double = false) {
+    return transformFetch('POST', '/game/level/award', { is_double });
+}
 // 资金记录
 export function income (page, size, source) {
     let data = {

@@ -119,7 +119,7 @@ export default class HomePage extends Component {
             const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
             const levelLength = nexLevel - preLevel;
             const myForwardNumber = Math.floor(avatarProLevelPosition.length * (myNowLevel - preLevel) / levelLength);
-            // console.log(preLevel, nexLevel, myNowLevel, this.state.nextRedLevel, '===============');
+            // console.log(getPath([getPath(['myGradeLevel'], this.state.user) + 1], this.state.gradeSetting), this.state.gradeSetting, getPath(['myGradeLevel'], this.state.user), '===============');
             const view = [];
             if (this.state.nextRedLevel.length) {
                 if (this.state.nextRedLevel.length >= 12) {
@@ -177,15 +177,16 @@ export default class HomePage extends Component {
                         <GameHeader ref={ref => this.gameHeader = ref}/>
                         {/* 中部显示区域 */}
                         <View style={[css.flex, css.pa, styles.homeMidWrap, css.afs]}>
-                            <TouchableOpacity style={[css.pa, styles.outputWrap]} activeOpacity={1} onPress={() => {
-                                DeviceEventEmitter.emit('showPop', <GameDialog btn={'我知道了'} tips={<Text>
-                                    渔船等级越高，产金币越多</Text>}/>);
-                            }}>
-                                <ImageBackground source={game5} style={[css.flex, css.fw, styles.outputWrapImg]}>
-                                    <Text style={[styles.outputText]}>金币产量</Text>
-                                    <Text style={styles.outputText} karet-lift>{secondIncome}币/秒</Text>
-                                </ImageBackground>
-                            </TouchableOpacity>
+                            {_if(getPath(['myGrade', 'incomeRate'], this.state.user), res =>
+                                <TouchableOpacity style={[css.pa, styles.outputWrap]} activeOpacity={1} onPress={() => {
+                                    DeviceEventEmitter.emit('showPop', <GameDialog btn={'我知道了'} tips={<Text>
+                                        渔船等级越高，产金币越多</Text>}/>);
+                                }}>
+                                    <ImageBackground source={game5} style={[css.flex, css.fw, styles.outputWrapImg]}>
+                                        <Text style={[styles.outputText]}>金币产量</Text>
+                                        <Text style={styles.outputText}>{res}</Text>
+                                    </ImageBackground>
+                                </TouchableOpacity>)}
                             {/* NoticePage */}
                             <TouchableOpacity activeOpacity={1} style={[css.pa, styles.noticeIcon]} onPress={() => {
                                 N.navigate('NoticePage');
@@ -209,6 +210,7 @@ export default class HomePage extends Component {
                                     right: 0,
                                     bottom: 0,
                                 }]}/>
+                                {_if(getPath([getPath(['myGradeLevel'], this.state.user) + 1, 'incomeRate'], this.state.gradeSetting), res => <Text style={styles.incomeRateText}>产量{res}</Text>)}
                             </View>
                             {/* 主页答题按钮 */}
                             <TouchableOpacity activeOpacity={1} onPress={() => {
@@ -298,6 +300,14 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         top: HEADER_HEIGHT,
         width,
+    },
+    incomeRateText: {
+        ...css.pa,
+        ...css.gf,
+        bottom: -10,
+        color: '#ddab4e',
+        fontSize: 10,
+        right: 10,
     },
     noticeIcon: {
         height: width * 0.1 * 96 / 93,

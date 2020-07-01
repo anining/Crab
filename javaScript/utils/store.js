@@ -11,6 +11,7 @@ const localStore = {
     banner: null,
     gradeSetting: null,
     gradeRange: null,
+    nextRedLevel: null,
 };
 const store = U.atom(localStore);
 
