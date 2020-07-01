@@ -2,10 +2,7 @@ import { DEVELOPER, PRIVATE_KEY, UA_ID } from './config';
 import { Platform } from 'react-native';
 import CryptoJS from 'crypto-js';
 import toast from './toast';
-import { _tc, AesDecrypt, buildStr, JsonParse, parameterTransform, setAndroidTime } from './util';
-import * as U from 'karet.util';
-import { store } from './store';
-import { N } from './router';
+import { AesDecrypt, buildStr, JsonParse, parameterTransform, setAndroidTime } from './util';
 import { getGlobal } from '../global/global';
 import android from '../components/Android';
 
@@ -346,7 +343,9 @@ const transformFetch = async (method, url, data = {}) => {
                     const FETCH_DATA = await fetch(parameterTransform(method, url, formatDataRet), request);
                     const DATA_TEXT = await FETCH_DATA.text();
                     const localDate = DEVELOPER === 'Production' ? JsonParse(AesDecrypt(DATA_TEXT)) : JsonParse(DATA_TEXT);
-                    localDate.error && toast(localDate.msg);
+                    if (localDate.error && localDate.msg !== 17) {
+                        toast(localDate.msg);
+                    }
                     if ('error' in localDate) {
                         resolve(localDate);
                     } else {
