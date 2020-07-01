@@ -9,7 +9,7 @@ import {
     signConfig,
     taskPlatform,
     user,
-    nextRedLevel,
+    nextRedLevel, account,
 } from './api';
 import { _tc, _toFixed, rangeLevel, toGoldCoin, transformMoney } from './util';
 import { getter, setter } from './store';
@@ -28,6 +28,15 @@ export const updateUser = (callback) => {
                 callback && callback();
             }
         }));
+    });
+};
+export const updateAccount = (callback) => {
+    return new Promise((resolve, reject) => {
+        account().then(r => {
+            resolve();
+            !r.error && setter([['accounts', r.data]], true);
+            callback && callback();
+        });
     });
 };
 function formatUserInfo (data) {
