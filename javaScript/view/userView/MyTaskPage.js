@@ -49,7 +49,7 @@ function MyTaskPage (props) {
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
-            <ListHeader value={id}>
+            <ListHeader value={props.route.params.id}>
                 {view}
             </ListHeader>
         </SafeAreaView>
