@@ -40,6 +40,8 @@ import { getter } from '../../utils/store';
 import * as U from 'karet.util';
 import * as R from 'kefir.ramda';
 import toast from '../../utils/toast';
+import game20 from '../../assets/icon/game/game20.png';
+import help from '../../lottie/help';
 
 const { height, width } = Dimensions.get('window');
 const CANVAS_WIDTH = width - 20;
@@ -60,10 +62,7 @@ const matrix = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
-const { trCorrectRate, user_level: userLevel, propNumsObj } = getter(['user.trCorrectRate', 'user.user_level', 'user.propNumsObj']);
-// const trCorrectRate = U.mapValue((res) => {
-//     return _toFixed(res * 100) + '%';
-// }, correctRate);
+const { trCorrectRate, level_num: userLevel, propNumsObj } = getter(['user.trCorrectRate', 'user.user_level.level_num', 'user.propNumsObj']);
 const gameTipsProp = U.mapValue((res) => {
     return res || 0;
 }, R.path(['3'], propNumsObj)); // 获取游戏提醒的数量
@@ -89,7 +88,7 @@ export default class GamePage extends Component {
         this._getGame();
     }
 
-    async _gameError (str) {
+    static async _gameError (str) {
         await gameError(str);// 打错题目
     }
 
@@ -516,7 +515,7 @@ export default class GamePage extends Component {
                         })();
                         this[`animationText${this.state.selectSite}`] && this[`animationText${this.state.selectSite}`].tada();
                         console.log(item, '???选错的字', this.state.coordinate, item.idiomPointArray.map((key) => { return this.state.coordinate[key].word; }).join(''));
-                        this._gameError(item.idiomPointArray.map((key) => { return this.state.coordinate[key].word; }).join(''));
+                        GamePage._gameError(item.idiomPointArray.map((key) => { return this.state.coordinate[key].word; }).join(''));
                     }
                 }
             });
@@ -578,6 +577,7 @@ export default class GamePage extends Component {
                     <Text style={styles.gameLabel} karet-lift>第{userLevel}关</Text>
                 </View>
                 <TouchableOpacity activeOpacity={1} onPress={() => {
+                    N.navigate('RightProPage');
                 }} style={[css.flex, css.fw, styles.ghRightBtn]}>
                     <Text style={{
                         ...styles.rightText,
@@ -607,7 +607,13 @@ export default class GamePage extends Component {
                             <ImageAuto source={game9} style={{ width: 22, marginRight: 5 }}/>
                             <Text style={styles.helpBtnText} numberOfLines={1} karet-lift>剩{gameTipsProp}次</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={1} style={[css.pa, { right: 0 }]}>
+                        <TouchableOpacity activeOpacity={1} style={[css.pa, { right: 0 }]} onPress={() => {
+                            DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
+                                this.lottieHelp && this.lottieHelp.pause();
+                            }} btn={'明白了'} content={
+                                <LottieView ref={ref => this.lottieHelp = ref} key={'lottieHelp'} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={'help'} source={help} loop={true} autoPlay={true} speed={1}/>
+                            }/>);
+                        }}>
                             <ImageAuto source={game57} style={{ width: 34, marginRight: 5, top: 8 }}/>
                         </TouchableOpacity>
                     </View>
