@@ -10,37 +10,35 @@ import asyncStorage from '../../utils/asyncStorage';
 import { getter } from '../../utils/store';
 
 const { user_id } = getter(['user.user_id']);
+const { taskPlatform } = getter(['taskPlatform']);
 
-export default function AccountBindPage (props) {
+function AccountBindPage (props) {
     const [url, setUrl] = useState('');
+    const { id, label } = props.route.params;
 
     function apiPostAccount () {
         if (!url) {
-            toast('链接不能为空');
+            toast('链接不能为空!');
+            return;
         }
-        postAccount(props.route.params.id, url).then(r => {
-            console.log(r);
+        postAccount(id, url).then(r => {
             if (!r.error) {
+                // 缓存用于新手福利判断
                 asyncStorage.setItem(`NEW_USER_TASK_TYPE2${user_id.get()}`, 'true');
-                toast('操作成功');
+                toast('操作成功!');
                 N.goBack();
-            } else {
-                toast(r.msg || '操作失败');
             }
         });
     }
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
-            <Header scene={{ descriptor: { options: {} }, route: { name: props.route.params.label } }} navigation={N}/>
+            <Header scene={{ descriptor: { options: {} }, route: { name: label } }} navigation={N}/>
             <View style={{ flex: 1, justifyContent: 'space-between' }}>
                 <View style={styles.container}>
                     <View style={styles.claim}>
                         <Text style={styles.claimText}>绑定要求：</Text>
-                        <View style={styles.claimView}>
-                            <Image source={bind1} style={{ height: 17, width: 17, marginRight: 5 }} />
-                            <Text style={{ color: '#999', fontSize: 14 }}>最低要求：<Text style={{ color: '#353535' }}>作品数<Text style={{ color: '#FF6C00' }}> 3 </Text>个</Text></Text>
-                        </View>
+                        <RenderConfig id={id}/>
                     </View>
                     <View style={styles.claim}>
                         <Text style={styles.homeText}>主页链接：</Text>
@@ -62,14 +60,46 @@ export default function AccountBindPage (props) {
                         <Text style={styles.text}>3.请确认自己的账号已经达到最低绑定要求。分享账号给其他用户，确保自己的作品、粉丝等信息是所有人可见的状态。</Text>
                     </View>
                 </View>
-                <TouchableOpacity onPress={() => {
-                    apiPostAccount();
-                }} style={styles.bindBtn}>
+                <TouchableOpacity onPress={apiPostAccount} style={styles.bindBtn}>
                     <Text style={styles.bindBtnText}>绑定账号</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
+}
+
+function RenderConfig ({ id }) {
+    const view = [];
+    const platforms = taskPlatform.get();
+    const localConfigs = platforms.filter(config => config.platform_category === id);
+
+    if (!localConfigs.length) {
+        return (
+            <View style={styles.claimView}>
+                <Image source={bind1} style={{ height: 17, width: 17, marginRight: 5 }} />
+                <Text style={{ color: '#999' }}>最低要求：<Text style={{ color: '#353535' }}>暂无要求</Text></Text>
+            </View>
+        );
+    }
+
+    const { level_config } = localConfigs[0];
+    const configs = Object.entries(level_config);
+
+    configs.forEach(config => {
+        const { works, fans, trends } = config[1];
+        view.push(
+            <View style={styles.claimView}>
+                <Image source={bind1} style={{ height: 17, width: 17, marginRight: 5 }} />
+                <Text numberOfLines={1} style={{ color: '#999' }}>等级{config[0]}要求：
+                    <Text style={{ color: '#353535' }}>作品数<Text style={{ color: '#FF6C00' }}> {works} </Text>个、</Text>
+                    <Text style={{ color: '#353535' }}>粉丝数<Text style={{ color: '#FF6C00' }}> {fans} </Text>个、</Text>
+                    <Text style={{ color: '#353535' }}>动态数<Text style={{ color: '#FF6C00' }}> {trends} </Text>个</Text>
+                </Text>
+            </View>
+        );
+    });
+
+    return <>{view}</>;
 }
 
 const styles = StyleSheet.create({
@@ -140,5 +170,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         paddingBottom: 10
-    },
+    }
 });
+
+export default AccountBindPage;
