@@ -101,7 +101,8 @@ export default class GamePage extends Component {
                 N.replace('PassGamePage', {
                     info: {
                         ...ret.data,
-                        ...this.state.gameInfo
+                        ...this.state.gameInfo,
+                        userLevel: userLevel.get()
                     }
                 });
             }, 1000);

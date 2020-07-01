@@ -44,7 +44,7 @@ import { avatarProLevelPosition, getLevelConfig, homeProLevelPosition } from '..
 import upgrade1 from '../../lottie/upgrade1';
 
 const { height, width } = Dimensions.get('window');
-const { level_num: userLevel } = getter(['user.user_level.level_num']);
+// const { level_num: userLevel } = getter(['user.user_level.level_num']);
 // const trCorrectRate = U.mapValue((res) => {
 //     return _toFixed(res * 100) + '%';
 // }, correctRate);
@@ -111,6 +111,7 @@ export default class PassGamePage extends Component {
                         if (ret && !ret.error) {
                             const addBalance = getPath(['data', 'add_balance'], ret);
                             this.gameHeader && this.gameHeader.start(toGoldCoin(addBalance));
+                            toast('领取成功');
                         }
                     }}/>
                 </View>
@@ -148,6 +149,7 @@ export default class PassGamePage extends Component {
 
     async componentDidMount () {
         this._showPop();
+        updateNextRedLevel();
         // _isUpgrade 是否升级判断完成后才更新用户信息
     }
 
@@ -187,7 +189,7 @@ export default class PassGamePage extends Component {
                     break;
                 }
             }
-            return ret - now;
+            return ret;
         } catch (e) {
             console.log(e);
         }
@@ -253,12 +255,12 @@ export default class PassGamePage extends Component {
                     {/* 核心显示区域 */}
                     <View style={[styles.gameResWrap, css.pr]}>
                         <ImageBackground source={game4} style={[css.flex, css.pa, styles.gamePassHeader]}>
-                            <Text style={styles.gamePassText} numberOfLines={1} karet-lift>恭喜通过第{userLevel}关</Text>
+                            <Text style={styles.gamePassText} numberOfLines={1} karet-lift>恭喜通过第{getPath(['userLevel'], this.paramsInfo, 0)}关</Text>
                         </ImageBackground>
                         <View style={[styles.gameCanvasWrap]}>
                             <View style={[styles.gameCanvasInner, css.flex, css.fw, css.afs]}>
                                 <Text style={[styles.gamePassTips, css.gf]}>您已超越<Text
-                                    style={{ fontSize: 20, color: 'red' }}>{_toFixed(getPath(['surpass'], this.state.user) * 100) + '%'}</Text>用户</Text>
+                                    style={{ fontSize: 20, color: 'red' }}>{_toFixed(getPath(['surpass'], this.state.user, 0) * 100) + '%'}</Text>用户</Text>
                                 <View style={[css.flex, css.fw, styles.idiomWrap, css.afs, css.js]}>
                                     {this._renderIdiomList()}
                                 </View>
