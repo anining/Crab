@@ -31,7 +31,7 @@ import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
 import { _if, _toFixed, setAndroidTime, transformMoney } from '../../utils/util';
 import EnlargeView from '../../components/EnlargeView';
-import { updateUser } from '../../utils/update';
+import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { getter } from '../../utils/store';
 import GameHeader from '../../components/GameHeader';
 import { bind } from 'kefir.ramda';
@@ -96,6 +96,7 @@ export default class HomePage extends Component {
         setAndroidTime(() => {
             this._getPosition();
             updateUser();
+            updateNextRedLevel();
         }, 1000);
     }
 
