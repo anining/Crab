@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, Image, Linking, Text, Dimensions, View, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, TextInput, DeviceEventEmitter } from 'react-native';
 import { css } from '../../assets/style/css';
-import task2 from '../../assets/icon/task/task2.png';
-import task3 from '../../assets/icon/task/task3.png';
 import task4 from '../../assets/icon/task/task4.png';
 import task5 from '../../assets/icon/task/task5.png';
 import task6 from '../../assets/icon/task/task6.png';
@@ -17,7 +15,7 @@ import task16 from '../../assets/icon/task/task16.png';
 import Upload from '../../components/Upload';
 import { N } from '../../utils/router';
 import { activityDetail, getTask, giveUp, taskReceiveDetail, taskSubmit } from '../../utils/api';
-import { _tc, getUrl, requestPermission, transformMoney } from '../../utils/util';
+import { getUrl, requestPermission, transformMoney } from '../../utils/util';
 import { captureRef } from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
 import Choice from '../../components/Choice';
@@ -63,9 +61,11 @@ const MENU_STATUS = {
 };
 
 function TaskDetailPage (props) {
-    const [name, setName] = useState('');
+    const [name, setName] = useState(props.route.params.detail.nickname || '');
+    const [sRef, setSRef] = useState();
     const [detail, setDetail] = useState(props.route.params.detail);
     const [account, setAccount] = useState(props.route.params.account);
+    const [progress, setProgress] = useState('等待上传');
     const [images, setImages] = useState(detail.images || []);
     const [num, setNum] = useState(0);
     const [change, setChange] = useState(1);
@@ -112,6 +112,7 @@ function TaskDetailPage (props) {
                         minTips: '您确定要返回首页(自动放弃任务)吗？',
                         lt: '返回首页',
                         lc: () => {
+                            giveUp(detail.receive_task_id);
                             N.goBack();
                         },
                         rt: '继续任务'
@@ -127,35 +128,26 @@ function TaskDetailPage (props) {
     return (
         <SafeAreaView style={[css.safeAreaView]}>
             <Header label={'任务信息'} backOnPress={backClick}/>
-            <View style={ styles.safeAreaView}>
-                <ScrollView>
-                    <EndTimeView detail={detail}/>
-                    <View style={{ paddingLeft: 10, paddingRight: 10 }}>
-                        <TitleView detail={detail} account={account}/>
-                        <DetailView detail={detail} account={account} change={change}/>
-                        <ClaimView detail={detail}/>
-                        <CourseView detail={detail} setName={setName} setImages={setImages} images={images} />
-                        <Btn detail={detail} name={name} account={account} images={images} setChange={setChange} setDetail={setDetail} setAccount={setAccount}/>
-                    </View>
-                </ScrollView>
-                <TouchableOpacity onPress={() => {
-                    _tc(() => N.navigate('DailyRedPackagePage', { activityId: (activityObj.get() || {})[1].activity_id }));
-                }} style={{ position: 'absolute', bottom: '29%', right: 10 }}>
-                    <Image source={task2} style={{ height: 70, width: 84 }}/>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
-                    _tc(() => N.navigate('OpenMoneyPage', { activityId: (activityObj.get() || {})[2].activity_id }));
-                }} style={{ position: 'absolute', bottom: '15%', right: 10 }}>
-                    <Image source={task3} style={{ height: 70, width: 84 }}/>
-                </TouchableOpacity>
-            </View>
+            <ScrollView style={{ backgroundColor: '#F8F8F8' }} ref={r => {
+                r && setSRef(r);
+            }}>
+                <EndTimeView detail={detail}/>
+                <View style={{ paddingLeft: 10, paddingRight: 10 }}>
+                    <TitleView detail={detail} account={account}/>
+                    <DetailView detail={detail} account={account} change={change}/>
+                    <ClaimView detail={detail}/>
+                    <CourseView name={name} detail={detail} progress={progress} setProgress={setProgress} setName={setName} setImages={setImages} images={images} />
+                    <Btn sRef={sRef} setProgress={setProgress} setName={setName} setImages={setImages} detail={detail} name={name} account={account} images={images} setChange={setChange} setDetail={setDetail} setAccount={setAccount}/>
+                </View>
+            </ScrollView>
         </SafeAreaView>
     );
 }
 
 function EndTimeView ({ detail }) {
     const { status, finish_deadline, audit_type, receive_task_id } = detail;
-    const AUDIT_TYPE = ['普通审核', '接口审核', '通用审核', '不审核'];
+    // const AUDIT_TYPE = ['普通审核', '接口审核', '通用审核', '不审核'];
+    const AUDIT_TYPE = ['24小时内审核', '24小时内审核', '24小时内审核', '24小时内审核'];
 
     function apiGiveUp () {
         DeviceEventEmitter.emit('showPop', {
@@ -173,9 +165,7 @@ function EndTimeView ({ detail }) {
                         }
                     });
                 },
-                rc: () => {
-                    console.log(2);
-                }
+                rc: () => {}
             }} />,
             close: () => {
 
@@ -218,7 +208,7 @@ function TitleView ({ detail, account }) {
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image source={task7} style={{ height: 20, width: 19, marginRight: 5 }}/>
-                <Text style={{ color: '#FF6C00', fontSize: 24 }}>{transformMoney(unit_money)}<Text style={{ fontSize: 14 }}> 金币</Text></Text>
+                <Text style={{ color: '#FF6C00', fontSize: 24 }}>{transformMoney(unit_money, 0)}<Text style={{ fontSize: 14 }}> 金币</Text></Text>
             </View>
         </View>
     );
@@ -278,7 +268,7 @@ function DetailView ({ detail, account, change }) {
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image source={task7} style={{ height: 20, width: 19, marginRight: 5 }}/>
-                    <Text style={{ color: '#FF6C00', fontSize: 24 }}>{transformMoney(unit_money)}<Text style={{ fontSize: 14 }}> 金币</Text></Text>
+                    <Text style={{ color: '#FF6C00', fontSize: 24 }}>{transformMoney(unit_money, 0)}<Text style={{ fontSize: 14 }}> 金币</Text></Text>
                 </View>
             </View>
             <View style={[styles.taskDetailBottom, { height: '60%', justifyContent: 'center' }]}>
@@ -312,16 +302,16 @@ function ClaimView ({ detail }) {
     );
 }
 
-function CourseView ({ detail, setName, images, setImages }) {
+function CourseView ({ detail, name, setName, images, setProgress, progress, setImages }) {
     const { course, status } = detail;
     const { submit = [], task = [] } = course;
     const submitView = [];
     const taskView = [];
-    submit.forEach(item => {
-        submitView.push(<RenderView status={status} setName={setName} images={images} setImages={setImages} name="submit" key={item.label} item={item}/>);
+    submit.forEach((item, index) => {
+        submitView.push(<RenderView inputName={name} length={submit.length} progress={progress} setProgress={setProgress} index={index} status={status} setName={setName} images={images} setImages={setImages} name="submit" key={item.label} item={item}/>);
     });
-    task.forEach(item => {
-        taskView.push(<RenderView status={status} images={images} setImages={setImages} setName={setName} name="task" key={item.label} item={item}/>);
+    task.forEach((item, index) => {
+        taskView.push(<RenderView inputName={name} length={task.length} progress={progress} setProgress={setProgress} index={index} status={status} images={images} setImages={setImages} setName={setName} name="task" key={item.label} item={item}/>);
     });
     return (
         <>
@@ -361,7 +351,7 @@ function CourseView ({ detail, setName, images, setImages }) {
     );
 }
 
-function RenderView ({ name, setImages, status, images, item, setName }) {
+function RenderView ({ name, inputName, length, index, setImages, setProgress, progress, status, images, item, setName }) {
     const { type, label, content } = item;
     const [view, setView] = useState();
 
@@ -417,6 +407,7 @@ function RenderView ({ name, setImages, status, images, item, setName }) {
                         editable={status === 1}
                         style={styles.input}
                         maxLength={20}
+                        value={inputName}
                         placeholder={content}
                         placeholderTextColor={'#FF7008'}
                         onChangeText={name => setName(name)}/>
@@ -426,7 +417,7 @@ function RenderView ({ name, setImages, status, images, item, setName }) {
         return (
             <>
                 <Text style={styles.taskCourseText}>{label}</Text>
-                <RenderImage images={images} setImages={setImages} status={status} sourceImage={content}/>
+                <RenderImage length={length} images={images} setProgress={setProgress} progress={progress} index={index} setImages={setImages} status={status} sourceImage={content}/>
                 <Text style={{ color: '#222', fontSize: 14, lineHeight: 30 }}>（请按照示例上传截图）</Text>
             </>
         );
@@ -452,30 +443,10 @@ function TransformUrlView ({ content, status, label }) {
     }
 }
 
-function RenderImage ({ images, setImages, status, sourceImage }) {
-    const view = <Image source={task8} style={ styles.uploadImage}/>;
-    if (images.length) {
-        const localImages = images;
-        const uri = localImages.shift();
-        setImages(localImages);
-        return (
-            <View style={css.flexRCSB}>
-                <TouchableOpacity onPress={() => {
-                    if (status === 1) {
-                        DeviceEventEmitter.emit('showPop', {
-                            dom: <Image source={{ uri: sourceImage }} style={[styles.saveBtn, { width: 312, height: 398, backgroundColor: '#fff' }]}/>,
-                            close: () => {}
-                        });
-                    }
-                }} style={{ marginTop: 10 }}>
-                    <Image source={{ uri: sourceImage }} style={[styles.uploadImage, { marginTop: 0 }]}/>
-                </TouchableOpacity>
-                <Image source={{ uri: status !== 1 ? uri : `data:${uri.mime};base64,${uri.data}` }} style={ styles.uploadImage}/>
-            </View>
-        );
-    }
+function RenderImage ({ images, length, progress, setProgress, index, setImages, status, sourceImage }) {
+    const view = <Image source={status === 1 ? images[index] ? { uri: `data:${images[index].mime};base64,${images[index].data}` } : task8 : { uri: images[index] }} style={ styles.uploadImage}/>;
     return (
-        <View style={css.flexRCSB}>
+        <View style={[css.flexRCSB, { alignItems: 'flex-start' }]}>
             <TouchableOpacity onPress={() => {
                 if (status === 1) {
                     DeviceEventEmitter.emit('showPop', {
@@ -486,21 +457,29 @@ function RenderImage ({ images, setImages, status, sourceImage }) {
             }} style={{ marginTop: 10 }}>
                 <Image source={{ uri: sourceImage }} style={[styles.uploadImage, { marginTop: 0 }]}/>
             </TouchableOpacity>
-            <Upload children={view} editable={status === 1} images={images} setImages={setImages}/>
+            <View>
+                <Upload children={view} setProgress={setProgress} editable={status === 1} images={images} setImages={setImages} length={length}/>
+                <Text style={styles.progress}>{progress}{isNaN(progress) ? '' : '%'}</Text>
+            </View>
         </View>
     );
 }
 
-function Btn ({ images, account, detail, name, setChange, setDetail, setAccount }) {
+function Btn ({ images, sRef, setName, account, detail, setProgress, setImages, name, setChange, setDetail, setAccount }) {
     const { status, nickname, home_url, receive_task_id, platform_category } = detail;
 
     function submit () {
-        if (!images.length || !(name || nickname)) {
+        const localImages = images.map(image => image.uri);
+        if (!localImages.length || !(name || nickname)) {
             toast('请填写完整的名称和执行图!');
             return;
         }
-        taskSubmit(receive_task_id, images, name || nickname).then(r => {
+        taskSubmit(receive_task_id, localImages, name || nickname).then(r => {
             if (!r.error) {
+                setName('');
+                setProgress('等待上传');
+                setImages([]);
+                sRef && sRef.scrollTo({ x: 0, y: 0, animated: true });
                 U.set(U.view(['user', 'today_pass_num'], store), Number.parseInt(today_pass_num.get()) + 1);
                 // 缓存用于新手福利判断
                 asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
@@ -634,8 +613,11 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 15
     },
-    safeAreaView: {
-        backgroundColor: '#F8F8F8'
+    progress: {
+        color: '#FF6C00',
+        fontSize: 12,
+        textAlign: 'center',
+        transform: [{ translateY: 25 }]
     },
     saveBtn: {
         alignItems: 'center',
