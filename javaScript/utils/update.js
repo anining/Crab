@@ -46,7 +46,8 @@ function formatUserInfo (data) {
         });
         data.trCorrectRate = _toFixed(data.correct_rate * 100) + '%';
         data.propNumsObj = propNumsObj;
-        data.myGrade = gradeSettingObj[rangeLevel(getPath(['user_level', 'level_num'], data), gradeRange.get())];
+        data.myGradeLevel = rangeLevel(getPath(['user_level', 'level_num'], data), gradeRange.get());
+        data.myGrade = gradeSettingObj[data.myGradeLevel];
         return data;
     } catch (e) {
         return data;

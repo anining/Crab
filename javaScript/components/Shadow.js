@@ -13,8 +13,8 @@ export default class Shadow extends Component {
         super(props);
         this.state = {};
         this.shadowOpt = {
-            color: this.props.color || '#000',
-            border: 6,
+            color: this.props.color || '#333333',
+            border: 3,
             opacity: 0.15,
             x: 0,
             y: 0,

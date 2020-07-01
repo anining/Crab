@@ -37,7 +37,7 @@ import GameHeader from '../../components/GameHeader';
 import { bind } from 'kefir.ramda';
 import { bindData, getPath } from '../../global/global';
 import toast from '../../utils/toast';
-import { getLevelConfig, homeProLevelPosition } from '../../utils/levelConfig';
+import { getLevelConfig, homeProLevelPosition, avatarProLevelPosition } from '../../utils/levelConfig';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
@@ -71,8 +71,6 @@ export default class HomePage extends Component {
     }
 
     componentDidMount () {
-        // getLevelConfig user.user_level.level_num
-        console.log(getLevelConfig(getPath(['user_level', 'level_num'], this.state.user)), 'getLevelConfig user.user_level.level_numgetLevelConfig user.user_level.level_numgetLevelConfig user.user_level.level_num');
         this.delayEmitter();
         this._homeStart();
     }
@@ -112,6 +110,50 @@ export default class HomePage extends Component {
         this._homeStop();
         this.startLottie && this.startLottie.remove();
         this.stopLottie && this.stopLottie.remove();
+    }
+
+    _renderHomeProcess () {
+        try {
+            const preLevel = getPath([getPath(['myGradeLevel'], this.state.user) - 1, 'level'], this.state.gradeSetting) || 0;
+            const nexLevel = getPath(['myGrade', 'level'], this.state.user);
+            const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
+            const levelLength = nexLevel - preLevel;
+            const myForwardNumber = Math.floor(avatarProLevelPosition.length * (myNowLevel - preLevel) / levelLength);
+            // console.log(myNowLevel - preLevel, nexLevel - preLevel, avatarProLevelPosition.length);
+            // console.log(preLevel, nexLevel, myNowLevel, myForwardNumber, '===========');
+            // console.log(this.state.nextRedLevel);
+            const view = [];
+            if (this.state.nextRedLevel.length) {
+                if (this.state.nextRedLevel.length >= 12) {
+                    homeProLevelPosition.forEach((item, index) => { view.push(<ImageAuto key={`red${index}`} source={game16} style={[css.pa, { left: item[0], top: item[1], width: 33, }]}/>); });
+                } else {
+                    const forwardNumberArray = [];
+                    this.state.nextRedLevel.forEach((item, index) => {
+                        const forwardNumber = Math.floor(homeProLevelPosition.length * (item - preLevel) / levelLength);
+                        forwardNumberArray.push(forwardNumber);
+                    });
+                    homeProLevelPosition.forEach((item, index) => {
+                        if (forwardNumberArray.includes(index + 1)) {
+                            view.push(<ImageAuto key={`red${index}`} source={game16} style={[css.pa, { left: item[0], top: item[1], width: 33, }]}/>);
+                        }
+                    });
+                }
+            }
+            avatarProLevelPosition.forEach((item, index) => {
+                if (myForwardNumber === index) {
+                    view.push(
+                        <ImageAuto key={`avatar${index}`} source={getPath(['avatar'], this.state.user)} style={[css.pa, {
+                            left: item[0],
+                            top: item[1],
+                            width: 33,
+                        }]}/>
+                    );
+                }
+            });
+            return view;
+        } catch (e) {
+            return null;
+        }
     }
 
     render () {
@@ -163,20 +205,7 @@ export default class HomePage extends Component {
                             style={[css.flex, css.pa, styles.homeBottomWrap, css.fw, css.afs]}>
                             {/* 主页进度显示 */}
                             <View style={[styles.progressWrap, css.pr]}>
-                                {(() => {
-                                    console.log(this.state.gradeSetting, '?????', this.state.nextRedLevel);
-                                    const view = [];
-                                    homeProLevelPosition.forEach((item, index) => {
-                                        view.push(
-                                            <ImageAuto key={`ad${index}`} source={game16} style={[css.pa, {
-                                                left: item[0],
-                                                top: item[1],
-                                                width: 33,
-                                            }]}/>
-                                        );
-                                    });
-                                    return view;
-                                })()}
+                                {this._renderHomeProcess()}
                                 <ImageAuto source={getLevelConfig(getPath(['user_level', 'level_num'], this.state.user)).ship} style={[css.pa, {
                                     width: 80,
                                     right: 0,
@@ -313,7 +342,6 @@ const styles = StyleSheet.create({
         width: width * 0.185,
     },
     progressWrap: {
-        backgroundColor: 'rgba(0,0,0,.1)',
         height: width * 0.35,
         paddingHorizontal: '5%',
         width: width,

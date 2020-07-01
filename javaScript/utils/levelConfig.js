@@ -34,3 +34,6 @@ export function getLevelConfig (level) {
 export const homeProLevelPosition = [[width * 0.06, 0], [width * 0.06, width * 0.15], [width * 0.17, width * 0.15], [width * 0.17, width * 0.03],
     [width * 0.29, width * 0.03], [width * 0.29, width * 0.15], [width * 0.39, width * 0.15], [width * 0.45, width * 0.01], [width * 0.52, width * 0.15],
     [width * 0.61, width * 0.15], [width * 0.68, width * 0.03], [width * 0.73, width * 0.12]];
+export const avatarProLevelPosition = [[width * 0.06, 0], [width * 0.06, width * 0.15], [width * 0.06, width * 0.07], [width * 0.17, width * 0.15], [width * 0.12, width * 0.18], [width * 0.17, width * 0.03],
+    [width * 0.17, width * 0.1], [width * 0.29, width * 0.03], [width * 0.22, width * 0.02], [width * 0.29, width * 0.15], [width * 0.29, width * 0.08], [width * 0.39, width * 0.15], [width * 0.34, width * 0.2], [width * 0.45, width * 0.01], [width * 0.41, width * 0.07], [width * 0.52, width * 0.15],
+    [width * 0.5, width * 0.07], [width * 0.61, width * 0.15], [width * 0.57, width * 0.2], [width * 0.68, width * 0.03], [width * 0.63, width * 0.09], [width * 0.74, width * 0.08], [width * 0.74, width * 0.17]];
