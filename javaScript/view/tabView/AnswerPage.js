@@ -25,7 +25,7 @@ import Choice from '../../components/Choice';
 import * as U from 'karet.util';
 import asyncStorage from '../../utils/asyncStorage';
 import pop3 from '../../assets/icon/pop/pop3.png';
-import { task } from '../../utils/update';
+import { getTaskPlatform, task } from '../../utils/update';
 
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
 const { width } = Dimensions.get('window');
@@ -59,6 +59,7 @@ function AnswerPage () {
     async function init () {
         await _signLogs();
         await _newUserTask();
+        await getTaskPlatform();
     }
 
     async function _signLogs () {
