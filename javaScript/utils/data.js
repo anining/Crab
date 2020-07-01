@@ -5,7 +5,7 @@ export const DEFAULT_USER = {
     total_income: 0,
     phone: '000***000',
     nickname: '未登录',
-    avatar: 'https://ali.rn.libragx.com/avatar21.png',
+    avatar: 'https://ali.taskpic.libragx.com/AA_QWZ/poster6.png',
     invite_code: '******',
     user_id: '未登录',
     correct_rate: 1

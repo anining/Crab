@@ -1,4 +1,5 @@
 import { DEVELOPER, PRIVATE_KEY, UA_ID } from './config';
+import { Platform } from 'react-native';
 import CryptoJS from 'crypto-js';
 import toast from './toast';
 import { _tc, AesDecrypt, buildStr, JsonParse, parameterTransform, setAndroidTime } from './util';
@@ -6,6 +7,7 @@ import * as U from 'karet.util';
 import { store } from './store';
 import { N } from './router';
 import { getGlobal } from '../global/global';
+import android from '../components/Android';
 
 // login
 export function apiLogin (phone, code, invite_code) {
@@ -297,6 +299,11 @@ export function useProp (prop_log_id) {
     return transformFetch('PUT', '/prop', { prop_log_id });
 }
 
+// 红包官咖
+export function nextRedLevel () {
+    return transformFetch('GET', '/game/next_red_level', {});
+}
+
 // 资金记录
 export function income (page, size, source) {
     let data = {
@@ -310,14 +317,14 @@ export function income (page, size, source) {
 
 const transformFetch = async (method, url, data = {}) => {
     try {
-        // console.log(getGlobal('authorization'), getGlobal('authorization').toString());
+        const formatDataRet = await formatData(data);
         const TIME_STAMP = Math.round(Date.now() / 1000).toString();
-        const POST_DATA = JSON.stringify(data);
+        const POST_DATA = JSON.stringify(formatDataRet);
         const HEADER = new Headers({
             authorization: JsonParse(getGlobal('authorization')),
             'x-uaid': UA_ID,
             'x-timestamp': TIME_STAMP,
-            'x-signature': CryptoJS.HmacSHA256(((method === 'GET' || method === 'DELETE') ? buildStr(data) : POST_DATA) + '.' + TIME_STAMP, PRIVATE_KEY).toString(),
+            'x-signature': CryptoJS.HmacSHA256(((method === 'GET' || method === 'DELETE') ? buildStr(formatDataRet) : POST_DATA) + '.' + TIME_STAMP, PRIVATE_KEY).toString(),
         });
         const request = { method, headers: HEADER };
         (method === 'POST' || method === 'PUT') && (request.body = POST_DATA);
@@ -329,7 +336,6 @@ const transformFetch = async (method, url, data = {}) => {
                     if (!loadingEnd) {
                         resolve({ error: 999, msg: '请求超时' });
                         toast('请求超时');
-                        console.log(loadingEnd, '请求超时==', url, method, data);
                         loadingEnd = true;
                     }
                 }, 10000);
@@ -337,7 +343,7 @@ const transformFetch = async (method, url, data = {}) => {
             // eslint-disable-next-line no-async-promise-executor
             new Promise(async (resolve, reject) => {
                 try {
-                    const FETCH_DATA = await fetch(parameterTransform(method, url, data), request);
+                    const FETCH_DATA = await fetch(parameterTransform(method, url, formatDataRet), request);
                     const DATA_TEXT = await FETCH_DATA.text();
                     const localDate = DEVELOPER === 'Production' ? JsonParse(AesDecrypt(DATA_TEXT)) : JsonParse(DATA_TEXT);
                     localDate.error && toast(localDate.msg);
@@ -357,3 +363,29 @@ const transformFetch = async (method, url, data = {}) => {
         console.log(e);
     }
 };
+const device_sys = Platform.OS === 'ios' ? 2 : 1; // 3.h5 1.android 2.ios
+let channel = null;
+async function formatData (data) {
+    try {
+        if (!channel) {
+            const ret = await android.promiseGetChannel();
+            channel = ret.channel;
+        }
+        channel && addValueToData(data, 'channel', channel);
+        addValueToData(data, 'device_sys', device_sys);
+        addValueToData(data, 'package', 'com.rncrab');
+        addValueToData(data, 'version', '1.0.0');
+        return data;
+    } catch (e) {
+        console.log(e);
+        return data;
+    }
+}
+
+function addValueToData (data, key, value) {
+    if (!data[key]) {
+        Object.assign(data, {
+            [key]: value
+        });
+    }
+}

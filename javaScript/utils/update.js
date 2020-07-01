@@ -1,11 +1,23 @@
-import { activity, app, banner, getSecondIncome, getTask, gradeSetting, taskReceiveDetail, signConfig, taskPlatform, user } from './api';
+import {
+    activity,
+    app,
+    banner,
+    getSecondIncome,
+    getTask,
+    gradeSetting,
+    taskReceiveDetail,
+    signConfig,
+    taskPlatform,
+    user,
+    nextRedLevel,
+} from './api';
 import { _tc, _toFixed, rangeLevel, toGoldCoin, transformMoney } from './util';
 import { getter, setter } from './store';
 import { getPath } from '../global/global';
+
 import toast from './toast';
 import { N } from './router';
 import { dyCrack } from '../crack/dy';
-
 export const updateUser = (callback) => {
     return new Promise((resolve, reject) => {
         user().then(res => _tc(() => {
@@ -191,6 +203,15 @@ export function updateSecondIncome () {
             console.log(res, '领取的金币');
             // eslint-disable-next-line no-unused-expressions
             asyncStorage.setItem('', value);
+        });
+    });
+}
+
+export function updateNextRedLevel () {
+    return new Promise((resolve, reject) => {
+        nextRedLevel().then(res => {
+            resolve();
+            setter([['nextRedLevel', getPath(['data', 'next_red_level'], res)]], true);
         });
     });
 }

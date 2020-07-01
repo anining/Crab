@@ -57,7 +57,9 @@ export default class ImageAuto extends Component {
         try {
             if (this.state.height) {
                 if (this.file) {
-                    return <Image source={this.source} key={`${JSON.stringify(this.source)}${JSON.stringify(this.style)}`} style={{ ...this.style, height: this.state.height }}/>;
+                    return <Image source={this.source} key={`${JSON.stringify(this.source)}${JSON.stringify(this.style)}`} style={{ ...this.style, height: this.state.height }} onLayout={(e) => {
+                        this.props.onLayout && this.props.onLayout(e);
+                    }}/>;
                 } else {
                     return <Image resizeMode={'cover'} key={`${JSON.stringify(this.source)}`} source={{ uri: this.url.replace('https', 'http').replace('http', 'https') }} style={{ ...this.style, height: this.state.height }}/>;
                 }

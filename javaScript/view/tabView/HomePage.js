@@ -7,7 +7,7 @@ import {
     View,
     Text,
     TouchableOpacity,
-    DeviceEventEmitter,
+    DeviceEventEmitter, UIManager,
 } from 'react-native';
 import * as U from 'karet.util';
 import * as R from 'kefir.ramda';
@@ -20,10 +20,10 @@ import game5 from '../../assets/icon/game/game5.png';
 import game41 from '../../assets/icon/game/game41.png';
 import game25 from '../../assets/icon/game/game25.png';
 import game22 from '../../assets/icon/game/game22.png';
-import game31 from '../../assets/icon/game/game31.png';
+import game7 from '../../assets/icon/game/game7.png';
 import game35 from '../../assets/icon/game/game35.png';
 import game12 from '../../assets/icon/game/game12.png';
-import game20 from '../../assets/icon/game/game20.png';
+import game16 from '../../assets/icon/game/game16.png';
 import ImageAuto from '../../components/ImageAuto';
 import ShiftView from '../../components/ShiftView';
 import { N } from '../../utils/router';
@@ -37,14 +37,12 @@ import GameHeader from '../../components/GameHeader';
 import { bind } from 'kefir.ramda';
 import { bindData, getPath } from '../../global/global';
 import toast from '../../utils/toast';
+import { getLevelConfig, homeProLevelPosition } from '../../utils/levelConfig';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
 const { trCorrectRate, myGrade } = getter(['user.trCorrectRate', 'user.propNumsObj', 'user.myGrade']);
-// const gameProp = U.mapValue((res) => {
-//     return res || 0;
-// }, R.path(['2'], propNumsObj)); // 获取游戏道具的数量
 const secondIncome = U.mapValue((res) => {
     return transformMoney(res || 0);
 }, R.path(['second_income'], myGrade)); // 每秒金币产量
@@ -53,9 +51,12 @@ export default class HomePage extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            gradeSetting: bindData('gradeSetting', this),
+            nextRedLevel: bindData('nextRedLevel', this),
             user: bindData('user', this),
+            gameHeaderPosition: null, // 头部图像视图
+            accuracyImagePosition: null // 答题按钮螃蟹视图
         };
-        this.loadingToGame = false;// 准备去往游戏页面
     }
 
     delayEmitter () {
@@ -70,24 +71,41 @@ export default class HomePage extends Component {
     }
 
     componentDidMount () {
+        // getLevelConfig user.user_level.level_num
+        console.log(getLevelConfig(getPath(['user_level', 'level_num'], this.state.user)), 'getLevelConfig user.user_level.level_numgetLevelConfig user.user_level.level_numgetLevelConfig user.user_level.level_num');
         this.delayEmitter();
         this._homeStart();
+    }
+
+    _getPosition () {
+        try {
+            this.gameHeader && (() => {
+                this.setState({
+                    gameHeaderPosition: this.gameHeader.getPosition()
+                }, () => {
+                    this.lottie && this.lottie.play();
+                    this.shiftView && this.shiftView.start();
+                    this.lamp && this.lamp.start();
+                });
+            })();
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     _homeStart () {
         this._homeStop();
         setAndroidTime(() => {
-            this.lottie && this.lottie.play();
-            this.shiftView && this.shiftView.start();
-            this.lamp && this.lamp.start();
+            this._getPosition();
             updateUser();
-        }, 800);
+        }, 1000);
     }
 
     _homeStop () {
         this.lottie && this.lottie.pause();
         this.shiftView && this.shiftView.stop();
         this.lamp && this.lamp.stop();
+        this.gameHeader && this.gameHeader.stop();
     }
 
     componentWillUnmount () {
@@ -100,41 +118,21 @@ export default class HomePage extends Component {
         return (
             <SafeAreaProvider>
                 <ImageBackground source={game41} style={[css.flex, css.pr, css.cover, css.afs]}>
-                    {/* eslint-disable-next-line no-return-assign */}
-                    {/* <View renderToHardwareTextureAndroid={true}> */}
-                    {/*    /!* renderToHardwareTextureAndroid *!/ */}
-                    {/*    /!* 决定这个视图是否要把它自己（以及所有的子视图）渲染到一个 GPU 上的硬件纹理中。 *!/ */}
-                    {/*    /!* 在 Android 上，这对于只修改不透明度、旋转、位移、或缩放的动画和交互十分有用：在这些情况下，视图不必每次都重新绘制，显示列表也不需要重新执行。纹理可以被重用于不同的参数。负面作用是这会大量消耗显存，所以当交互/动画结束后应该把此属性设置回 false。 *!/ */}
-                    {/*    /!* eslint-disable-next-line no-return-assign *!/ */}
-                    {/*    <LottieView ref={ref => this.lottie = ref} key={'lottie'} renderMode={'HARDWARE'} style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1} loop={true} autoPlay={true} speed={1}/> */}
-                    {/* </View> */}
-                    {/* eslint-disable-next-line no-return-assign */}
                     <LottieView ref={ref => this.lottie = ref} key={'lottie'} renderMode={'HARDWARE'}
-                        style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole1'} source={whole1}
+                        style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole'} source={whole1}
                         loop={true} autoPlay={false} speed={1}/>
                     <View style={[css.pa, css.cover]}>
                         {/* eslint-disable-next-line no-return-assign */}
-                        <ShiftView callback={() => {
+                        {_if(this.state.gameHeaderPosition, res => <ShiftView callback={() => {
                             this.gameHeader && this.gameHeader.start();
-                        }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={1000}
-                        startSite={[width * 0.25, width * 0.55]} endSite={[width - 195, HEADER_HEIGHT - 28]}>
+                        }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={1300} startSite={[width * 0.25, width * 0.55]} endSite={res[1]}>
                             <ImageAuto source={game22} width={33}/>
-                        </ShiftView>
-                        <ShiftView callback={() => {
-                            this.loadingToGame = false;
-                            // N.navigate('GamePage');
-                            if (getPath(['propNumsObj', '2'], this.state.user)) {
-                                N.navigate('GamePage');
-                                // this.gameHeader && this.gameHeader.showPop();
-                            } else {
-                                toast('游戏道具不足');
-                                this.gameHeader && this.gameHeader.showPop();
-                            }
-                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
-                        startSite={[25, HEADER_HEIGHT - 28]}
-                        endSite={[width - 240, height - width * 0.05]}>
+                        </ShiftView>)}
+                        {_if(this.state.gameHeaderPosition && this.state.accuracyImagePosition, res => <ShiftView callback={() => {
+                            N.navigate('GamePage');
+                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} startSite={this.state.gameHeaderPosition[0]} endSite={this.state.accuracyImagePosition}>
                             <ImageAuto source={game25} width={33}/>
-                        </ShiftView>
+                        </ShiftView>)}
                         {/* /!* 头部显示区域 *!/ */}
                         <GameHeader ref={ref => this.gameHeader = ref}/>
                         {/* 中部显示区域 */}
@@ -158,21 +156,54 @@ export default class HomePage extends Component {
                             </TouchableOpacity>
                             {/* eslint-disable-next-line no-return-assign */}
                             <Lamp ref={ref => this.lamp = ref} width={'100%'} backgroundColor={'rgba(0,179,216,.5)'}
-                                color={'#005262'} color1={'#FF6C00'}/>
+                                color={'#005262'} color1={'#FF6C00'} autoPlay={false}/>
                         </View>
                         {/* 底部显示区域 */}
                         <ImageBackground source={game12}
                             style={[css.flex, css.pa, styles.homeBottomWrap, css.fw, css.afs]}>
                             {/* 主页进度显示 */}
-                            <View style={styles.progressWrap}>
+                            <View style={[styles.progressWrap, css.pr]}>
+                                {(() => {
+                                    console.log(this.state.gradeSetting, '?????', this.state.nextRedLevel);
+                                    const view = [];
+                                    homeProLevelPosition.forEach((item, index) => {
+                                        view.push(
+                                            <ImageAuto key={`ad${index}`} source={game16} style={[css.pa, {
+                                                left: item[0],
+                                                top: item[1],
+                                                width: 33,
+                                            }]}/>
+                                        );
+                                    });
+                                    return view;
+                                })()}
+                                <ImageAuto source={getLevelConfig(getPath(['user_level', 'level_num'], this.state.user)).ship} style={[css.pa, {
+                                    width: 80,
+                                    right: 0,
+                                    bottom: 0,
+                                }]}/>
                             </View>
                             {/* 主页答题按钮 */}
-                            <TouchableOpacity style={styles.homeBtn} activeOpacity={1} onPress={() => {
-                                if (!this.loadingToGame) {
-                                    this.loadingToGame = true;
+                            <TouchableOpacity activeOpacity={1} onPress={() => {
+                                if (getPath(['propNumsObj', '2'], this.state.user)) {
                                     this.startGame && this.startGame.start();
+                                    this._homeStop();
+                                } else {
+                                    toast('游戏道具不足');
+                                    this.gameHeader && this.gameHeader.showPop();
                                 }
-                            }}><ImageAuto source={game1} width={width * 0.5}/></TouchableOpacity>
+                            }}>
+                                <ImageBackground source={game1} style={[css.flex, styles.homeBtnWrap]}>
+                                    <Text style={styles.homeBtnText}>升渔船</Text>
+                                    <ImageAuto source={game7} style={{ width: 33, marginLeft: 10 }} onLayout={(e) => {
+                                        UIManager.measure(e.target, (x, y, w, h, l, t) => {
+                                            this.setState({
+                                                accuracyImagePosition: [l, t]
+                                            });
+                                        });
+                                    }}/>
+                                </ImageBackground>
+                            </TouchableOpacity>
                             <Text style={styles.accuracyText}>正确率: <Text style={{ color: '#FF6C00' }} karet-lift>{trCorrectRate}</Text></Text>
                         </ImageBackground>
                     </View>
@@ -212,6 +243,17 @@ const styles = StyleSheet.create({
         paddingTop: width * 0.27,
         width,
         zIndex: 10,
+    },
+    homeBtnText: {
+        ...css.gf,
+        color: '#fff',
+        fontSize: 20,
+    },
+    homeBtnWrap: {
+        height: width * 0.5 * 183 / 498,
+        paddingBottom: width * 0.05,
+        paddingLeft: 10,
+        width: width * 0.5,
     },
     homeHeaderWrap: {
         height: HEADER_HEIGHT,
@@ -271,8 +313,9 @@ const styles = StyleSheet.create({
         width: width * 0.185,
     },
     progressWrap: {
+        backgroundColor: 'rgba(0,0,0,.1)',
         height: width * 0.35,
         paddingHorizontal: '5%',
-        width,
+        width: width,
     },
 });

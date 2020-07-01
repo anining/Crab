@@ -45,6 +45,8 @@ export default class GameHeader extends Component {
         };
         this.secondIncome = 0;
         this._start = false;
+        this.imagePosition2 = [0, 0];
+        this.imagePosition1 = [0, 0];
     }
 
     async componentDidMount () {
@@ -99,6 +101,10 @@ export default class GameHeader extends Component {
         }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text>系统赠送1个最多同时持有<Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>} icon={game20}/>);
     }
 
+    getPosition () {
+        return [this.imagePosition1, this.imagePosition2];
+    }
+
     render () {
         return <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
             <TouchableOpacity karet-lift activeOpacity={1} style={[styles.headerDataNumber, css.flex, {
@@ -107,7 +113,11 @@ export default class GameHeader extends Component {
             onPress={() => {
                 this.showPop();
             }}>
-                <ImageAuto source={game25} width={33}/>
+                <ImageAuto source={game25} width={33} onLayout={(e) => {
+                    UIManager.measure(e.target, (x, y, w, h, l, t) => {
+                        this.imagePosition1 = [l, t];
+                    });
+                }}/>
                 <View style={styles.hdnTextWrap}>
                     <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }}
                         karet-lift>{gameProp}</Text>/10</Text>
@@ -122,7 +132,11 @@ export default class GameHeader extends Component {
                     <TouchableOpacity activeOpacity={1} style={[css.pa, styles.topHDN]} onPress={() => {
                         N.navigate('WithdrawPage');
                     }}/>
-                    <ImageAuto source={game22} width={33}/>
+                    <ImageAuto source={game22} width={33} onLayout={(e) => {
+                        UIManager.measure(e.target, (x, y, w, h, l, t) => {
+                            this.imagePosition2 = [l, t];
+                        });
+                    }}/>
                     <TextInput multiline={false} style={[styles.hdnText]} ref={ref => this.secondText = ref} onFocus={() => {
                         this.secondText.blur();
                     }}/>

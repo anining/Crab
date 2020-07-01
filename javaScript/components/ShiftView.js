@@ -45,8 +45,15 @@ export default class ShiftView extends Component {
                 easing: Easing.linear,
             }),
             Animated.timing(this.modelOpacity, {
+                toValue: 1,
+                duration: this.duration - 200,
+                delay: 0,
+                useNativeDriver: true,
+                easing: Easing.linear,
+            }),
+            Animated.timing(this.modelOpacity, {
                 toValue: 0,
-                duration: this.duration - 50,
+                duration: 100,
                 delay: 0,
                 useNativeDriver: true,
                 easing: Easing.linear,
@@ -91,19 +98,25 @@ export default class ShiftView extends Component {
     }
 
     componentWillMount () {
-        this.stop();
+        this._stop = true;
+        this.animation && (() => {
+            this.animation.stop();
+            this.animation = null;
+        })();
     }
 
     start () {
+        this._stop = false;
         this.animation && this.animation.stop();
         this._animationStart();
     }
 
     _animationStart () {
         requestAnimationFrame(() => {
+            // Animated.sequence(this.opacityStart)
             this.animation = Animated.parallel([Animated.sequence(this.opacityStart), Animated.sequence(this.transformXStart), Animated.sequence(this.transformYStart)]).start(() => {
-                if (this.loop && this.duration) {
-                    this.start();
+                if (this.loop && this.duration && !this._stop) {
+                    this._animationStart();
                 }
             });
             setAndroidTime(() => {
@@ -113,6 +126,7 @@ export default class ShiftView extends Component {
     }
 
     stop () {
+        this._stop = true;
         this.animation && (() => {
             this.animation.stop();
             this.animation = null;
