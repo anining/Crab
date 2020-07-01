@@ -295,8 +295,8 @@ export function deleteNoteBook (notebook_id) {
 }
 
 // 使用游戏题型道具
-export function useProp (prop_log_id) {
-    return transformFetch('PUT', '/prop', { prop_log_id });
+export function useProp () {
+    return transformFetch('PUT', '/prop', { });
 }
 
 // 红包官咖

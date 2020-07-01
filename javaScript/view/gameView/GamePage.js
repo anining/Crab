@@ -27,7 +27,7 @@ import game61 from '../../assets/icon/game/game61.png';
 import game62 from '../../assets/icon/game/game62.png';
 import ImageAuto from '../../components/ImageAuto';
 import { _gv, _if, _tc, _toFixed, setAndroidTime } from '../../utils/util';
-import { gameError, getGame, upgradeGameLevel } from '../../utils/api';
+import { gameError, getGame, upgradeGameLevel, useProp } from '../../utils/api';
 import ShiftView from '../../components/ShiftView';
 import EnlargeView from '../../components/EnlargeView';
 import OpacityView from '../../components/OpacityView';
@@ -42,6 +42,7 @@ import * as R from 'kefir.ramda';
 import toast from '../../utils/toast';
 import game20 from '../../assets/icon/game/game20.png';
 import help from '../../lottie/help';
+import { updateUser } from '../../utils/update';
 
 const { height, width } = Dimensions.get('window');
 const CANVAS_WIDTH = width - 20;
@@ -70,6 +71,7 @@ export default class GamePage extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            loading: false, // 网络请求加载中
             gameInfo: null, // 整个页面的全部数据, 用于等待加载
             coordinate: null, // 格式化后的汉子对象列表，用于渲染填词背景，所有字的坐标已确定在该对象内
             answerObj: null, // 底部答案对象
@@ -95,12 +97,14 @@ export default class GamePage extends Component {
     async _upgradeGameLevel () {
         const ret = await upgradeGameLevel(JSON.stringify(this.state.gameInfo.content));
         if (ret && !ret.error) {
-            N.replace('PassGamePage', {
-                info: {
-                    ...ret.data,
-                    ...this.state.gameInfo
-                }
-            });
+            setAndroidTime(() => {
+                N.replace('PassGamePage', {
+                    info: {
+                        ...ret.data,
+                        ...this.state.gameInfo
+                    }
+                });
+            }, 500);
         } else {
             // N.goBack();
         }
@@ -558,11 +562,27 @@ export default class GamePage extends Component {
 
     render () {
         const gameTipsPropFn = U.mapValue((res) => {
-            return () => {
-                if (res) {
-                    // console.log('???');
-                } else {
-                    toast('提示次数不足');
+            return async () => {
+                try {
+                    if (res) {
+                        const ret = await useProp();
+                        if (ret && !ret.error) {
+                            const answerObj = this.state.answerObj;
+                            for (const key in answerObj) {
+                                const item = answerObj[key];
+                                if (item.key === this.state.selectSite) {
+                                    this._checkAnswer(item);
+                                    break;
+                                }
+                            }
+                            toast('消耗成功');
+                            updateUser();
+                        }
+                    } else {
+                        toast('提示次数不足');
+                    }
+                } catch (e) {
+                    toast('系统出错');
                 }
             };
         }, R.path(['3'], propNumsObj));

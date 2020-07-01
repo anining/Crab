@@ -119,9 +119,7 @@ export default class HomePage extends Component {
             const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
             const levelLength = nexLevel - preLevel;
             const myForwardNumber = Math.floor(avatarProLevelPosition.length * (myNowLevel - preLevel) / levelLength);
-            // console.log(myNowLevel - preLevel, nexLevel - preLevel, avatarProLevelPosition.length);
-            // console.log(preLevel, nexLevel, myNowLevel, myForwardNumber, '===========');
-            // console.log(this.state.nextRedLevel);
+            // console.log(preLevel, nexLevel, myNowLevel, this.state.nextRedLevel, '===============');
             const view = [];
             if (this.state.nextRedLevel.length) {
                 if (this.state.nextRedLevel.length >= 12) {

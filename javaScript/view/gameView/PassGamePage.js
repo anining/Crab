@@ -34,11 +34,13 @@ import { _toFixed, toGoldCoin, transformMoney } from '../../utils/util';
 import ShiftView from '../../components/ShiftView';
 import game20 from '../../assets/icon/game/game20.png';
 import IdiomCard from '../../components/IdiomCard';
-import { addNoteBook, nextRedLevel } from '../../utils/api';
+import { addNoteBook } from '../../utils/api';
 import toast from '../../utils/toast';
 import * as U from 'karet.util';
 import GameHeader from '../../components/GameHeader';
-import { updateUser } from '../../utils/update';
+import { updateNextRedLevel, updateUser } from '../../utils/update';
+import { bindData, getPath } from '../../global/global';
+import { avatarProLevelPosition, homeProLevelPosition } from '../../utils/levelConfig';
 
 const { height, width } = Dimensions.get('window');
 const { level_num: userLevel } = getter(['user.user_level.level_num']);
@@ -49,8 +51,11 @@ export default class PassGamePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
         super(props);
-        this.state = {};
-        // this.correct_rate = getter(['user.correct_rate']).correct_rate;
+        this.state = {
+            user: bindData('user', this),
+            gradeSetting: bindData('gradeSetting', this),
+            nextRedLevel: bindData('nextRedLevel', this),
+        };
         this.paramsInfo = this.props.route.params.info;
     }
 
@@ -92,14 +97,6 @@ export default class PassGamePage extends Component {
         console.log(this);
         this._showPop();
         updateUser();
-        await this._nextRedLevel();
-    }
-
-    async _nextRedLevel () {
-        const ret = await nextRedLevel();
-        if (ret && !ret.error) {
-            console.log(ret, '??====');
-        }
     }
 
     _renderIdiomList () {
@@ -128,6 +125,55 @@ export default class PassGamePage extends Component {
         }
     }
 
+    _renderProgress () {
+        try {
+            console.log(this.state.nextRedLevel, '========3563!!', this.state.user);
+            if (this.state.nextRedLevel && this.state.nextRedLevel.length) {
+                const preLevel = getPath([getPath(['myGradeLevel'], this.state.user) - 1, 'level'], this.state.gradeSetting) || 0;
+                const nexLevel = getPath(['myGrade', 'level'], this.state.user);
+                const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
+                const levelLength = nexLevel - preLevel;
+                const progressInnerLength = Number((myNowLevel - preLevel) / levelLength);
+                // const levelLength = nexLevel - preLevel;
+                // const myForwardNumber = Math.floor(avatarProLevelPosition.length * (myNowLevel - preLevel) / levelLength);
+                console.log(this.state.nextRedLevel, myNowLevel);
+                console.log(progressInnerLength, '=======');
+                // if(this.state.nextRedLevel) {}
+                return <View style={[css.flex, css.fw, styles.progressWrap, css.pr]}>
+                    {(() => {
+                        const view = [];
+                        this.state.nextRedLevel.splice(0, 2).forEach((item, index) => {
+                            const forwardNumber = Math.floor((item - preLevel) / levelLength);
+                            view.push(
+                                <ImageAuto style={[css.pa, styles.redImage, {
+                                    left: forwardNumber * 100 + '%'
+                                }]} source={game16} key={`red${index}`}/>
+                            );
+                        });
+                        return view;
+                    })()}
+                    <View style={[css.flex, styles.progressBox, css.js]}>
+                        <View style={[css.flex, styles.progressInner, {
+                            width: progressInnerLength * 100 + '%'
+                        }]}/>
+                    </View>
+                    <View style={{ height: 20, width: '100%' }}/>
+                    <Text style={[styles.gamePassTips, css.gf, { fontSize: 15 }]}>再闯关<Text
+                        style={{ fontSize: 17, color: 'red' }}>10</Text>关领红包</Text>
+                </View>;
+            } else {
+                return <View style={[css.flex, css.fw, styles.progressWrap, {
+                    height: 50
+                }]}>
+                    <Text style={styles.noRedText}>更多红包在后面关卡等你拿～</Text>
+                </View>;
+            }
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
+    }
+
     render () {
         try {
             return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
@@ -148,20 +194,11 @@ export default class PassGamePage extends Component {
                         <View style={[styles.gameCanvasWrap]}>
                             <View style={[styles.gameCanvasInner, css.flex, css.fw, css.afs]}>
                                 <Text style={[styles.gamePassTips, css.gf]}>您已超越<Text
-                                    style={{ fontSize: 20, color: 'red' }}>43.82%</Text>用户</Text>
+                                    style={{ fontSize: 20, color: 'red' }}>{_toFixed(getPath(['surpass'], this.state.user) * 100) + '%'}</Text>用户</Text>
                                 <View style={[css.flex, css.fw, styles.idiomWrap, css.afs, css.js]}>
                                     {this._renderIdiomList()}
                                 </View>
-                                <View style={[css.flex, css.fw, styles.progressWrap, css.pr]}>
-                                    <ImageAuto style={[css.pa, styles.redImage]} source={game16}/>
-                                    <ImageAuto style={[css.pa, styles.redImage, { left: 100 }]} source={game16}/>
-                                    <View style={[css.flex, styles.progressBox, css.js]}>
-                                        <View style={[css.flex, styles.progressInner]}/>
-                                    </View>
-                                    <View style={{ height: 20, width: '100%' }}/>
-                                    <Text style={[styles.gamePassTips, css.gf, { fontSize: 15 }]}>再闯关<Text
-                                        style={{ fontSize: 17, color: 'red' }}>10</Text>关领红包</Text>
-                                </View>
+                                {this._renderProgress()}
                                 <View style={[css.flex, css.sp, styles.nextBtnWrap]}>
                                     <TouchableOpacity activeOpacity={1} onPress={() => {
                                         N.goBack();
@@ -197,8 +234,6 @@ const styles = StyleSheet.create({
     },
     gameCanvasWrap: {
         backgroundColor: '#FFDF7A',
-        height: width * 1.2,
-        minHeight: 500,
         width: width - 20,
         ...css.auto,
         borderRadius: 10,
@@ -295,6 +330,11 @@ const styles = StyleSheet.create({
         height: 100,
         overflow: 'hidden',
         width: '77%',
+    },
+    noRedText: {
+        color: 'red',
+        fontSize: 16,
+        ...css.gf
     },
     passDataNumber: {
         backgroundColor: 'rgba(0,0,0,.5)',
