@@ -45,24 +45,25 @@ function OpenMoneyPage (props) {
                 } else {
                     setReceivedStatus(1);
                     DeviceEventEmitter.emit('showPop', {
-                        dom:
-                                      <TouchableOpacity style={css.pr} onPress={_openRedPackage}>
-                                          <TouchableOpacity style={[styles.redInnerWrap, css.pa, css.flex, css.fw]}>
-                                              <ImageAuto style={{
-                                                  width: 48,
-                                                  borderRadius: 20,
-                                              }} source={activity8}/>
-                                              <Text style={styles.redNameText}>运营商送你一个红包</Text>
-                                              <Text style={styles.redTipsText}>现在打开</Text>
-                                              <Text style={styles.redTipsText}>最低20元现金等着你</Text>
-                                          </TouchableOpacity>
-                                          <ImageAuto width={width * 0.8} source={activity14}/>
-                                      </TouchableOpacity>,
+                        dom: <TouchableOpacity style={css.pr} onPress={_openRedPackage}>
+                            <TouchableOpacity style={[styles.redInnerWrap, css.pa, css.flex, css.fw]}>
+                                <ImageAuto style={{
+                                    width: 48,
+                                    borderRadius: 20,
+                                }} source={activity8}/>
+                                <Text style={styles.redNameText}>运营商送你一个红包</Text>
+                                <Text style={styles.redTipsText}>现在打开</Text>
+                                <Text style={styles.redTipsText}>最低20元现金等着你</Text>
+                            </TouchableOpacity>
+                            <ImageAuto width={width * 0.8} source={activity14}/>
+                        </TouchableOpacity>,
                         close: () => {
-                            receivedStatus !== 2 && N.goBack();
+                            !money && N.goBack();
                         }
                     });
                 }
+            } else {
+                N.goBack();
             }
         });
     }
@@ -84,11 +85,14 @@ function RenderRedPackage ({ receivedStatus, activityId, money, data }) {
     if (receivedStatus !== 2) {
         return <></>;
     }
+
+    const { title, icon: uri } = data;
+
     return (
         <View style={styles.redPackageView}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image style={styles.redPackageAvatar} source={{ uri: 'https://dss0.bdstatic.com/6Ox1bjeh1BF3odCf/it/u=1686213923,775040294&fm=85&app=92&f=PNG?w=121&h=75&s=66B1128E8C121ADC0EB174A90300A017' }}/>
-                <Text style={styles.redPackageText}>运营商的红包</Text>
+                <Image style={styles.redPackageAvatar} source={{ uri }}/>
+                <Text style={styles.redPackageText}>{title}</Text>
             </View>
             <Text style={{ fontSize: 15, color: '#FDEAB9' }}>恭喜您获得现金</Text>
             <Text style={{ fontWeight: '500', color: 'rgba(254,204,81,1)' }}>¥ <Text style={{ fontSize: 49, fontWeight: '800' }}>{money}W</Text> 金币</Text>
@@ -107,10 +111,10 @@ function RenderView ({ receivedStatus, pageInfo, totalNum }) {
     }
     const view = [];
     pageInfo.forEach(item => {
-        const { created_at, money, user_nickname, avatar } = item;
+        const { created_at, money, user_nickname, avatar: uri } = item;
         view.push(
             <View style={styles.listView}>
-                <Image style={styles.listAvatar} source={{ uri: avatar }}/>
+                <Image style={styles.listAvatar} source={{ uri }}/>
                 <View style={styles.listRight}>
                     <View>
                         <Text numberOfLines={1} style={{ color: 'rgba(53,53,53,1)', fontSize: 16, maxWidth: 250 }}>{user_nickname}</Text>

@@ -48,6 +48,9 @@ import ShareUrlPage from '../view/shareView/ShareUrlPage';
 import ShareQRCodePage from '../view/shareView/ShareQRCodePage';
 import PassGamePage from '../view/gameView/PassGamePage';
 import RightProPage from '../view/gameView/RightProPage';
+import { N } from '../utils/router';
+import * as U from 'karet.util';
+import { store } from '../utils/store';
 
 const Stack = createStackNavigator();
 
@@ -240,7 +243,7 @@ function setStatusBar () {
     StatusBar.setTranslucent(true);
 }
 
-function initNetInfo () {
+export function initNetInfo () {
     return Promise.all([updateUser(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome()]);
 }
 
@@ -248,6 +251,13 @@ function AppStackNavigator () {
     const [keys, setKeys] = useState();
     const GenerateScreen = stackScreens.map(screen =>
         <Stack.Screen name={screen.name} component={screen.component} options={{ title: screen.title }} key={screen.name}/>);
+
+    function set () {
+        setStatusBar();
+        setKeys([]);
+        SplashScreen.hide();
+    }
+
     useEffect(() => {
         setConsole();
         asyncStorage.getAllKeys()
@@ -257,17 +267,20 @@ function AppStackNavigator () {
                         console.log(r, '从本地缓存去除');
                         initializationStore(r);
                         if (r && r.length) {
-                            const ret = initNetInfo();
+                            set();
                         } else {
-                            await initNetInfo();
+                            const authorization = U.view(['authorization'], store).get();
+                            if (authorization) {
+                                await initNetInfo();
+                                set();
+                            } else {
+                                set();
+                                N.replace('VerificationStackNavigator');
+                            }
                         }
-                        setStatusBar();
-                        setKeys([]);
-                        SplashScreen.hide();
                     });
             })
-            .catch(err => {
-                console.log(err);
+            .catch(() => {
                 setKeys([]);
             });
         return () => {

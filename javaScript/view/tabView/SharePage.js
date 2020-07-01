@@ -27,7 +27,7 @@ import { _gv, _if } from '../../utils/util';
 
 const { width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
-const SHARE_ITEM_RADIUS = 10; // welfare
+const SHARE_ITEM_RADIUS = 10;
 const WALFARE_ONE_height = 190;
 const WALFARE_TWO_height = 600;
 const cashBack = [{
@@ -41,6 +41,7 @@ const cashBack = [{
     label: '师傅得3元',
 }];
 const { invite_code } = getter(['user.invite_code']);
+
 export default class SharePage extends PureComponent {
     constructor (props) {
         super(props);
@@ -291,6 +292,7 @@ function Share () {
         </View>
     );
 }
+
 const styles = StyleSheet.create({
     cashBackItem: {
         height: width * 0.9 * 0.25 * 294 / 273,

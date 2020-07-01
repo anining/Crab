@@ -20,7 +20,7 @@ const { width } = Dimensions.get('window');
 
 function DailyMoneyPage (props) {
     const { activityId, pageInfo } = props.route.params;
-    const { log, user_history } = pageInfo;
+    const { log, user_history, title } = pageInfo;
     const { money, invalid_time } = log;
     const [withdrawLogs, setWithdrawLogs] = useState([]);
 
@@ -37,7 +37,7 @@ function DailyMoneyPage (props) {
             DeviceEventEmitter.emit('showPop', {
                 dom:
                   <ImageBackground source={activity17} style={styles.lastPop}>
-                      <Text style={[styles.lastPopText, { fontSize: 17 }]}>运营商送给您<Text style={{ color: 'rgba(232,58,41,1)', fontSize: 19, fontWeight: '500' }}> {money} 元</Text></Text>
+                      <Text style={[styles.lastPopText, { fontSize: 17 }]}>{title}送给您<Text style={{ color: 'rgba(232,58,41,1)', fontSize: 19, fontWeight: '500' }}> {money} 元</Text></Text>
                       <Text style={[styles.lastPopText, { fontSize: 12, marginTop: '7%', color: 'rgba(53,53,53,1)' }]}>当前已累积金额</Text>
                       <Text style={[styles.lastPopText, { marginTop: '5%', fontSize: 38, fontWeight: '800', color: 'rgba(232,58,41,1)' }]}>0<Text style={{ fontSize: 15, fontWeight: '500' }}>元</Text></Text>
                   </ImageBackground>,
@@ -50,7 +50,6 @@ function DailyMoneyPage (props) {
 
     function apiRedPackage () {
         getRedPackage(activityId).then(r => {
-            console.log(r);
             if (!r.error) {
                 DeviceEventEmitter.emit('showPop', {
                     dom:
