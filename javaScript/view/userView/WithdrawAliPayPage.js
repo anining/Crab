@@ -1,15 +1,5 @@
 import React, { useState } from 'react';
-import {
-    SafeAreaView,
-    Text,
-    View,
-    StyleSheet,
-    Image,
-    TouchableOpacity,
-    Dimensions,
-    TextInput,
-    DeviceEventEmitter,
-} from 'react-native';
+import { SafeAreaView, Text, View, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, DeviceEventEmitter } from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import Crab from '../../components/Crab';
@@ -21,26 +11,20 @@ import Choice from '../../components/Choice';
 import with10 from '../../assets/icon/withdraw/withdraw10.png';
 
 const { width } = Dimensions.get('window');
-export default function WithdrawAliPayPage (props) {
-    const [goodId] = useState(`${props.route.params.goodId}`);
-    const [money] = useState(`${props.route.params.money}`);
+
+function WithdrawAliPayPage (props) {
+    const [goodId] = useState(props.route.params.goodId);
+    const [money] = useState(props.route.params.money);
     const [number, setNumber] = useState();
     const [name, setName] = useState();
 
     function withdraw () {
         if (!goodId || !money || !number || !name) {
-            toast('提现失败');
+            toast('请填写完整的账号和姓名!');
             return;
         }
         postWithdraw(goodId, money, 'ali', number, name).then(r => {
-            const { error } = r;
-            if (error) {
-                const { msg } = r;
-                toast(msg || '提现失败');
-                if (error === 8) {
-                    N.navigate('WeChatBindPage');
-                }
-            } else {
+            if (!r.error) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: with10,
                     tips: '提现申请成功，请耐心等待审核。一般1个工作日内审核完成。',
@@ -72,7 +56,6 @@ export default function WithdrawAliPayPage (props) {
                     <Image source={with7} style={{ height: 20, width: 20, marginRight: 5, }} />
                     <Text style={{ fontWeight: '500', fontSize: 14, color: '#353535' }}>支付宝姓名：</Text>
                     <TextInput
-                        keyboardType='numeric'
                         maxLength={11}
                         placeholder={'请输入支付宝对应姓名'}
                         placeholderTextColor={'#BCBCBC'}
@@ -81,9 +64,7 @@ export default function WithdrawAliPayPage (props) {
                 <Crab text="提现说明：" paddingLeft={0}/>
                 <Text style={{ fontSize: 12, color: '#999' }}>1.支付宝账号姓名必须匹配，否则提现不会到账。</Text>
             </View>
-            <TouchableOpacity onPress={() => {
-                withdraw();
-            }} style={styles.btn}>
+            <TouchableOpacity onPress={withdraw} style={styles.btn}>
                 <Text style={styles.btnText}>提现到支付宝</Text>
             </TouchableOpacity>
         </SafeAreaView>
@@ -118,3 +99,5 @@ const styles = StyleSheet.create({
         width: '100%'
     }
 });
+
+export default WithdrawAliPayPage;

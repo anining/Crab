@@ -11,7 +11,8 @@ import { transformMoney, transformTime } from '../../utils/util';
 const itemHeight = 110;
 const itemMarginTop = 10;
 const { width } = Dimensions.get('window');
-export default function WithdrawRecordsPage () {
+
+function WithdrawRecordsPage () {
     const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>状态说明</Text>;
 
     return (
@@ -23,11 +24,9 @@ export default function WithdrawRecordsPage () {
                 <ListGeneral
                     itemHeight={itemHeight}
                     itemMarginTop={itemMarginTop}
-                    getList={async (page, num, callback) => {
+                    getList={ (page, num, callback) => {
                         withdrawLogs(page, num).then(r => {
-                            if (!r.error) {
-                                callback(r.data);
-                            }
+                            !r.error && callback(r.data);
                         });
                     }}
                     renderItem={item => {
@@ -37,7 +36,7 @@ export default function WithdrawRecordsPage () {
                                 <View style={styles.itemView} key={withdraw_log_id}>
                                     <View style={[css.flexRCSB, styles.item, { borderBottomWidth: 1, borderBottomColor: '#EDEDED' }]}>
                                         <Text numberOfLines={1} style={{ fontSize: 12, color: '#999', maxWidth: 200 }}>申请时间：{transformTime(created_at)}</Text>
-                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>-{transformMoney(balance)}<Text style={{ fontSize: 14, fontWeight: '600' }}>金币({balance}元)</Text></Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>-{transformMoney(balance)}<Text style={{ fontSize: 14, fontWeight: '600' }}> 金币({balance}元)</Text></Text>
                                     </View>
                                     <RenderView status={status}/>
                                 </View>
@@ -52,27 +51,30 @@ export default function WithdrawRecordsPage () {
 
 function RenderView ({ status }) {
     switch (status) {
-    case 1:return (
-        <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-            <Text numberOfLines={1} style={ { color: '#0045FF', fontSize: 15, maxWidth: 180 }}>提现中</Text>
-            <Text numberOfLines={1} style={{ color: '#999', fontSize: 12 }}>24小时内审核到账</Text>
-        </View>
-    );
-    case 2:return (
-        <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-            <Text numberOfLines={1} style={ { color: '#999', fontSize: 12, maxWidth: 200 }}>提现失败(提现账户异常)，金币已退回</Text>
-            <TouchableOpacity activeOpacity={1} onPress={() => {
-                N.navigate('FeedBackPage');
-            }}>
-                <Text numberOfLines={1} style={{ color: '#FA0000', fontSize: 15 }}>我有疑问</Text>
-            </TouchableOpacity>
-        </View>
-    );
-    default:return (
-        <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-            <Text numberOfLines={1} style={ { color: '#53C23B', fontSize: 15, maxWidth: 180 }}>提现成功</Text>
-        </View>
-    );
+    case 1:
+        return (
+            <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
+                <Text numberOfLines={1} style={ { color: '#0045FF', fontSize: 15, maxWidth: 180 }}>提现中</Text>
+                <Text numberOfLines={1} style={{ color: '#999', fontSize: 12 }}>24小时内审核到账</Text>
+            </View>
+        );
+    case 2:
+        return (
+            <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
+                <Text numberOfLines={1} style={ { color: '#999', fontSize: 12, maxWidth: 200 }}>提现失败(提现账户异常)，金币已退回</Text>
+                <TouchableOpacity onPress={() => {
+                    N.navigate('FeedBackPage');
+                }}>
+                    <Text numberOfLines={1} style={{ color: '#FA0000', fontSize: 15 }}>我有疑问</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    default:
+        return (
+            <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
+                <Text numberOfLines={1} style={ { color: '#53C23B', fontSize: 15, maxWidth: 180 }}>提现成功</Text>
+            </View>
+        );
     }
 }
 
@@ -99,3 +101,5 @@ const styles = StyleSheet.create({
         fontSize: 14
     }
 });
+
+export default WithdrawRecordsPage;

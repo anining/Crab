@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-    DeviceEventEmitter,
-    Dimensions,
-    ImageBackground,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import { DeviceEventEmitter, Dimensions, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { css } from '../../assets/style/css';
 import activity8 from '../../assets/icon/activity/activity8.png';
 import activity9 from '../../assets/icon/activity/activity9.png';
@@ -26,13 +16,18 @@ import { N } from '../../utils/router';
 import { activityDetail, getReceiveTaskAward } from '../../utils/api';
 import { transformMoney } from '../../utils/util';
 import { getter } from '../../utils/store';
-import toast from '../../utils/toast';
 
 const { width } = Dimensions.get('window');
+const { today_pass_num } = getter(['user.today_pass_num']);
 
-export default function DailyRedPackagePage (props) {
+function DailyRedPackagePage (props) {
     const { activityId } = props.route.params;
     const [rule, setRule] = useState([]);
+    const [endDatetime, setEndDatetime] = useState('2020/12/12');
+
+    useEffect(() => {
+        detail();
+    }, []);
 
     function format (rule, logs) {
         const arr = [];
@@ -48,10 +43,6 @@ export default function DailyRedPackagePage (props) {
         return arr;
     }
 
-    useEffect(() => {
-        detail();
-    }, []);
-
     function detail () {
         activityDetail(activityId).then(r => {
             try {
@@ -59,7 +50,8 @@ export default function DailyRedPackagePage (props) {
                 if (error) {
                     N.goBack();
                 } else {
-                    const { logs, setting } = data;
+                    const { logs, setting, end_datetime } = data;
+                    setEndDatetime(end_datetime);
                     const { rule } = setting;
                     setRule(format(rule, logs));
                 }
@@ -78,7 +70,7 @@ export default function DailyRedPackagePage (props) {
                     <ImageBackground source={activity9} style={[css.pa, styles.arpImage, css.flex]}>
                         <View style={[styles.activeTitleWrap, css.flex, css.fw]}>
                             <Text style={styles.atwTitle}>活动倒计时</Text>
-                            <CountDown time={+new Date('2020/06/25')} style={{ color: '#fff', fontSize: 15, letterSpacing: 4 }}/>
+                            <CountDown time={+new Date(endDatetime)} style={{ color: '#fff', fontSize: 15, letterSpacing: 4 }}/>
                         </View>
                     </ImageBackground>
                     <RenderRedItem rule={rule} activityId={activityId} detail={detail}/>
@@ -92,16 +84,12 @@ export default function DailyRedPackagePage (props) {
 
 function RenderRedItem ({ rule, activityId, detail }) {
     const view = [];
-    const { today_pass_num } = getter(['user.today_pass_num']);
 
     function ReceiveTaskAward (level) {
         getReceiveTaskAward(level, activityId).then(r => {
-            const { error, data } = r;
-            if (error) {
-                toast(r.msg || '打开失败');
-            } else {
+            if (!r.error) {
                 detail();
-                const { add_balance } = data;
+                const { add_balance } = r.data;
                 DeviceEventEmitter.emit('showPop', { dom: <Popup money={add_balance} twice={level === 6 ? 0 : rule[level - 1].min_add_balance}/> });
             }
         });
@@ -235,5 +223,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         width: '90%',
         ...css.auto
-    },
+    }
 });
+
+export default DailyRedPackagePage;

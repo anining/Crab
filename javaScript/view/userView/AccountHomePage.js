@@ -28,12 +28,14 @@ const TYPE = [
     }
 ];
 const { width } = Dimensions.get('window');
-export default function AccountHomePage () {
+
+function AccountHomePage () {
     const [binds, setBinds] = useState([]);
+    const headerRight = <Text style={{ color: '#FF6C00' }}>添加绑定</Text>;
+
     useEffect(() => {
         updateBinds();
     }, []);
-    const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>添加绑定</Text>;
 
     function updateBinds () {
         account().then(r => {
@@ -44,7 +46,10 @@ export default function AccountHomePage () {
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '绑定账号' } }} navigation={N} onPress={() => {
-                DeviceEventEmitter.emit('showPop', <RenderSelect style={styles.selectView}/>);
+                DeviceEventEmitter.emit('showPop', {
+                    dom: <RenderSelect style={styles.selectView}/>,
+                    close: () => {},
+                });
             }} headerRight={binds.length && headerRight}/>
             <RenderView binds={binds} updateBinds={updateBinds}/>
         </SafeAreaView>
@@ -53,6 +58,7 @@ export default function AccountHomePage () {
 
 function RenderSelect () {
     const components = [];
+
     TYPE.forEach(item => {
         const { id, label } = item;
         components.push(
@@ -70,6 +76,103 @@ function RenderSelect () {
             {components}
         </View>
     );
+}
+
+function RenderView ({ binds = [], updateBinds }) {
+    if (!binds.length) {
+        const children = (
+            <>
+                <Text style={{ marginTop: 7, marginBottom: 20 }}>快去绑定账号做任务吧～</Text>
+                <TouchableOpacity onPress={() => { DeviceEventEmitter.emit('showPop', <RenderSelect />); }} style={{ width: 206, height: 44, backgroundColor: '#FF9C00', borderRadius: 22 }}>
+                    <Text numberOfLines={1} style={{ color: '#fff', lineHeight: 44, textAlign: 'center', fontSize: 17 }}>添加绑定</Text>
+                </TouchableOpacity>
+            </>
+        );
+        return <Null text='您还未绑定账号' children={children}/>;
+    }
+    return (
+        <ScrollView>
+            <RenderBindView updateBinds={updateBinds} binds={binds}/>
+        </ScrollView>
+    );
+}
+
+function RenderBindView ({ binds = [], updateBinds }) {
+    const view = [];
+
+    function apiDeleteAccount (account_id) {
+        deleteAccount(account_id).then(r => {
+            if (!r.error) {
+                toast('操作成功!');
+                updateBinds();
+            }
+        });
+    }
+
+    binds.forEach(bind => {
+        const { account_id, reason, status, avatar, nickname, home_url, is_current, success_rate, task_platform } = bind;
+        const { label, platform_category } = task_platform;
+        if (!is_current) {
+            return;
+        }
+        if (status === 1) {
+            view.push(
+                <View style={styles.numberView} key={account_id}>
+                    <View style={[css.flexRCSB, styles.item, { borderBottomWidth: 1, borderBottomColor: '#EDEDED' }]}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={{ uri: avatar }} style={{ height: 54, width: 54, borderRadius: 27, marginRight: 5 }}/>
+                            <View>
+                                <Text numberOfLines={1} style={{ fontSize: 18, color: '#222', fontWeight: '800', marginBottom: 3 }}>{nickname}</Text>
+                                <Text numberOfLines={1} style={{ fontSize: 10, color: '#353535' }}>账号类型：{label}</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity onPress={() => {
+                            DeviceEventEmitter.emit('showPop', <RenderChange updateBinds={updateBinds} binds={binds} label={label} account_id={account_id} platform_category={platform_category}/>);
+                        }} style={styles.changeBindBtn}>
+                            <Text numberOfLines={1} style={{ color: '#fff', lineHeight: 35, textAlign: 'center', fontSize: 13 }}>切换账号</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Text numberOfLines={1} style={ styles.successRateText}>当前账号通过率：<Text style={ { color: '#FF6C00', fontWeight: '500' }}>{Number.parseInt(success_rate * 100)}%</Text></Text>
+                    <Text numberOfLines={3} style={styles.successRateView}>通过率表示您这个账号今日任务通过情况，通过率低代表您的账号可能已经不健康，易导致任务审核不通过，建议绑定其他账号做单.</Text>
+                </View>
+            );
+        } else {
+            view.push(
+                <View style={styles.numberView} key={account_id}>
+                    <View style={[css.flexRCSB, styles.item, { borderBottomWidth: 1, borderBottomColor: '#EDEDED', height: 40 }]}>
+                        <Text numberOfLines={1} style={{ fontWeight: '500', color: status === 3 ? '#FF3B00' : '#353535' }}>{label}{status === 3 ? '绑定失败' : '绑定中'}</Text>
+                        <Text numberOfLines={1} style={{ fontSize: 12, color: '#353535' }}>{reason}</Text>
+                    </View>
+                    <View style={[css.flexRCSB, styles.item, styles.urlView]}>
+                        <Text numberOfLines={1} style={styles.urlText}>绑定链接：{home_url}</Text>
+                        <TouchableOpacity onPress={() => {
+                            Clipboard.setString(home_url.toString());
+                            toast('复制成功!');
+                        }}>
+                            <Text numberOfLines={1} style={{ fontSize: 12, color: '#FF6C00' }}>复制链接</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={[css.flexRCSB, styles.item, styles.btnView]}>
+                        <TouchableOpacity onPress={() => {
+                            if (status === 3) {
+                                apiDeleteAccount(account_id);
+                            } else {
+                                updateBinds();
+                            }
+                        }} style={styles.giveUpBtn}>
+                            <Text numberOfLines={1} style={styles.bindBtnText }>{status === 3 ? '换号重绑' : '刷新状态'}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            apiDeleteAccount(account_id);
+                        }} style={[styles.giveUpBtn, { backgroundColor: '#fff', borderWidth: 1, borderColor: '#FF6C00' }]}>
+                            <Text numberOfLines={1} style={[styles.bindBtnText, { color: '#FF6C00' }]}>取消绑定</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            );
+        }
+    });
+    return <>{view}</>;
 }
 
 function RenderSelectView ({ select }) {
@@ -90,17 +193,15 @@ function RenderChange ({ binds = [], label, updateBinds, account_id, platform_ca
     function apiPutAccount () {
         putAccount(platform_category, selectId).then(r => {
             if (!r.error) {
-                toast('操作成功');
+                toast('操作成功!');
                 updateBinds();
-            } else {
-                toast(r.msg || '操作失败');
             }
         });
     }
 
     binds.forEach(bind => {
-        const { account_id: id, reason, status, avatar, nickname, success_rate, task_platform } = bind;
-        const { label: local_label, platform_category: local_platform_category } = task_platform;
+        const { account_id: id, avatar, nickname, task_platform } = bind;
+        const { platform_category: local_platform_category } = task_platform;
         if (local_platform_category !== platform_category) {
             return;
         }
@@ -119,11 +220,7 @@ function RenderChange ({ binds = [], label, updateBinds, account_id, platform_ca
     return (
         <View style={styles.changeView}>
             <Text style={{ color: '#FF3B00', fontSize: 17, lineHeight: 50, textAlign: 'center', fontWeight: '600' }}>切换做单账号</Text>
-            <View style={{
-                height: 200,
-                width: '100%',
-                marginBottom: 20
-            }}>
+            <View style={{ height: 200, width: '100%', marginBottom: 20 }}>
                 <ScrollView>
                     {components}
                 </ScrollView>
@@ -150,112 +247,6 @@ function RenderChange ({ binds = [], label, updateBinds, account_id, platform_ca
             </View>
         </View>
     );
-}
-
-function RenderView ({ binds = [], updateBinds }) {
-    if (!binds.length) {
-        const children = (
-            <>
-                <Text style={{ marginTop: 7, marginBottom: 20 }}>快去绑定账号做任务吧～</Text>
-                <TouchableOpacity onPress={() => {
-                    DeviceEventEmitter.emit('showPop', <RenderSelect />);
-                }} style={{ width: 206, height: 44, backgroundColor: '#FF9C00', borderRadius: 22 }}>
-                    <Text numberOfLines={1} style={{ color: '#fff', lineHeight: 44, textAlign: 'center', fontSize: 17 }}>添加绑定</Text>
-                </TouchableOpacity>
-            </>
-        );
-        return (
-            <>
-                <Null text='您还未绑定账号' children={children}/>
-            </>
-        );
-    }
-    return (
-        <ScrollView>
-            <RenderBindView updateBinds={updateBinds} binds={binds}/>
-        </ScrollView>
-    );
-}
-
-function RenderBindView ({ binds = [], updateBinds }) {
-    const components = [];
-
-    function apiDeleteAccount (account_id) {
-        deleteAccount(account_id).then(r => {
-            if (!r.error) {
-                toast('操作成功');
-                updateBinds();
-            } else {
-                toast(r.msg || '操作失败');
-            }
-        });
-    }
-
-    binds.forEach(bind => {
-        console.log(bind);
-        const { account_id, reason, status, avatar, nickname, home_url, is_current, success_rate, task_platform } = bind;
-        const { label, platform_category } = task_platform;
-        if (!is_current) {
-            return;
-        }
-        if (status === 1) {
-            components.push(
-                <View style={styles.numberView} key={account_id}>
-                    <View style={[css.flexRCSB, styles.item, { borderBottomWidth: 1, borderBottomColor: '#EDEDED' }]}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Image source={{ uri: avatar }} style={{ height: 54, width: 54, borderRadius: 27, marginRight: 5 }}/>
-                            <View>
-                                <Text numberOfLines={1} style={{ fontSize: 18, color: '#222', fontWeight: '800', marginBottom: 3 }}>{nickname}</Text>
-                                <Text numberOfLines={1} style={{ fontSize: 10, color: '#353535' }}>账号类型：{label}</Text>
-                            </View>
-                        </View>
-                        <TouchableOpacity onPress={() => {
-                            DeviceEventEmitter.emit('showPop', <RenderChange updateBinds={updateBinds} binds={binds} label={label} account_id={account_id} platform_category={platform_category}/>);
-                        }} style={styles.changeBindBtn}>
-                            <Text numberOfLines={1} style={{ color: '#fff', lineHeight: 35, textAlign: 'center', fontSize: 13 }}>切换账号</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <Text numberOfLines={1} style={ styles.successRateText}>当前账号通过率：<Text style={ { color: '#FF6C00', fontWeight: '500' }}>{Number.parseInt(success_rate * 100)}%</Text></Text>
-                    <Text numberOfLines={3} style={styles.successRateView}>通过率表示您这个账号今日任务通过情况，通过率低代表您的账号可能已经不健康，易导致任务审核不通过，建议绑定其他账号做单.</Text>
-                </View>
-            );
-        } else {
-            components.push(
-                <View style={styles.numberView} key={account_id}>
-                    <View style={[css.flexRCSB, styles.item, { borderBottomWidth: 1, borderBottomColor: '#EDEDED', height: 40 }]}>
-                        <Text numberOfLines={1} style={{ fontSize: 14, fontWeight: '500', color: status === 3 ? '#FF3B00' : '#353535' }}>{label}{status === 3 ? '绑定失败' : '绑定中'}</Text>
-                        <Text numberOfLines={1} style={{ fontSize: 12, color: '#353535' }}>{reason}</Text>
-                    </View>
-                    <View style={[css.flexRCSB, styles.item, styles.urlView]}>
-                        <Text numberOfLines={1} style={styles.urlText}>绑定链接：{home_url}</Text>
-                        <TouchableOpacity onPress={() => {
-                            Clipboard.setString(home_url.toString());
-                            toast('复制成功');
-                        }}>
-                            <Text numberOfLines={1} style={{ fontSize: 12, color: '#FF6C00' }}>复制链接</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={[css.flexRCSB, styles.item, styles.btnView]}>
-                        <TouchableOpacity onPress={() => {
-                            if (status === 3) {
-                                apiDeleteAccount(account_id);
-                            } else {
-                                updateBinds();
-                            }
-                        }} style={styles.giveUpBtn}>
-                            <Text numberOfLines={1} style={styles.bindBtnText }>{status === 3 ? '换号重绑' : '刷新状态'}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
-                            apiDeleteAccount(account_id);
-                        }} style={[styles.giveUpBtn, { backgroundColor: '#fff', borderWidth: 1, borderColor: '#FF6C00' }]}>
-                            <Text numberOfLines={1} style={[styles.bindBtnText, { color: '#FF6C00' }]}>取消绑定</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            );
-        }
-    });
-    return <>{components}</>;
 }
 
 const styles = StyleSheet.create({
@@ -405,3 +396,5 @@ const styles = StyleSheet.create({
         width: '90%'
     }
 });
+
+export default AccountHomePage;

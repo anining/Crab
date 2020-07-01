@@ -4,13 +4,14 @@ import ImagePicker from 'react-native-image-crop-picker';
 import toast from '../utils/toast';
 import { uploadToken } from '../utils/api';
 
-function Upload ({ children, images = [], setImages, editable = true, style = {}, length }) {
+function Upload ({ children, images = [], setImages, setProgress, editable = true, style = {}, length }) {
     const [file, setFiles] = useState();
 
     useEffect(() => {
         if (!file) {
             return;
         }
+        setProgress && setProgress('正在上传...');
         uploadToken('taskpicture', 'realman/upload/').then(r => {
             const { dir, accessid, host, policy, signature, cdn_domain } = r.data;
             const { mime } = file;
@@ -24,8 +25,12 @@ function Upload ({ children, images = [], setImages, editable = true, style = {}
                 FD.append('signature', signature);
                 FD.append('file', file);
                 const xhr = new XMLHttpRequest();
+                xhr.upload.addEventListener('progress', e => {
+                    e.lengthComputable && setProgress && setProgress(Math.round((e.loaded * 100) / e.total).toString());
+                }, false);
                 xhr.addEventListener('error', () => {
                     toast('上传失败');
+                    setProgress && setProgress('上传失败');
                 }, false);
                 xhr.addEventListener('load', () => {
                     const newImages = [...[Object.assign(file, { uri: `${cdn_domain}/${key}` })], ...images].slice(0, length);

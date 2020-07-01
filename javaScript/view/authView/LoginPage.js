@@ -8,6 +8,7 @@ import toast from '../../utils/toast';
 import { apiLogin, verifyCode } from '../../utils/api';
 import { setter } from '../../utils/store';
 import Button from '../../components/Button';
+import { initNetInfo } from '../../navigation/AppStackNavigator';
 
 function LoginPage () {
     const [phone, setPhone] = useState('');
@@ -25,6 +26,7 @@ function LoginPage () {
         if (r && !r.error) {
             const { access_token, token_type } = r.data;
             setter([['authorization', `${token_type} ${access_token}`]], true);
+            await initNetInfo();
             N.replace('MaterialTopTabNavigator');
         }
     }

@@ -43,7 +43,7 @@ import Prompt from '../components/Prompt';
 import {
     getGradeSetting,
     getSignConfig,
-    getTaskPlatform,
+    getTaskPlatform, updateAccount,
     updateActivity,
     updateApp,
     updateBanner,
@@ -59,6 +59,9 @@ import ShareQRCodePage from '../view/shareView/ShareQRCodePage';
 import PassGamePage from '../view/gameView/PassGamePage';
 import toast from '../utils/toast';
 import RightProPage from '../view/gameView/RightProPage';
+import { N } from '../utils/router';
+import * as U from 'karet.util';
+import { store } from '../utils/store';
 
 const Stack = createStackNavigator();
 
@@ -242,7 +245,7 @@ const stackScreens = [
         name: 'RightProPage',
         component: RightProPage,
         title: '答题正确率',
-    },
+    }
 ];
 
 function setStatusBar () {
@@ -251,14 +254,21 @@ function setStatusBar () {
     StatusBar.setTranslucent(true);
 }
 
-function initNetInfo () {
-    return Promise.all([updateUser(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome(), updateNextRedLevel()]);
+export function initNetInfo () {
+    return Promise.all([updateUser(), updateAccount(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome(), updateNextRedLevel()]);
 }
 
 function AppStackNavigator () {
     const [keys, setKeys] = useState();
     const GenerateScreen = stackScreens.map(screen =>
         <Stack.Screen name={screen.name} component={screen.component} options={{ title: screen.title }} key={screen.name}/>);
+
+    function set () {
+        setStatusBar();
+        setKeys([]);
+        SplashScreen.hide();
+    }
+
     useEffect(() => {
         setConsole();
         asyncStorage.getAllKeys()
@@ -268,17 +278,20 @@ function AppStackNavigator () {
                         console.log(r, '从本地缓存去除');
                         initializationStore(r);
                         if (r && r.length) {
-                            const ret = initNetInfo();
+                            set();
                         } else {
-                            await initNetInfo();
+                            const authorization = U.view(['authorization'], store).get();
+                            if (authorization) {
+                                await initNetInfo();
+                                set();
+                            } else {
+                                set();
+                                N.replace('VerificationStackNavigator');
+                            }
                         }
-                        setStatusBar();
-                        setKeys([]);
-                        SplashScreen.hide();
                     });
             })
-            .catch(err => {
-                console.log(err);
+            .catch(() => {
                 setKeys([]);
             });
         return () => {

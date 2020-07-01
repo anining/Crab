@@ -3,6 +3,7 @@ import { store } from './store';
 import RNFetchBlob from 'rn-fetch-blob';
 import CameraRoll from '@react-native-community/cameraroll';
 import * as U from 'karet.util';
+import { N } from './router';
 import CryptoJS from 'crypto-js';
 import RN_FS from 'react-native-fs';
 import { API_URL, CONSOLE_LOG, PRIVATE_KEY } from './config';
@@ -367,25 +368,12 @@ export function _gv (obj, str, defaultValue) {
 }
 
 export async function bannerAction (action, link, label) {
-    // console.log(action, link, label);
-    try {
-        if (action === 1) {
-            // app 跳转内部页面
-            N.navigate(link);
-        }
-        if (action === 2) {
-            // 到webview页面加载活动
-            N.navigate('WebViewPage', {
-                url: link,
-                title: label || '活动',
-            });
-        }
-        if (action === 4) {
-            // eslint-disable-next-line handle-callback-err
-            Linking.openURL(link).catch(err => {});
-        }
-    } catch (e) {
-        console.log(e);
+    switch (action) {
+    // app 跳转内部页面
+    case 1: N.navigate(link); break;
+    // 到webview页面加载活动
+    case 2: N.navigate('WebViewPage', { url: link, title: label || '活动' }); break;
+    default:Linking.openURL(link).catch(e => console.log(e));
     }
 }
 
