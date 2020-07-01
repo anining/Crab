@@ -46,8 +46,7 @@ export const css = StyleSheet.create({
         flexWrap: 'wrap'
     },
     gf: {
-        fontFamily: 'ZhongYuanTi-2'
-        // fontFamily: 'MYuenHKS-Light-1',
+        fontFamily: 'sy-bold',
     },
     header: {
         height: 63,

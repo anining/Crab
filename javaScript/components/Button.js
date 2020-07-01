@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import { Dimensions, StyleSheet, TouchableOpacity, Text, ActivityIndicator, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Shadow from './Shadow';
 import { css } from '../assets/style/css';
 const { height, width } = Dimensions.get('window');
 /**
  * <Button type={2} name={'确定'} onPress={fn}/>
- * <Button onPress={(callback) => {
+ * <Button name={'确定'} onPress={(callback) => {
         setTimeout(() => {
             callback && callback();
         }, 2000);
@@ -44,6 +44,7 @@ export default class Button extends Component {
     btnOnPress () {
         try {
             if (!this.state.loading) {
+                console.log('点击了我');
                 this.setState({ loading: true });
                 this.props.onPress && this.props.onPress(() => {
                     this.setState({ loading: false });
@@ -58,7 +59,7 @@ export default class Button extends Component {
         try {
             const typeStyle = {
                 1: {
-                    width: this.props.width || width * 0.9,
+                    width: this.props.width || width * 0.85,
                     borderRadius: 23,
                 },
                 2: {
@@ -75,16 +76,18 @@ export default class Button extends Component {
                     </Text>
                 </Shadow>;
             } else {
-                return <Shadow style={[styles.buntWrap, typeStyleProxy[this.type]]} color={this.shadow}>
-                    <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.buntWrap, styles.lineStyle, typeStyleProxy[this.type]]}>
-                        <TouchableOpacity activeOpacity={1} style={styles.touchBtn} activeOpacity={1} onPress={() => { this.btnOnPress(); }}>
-                            {this.renderLoading.call(this)}
-                            <Text style={styles.btnText}>
-                                {this.props.name || this.props.title || '确定'}
-                            </Text>
-                        </TouchableOpacity>
-                    </LinearGradient>
-                </Shadow>;
+                return <View style={{ marginVertical: 20 }}>
+                    <Shadow style={[styles.buntWrap, typeStyleProxy[this.type]]} color={this.shadow}>
+                        <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.buntWrap, styles.lineStyle, typeStyleProxy[this.type]]}>
+                            <TouchableOpacity style={styles.touchBtn} activeOpacity={1} onPress={() => { this.btnOnPress(); }}>
+                                {this.renderLoading.call(this)}
+                                <Text style={styles.btnText}>
+                                    {this.props.name || this.props.title || '确定'}
+                                </Text>
+                            </TouchableOpacity>
+                        </LinearGradient>
+                    </Shadow>
+                </View>;
             }
         } catch (e) {
             return null;
@@ -104,7 +107,7 @@ const styles = StyleSheet.create({
     },
     buntWrap: {
         height: 46,
-        lineHeight: 46
+        lineHeight: 46,
     },
     disableBtnText: {
         backgroundColor: '#b4b4b4',

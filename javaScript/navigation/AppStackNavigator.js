@@ -40,7 +40,17 @@ import asyncStorage from '../utils/asyncStorage';
 import { _tc, initializationStore, setConsole } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
 import Prompt from '../components/Prompt';
-import { getGradeSetting, getSignConfig, getTaskPlatform, updateActivity, updateApp, updateBanner, updateSecondIncome, updateUser } from '../utils/update';
+import {
+    getGradeSetting,
+    getSignConfig,
+    getTaskPlatform,
+    updateActivity,
+    updateApp,
+    updateBanner,
+    updateNextRedLevel,
+    updateSecondIncome,
+    updateUser,
+} from '../utils/update';
 import OpenMoneyPage from '../view/activityView/OpenMoneyPage';
 import GamePage from '../view/gameView/GamePage';
 import NoticeDetailPage from '../view/homeView/NoticeDetailPage';
@@ -227,7 +237,6 @@ const stackScreens = [
         name: 'PassGamePage',
         component: PassGamePage,
         title: '答题结算',
-    }
     },
     {
         name: 'RightProPage',
@@ -243,7 +252,7 @@ function setStatusBar () {
 }
 
 function initNetInfo () {
-    return Promise.all([updateUser(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome()]);
+    return Promise.all([updateUser(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome(), updateNextRedLevel()]);
 }
 
 function AppStackNavigator () {

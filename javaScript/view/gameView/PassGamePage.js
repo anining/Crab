@@ -34,7 +34,7 @@ import { _toFixed, toGoldCoin, transformMoney } from '../../utils/util';
 import ShiftView from '../../components/ShiftView';
 import game20 from '../../assets/icon/game/game20.png';
 import IdiomCard from '../../components/IdiomCard';
-import { addNoteBook } from '../../utils/api';
+import { addNoteBook, nextRedLevel } from '../../utils/api';
 import toast from '../../utils/toast';
 import * as U from 'karet.util';
 import GameHeader from '../../components/GameHeader';
@@ -88,10 +88,18 @@ export default class PassGamePage extends Component {
         }
     }
 
-    componentDidMount () {
+    async componentDidMount () {
         console.log(this);
         this._showPop();
         updateUser();
+        await this._nextRedLevel();
+    }
+
+    async _nextRedLevel () {
+        const ret = await nextRedLevel();
+        if (ret && !ret.error) {
+            console.log(ret, '??====');
+        }
     }
 
     _renderIdiomList () {
@@ -311,8 +319,9 @@ const styles = StyleSheet.create({
     },
     progressWrap: {
         // backgroundColor: 'red',
-        height: 130,
+        height: 100,
         marginTop: 20,
+        paddingTop: 30,
         width: '70%',
     },
     redImage: {

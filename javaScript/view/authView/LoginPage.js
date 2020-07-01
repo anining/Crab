@@ -7,19 +7,22 @@ import login2 from '../../assets/icon/login/login2.png';
 import toast from '../../utils/toast';
 import { apiLogin, verifyCode } from '../../utils/api';
 import { setter } from '../../utils/store';
+import Button from '../../components/Button';
 
 function LoginPage () {
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('');
     const [codeText, setCodeText] = useState('获取验证码');
 
-    async function login () {
+    async function login (callback) {
         if (!phone || !code) {
+            callback();
             toast('请填写完整的账号和密码!');
             return;
         }
         const r = await apiLogin(phone, code);
-        if (!r.error) {
+        callback();
+        if (r && !r.error) {
             const { access_token, token_type } = r.data;
             setter([['authorization', `${token_type} ${access_token}`]], true);
             N.replace('MaterialTopTabNavigator');
@@ -77,9 +80,9 @@ function LoginPage () {
                         <Text style={styles.codeText}>{codeText + (!isNaN(codeText) ? 's' : '')}</Text>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={login} style={styles.loginBtn}>
-                    <Text style={styles.loginText}>立即登录</Text>
-                </TouchableOpacity>
+                <Button name={'立即登录'} onPress={async (callback) => {
+                    await login(callback);
+                }}/>
                 <Text style={styles.text} numberOfLines={1}>*未注册用户将会自动注册并登录</Text>
                 <Text style={styles.text} numberOfLines={1}>*如果未收到验证码，请检查是否被手机拦截。</Text>
             </View>
