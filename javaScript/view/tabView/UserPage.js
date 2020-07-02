@@ -103,9 +103,10 @@ const TASK_MENU = [
         icon: user6
     }
 ];
-const { today_income, total_income, nickname, balance, phone, avatar, invite_code, receive_task_status } = getter(['user.red_point.receive_task_status', 'user.today_income', 'user.nickname', 'user.total_income', 'user.balance', 'user.phone', 'user.avatar', 'user.invite_code']);
+const { today_income, total_income, nickname, authorization, balance, phone, avatar, invite_code, receive_task_status } = getter(['user.red_point.receive_task_status', 'authorization', 'user.today_income', 'user.nickname', 'user.total_income', 'user.balance', 'user.phone', 'user.avatar', 'user.invite_code']);
 
 function UserPage () {
+    !authorization.get() && N.replace('VerificationStackNavigator');
     updateUser();
 
     return (

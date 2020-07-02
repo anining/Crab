@@ -31,7 +31,7 @@ import toast from '../../utils/toast';
 
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
 const { width } = Dimensions.get('window');
-const { banner, signConfig, activityObj, user, today_task_num, taskPlatform, user_id } = getter(['banner', 'signConfig', 'activityObj', 'user', 'user.today_task_num', 'user.user_id', 'taskPlatform']);
+const { banner, signConfig, activityObj, authorization, today_task_num, taskPlatform, user_id } = getter(['banner', 'signConfig', 'authorization', 'activityObj', 'user', 'user.today_task_num', 'user.user_id', 'taskPlatform']);
 const NEW_USER_TASK_TYPE = {
     1: {
         label: '看视频领金币',
@@ -53,6 +53,8 @@ const NEW_USER_TASK_TYPE = {
 function AnswerPage () {
     const [signDay, setSignDay] = useState(0);
     const [newUser, setNewUser] = useState([]);
+
+    !authorization.get() && N.replace('VerificationStackNavigator');
 
     useEffect(() => {
         init();

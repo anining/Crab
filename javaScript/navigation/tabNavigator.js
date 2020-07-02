@@ -18,7 +18,7 @@ import icon10 from '../assets/icon/tab/tab10.png';
 
 const Tab = createBottomTabNavigator();
 
-export default function TabNavigator ({ navigation }) {
+function TabNavigator ({ navigation }) {
     proxyRouter(navigation, ['MaterialTopTabNavigator', 'LoginPage'], 'VerificationStackNavigator');
     return (
         <Tab.Navigator
@@ -84,3 +84,5 @@ export default function TabNavigator ({ navigation }) {
         </Tab.Navigator>
     );
 }
+
+export default TabNavigator;

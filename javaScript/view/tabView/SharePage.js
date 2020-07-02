@@ -40,7 +40,7 @@ const cashBack = [{
     title: '徒弟第三次提现到账',
     label: '师傅得3元',
 }];
-const { invite_code } = getter(['user.invite_code']);
+const { invite_code, authorization } = getter(['user.invite_code', 'authorization']);
 
 export default class SharePage extends PureComponent {
     constructor (props) {
@@ -97,7 +97,11 @@ export default class SharePage extends PureComponent {
     }
 
     async componentDidMount () {
-        await this._awardDetail();
+        if (authorization.get()) {
+            await this._awardDetail();
+        } else {
+            N.replace('VerificationStackNavigator');
+        }
     }
 
     _renderWelfare () {
