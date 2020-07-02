@@ -346,7 +346,7 @@ const transformFetch = async (method, url, data = {}) => {
                     const FETCH_DATA = await fetch(parameterTransform(method, url, formatDataRet), request);
                     const DATA_TEXT = await FETCH_DATA.text();
                     const localDate = DEVELOPER === 'Production' ? JsonParse(AesDecrypt(DATA_TEXT)) : JsonParse(DATA_TEXT);
-                    if (localDate.error && localDate.msg !== 17) {
+                    if (localDate.error && localDate.error !== 17) {
                         toast(localDate.msg);
                     }
                     if ('error' in localDate) {

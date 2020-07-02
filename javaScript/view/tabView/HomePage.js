@@ -243,10 +243,12 @@ export default class HomePage extends Component {
                         </ImageBackground>
                     </SafeAreaProvider>
                 );
+            } else {
+                return <View/>;
             }
         } catch (e) {
             console.log(e);
-            return null;
+            return <View/>;
         }
     }
 }

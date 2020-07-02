@@ -15,6 +15,7 @@ import answer11 from '../../assets/icon/answer/answer11.png';
 import answer13 from '../../assets/icon/answer/answer13.png';
 import answer14 from '../../assets/icon/answer/answer14.png';
 import pop5 from '../../assets/icon/pop/pop5.png';
+import pop8 from '../../assets/icon/pop/pop8.png';
 import Shadow from '../../components/Shadow';
 import { _if, _tc, bannerAction, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
@@ -349,7 +350,18 @@ function RenderBtn ({ item }) {
         //     if (!r.error) {
         //         const { data } = r;
         //         if (data.length) {
-        //
+        //             DeviceEventEmitter.emit('showPop', <Choice info={{
+        //                 icon: pop8,
+        //                 tips: '提现申请成功，请耐心等待审核。一般1个工作日内审核完成。',
+        //                 rt: '我知道了',
+        //                 lt: '',
+        //                 rc: () => {
+        //                     N.goBack();
+        //                 },
+        //                 lc: () => {
+        //                     N.goBack();
+        //                 }
+        //             }}/>);
         //         } else {
         //             task(platform_category);
         //         }
