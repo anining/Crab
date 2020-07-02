@@ -120,7 +120,7 @@ export default class PassGamePage extends Component {
 
     _isUpgrade () {
         try {
-            const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
+            const myNowLevel = getPath(['user_level', 'level_num'], this.state.user, 1);
             const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
             for (let i = 0; i < this.state.gradeRange.length; i++) {
                 const item = this.state.gradeRange[i];
@@ -179,17 +179,16 @@ export default class PassGamePage extends Component {
 
     static _countNextLevel (now, array) {
         try {
-            let ret = 0;
+            let retNumber = 0;
             for (let i = 0; i < array.length; i++) {
                 const item = array[i];
-                console.log(item, 'dsadsa???', now, item > now);
                 if (item > now) {
-                    ret = item;
-                    console.log(ret);
+                    retNumber = item;
+                    console.log(retNumber);
                     break;
                 }
             }
-            return ret;
+            return retNumber;
         } catch (e) {
             console.log(e);
         }
@@ -197,11 +196,12 @@ export default class PassGamePage extends Component {
 
     _renderProgress () {
         try {
-            console.log(this.state.nextRedLevel, '????', this.state.user);
+            console.log(this.state.nextRedLevel, '????', this.state.user, this.state.gradeSetting, '==========uio');
             if (this.state.nextRedLevel && this.state.nextRedLevel.length) {
-                const preLevel = getPath([getPath(['myGradeLevel'], this.state.user) - 1, 'level'], this.state.gradeSetting) || 0;
-                const nexLevel = getPath(['myGrade', 'level'], this.state.user);
-                const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
+                const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
+                const preLevel = getPath([myGradeLevel - 1, 'level'], this.state.gradeSetting, 0);
+                const nexLevel = getPath(['myGrade', 'level'], this.state.user, 1);
+                const myNowLevel = getPath(['user_level', 'level_num'], this.state.user, 1);
                 const levelLength = nexLevel - preLevel;
                 const progressInnerLength = Number((myNowLevel - preLevel) / levelLength);
                 console.log(myNowLevel, this.state.nextRedLevel, '????');
@@ -212,7 +212,7 @@ export default class PassGamePage extends Component {
                             const forwardNumber = Math.floor((item - preLevel) / levelLength);
                             view.push(
                                 <ImageAuto style={[css.pa, styles.redImage, {
-                                    left: forwardNumber * 100 + '%'
+                                    left: forwardNumber * 90 + '%'
                                 }]} source={game16} key={`red${index}`}/>
                             );
                         });

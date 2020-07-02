@@ -112,7 +112,8 @@ export default class HomePage extends Component {
 
     _renderHomeProcess () {
         try {
-            const preLevel = getPath([getPath(['myGradeLevel'], this.state.user, 1) - 1, 'level'], this.state.gradeSetting, 0);
+            const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
+            const preLevel = getPath([myGradeLevel - 1, 'level'], this.state.gradeSetting, 0);
             const nexLevel = getPath(['myGrade', 'level'], this.state.user);
             const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
             const levelLength = nexLevel - preLevel;
