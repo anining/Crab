@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     glossaryInnerBox: {
         height: width * 1.25,
         left: width * 0.1,
-        paddingLeft: 10,
+        paddingLeft: 5,
         paddingTop: 20,
         top: width * 0.25,
         width: width * 0.8
