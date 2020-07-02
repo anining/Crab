@@ -29,7 +29,7 @@ import ShiftView from '../../components/ShiftView';
 import { N } from '../../utils/router';
 import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
-import { _if, _toFixed, setAndroidTime, transformMoney } from '../../utils/util';
+import { _if, _tc, _toFixed, setAndroidTime, transformMoney } from '../../utils/util';
 import EnlargeView from '../../components/EnlargeView';
 import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { getter } from '../../utils/store';
@@ -38,11 +38,14 @@ import { bind } from 'kefir.ramda';
 import { bindData, getPath } from '../../global/global';
 import toast from '../../utils/toast';
 import { getGradeConfig, homeProLevelPosition, avatarProLevelPosition } from '../../utils/levelConfig';
+import Clipboard from '@react-native-community/clipboard';
+import asyncStorage from '../../utils/asyncStorage';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
-const { trCorrectRate } = getter(['user.trCorrectRate', 'user.propNumsObj']);
+const { trCorrectRate, authorization, activityObj } = getter(['user.trCorrectRate', 'user.propNumsObj', 'activityObj', 'authorization']);
+
 export default class HomePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
@@ -70,6 +73,18 @@ export default class HomePage extends Component {
     componentDidMount () {
         this.delayEmitter();
         this._homeStart();
+        this.copiedText();
+    }
+
+    async copiedText () {
+        if (authorization.get()) {
+            const localText = await asyncStorage.getItem('OpenMoneyPage');
+            const text = await Clipboard.getString();
+            if (!localText && text === 'OpenMoneyPage') {
+                asyncStorage.setItem('OpenMoneyPage', 'OpenMoneyPage');
+                _tc(() => N.navigate('OpenMoneyPage', { activityId: (activityObj.get() || {})[2].activity_id }));
+            }
+        }
     }
 
     _getPosition () {
