@@ -101,18 +101,29 @@ function AnswerPage () {
                     <ComTitle title={'每日签到'} minTitle={<Text style={css.minTitle}>连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text></Text>}/>
                     <RenderDaySign signDay={signDay} setSignDay={setSignDay}/>
                 </View>
-                <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8', borderBottomWidth: 15, borderBottomColor: '#f8f8f8' }]}>
+                <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
                     <ComTitle title={'火爆活动'}/>
                     <RenderActivity />
                 </View>
-                <View style={styles.answerWrap}>
-                    <ComTitle title={'新手福利'}/>
-                    <RenderNewList list={newUser} _newUserTask={_newUserTask}/>
-                </View>
+                <Reward newUser={newUser} _newUserTask={_newUserTask}/>
                 <RenderTaskView />
             </ScrollView>
         </SafeAreaView>
     );
+}
+
+function Reward ({ newUser = [], _newUserTask }) {
+    const localNewUser = newUser.filter(item => item.btnStatus !== 3);
+
+    if (localNewUser.length) {
+        return (
+            <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
+                <ComTitle title={'新手福利'}/>
+                <RenderNewList list={newUser} _newUserTask={_newUserTask}/>
+            </View>
+        );
+    }
+    return <></>;
 }
 
 function RenderDaySign ({ signDay, setSignDay }) {
