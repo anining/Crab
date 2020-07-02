@@ -9,12 +9,9 @@ import {
     TouchableOpacity,
     DeviceEventEmitter, UIManager,
 } from 'react-native';
-import * as U from 'karet.util';
-import * as R from 'kefir.ramda';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { css } from '../../assets/style/css';
 import LottieView from 'lottie-react-native';
-import whole1 from '../../lottie/whole1';
 import game1 from '../../assets/icon/game/game1.png';
 import game5 from '../../assets/icon/game/game5.png';
 import game41 from '../../assets/icon/game/game41.png';
@@ -29,15 +26,14 @@ import ShiftView from '../../components/ShiftView';
 import { N } from '../../utils/router';
 import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
-import { _if, _toFixed, setAndroidTime, transformMoney } from '../../utils/util';
-import EnlargeView from '../../components/EnlargeView';
+import { _if, setAndroidTime } from '../../utils/util';
 import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { getter } from '../../utils/store';
 import GameHeader from '../../components/GameHeader';
-import { bind } from 'kefir.ramda';
 import { bindData, getPath } from '../../global/global';
 import toast from '../../utils/toast';
 import { getGradeConfig, homeProLevelPosition, avatarProLevelPosition } from '../../utils/levelConfig';
+import { HomeDelayMonitorTime, HomeStartAnimationTime } from '../../utils/animationConfig';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
@@ -55,9 +51,11 @@ export default class HomePage extends Component {
             gameHeaderPosition: null, // 头部图像视图
             accuracyImagePosition: null // 答题按钮螃蟹视图
         };
+        this.animationCanstart = false;// 用户页面已经切换走的动画是否开始判断
     }
 
     delayEmitter () {
+        this.animationCanstart = true;
         setAndroidTime(() => {
             this.startLottie = DeviceEventEmitter.addListener('startLottie', () => {
                 this._homeStart();
@@ -65,7 +63,7 @@ export default class HomePage extends Component {
             this.stopLottie = DeviceEventEmitter.addListener('stopLottie', () => {
                 this._homeStop();
             });
-        }, 1000);
+        }, HomeDelayMonitorTime);
     }
 
     componentDidMount () {
@@ -73,15 +71,15 @@ export default class HomePage extends Component {
         this._homeStart();
     }
 
-    _getPosition () {
+    _getPosition (callback) {
         try {
+            this._homeStop();
             this.gameHeader && (() => {
                 this.setState({
                     gameHeaderPosition: this.gameHeader.getPosition()
                 }, () => {
-                    this.lottie && this.lottie.play();
-                    this.shiftView && this.shiftView.start();
-                    this.lamp && this.lamp.start();
+                    this._animationStart();
+                    callback && callback();
                 });
             })();
         } catch (e) {
@@ -90,12 +88,19 @@ export default class HomePage extends Component {
     }
 
     _homeStart () {
-        this._homeStop();
         setAndroidTime(() => {
-            this._getPosition();
-            updateUser();
-            updateNextRedLevel();
-        }, 1000);
+            if (this.animationCanstart) {
+                this._getPosition();
+                updateUser();
+                updateNextRedLevel();
+            }
+        }, HomeStartAnimationTime);
+    }
+
+    _animationStart () {
+        this.lottie && this.lottie.play();
+        this.shiftView && this.shiftView.start();
+        this.lamp && this.lamp.start();
     }
 
     _homeStop () {
@@ -109,6 +114,7 @@ export default class HomePage extends Component {
         this._homeStop();
         this.startLottie && this.startLottie.remove();
         this.stopLottie && this.stopLottie.remove();
+        this.animationCanstart = false;
     }
 
     _renderHomeProcess () {
@@ -140,7 +146,7 @@ export default class HomePage extends Component {
             avatarProLevelPosition.forEach((item, index) => {
                 if (myForwardNumber === index) {
                     view.push(
-                        <ImageAuto key={`avatar${index}`} source={getPath(['avatar'], this.state.user)} style={[css.pa, {
+                        <ImageAuto key={`avatar${getPath(['avatar'], this.state.user)}`} source={getPath(['avatar'], this.state.user)} style={[css.pa, {
                             left: item[0],
                             top: item[1],
                             width: 33,
@@ -163,17 +169,17 @@ export default class HomePage extends Component {
                 return (
                     <SafeAreaProvider>
                         <ImageBackground source={game41} style={[css.flex, css.pr, css.cover, css.afs]}>
-                            <LottieView ref={ref => this.lottie = ref} key={myGradeConfig.wholeLottie} renderMode={'HARDWARE'}
+                            <LottieView ref={ref => this.lottie = ref} key={`lottie${myGradeConfig.wholeLottie}${getPath(['phone'], this.state.user, 0)}`} renderMode={'HARDWARE'}
                                 style={{ width: width, height: 'auto' }} imageAssetsFolder={myGradeConfig.wholeLottie} source={myGradeConfig.whole}
                                 loop={true} autoPlay={false} speed={1}/>
                             <View style={[css.pa, css.cover]}>
                                 {/* eslint-disable-next-line no-return-assign */}
-                                {_if(this.state.gameHeaderPosition, res => <ShiftView callback={() => {
+                                {_if(this.state.gameHeaderPosition, res => <ShiftView key={`ShiftView1${JSON.stringify(this.state.gameHeaderPosition)}`} callback={() => {
                                     this.gameHeader && this.gameHeader.start();
                                 }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={1300} startSite={[width * 0.25, width * 0.55]} endSite={res[1]}>
                                     <ImageAuto source={game22} width={33}/>
                                 </ShiftView>)}
-                                {_if(this.state.gameHeaderPosition && this.state.accuracyImagePosition, res => <ShiftView callback={() => {
+                                {_if(this.state.gameHeaderPosition && this.state.accuracyImagePosition, res => <ShiftView key={`ShiftView1${JSON.stringify(this.state.gameHeaderPosition)}${JSON.stringify(this.state.accuracyImagePosition)}`} callback={() => {
                                     N.navigate('GamePage');
                                 }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} startSite={this.state.gameHeaderPosition[0]} endSite={this.state.accuracyImagePosition}>
                                     <ImageAuto source={game25} width={33}/>
@@ -210,7 +216,7 @@ export default class HomePage extends Component {
                                     {/* 主页进度显示 */}
                                     <View style={[styles.progressWrap, css.pr]}>
                                         {this._renderHomeProcess()}
-                                        <ImageAuto source={nextGradeConfig.ship} style={[css.pa, {
+                                        <ImageAuto key={`ship${JSON.stringify(nextGradeConfig.ship)}`} source={nextGradeConfig.ship} style={[css.pa, {
                                             width: 80,
                                             right: 0,
                                             bottom: 0,
@@ -230,11 +236,16 @@ export default class HomePage extends Component {
                                         <ImageBackground source={game1} style={[css.flex, styles.homeBtnWrap]}>
                                             <Text style={styles.homeBtnText}>升渔船</Text>
                                             <ImageAuto source={game7} style={{ width: 33, marginLeft: 10 }} onLayout={(e) => {
-                                                UIManager.measure(e.target, (x, y, w, h, l, t) => {
-                                                    this.setState({
-                                                        accuracyImagePosition: [l, t]
+                                                const target = e.target;
+                                                setAndroidTime(() => {
+                                                    UIManager.measure(target, (x, y, w, h, l, t) => {
+                                                        if (l && t) {
+                                                            this.setState({
+                                                                accuracyImagePosition: [l, t]
+                                                            });
+                                                        }
                                                     });
-                                                });
+                                                }, 600);
                                             }}/>
                                         </ImageBackground>
                                     </TouchableOpacity>

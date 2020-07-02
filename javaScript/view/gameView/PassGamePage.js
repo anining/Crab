@@ -70,6 +70,21 @@ export default class PassGamePage extends Component {
         }
     }
 
+    async getAward () {
+        try {
+            // 直接领取
+            const ret = await choseGetAward();
+            DeviceEventEmitter.emit('hidePop');
+            if (ret && !ret.error) {
+                const addBalance = getPath(['data', 'add_balance'], ret);
+                this.gameHeader && this.gameHeader.start(toGoldCoin(addBalance));
+                toast('领取成功');
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     _showPop () {
         if (this.paramsInfo && this.paramsInfo.rate <= 1) { // rate 小于等于1是普通宝箱
             DeviceEventEmitter.emit('showPop', <View
@@ -91,40 +106,40 @@ export default class PassGamePage extends Component {
             </View>);
         }
         if (this.paramsInfo && this.paramsInfo.rate > 1) {
-            DeviceEventEmitter.emit('showPop', <ImageBackground source={game17} style={[styles.gameRedPackage, css.flex, css.pr]}>
-                <Text style={styles.hdnRedPackageText}>+{transformMoney(this.paramsInfo.add_balance)}<Text style={{ fontSize: 15 }}>金币</Text></Text>
-                <View style={styles.hdnRedBtnWrap}>
-                    <Text style={styles.hdnRedBtnText} onPress={async () => {
-                        // 双倍领取
-                        const ret = await choseGetAward(true);
-                        DeviceEventEmitter.emit('hidePop');
-                        if (ret && !ret.error) {
-                            N.navigate('AnswerPage');
-                            toast('完成任务后即可领取双倍奖励');
-                        }
-                    }}/>
-                    <Text style={styles.hdnRedBtnText} onPress={async () => {
-                        // 直接领取
-                        const ret = await choseGetAward();
-                        DeviceEventEmitter.emit('hidePop');
-                        if (ret && !ret.error) {
-                            const addBalance = getPath(['data', 'add_balance'], ret);
-                            this.gameHeader && this.gameHeader.start(toGoldCoin(addBalance));
-                            toast('领取成功');
-                        }
-                    }}/>
-                </View>
-            </ImageBackground>);
+            DeviceEventEmitter.emit('showPop', {
+                dom: <ImageBackground source={game17} style={[styles.gameRedPackage, css.flex, css.pr]}>
+                    <Text style={styles.hdnRedPackageText}>+{transformMoney(this.paramsInfo.add_balance)}<Text style={{ fontSize: 15 }}>金币</Text></Text>
+                    <View style={styles.hdnRedBtnWrap}>
+                        <Text style={styles.hdnRedBtnText} onPress={async () => {
+                            // 双倍领取
+                            const ret = await choseGetAward(true);
+                            DeviceEventEmitter.emit('hidePop');
+                            if (ret && !ret.error) {
+                                N.navigate('AnswerPage');
+                                toast('完成任务后即可领取双倍奖励');
+                            }
+                        }}/>
+                        <Text style={styles.hdnRedBtnText} onPress={async () => {
+                            await this.getAward();
+                        }}/>
+                    </View>
+                </ImageBackground>,
+                close: async () => {
+                    // await this.getAward();
+                    this._isUpgrade();// 这个弹窗完以后，判断是否升级
+                }
+            });
         }
     }
 
     _isUpgrade () {
         try {
-            const myNowLevel = getPath(['user_level', 'level_num'], this.state.user, 1);
+            const myNowLevel = this.paramsInfo.userLevel;
             const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
             for (let i = 0; i < this.state.gradeRange.length; i++) {
                 const item = this.state.gradeRange[i];
-                if (item === myNowLevel) {
+                console.log(item, myNowLevel, '???????==', item === myNowLevel - 1, myNowLevel);
+                if (item === myNowLevel - 1) {
                     const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
                     const coinRate = getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting);
                     if (nextGradeConfig && coinRate) {
@@ -132,6 +147,7 @@ export default class PassGamePage extends Component {
                             DeviceEventEmitter.emit('hidePop');
                         }} btn={'知道啦'} content={
                             <View style={[css.flex, css.fw, css.pr]}>
+                                <Text style={[styles.lottieUpgradeText, { fontSize: 20 }]}>恭喜你的渔船升级啦!</Text>
                                 <LottieView key={nextGradeConfig.lottie} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={nextGradeConfig.lottie} source={nextGradeConfig.upgrade} loop={false} autoPlay={true} speed={1}/>
                                 <Text style={[css.pa, styles.lottieUpgradeText]}>当前金币产量<Text style={{ color: '#F9D200' }}>{coinRate}</Text></Text>
                             </View>
@@ -141,7 +157,7 @@ export default class PassGamePage extends Component {
                 }
             }
             updateUser();
-            updateNextRedLevel();
+            // updateNextRedLevel();
         } catch (e) {
             console.log(e);
         }
@@ -149,7 +165,7 @@ export default class PassGamePage extends Component {
 
     async componentDidMount () {
         this._showPop();
-        updateNextRedLevel();
+        // updateNextRedLevel();
         // _isUpgrade 是否升级判断完成后才更新用户信息
     }
 
@@ -189,7 +205,7 @@ export default class PassGamePage extends Component {
                     break;
                 }
             }
-            return retNumber;
+            return retNumber - now;
         } catch (e) {
             console.log(e);
         }
