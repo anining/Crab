@@ -15,7 +15,7 @@ import task16 from '../../assets/icon/task/task16.png';
 import Upload from '../../components/Upload';
 import { N } from '../../utils/router';
 import { activityDetail, getTask, giveUp, taskReceiveDetail, taskSubmit } from '../../utils/api';
-import { djangoTime, getUrl, requestPermission, transformMoney } from '../../utils/util';
+import { djangoTime, getUrl, requestPermission, saveBase64ImageToCameraRoll, transformMoney } from '../../utils/util';
 import { captureRef } from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
 import Choice from '../../components/Choice';
@@ -360,21 +360,28 @@ function RenderView ({ name, inputName, length, index, setImages, setProgress, p
     const [view, setView] = useState();
 
     function save () {
-        requestPermission(() => {
+        try {
             if (view) {
-                captureRef(view, {
-                    format: 'jpg',
-                    quality: 1.0,
-                }).then(
-                    uri => {
-                        CameraRoll.saveToCameraRoll(uri)
-                            .then(() => toast('保存成功,请到相册查看'))
-                            .catch(() => toast('保存失败'));
-                    },
-                    () => () => toast('保存失败'),
-                );
+                requestPermission(() => {
+                    captureRef(view, {
+                        format: 'jpg',
+                        quality: 1.0,
+                        result: 'base64'
+                    }).then(
+                        uri => {
+                            saveBase64ImageToCameraRoll(uri, () => toast('保存成功,请到相册查看!'), () => toast('保存失败!'));
+                        },
+                        () => {
+                            toast('保存失败!');
+                        },
+                    );
+                }, () => {
+                    toast('保存失败!');
+                });
             }
-        }).then(r => console.log(r));
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     if (name === 'task') {
