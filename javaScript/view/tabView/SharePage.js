@@ -46,27 +46,37 @@ export default class SharePage extends PureComponent {
     constructor (props) {
         super(props);
         this.state = {
-            detailInfo: null
+            detailInfo: null,
+            rebate: [0, 0], // 返佣比例
         };
     }
 
     async _awardDetail () {
         const ret = await awardDetail();
         if (ret && !ret.error) {
-            this.setState({ detailInfo: ret.data });
+            const { promote_level = [], valid_children } = ret.data;
+            const { rebate } = this.state;
+            promote_level.forEach(level => {
+                const { need_children_num, first_rebate, second_rebate } = level;
+                if (Number(valid_children) >= Number(need_children_num)) {
+                    rebate[0] = first_rebate;
+                    rebate[1] = second_rebate;
+                }
+            });
+            this.setState({ detailInfo: ret.data, rebate });
         }
     }
 
     async getReward () {
         const ret = await getChildAward();
         if (ret && !ret.error) {
-            const { add_balance, num = 'xxx' } = ret.data;
+            const { add_balance = 0, children_num = 0 } = ret.data;
             DeviceEventEmitter.emit('showPop', {
                 dom:
                   <View style={styles.popContainer}>
                       <Image source={share9} style={styles.popImage}/>
                       <Text style={[{ fontSize: 15, color: '#353535', fontWeight: '500', transform: [{ translateY: -40 }] }]}>您真的太棒了！</Text>
-                      <Text style={[{ fontSize: 13, color: '#353535', fontWeight: '500', transform: [{ translateY: -30 }] }]}>您又有 <Text style={[{ color: '#FF3B00' }]}>{num} 位</Text> 徒弟一共为你贡献了</Text>
+                      <Text style={[{ fontSize: 13, color: '#353535', fontWeight: '500', transform: [{ translateY: -30 }] }]}>您又有 <Text style={[{ color: '#FF3B00' }]}>{children_num} 位</Text> 徒弟一共为你贡献了</Text>
                       <Text style={[{ fontSize: 36, color: '#FF6C00', fontWeight: '800', transform: [{ translateY: -20 }] }]}>{add_balance}<Text style={[{ fontSize: 18 }]}>元</Text></Text>
                       <TouchableOpacity onPress={() => {
                           DeviceEventEmitter.emit('hidePop');
@@ -179,6 +189,7 @@ export default class SharePage extends PureComponent {
     }
 
     render () {
+        const { rebate } = this.state;
         return (
             <SafeAreaView style={css.safeAreaView}>
                 <ScrollView style={styles.scrollWrap}>
@@ -214,9 +225,9 @@ export default class SharePage extends PureComponent {
                                     N.navigate('PupilInfoPage');
                                 }}>
                                 <Text numberOfLines={1} style={styles.shareInfoTips}>
-                                    当前提现返佣：徒弟提现反10%，徒孙提现反5%
+                                    当前提现返佣：徒弟提现返{Number.parseInt(rebate[0] * 100)}%，徒孙提现返{Number.parseInt(rebate[1] * 100)}%
                                 </Text>
-                                <Text style={styles.tipsBtn}>师徒信息(26)</Text>
+                                <Text style={styles.tipsBtn}>师徒信息</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={[styles.welfareWrap, css.auto, css.flex, css.fw]}>
@@ -230,7 +241,7 @@ export default class SharePage extends PureComponent {
                                         paddingTop: 30,
                                         paddingHorizontal: 10,
                                     }]}>
-                                        {SharePage._renderShareTitle(<Text style={styles.wTitleText}>徒弟提现送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>, <TouchableOpacity onPress={this.getReward}><Text style={{ fontSize: 11, color: 'rgba(255,92,34,1)' }}>领取奖励(11)</Text></TouchableOpacity>)}
+                                        {SharePage._renderShareTitle(<Text style={styles.wTitleText}>徒弟提现送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>, <TouchableOpacity onPress={this.getReward}><Text style={{ fontSize: 11, color: 'rgba(255,92,34,1)', paddingRight: 15 }}>领取奖励</Text></TouchableOpacity>)}
                                         {this._renderCashBack()}
                                     </View>
                                 </Shadow>
