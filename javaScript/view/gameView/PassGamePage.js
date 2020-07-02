@@ -177,7 +177,7 @@ export default class PassGamePage extends Component {
                 const view = [];
                 this.paramsInfo.content.forEach((item, index) => {
                     view.push(
-                        <TouchableOpacity activeOpacity={1} key={`content${index}`} activeOpacity={1}
+                        <TouchableOpacity activeOpacity={1} key={`content${index}`}
                             style={[css.flex, styles.idiomItemWrap]} onPress={() => {
                                 DeviceEventEmitter.emit('showPop', <GameDialog callback={async () => {
                                     await PassGamePage._addNoteBook(item);
@@ -245,7 +245,7 @@ export default class PassGamePage extends Component {
                             view.push(
                                 <ImageAuto key={`${item}${forwardNumber}`} style={[css.pa, styles.redImage, {
                                     left: forwardNumber * 100 + '%',
-                                    transform: forwardNumber ? [{ translateX: -15 }] : [{ translateX: 0 }]
+                                    transform: (forwardNumber) ? (forwardNumber < 0.9) ? [{ translateX: -15 }] : [{ translateX: -30 }] : [{ translateX: 0 }]
                                 }]} source={game16} />
                             );
                         });
