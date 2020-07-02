@@ -1,17 +1,19 @@
 import React from 'react';
-import { Dimensions, SafeAreaView } from 'react-native';
+import { Dimensions, SafeAreaView, ScrollView } from 'react-native';
 import { css } from '../../assets/style/css';
-import { getter } from '../../utils/store';
 import HTML from 'react-native-render-html';
+import { PRIVACY } from '../../utils/data';
 
 const { width } = Dimensions.get('window');
 
-export default function PrivacyPolicyPage () {
-    const { privacy } = getter(['app.privacy']);
-
+function PrivacyPolicyPage () {
     return (
         <SafeAreaView style={[css.safeAreaView, css.RichText]}>
-            <HTML html={privacy.get()} imagesMaxWidth={width} tagsStyles={{ p: { lineHeight: 24 } }}/>
+            <ScrollView>
+                <HTML html={PRIVACY} imagesMaxWidth={width} tagsStyles={{ p: { lineHeight: 24 } }}/>
+            </ScrollView>
         </SafeAreaView>
     );
 }
+
+export default PrivacyPolicyPage;
