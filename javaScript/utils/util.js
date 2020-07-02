@@ -401,6 +401,7 @@ export function _toFixed (number, num = 2) {
 
 export function rangeLevel (level, rangeArray) {
     try {
+        console.log(level, rangeArray, '========计算等级');
         let grade = 1;
         for (let i = 0; i < rangeArray.length; i++) {
             const item = rangeArray[i];
@@ -408,7 +409,11 @@ export function rangeLevel (level, rangeArray) {
                 grade = i + 1;
                 break;
             }
+            if ((i === rangeArray.length - 1) && (level >= item)) {
+                grade = i + 1;
+            }
         }
+        console.log(grade, '=======计算结果');
         return grade;
     } catch (e) {
         return 1;
