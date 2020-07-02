@@ -72,6 +72,7 @@ export default class SharePage extends PureComponent {
     async getReward () {
         const { awardLength } = this.state;
         if (!awardLength) {
+            toast('暂时没有奖励可以领取!');
             return;
         }
         const ret = await getChildAward();
