@@ -20,42 +20,33 @@ import { captureRef } from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
 import Choice from '../../components/Choice';
 import pop3 from '../../assets/icon/pop/pop3.png';
-import pop9 from '../../assets/icon/pop/pop9.png';
 import Header from '../../components/Header';
 import { getter, store } from '../../utils/store';
 import * as U from 'karet.util';
 import { useFocusEffect } from '@react-navigation/native';
 import { Down } from '../../components/Down';
-import { dyCrack } from '../../crack/dy';
 import toast from '../../utils/toast';
 import asyncStorage from '../../utils/asyncStorage';
 import { task } from '../../utils/update';
+import Button from '../../components/Button';
 
 const { user_id, today_pass_num, activityObj } = getter(['user.user_id', 'activityObj', 'user.today_pass_num']);
 const { width } = Dimensions.get('window');
 const MENU_STATUS = {
     1: {
         text: '提交任务',
-        color: '#fff',
-        backgroundColor: '#FF3E00',
-        disabled: true
+        color: '#fff'
     },
     4: {
         text: '审核中',
-        color: '#4F4F4F',
-        backgroundColor: '#ABABAB',
         disabled: false
     },
     5: {
         text: '已通过',
-        color: '#4F4F4F',
-        backgroundColor: '#ABABAB',
         disabled: false
     },
     6: {
         text: '未通过',
-        color: '#4F4F4F',
-        backgroundColor: '#ABABAB',
         disabled: false
     }
 };
@@ -468,9 +459,10 @@ function RenderImage ({ images, length, progress, setProgress, index, setImages,
 function Btn ({ images, sRef, setName, account, detail, setProgress, setImages, name, setChange, setDetail, setAccount }) {
     const { status, nickname, home_url, receive_task_id, platform_category } = detail;
 
-    function submit () {
+    function submit (callback) {
         const localImages = images.map(image => image.uri);
         if (!localImages.length || !(name || nickname)) {
+            callback();
             toast('请填写完整的名称和执行图!');
             return;
         }
@@ -484,74 +476,31 @@ function Btn ({ images, sRef, setName, account, detail, setProgress, setImages, 
                 // 缓存用于新手福利判断
                 asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
                 getTask(platform_category).then(r => {
+                    callback();
                     if (!r.error) {
                         toast('提交任务成功!自动继续下一个任务!');
                         taskReceiveDetail(r.data.receive_task_id).then(response => {
                             if (response.error) {
                                 N.goBack();
                             } else {
-                                const { data: detail } = response;
-                                const { home_url, platform_category } = detail;
-                                if (platform_category === 1) {
-                                    dyCrack(home_url).then(account => {
-                                        setDetail(detail);
-                                        setAccount(account.liked ? account : undefined);
-                                    });
-                                } else {
-                                    setDetail(detail);
-                                    setAccount(undefined);
-                                }
+                                setDetail(response.data);
+                                setAccount(undefined);
                             }
                         });
                     }
                 });
+            } else {
+                callback();
             }
         });
     }
 
-    function check () {
-        if (account) {
-            dyCrack(home_url).then(r => {
-                if (r) {
-                    const { focus, follower, liked, userTab, likeTab } = r;
-                    if (r.focus !== focus || r.follower !== follower || r.liked !== liked || r.userTab !== userTab || r.likeTab !== likeTab) {
-                        setChange(3);
-                        submit();
-                    }
-                } else {
-                    setChange(2);
-                    DeviceEventEmitter.emit('showPop', {
-                        dom: <Choice info={{
-                            icon: pop9,
-                            tips: '您的账号可能已经不健康',
-                            minTips: '提交的任务可能会不通过！建议更换账号做单,您可以重新打开链接复查做单结果!',
-                            rt: '更换账号',
-                            lt: '继续提交',
-                            rc: () => {
-                                N.navigate('AccountHomePage');
-                            },
-                            lc: () => {
-                                submit();
-                            },
-                        }} />,
-                        close: () => {}
-                    }
-                    );
-                }
-            });
-        } else {
-            submit();
-        }
-    }
-
     return (
-        <TouchableOpacity onPress={() => {
-            if (MENU_STATUS[status].disabled) {
-                check();
-            }
-        }} style={[styles.submitBtn, { backgroundColor: MENU_STATUS[status].backgroundColor }]}>
-            <Text style={[styles.submitBtnText, { color: MENU_STATUS[status].color }]}>{MENU_STATUS[status].text}</Text>
-        </TouchableOpacity>
+        <View style={styles.submitBtn}>
+            <Button name={MENU_STATUS[status].text} onPress={callback => {
+                submit(callback);
+            }} disable={MENU_STATUS[status].disabled}/>
+        </View>
     );
 }
 
@@ -639,10 +588,11 @@ const styles = StyleSheet.create({
         paddingTop: 5
     },
     submitBtn: {
-        borderRadius: 22,
-        height: 44,
-        marginBottom: 100,
-        marginTop: 20
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 15,
+        marginTop: 15,
+        width
     },
     submitBtnText: {
         fontSize: 17,

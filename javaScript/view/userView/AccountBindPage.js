@@ -8,6 +8,7 @@ import { postAccount } from '../../utils/api';
 import toast from '../../utils/toast';
 import asyncStorage from '../../utils/asyncStorage';
 import { getter } from '../../utils/store';
+import { updateAccount } from '../../utils/update';
 
 const { user_id } = getter(['user.user_id']);
 const { taskPlatform } = getter(['taskPlatform']);
@@ -25,8 +26,11 @@ function AccountBindPage (props) {
             if (!r.error) {
                 // 缓存用于新手福利判断
                 asyncStorage.setItem(`NEW_USER_TASK_TYPE2${user_id.get()}`, 'true');
-                toast('操作成功!');
+                updateAccount();
+                toast('绑定操作成功!');
                 N.goBack();
+            } else {
+                console.log(r);
             }
         });
     }
@@ -91,9 +95,9 @@ function RenderConfig ({ id }) {
             <View style={styles.claimView}>
                 <Image source={bind1} style={{ height: 17, width: 17, marginRight: 5 }} />
                 <Text numberOfLines={1} style={{ color: '#999' }}>等级{config[0]}要求：
-                    <Text style={{ color: '#353535' }}>作品数<Text style={{ color: '#FF6C00' }}> {works} </Text>个、</Text>
-                    <Text style={{ color: '#353535' }}>粉丝数<Text style={{ color: '#FF6C00' }}> {fans} </Text>个、</Text>
-                    <Text style={{ color: '#353535' }}>动态数<Text style={{ color: '#FF6C00' }}> {trends} </Text>个</Text>
+                    <Text style={{ color: '#353535', fontSize: 13 }}>作品<Text style={{ color: '#FF6C00' }}> {works} </Text>个、</Text>
+                    <Text style={{ color: '#353535', fontSize: 13 }}>粉丝<Text style={{ color: '#FF6C00' }}> {fans} </Text>个、</Text>
+                    <Text style={{ color: '#353535', fontSize: 13 }}>动态<Text style={{ color: '#FF6C00' }}> {trends} </Text>个</Text>
                 </Text>
             </View>
         );
@@ -133,7 +137,7 @@ const styles = StyleSheet.create({
     claimView: {
         alignItems: 'center',
         flexDirection: 'row',
-        height: 50,
+        height: 35,
         paddingLeft: 15,
         paddingRight: 15
     },
