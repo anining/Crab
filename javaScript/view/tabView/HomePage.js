@@ -172,6 +172,8 @@ export default class HomePage extends Component {
                 const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
                 const myGradeConfig = getGradeConfig(myGradeLevel);
                 const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
+                const position = this.state.gameHeaderPosition;
+                const accuracyPosition = this.state.accuracyImagePosition;
                 return (
                     <SafeAreaProvider>
                         <ImageBackground source={game41} style={[css.flex, css.pr, css.cover, css.afs]}>
@@ -180,14 +182,14 @@ export default class HomePage extends Component {
                                 loop={true} autoPlay={false} speed={1}/>
                             <View style={[css.pa, css.cover]}>
                                 {/* eslint-disable-next-line no-return-assign */}
-                                {_if(this.state.gameHeaderPosition, res => <ShiftView key={`ShiftView1${JSON.stringify(this.state.gameHeaderPosition)}`} callback={() => {
+                                {_if(position && position[1] && position[1][0], res => <ShiftView key={`ShiftView1${JSON.stringify(position)}`} callback={() => {
                                     this.gameHeader && this.gameHeader.start();
-                                }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={1500} startSite={[width * 0.25, width * 0.55]} endSite={res[1]}>
+                                }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={1500} startSite={[width * 0.25, width * 0.55]} endSite={position[1]}>
                                     <ImageAuto source={game22} width={33}/>
                                 </ShiftView>)}
-                                {_if(this.state.gameHeaderPosition && this.state.accuracyImagePosition, res => <ShiftView key={`ShiftView1${JSON.stringify(this.state.gameHeaderPosition)}${JSON.stringify(this.state.accuracyImagePosition)}`} callback={() => {
+                                {_if(position && accuracyPosition, res => <ShiftView key={`ShiftView1${JSON.stringify(position)}${JSON.stringify(accuracyPosition)}`} callback={() => {
                                     N.navigate('GamePage');
-                                }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} startSite={this.state.gameHeaderPosition[0]} endSite={this.state.accuracyImagePosition}>
+                                }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} startSite={position[0]} endSite={accuracyPosition}>
                                     <ImageAuto source={game25} width={33}/>
                                 </ShiftView>)}
                                 {/* /!* 头部显示区域 *!/ */}
