@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { SafeAreaView, Image, Linking, Text, Dimensions, View, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, TextInput, DeviceEventEmitter } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, Image, Linking, Text, BackHandler, Dimensions, View, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, TextInput, DeviceEventEmitter } from 'react-native';
 import { css } from '../../assets/style/css';
 import task4 from '../../assets/icon/task/task4.png';
 import task5 from '../../assets/icon/task/task5.png';
@@ -62,7 +62,7 @@ function TaskDetailPage (props) {
     const [num, setNum] = useState(0);
     const [change, setChange] = useState(1);
 
-    useFocusEffect(() => {
+    useEffect(() => {
         try {
             activityDetail(activityObj.get()[1].activity_id).then(r => {
                 if (!r.error) {
@@ -75,6 +75,17 @@ function TaskDetailPage (props) {
             console.log(e);
         }
     }, []);
+
+    useFocusEffect(() => {
+        const onBackPress = () => {
+            if (detail.status === 1) {
+                backClick();
+                return true;
+            }
+        };
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+        return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    });
 
     function format (rule, logs) {
         let level = 0;
