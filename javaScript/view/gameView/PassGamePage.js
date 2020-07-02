@@ -34,14 +34,16 @@ import { _toFixed, toGoldCoin, transformMoney } from '../../utils/util';
 import ShiftView from '../../components/ShiftView';
 import game20 from '../../assets/icon/game/game20.png';
 import IdiomCard from '../../components/IdiomCard';
-import { addNoteBook, nextRedLevel } from '../../utils/api';
+import { addNoteBook, choseGetAward } from '../../utils/api';
 import toast from '../../utils/toast';
 import * as U from 'karet.util';
 import GameHeader from '../../components/GameHeader';
-import { updateUser } from '../../utils/update';
+import { updateNextRedLevel, updateUser } from '../../utils/update';
+import { bindData, getPath } from '../../global/global';
+import { avatarProLevelPosition, getGradeConfig, homeProLevelPosition } from '../../utils/levelConfig';
 
 const { height, width } = Dimensions.get('window');
-const { level_num: userLevel } = getter(['user.user_level.level_num']);
+// const { level_num: userLevel } = getter(['user.user_level.level_num']);
 // const trCorrectRate = U.mapValue((res) => {
 //     return _toFixed(res * 100) + '%';
 // }, correctRate);
@@ -49,8 +51,14 @@ export default class PassGamePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
         super(props);
-        this.state = {};
-        // this.correct_rate = getter(['user.correct_rate']).correct_rate;
+        this.state = {
+            user: bindData('user', this),
+            gradeSetting: bindData('gradeSetting', this),
+            nextRedLevel: bindData('nextRedLevel', this),
+            gradeRange: bindData('gradeRange', this),
+            gameHeaderPosition: null, // 头部图像视图
+            accuracyImagePosition: null // 答题按钮螃蟹视图
+        };
         this.paramsInfo = this.props.route.params.info;
     }
 
@@ -71,6 +79,7 @@ export default class PassGamePage extends Component {
                     loop={false} autoPlay={true} speed={1} onAnimationFinish={() => {
                         DeviceEventEmitter.emit('hidePop');
                         this.gameHeader && this.gameHeader.start(toGoldCoin(this.paramsInfo.add_balance));
+                        this._isUpgrade();// 这个弹窗完以后，判断是否升级
                     }}/>
                 <View style={[styles.passDataNumber, css.flex, css.auto, css.pa, {
                     top: width * 0.8 - 50,
@@ -82,24 +91,66 @@ export default class PassGamePage extends Component {
             </View>);
         }
         if (this.paramsInfo && this.paramsInfo.rate > 1) {
-            DeviceEventEmitter.emit('showPop', <ImageBackground source={game17} style={[styles.gameRedPackage, css.flex]}>
+            DeviceEventEmitter.emit('showPop', <ImageBackground source={game17} style={[styles.gameRedPackage, css.flex, css.pr]}>
                 <Text style={styles.hdnRedPackageText}>+{transformMoney(this.paramsInfo.add_balance)}<Text style={{ fontSize: 15 }}>金币</Text></Text>
+                <View style={styles.hdnRedBtnWrap}>
+                    <Text style={styles.hdnRedBtnText} onPress={async () => {
+                        // 双倍领取
+                        const ret = await choseGetAward(true);
+                        DeviceEventEmitter.emit('hidePop');
+                        if (ret && !ret.error) {
+                            N.navigate('AnswerPage');
+                            toast('完成任务后即可领取双倍奖励');
+                        }
+                    }}/>
+                    <Text style={styles.hdnRedBtnText} onPress={async () => {
+                        // 直接领取
+                        const ret = await choseGetAward();
+                        DeviceEventEmitter.emit('hidePop');
+                        if (ret && !ret.error) {
+                            const addBalance = getPath(['data', 'add_balance'], ret);
+                            this.gameHeader && this.gameHeader.start(toGoldCoin(addBalance));
+                            toast('领取成功');
+                        }
+                    }}/>
+                </View>
             </ImageBackground>);
         }
     }
 
-    async componentDidMount () {
-        console.log(this);
-        this._showPop();
-        updateUser();
-        await this._nextRedLevel();
+    _isUpgrade () {
+        try {
+            const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
+            const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
+            for (let i = 0; i < this.state.gradeRange.length; i++) {
+                const item = this.state.gradeRange[i];
+                if (item === (myNowLevel + 1)) {
+                    const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
+                    const coinRate = getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting);
+                    if (nextGradeConfig && coinRate) {
+                        DeviceEventEmitter.emit('showPop', <GameDialog transparent={true} callback={() => {
+                            DeviceEventEmitter.emit('hidePop');
+                        }} btn={'知道啦'} content={
+                            <View style={[css.flex, css.fw, css.pr]}>
+                                <LottieView key={nextGradeConfig.lottie} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={nextGradeConfig.lottie} source={nextGradeConfig.upgrade} loop={false} autoPlay={true} speed={1}/>
+                                <Text style={[css.pa, styles.lottieUpgradeText]}>当前金币产量<Text style={{ color: '#F9D200' }}>{coinRate}</Text></Text>
+                            </View>
+                        }/>);
+                    }
+                    break;
+                }
+            }
+            updateUser();
+            updateNextRedLevel();
+        } catch (e) {
+            console.log(e);
+        }
     }
 
-    async _nextRedLevel () {
-        const ret = await nextRedLevel();
-        if (ret && !ret.error) {
-            console.log(ret, '??====');
-        }
+    async componentDidMount () {
+        this._showPop();
+        updateNextRedLevel();
+        // _isUpgrade 是否升级判断完成后才更新用户信息
     }
 
     _renderIdiomList () {
@@ -111,8 +162,6 @@ export default class PassGamePage extends Component {
                         <TouchableOpacity key={`content${index}`} activeOpacity={1}
                             style={[css.flex, styles.idiomItemWrap]} onPress={() => {
                                 DeviceEventEmitter.emit('showPop', <GameDialog callback={async () => {
-                                    // N.navigate('AnswerPage');
-                                    console.log(item);
                                     await PassGamePage._addNoteBook(item);
                                 }} btn={'加入生词本'} content={<IdiomCard content={item} idiom={this.paramsInfo.idioms[item][0]}/>}/>);
                             }}>
@@ -124,6 +173,69 @@ export default class PassGamePage extends Component {
                 return view;
             }
         } catch (e) {
+            return null;
+        }
+    }
+
+    static _countNextLevel (now, array) {
+        try {
+            let ret = 0;
+            for (let i = 0; i < array.length; i++) {
+                const item = array[i];
+                console.log(item, 'dsadsa???', now, item > now);
+                if (item > now) {
+                    ret = item;
+                    console.log(ret);
+                    break;
+                }
+            }
+            return ret;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    _renderProgress () {
+        try {
+            console.log(this.state.nextRedLevel, '????', this.state.user);
+            if (this.state.nextRedLevel && this.state.nextRedLevel.length) {
+                const preLevel = getPath([getPath(['myGradeLevel'], this.state.user) - 1, 'level'], this.state.gradeSetting) || 0;
+                const nexLevel = getPath(['myGrade', 'level'], this.state.user);
+                const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
+                const levelLength = nexLevel - preLevel;
+                const progressInnerLength = Number((myNowLevel - preLevel) / levelLength);
+                console.log(myNowLevel, this.state.nextRedLevel, '????');
+                return <View style={[css.flex, css.fw, styles.progressWrap, css.pr]}>
+                    {(() => {
+                        const view = [];
+                        this.state.nextRedLevel.splice(0, 2).forEach((item, index) => {
+                            const forwardNumber = Math.floor((item - preLevel) / levelLength);
+                            view.push(
+                                <ImageAuto style={[css.pa, styles.redImage, {
+                                    left: forwardNumber * 100 + '%'
+                                }]} source={game16} key={`red${index}`}/>
+                            );
+                        });
+                        return view;
+                    })()}
+                    <View style={[css.flex, styles.progressBox, css.js]}>
+                        <View style={[css.flex, styles.progressInner, {
+                            width: progressInnerLength * 100 + '%'
+                        }]}/>
+                    </View>
+                    <View style={{ height: 20, width: '100%' }}/>
+                    <Text style={[styles.gamePassTips, css.gf, { fontSize: 15 }]}>再闯关<Text
+                        style={{ fontSize: 17, color: 'red' }}>{PassGamePage._countNextLevel(myNowLevel, this.state.nextRedLevel)}</Text>关领红包</Text>
+                </View>;
+            } else {
+                return <View style={[css.flex, css.fw, styles.progressWrap, {
+                    height: 50
+                }]}>
+                    <Text style={styles.noRedText}>更多红包在后面关卡等你拿～</Text>
+                </View>;
+            }
+        } catch (e) {
+            console.log(e);
             return null;
         }
     }
@@ -143,25 +255,16 @@ export default class PassGamePage extends Component {
                     {/* 核心显示区域 */}
                     <View style={[styles.gameResWrap, css.pr]}>
                         <ImageBackground source={game4} style={[css.flex, css.pa, styles.gamePassHeader]}>
-                            <Text style={styles.gamePassText} numberOfLines={1} karet-lift>恭喜通过第{userLevel}关</Text>
+                            <Text style={styles.gamePassText} numberOfLines={1} karet-lift>恭喜通过第{getPath(['userLevel'], this.paramsInfo, 0)}关</Text>
                         </ImageBackground>
                         <View style={[styles.gameCanvasWrap]}>
                             <View style={[styles.gameCanvasInner, css.flex, css.fw, css.afs]}>
                                 <Text style={[styles.gamePassTips, css.gf]}>您已超越<Text
-                                    style={{ fontSize: 20, color: 'red' }}>43.82%</Text>用户</Text>
+                                    style={{ fontSize: 20, color: 'red' }}>{_toFixed(getPath(['surpass'], this.state.user, 0) * 100) + '%'}</Text>用户</Text>
                                 <View style={[css.flex, css.fw, styles.idiomWrap, css.afs, css.js]}>
                                     {this._renderIdiomList()}
                                 </View>
-                                <View style={[css.flex, css.fw, styles.progressWrap, css.pr]}>
-                                    <ImageAuto style={[css.pa, styles.redImage]} source={game16}/>
-                                    <ImageAuto style={[css.pa, styles.redImage, { left: 100 }]} source={game16}/>
-                                    <View style={[css.flex, styles.progressBox, css.js]}>
-                                        <View style={[css.flex, styles.progressInner]}/>
-                                    </View>
-                                    <View style={{ height: 20, width: '100%' }}/>
-                                    <Text style={[styles.gamePassTips, css.gf, { fontSize: 15 }]}>再闯关<Text
-                                        style={{ fontSize: 17, color: 'red' }}>10</Text>关领红包</Text>
-                                </View>
+                                {this._renderProgress()}
                                 <View style={[css.flex, css.sp, styles.nextBtnWrap]}>
                                     <TouchableOpacity activeOpacity={1} onPress={() => {
                                         N.goBack();
@@ -187,6 +290,17 @@ export default class PassGamePage extends Component {
     }
 }
 const styles = StyleSheet.create({
+    dialogIcons: {
+        height: width * 0.75 * 291 / 831,
+        paddingBottom: width * 0.1,
+        width: width * 0.75,
+        ...css.flex
+    },
+    dialogIconsText: {
+        ...css.gf,
+        color: '#fff',
+        fontSize: 24
+    },
     gameCanvasInner: {
         backgroundColor: '#FFF7A9',
         borderRadius: 10,
@@ -197,8 +311,6 @@ const styles = StyleSheet.create({
     },
     gameCanvasWrap: {
         backgroundColor: '#FFDF7A',
-        height: width * 1.2,
-        minHeight: 500,
         width: width - 20,
         ...css.auto,
         borderRadius: 10,
@@ -222,14 +334,28 @@ const styles = StyleSheet.create({
         fontSize: 17,
     },
     gameRedPackage: {
-        height: width * 0.8 * 1173 / 885,
+        height: width * 0.73 * 1173 / 885,
         paddingTop: 20,
-        width: width * 0.8
+        width: width * 0.73
     },
     gameResWrap: {
         marginTop: HEADER_HEIGHT,
         paddingTop: width * 0.2,
         width
+    },
+    hdnRedBtnText: {
+        // backgroundColor: 'rgba(0,0,0,.1)',
+        height: '50%',
+        width: '100%'
+    },
+    hdnRedBtnWrap: {
+        ...css.flex,
+        ...css.fw,
+        ...css.pa,
+        // backgroundColor: 'rgba(0,0,0,.1)',
+        bottom: 0,
+        height: width * 0.34,
+        width: '100%'
     },
     hdnRedPackageText: {
         color: '#F5E385',
@@ -291,10 +417,21 @@ const styles = StyleSheet.create({
     lineIdiom: {
         fontSize: 15,
     },
+    lottieUpgradeText: {
+        color: '#fff',
+        fontSize: 14,
+        ...css.gf,
+        bottom: 10
+    },
     nextBtnWrap: {
         height: 100,
         overflow: 'hidden',
         width: '77%',
+    },
+    noRedText: {
+        color: 'red',
+        fontSize: 16,
+        ...css.gf
     },
     passDataNumber: {
         backgroundColor: 'rgba(0,0,0,.5)',

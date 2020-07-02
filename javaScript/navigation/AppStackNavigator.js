@@ -255,7 +255,7 @@ function setStatusBar () {
 }
 
 export function initNetInfo () {
-    return Promise.all([updateUser(), updateAccount(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome(), updateNextRedLevel()]);
+    return Promise.all([updateAccount(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome(), updateNextRedLevel()]);
 }
 
 function AppStackNavigator () {
@@ -275,10 +275,10 @@ function AppStackNavigator () {
             .then(response => {
                 asyncStorage.multiGet(response.filter(x => !new RegExp('[0-9]').test(x))) // 去除含有数字的key值
                     .then(async r => {
-                        console.log(r, '从本地缓存去除');
                         initializationStore(r);
                         if (r && r.length) {
-                            set();
+                            set(); // 先进入主页，后发起更新请求
+                            await initNetInfo();
                         } else {
                             const authorization = U.view(['authorization'], store).get();
                             if (authorization) {

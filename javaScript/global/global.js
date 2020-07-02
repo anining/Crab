@@ -107,14 +107,14 @@ export function setGlobalStorage (key, value, otherKey) {
     }
 }
 
-export function getPath (path, obj) {
+export function getPath (path, obj, defaultValue) {
     try {
         let ret = obj;
         path.forEach((keyName) => {
             ret = ret[keyName];
         });
-        return ret;
+        return ret || defaultValue;
     } catch (e) {
-        return null;
+        return defaultValue;
     }
 }

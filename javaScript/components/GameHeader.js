@@ -24,18 +24,26 @@ import game22 from '../assets/icon/game/game22.png';
 import { getter } from '../utils/store';
 import * as U from 'karet.util';
 import * as R from 'kefir.ramda';
-import { getSecondIncome } from '../utils/api';
 import { bindData, getPath } from '../global/global';
-import { _toFixed, setAndroidTime, toGoldCoin, transformMoney, unitConversion } from '../utils/util';
-import ShiftView from './ShiftView';
-
+import {
+    _if,
+    _toFixed,
+    djangoTime,
+    JsonParse,
+    setAndroidTime,
+    toGoldCoin,
+    transformMoney,
+    unitConversion,
+} from '../utils/util';
+import asyncStorage from '../utils/asyncStorage';
+import CountDown from './CountDown';
+import { updateUser } from '../utils/update';
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
-const { propNumsObj } = getter(['user.propNumsObj']);
-const gameProp = U.mapValue((res) => { return res || 0; }, R.path(['2'], propNumsObj)); // 获取游戏道具的数量
 let nowBalance = 0;
 const addFrequency = 10; // 动画快慢频率
+const propsTime = 60000 * 30.5; // 30.5 分钟
 export default class GameHeader extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
@@ -52,11 +60,20 @@ export default class GameHeader extends Component {
     async componentDidMount () {
         this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user));
         nowBalance = parseFloat(this.state.user.goldCoin || 0);
-        console.log(this.state.user, this.state.user.phone, '=========初始化、、======');
+        await this.getCoin();
         this.secondText && this.secondText.setNativeProps({
             text: `${_toFixed(nowBalance, 4)}`
         });
         this._start = true;
+    }
+
+    async getCoin () {
+        try {
+            const ret = await asyncStorage.getItem(`${getPath(['phone'], this.state.user)}coin`);
+            nowBalance = JsonParse(ret).coin || parseFloat(this.state.user.goldCoin || 0);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     componentWillUnmount () {
@@ -71,12 +88,16 @@ export default class GameHeader extends Component {
                 const minAddUnit = parseFloat(addIncome / addFrequency);
                 const baseNowBalance = nowBalance;
                 nowBalance += parseFloat(addIncome);
-                // console.log(minAddUnit, nowBalance, addIncome, '每秒加金币');
                 for (let i = 0; i < addFrequency; i++) {
                     setAndroidTime(() => {
                         if ((i + 1) === addFrequency) {
+                            // 最后一次加的时候存入内存
                             this.secondText && this.secondText.setNativeProps({
                                 text: `${_toFixed(nowBalance, 4)}`
+                            });
+                            asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
+                                coin: nowBalance,
+                                time: +new Date()
                             });
                         } else {
                             this.secondText && this.secondText.setNativeProps({
@@ -106,7 +127,13 @@ export default class GameHeader extends Component {
     }
 
     render () {
+        const propNumber = getPath(['propNumsObj', '2'], this.state.user, 0);// 游戏道具数量
         return <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
+            {_if(getPath(['last_get_game_prop_time'], this.state.user) && (propNumber < 10), res => {
+                return <CountDown callback={() => {
+                    updateUser();
+                }} style={styles.countDownText} viewStyle={{ ...css.pa, ...styles.countDownView }} time={+new Date(djangoTime(getPath(['last_get_game_prop_time'], this.state.user))) + propsTime}/>;
+            })}
             <TouchableOpacity karet-lift activeOpacity={1} style={[styles.headerDataNumber, css.flex, {
                 backgroundColor: this.props.backgroundColor
             }]}
@@ -119,8 +146,7 @@ export default class GameHeader extends Component {
                     });
                 }}/>
                 <View style={styles.hdnTextWrap}>
-                    <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }}
-                        karet-lift>{gameProp}</Text>/10</Text>
+                    <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }}>{propNumber}</Text>/10</Text>
                 </View>
                 <ImageAuto source={game31} width={22}/>
             </TouchableOpacity>
@@ -153,6 +179,15 @@ GameHeader.defaultProps = {
     backgroundColor: 'rgba(0,179,216,.5)'
 };
 const styles = StyleSheet.create({
+    countDownText: {
+        color: '#7d7d7d',
+        fontSize: 11
+    },
+    countDownView: {
+        bottom: -17,
+        fontSize: 10,
+        left: 50
+    },
     hdnText: {
         // backgroundColor: 'red',
         color: '#ffffff',
@@ -164,7 +199,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 6,
     },
     headerDataNumber: {
-        // backgroundColor: 'rgba(0,179,216,.5)',
         borderRadius: 15,
         height: 30,
         overflow: 'hidden',
@@ -172,13 +206,14 @@ const styles = StyleSheet.create({
         width: 120,
     },
     homeHeaderWrap: {
+        // backgroundColor: 'red',
         height: HEADER_HEIGHT,
         left: 0,
-        overflow: 'hidden',
+        // overflow: 'hidden',
         paddingHorizontal: 20,
         paddingTop: 35,
         top: 0,
-        width,
+        width
     },
     topHDN: {
         // backgroundColor: 'red',
