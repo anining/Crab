@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    View,
-    ImageBackground,
-    Dimensions,
-    TouchableOpacity,
-    ScrollView,
-    Image,
-    TextInput, DeviceEventEmitter,
-} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Clipboard, ImageBackground, Dimensions, TouchableOpacity, ScrollView, Image, TextInput, DeviceEventEmitter } from 'react-native';
 import { css } from '../../assets/style/css';
 import Header from '../../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
@@ -29,6 +18,8 @@ import { bindParent, childDetail } from '../../utils/api';
 import { transformTime } from '../../utils/util';
 import Choice from '../../components/Choice';
 import { getter } from '../../utils/store';
+import toast from '../../utils/toast';
+
 const { width } = Dimensions.get('window');
 const itemHeight = 135;
 const itemMarginTop = 10;
@@ -80,7 +71,7 @@ function PupilInfoPage () {
 function RenderChild ({ children }) {
     const view = [];
     children.forEach(item => {
-        const { today_income, total_income, children_num, avatar = 'http://wwww', total_task_num, created_at, nickname, user_id } = item;
+        const { today_income, total_income, children_num, avatar, total_task_num, created_at, nickname, user_id } = item;
         view.push(
             <View style={styles.itemContainer} key={user_id}>
                 <View style={[styles.containerT]}>
@@ -189,7 +180,7 @@ function ParentView ({ parent, _childDetail }) {
     }
 
     if (parent.invite_code) {
-        const { invite_code = 'xxx', avatar = 'xxx', nickname = 'xxx', qq_group = 'xxx', wx = 'xxx' } = parent;
+        const { invite_code, avatar, nickname, qq_group, wx } = parent;
         return (
             <ImageBackground source={pupil8} style={[styles.infoHeader, css.pa]}>
                 <RenderShareTitle title="我的师父" icon={pupil5}/>

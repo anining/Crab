@@ -246,28 +246,21 @@ function transformTime (time, start = 10, end = 11) {
     return `${time.slice(0, start)} ${time.slice(end, end + 8)}`;
 }
 
-async function requestPermission (success, fail) {
+function requestPermission (success, denied) {
     try {
         if (Platform.OS === 'ios') {
-            if (success) {
-                success();
-            }
+            success && success();
         } else {
-            const granted = await PermissionsAndroid.requestMultiple(
-                [
-                    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                ],
-            );
-            if (granted['android.permission.READ_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED && granted['android.permission.WRITE_EXTERNAL_STORAGE'] === PermissionsAndroid.RESULTS.GRANTED) {
-                if (success) {
-                    success();
+            PermissionsAndroid.requestMultiple([
+                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            ]).then(granted => {
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    success && success();
+                } else {
+                    denied && denied();
                 }
-            } else {
-                if (fail) {
-                    fail();
-                }
-            }
+            });
         }
     } catch (err) {
         console.warn(err);
