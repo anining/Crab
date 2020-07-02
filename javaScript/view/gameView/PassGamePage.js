@@ -240,7 +240,7 @@ export default class PassGamePage extends Component {
                     {(() => {
                         const view = [];
                         [...this.state.nextRedLevel].forEach((item, index) => {
-                            const forwardNumber = (item - preLevel) / levelLength;
+                            const forwardNumber = parseInt((item - preLevel) / levelLength * 10) / 10; // 尽可能的不重复显示
                             console.log(item, preLevel, levelLength, forwardNumber, (item - preLevel) / levelLength, '===+++++====');
                             view.push(
                                 <ImageAuto key={`${item}${forwardNumber}`} style={[css.pa, styles.redImage, {

@@ -127,7 +127,7 @@ export default class HomePage extends Component {
             const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
             const levelLength = nexLevel - preLevel;
             const myForwardNumber = Math.floor(avatarProLevelPosition.length * (myNowLevel - preLevel) / levelLength);
-            console.log(myGradeLevel, preLevel, nexLevel, myNowLevel, this.state.gradeRange);
+            console.log(myGradeLevel, preLevel, nexLevel, myNowLevel, this.state.gradeRange, this.state.nextRedLevel, '===============!!!==========');
             const view = [];
             if (this.state.nextRedLevel.length) {
                 if (this.state.nextRedLevel.length >= 12) {
@@ -135,8 +135,12 @@ export default class HomePage extends Component {
                 } else {
                     const forwardNumberArray = [];
                     this.state.nextRedLevel.forEach((item, index) => {
-                        const forwardNumber = Math.floor(homeProLevelPosition.length * (item - preLevel) / levelLength);
-                        forwardNumberArray.push(forwardNumber);
+                        const forwardNumber = parseInt(homeProLevelPosition.length * (item - preLevel) / levelLength);
+                        if (forwardNumberArray.includes(forwardNumber)) {
+                            forwardNumberArray.push(forwardNumber + 1); // 尽可能多的显示红包
+                        } else {
+                            forwardNumberArray.push(forwardNumber);
+                        }
                     });
                     homeProLevelPosition.forEach((item, index) => {
                         if (forwardNumberArray.includes(index + 1)) {
