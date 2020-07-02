@@ -55,7 +55,7 @@ function RenderCard ({ cards, setItem, item }) {
         const { prop_id: id } = item;
         const value = prop_id === id;
         view.push(
-            <TouchableOpacity onPress={() => setItem(card)} key={prop_id} style={[styles.cardItem, { borderColor: value ? '#FFE06F' : '#F1F1F1', backgroundColor: value ? '#FFF6D7' : '#F1F1F1' }]}>
+            <TouchableOpacity activeOpacity={1}  onPress={() => setItem(card)} key={prop_id} style={[styles.cardItem, { borderColor: value ? '#FFE06F' : '#F1F1F1', backgroundColor: value ? '#FFF6D7' : '#F1F1F1' }]}>
                 <Text numberOfLines={1} style={{ color: '#353535', fontWeight: '500' }}>{label}</Text>
                 <Image source={{ uri }} style={{ height: 43 / 1.3, width: 34 / 1.3 }}/>
                 <Text style={{ color: '#FF6C00' }}>x{num}</Text>

@@ -33,7 +33,8 @@ import GameHeader from '../../components/GameHeader';
 import { bindData, getPath } from '../../global/global';
 import toast from '../../utils/toast';
 import { getGradeConfig, homeProLevelPosition, avatarProLevelPosition } from '../../utils/levelConfig';
-import {DelayGetDomeTime, HomeDelayMonitorTime, HomeStartAnimationTime} from '../../utils/animationConfig';
+import { DelayGetDomeTime, HomeDelayMonitorTime, HomeStartAnimationTime } from '../../utils/animationConfig';
+import Button from '../../components/Button';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
@@ -93,6 +94,7 @@ export default class HomePage extends Component {
             if (this.animationCanstart) {
                 this._getPosition();
                 updateUser();
+                updateNextRedLevel();
             }
         }, HomeStartAnimationTime);
     }
@@ -176,7 +178,7 @@ export default class HomePage extends Component {
                                 {/* eslint-disable-next-line no-return-assign */}
                                 {_if(this.state.gameHeaderPosition, res => <ShiftView key={`ShiftView1${JSON.stringify(this.state.gameHeaderPosition)}`} callback={() => {
                                     this.gameHeader && this.gameHeader.start();
-                                }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={1300} startSite={[width * 0.25, width * 0.55]} endSite={res[1]}>
+                                }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={1500} startSite={[width * 0.25, width * 0.55]} endSite={res[1]}>
                                     <ImageAuto source={game22} width={33}/>
                                 </ShiftView>)}
                                 {_if(this.state.gameHeaderPosition && this.state.accuracyImagePosition, res => <ShiftView key={`ShiftView1${JSON.stringify(this.state.gameHeaderPosition)}${JSON.stringify(this.state.accuracyImagePosition)}`} callback={() => {
@@ -255,10 +257,19 @@ export default class HomePage extends Component {
                         </ImageBackground>
                     </SafeAreaProvider>
                 );
+            } else {
+                return <SafeAreaProvider>
+                    <ImageBackground source={game41} style={[css.flex, css.pr, css.cover]}>
+                        <Button type={1} name={'去登录'} onPress={(callback) => {
+                            N.replace('VerificationStackNavigator');
+                            callback && callback();
+                        }}/>
+                    </ImageBackground>
+                </SafeAreaProvider>;
             }
         } catch (e) {
             console.log(e);
-            return null;
+            return <View/>;
         }
     }
 }

@@ -74,7 +74,7 @@ function L ({ type, itemHeight }) {
                     const { receive_task_id, success_rate, reason, category, updated_at, finish_deadline, account, money } = item;
                     return (
                         <>
-                            <TouchableOpacity style={[styles.itemView, { height: itemHeight }]} key={receive_task_id} onPress={() => {
+                            <TouchableOpacity activeOpacity={1}  style={[styles.itemView, { height: itemHeight }]} key={receive_task_id} onPress={() => {
                                 task(null, receive_task_id);
                             }}>
                                 <View style={styles.itemViewTop}>
@@ -90,7 +90,7 @@ function L ({ type, itemHeight }) {
                                 </View>
                                 <View style={styles.itemViewCenter}>
                                     <Text style={{ color: '#353535', fontSize: 14 }}>接任务ID：{receive_task_id}</Text>
-                                    <TouchableOpacity onPress={() => {
+                                    <TouchableOpacity activeOpacity={1}  onPress={() => {
                                         Clipboard.setString(receive_task_id.toString());
                                         toast('复制成功!');
                                     }} style={styles.copyBtn}>
@@ -124,7 +124,7 @@ function RenderItem ({ type, updated_at, receive_task_id, reason, finish_deadlin
                     <Text style={styles.deadline}>剩余时间：</Text>
                     <Down time={finish_deadline} style={styles.deadline}/>
                 </View>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity activeOpacity={1}  onPress={() => {
                     apiGiveUp();
                 }} style={styles.giveUpBtn}>
                     <Text style={{ fontSize: 17, color: '#FF6C00', lineHeight: 42, textAlign: 'center' }}>放弃任务</Text>
@@ -154,7 +154,7 @@ function RenderItem ({ type, updated_at, receive_task_id, reason, finish_deadlin
                 </View>
                 <View style={styles.defaultView}>
                     <Text style={{ color: '#353535', fontSize: 14 }}>未通过原因：<Text style={{ color: '#FF3154' }}>{reason}</Text></Text>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity activeOpacity={1}  onPress={() => {
                         N.navigate('FeedBackPage');
                     }} style={styles.answerBtn}>
                         <Text style={styles.feedBtn}>我有疑问</Text>

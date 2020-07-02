@@ -87,19 +87,19 @@ function WithdrawPage () {
                 <View style={styles.withDrawView}>
                     <View style={styles.withDrawViewTitle}>
                         <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>提现到</Text>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity activeOpacity={1} onPress={() => {
                             N.navigate('WithdrawRecordsPage');
                         }}>
                             <Text style={{ fontSize: 12, color: '#FF6C00' }}>提现记录</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.withDrawType}>
-                        <TouchableOpacity onPress={() => setPayType('ali')} style={[styles.withDrawTypeItem, { borderColor: payType === 'ali' ? '#FF6C00' : '#D0D0D0' }]}>
+                        <TouchableOpacity activeOpacity={1} onPress={() => setPayType('ali')} style={[styles.withDrawTypeItem, { borderColor: payType === 'ali' ? '#FF6C00' : '#D0D0D0' }]}>
                             <RenderWithDrawTypeSelectView select={payType === 'ali'}/>
                             <Image source={with3} style={styles.withDrawImage}/>
                             <Text style={styles.withDrawText}>支付宝账户</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setPayType('wx')} style={[styles.withDrawTypeItem, { borderColor: payType === 'wx' ? '#FF6C00' : '#D0D0D0' }]}>
+                        <TouchableOpacity activeOpacity={1} onPress={() => setPayType('wx')} style={[styles.withDrawTypeItem, { borderColor: payType === 'wx' ? '#FF6C00' : '#D0D0D0' }]}>
                             <RenderWithDrawTypeSelectView select={payType === 'wx'}/>
                             <Image source={with4} style={styles.withDrawImage}/>
                             <Text style={styles.withDrawText}>微信账户</Text>
@@ -116,7 +116,7 @@ function WithdrawPage () {
                 <Text numberOflines={1} style={styles.text}>7.支付宝账号和姓名必须匹配，否则提现不会到账。</Text>
                 <Text numberOflines={1} style={[styles.text, { paddingBottom: 50 }]}>8.每天每档只能提现一次。</Text>
             </ScrollView>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 if (!goodId) {
                     toast('提现失败!');
                     return;
@@ -142,7 +142,7 @@ function RenderGoodItem ({ goods, setGoodId, setMoney, goodId }) {
             return;
         }
         view.push(
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 setGoodId(withdraw_id);
                 setMoney(money);
             }} key={withdraw_id} style={[styles.goodItem, { borderColor: value ? '#FF6C00' : '#D0D0D0', backgroundColor: value ? '#FFF5F0' : '#fff' }]}>

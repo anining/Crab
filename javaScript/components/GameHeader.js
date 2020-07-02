@@ -141,7 +141,7 @@ export default class GameHeader extends Component {
                         updateUser();
                     }} style={styles.countDownText} viewStyle={{ ...css.pa, ...styles.countDownView }} time={+new Date(djangoTime(getPath(['last_get_game_prop_time'], this.state.user))) + propsTime}/>;
                 })}
-                <TouchableOpacity karet-lift activeOpacity={1} style={[styles.headerDataNumber, css.flex, {
+                <TouchableOpacity activeOpacity={1} karet-lift style={[styles.headerDataNumber, css.flex, {
                     backgroundColor: this.props.backgroundColor
                 }]}
                 onPress={() => {

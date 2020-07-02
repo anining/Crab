@@ -31,7 +31,7 @@ function WeChatBindPage () {
     return (
         <SafeAreaView style={css.safeAreaView}>
             <Image karet-lift source={U.template({ uri })} style={styles.image} ref={ref => setView(ref)}/>
-            <TouchableOpacity onPress={save} style={styles.btn}>
+            <TouchableOpacity activeOpacity={1} onPress={save} style={styles.btn}>
                 <Text style={styles.btnText}>保存图片到本地</Text>
             </TouchableOpacity>
             <Crab text="绑定说明："/>

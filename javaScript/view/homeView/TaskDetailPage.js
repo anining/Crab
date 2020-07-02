@@ -174,7 +174,7 @@ function EndTimeView ({ detail }) {
                     <Text style={{ color: '#fff', fontSize: 16, fontWeight: '500' }}>剩余时间：</Text>
                     <Down time={finish_deadline} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }}/>
                 </View>
-                <TouchableOpacity onPress={apiGiveUp} style={styles.giveUpBtn}>
+                <TouchableOpacity activeOpacity={1} onPress={apiGiveUp} style={styles.giveUpBtn}>
                     <Text style={{ color: '#fff', fontSize: 12, lineHeight: 25, textAlign: 'center' }}>放弃任务</Text>
                 </TouchableOpacity>
             </View>
@@ -238,7 +238,7 @@ function DetailView ({ detail, account, change }) {
                         </View>
                         <View style={styles.taskDetailVB}>
                             <Text style={{ fontSize: 12, color: '#999' }}>通过率低于20%时，建议切换账号做单。</Text>
-                            <TouchableOpacity onPress={() => {
+                            <TouchableOpacity activeOpacity={1} onPress={() => {
                                 N.navigate('AccountHomePage');
                             }} style={styles.taskDetailVBBtn}>
                                 <Text style={{ color: '#fff' }}>切换账号</Text>
@@ -269,7 +269,7 @@ function DetailView ({ detail, account, change }) {
                 </View>
                 <View style={styles.DetailBV}>
                     <Text style={{ color: '#999', fontSize: 12 }}>通过率低于20%时，建议切换账号做单。</Text>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
                         status === 1 && N.navigate('AccountHomePage');
                     }} style={[styles.changeNumber, { borderColor: status === 1 ? '#FF6C00' : '#ABABAB' }]}>
                         <Text style={{ color: status === 1 ? '#FF6C00' : '#4F4F4F', fontSize: 12, lineHeight: 28, textAlign: 'center' }}>切换账号</Text>
@@ -312,7 +312,7 @@ function CourseView ({ detail, name, setName, images, setProgress, progress, set
                         <Image source={task6} style={{ height: 14, width: 14, marginRight: 5 }}/>
                         <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>做单教程</Text>
                     </View>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
                         status === 1 && N.navigate('HelpCenterPage');
                     }}>
                         <Text style={{ color: status === 1 ? '#FF6C00' : '#4F4F4F', fontSize: 12 }}>帮助中心</Text>
@@ -328,7 +328,7 @@ function CourseView ({ detail, name, setName, images, setProgress, progress, set
                         <Image source={task5} style={{ height: 14, width: 14, marginRight: 5 }}/>
                         <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>提交审核</Text>
                     </View>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
                         status === 1 && N.navigate('HelpCenterPage');
                     }}>
                         <Text style={{ color: status === 1 ? '#FF6C00' : '#4F4F4F', fontSize: 12 }}>帮助中心</Text>
@@ -371,7 +371,7 @@ function RenderView ({ name, inputName, length, index, setImages, setProgress, p
         return (
             <>
                 <Text style={styles.taskCourseText}>{label}</Text>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity activeOpacity={1} onPress={() => {
                     if (status === 1) {
                         DeviceEventEmitter.emit('showPop', {
                             dom: <Image source={{ uri: content }} style={[styles.saveBtn, { width: 312, height: 398, backgroundColor: '#fff' }]}/>,
@@ -380,7 +380,7 @@ function RenderView ({ name, inputName, length, index, setImages, setProgress, p
                     }
                 }} style={{ marginTop: 10 }}>
                     <ImageBackground source={{ uri: content }} style={styles.saveBtn} ref={ref => setView(ref)}>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity activeOpacity={1} onPress={() => {
                             status === 1 && save();
                         }} style={{ marginBottom: '10%' }}>
                             <Text style={styles.saveBtnText}>保存图片</Text>
@@ -438,7 +438,7 @@ function RenderImage ({ images, length, progress, setProgress, index, setImages,
     const view = <Image source={status === 1 ? images[index] ? { uri: `data:${images[index].mime};base64,${images[index].data}` } : task8 : { uri: images[index] }} style={ styles.uploadImage}/>;
     return (
         <View style={[css.flexRCSB, { alignItems: 'flex-start' }]}>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 if (status === 1) {
                     DeviceEventEmitter.emit('showPop', {
                         dom: <Image source={{ uri: sourceImage }} style={[styles.saveBtn, { width: 312, height: 398, backgroundColor: '#fff' }]}/>,

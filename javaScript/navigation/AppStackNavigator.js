@@ -255,7 +255,7 @@ function setStatusBar () {
 }
 
 export function initNetInfo () {
-    return Promise.all([updateAccount(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome(), updateNextRedLevel(), getWithdrawLatest()]);
+    return Promise.all([updateUser(), updateAccount(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome(), updateNextRedLevel(), getWithdrawLatest()]);
 }
 
 function AppStackNavigator () {

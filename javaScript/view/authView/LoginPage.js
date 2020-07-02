@@ -78,7 +78,7 @@ function LoginPage () {
                         placeholder={'请输入手机验证码'}
                         placeholderTextColor={'#dbdcdb'}
                         onChangeText={code => setCode(code)}/>
-                    <TouchableOpacity onPress={getCode} style={styles.codeBtn}>
+                    <TouchableOpacity activeOpacity={1} onPress={getCode} style={styles.codeBtn}>
                         <Text style={styles.codeText}>{codeText + (!isNaN(codeText) ? 's' : '')}</Text>
                     </TouchableOpacity>
                 </View>

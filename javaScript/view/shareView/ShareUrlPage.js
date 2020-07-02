@@ -47,13 +47,13 @@ function ShareUrlPage () {
                     numberOfLines={2}
                     style={styles.input} />
                 <View style={[css.flexRCSB, { height: 50 }]}>
-                    <TouchableOpacity style={styles.lBtn} onPress={() => {
+                    <TouchableOpacity activeOpacity={1} style={styles.lBtn} onPress={() => {
                         Clipboard.setString(message.toString());
                         toast('复制成功');
                     }}>
                         <Text style={{ color: '#fff' }}>复制文案</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.lBtn, { backgroundColor: '#FF6C00' }]} onPress={() => {
+                    <TouchableOpacity activeOpacity={1} style={[styles.lBtn, { backgroundColor: '#FF6C00' }]} onPress={() => {
                         onShare(info, message);
                     }}>
                         <Text style={{ color: '#fff' }}>邀请好友</Text>

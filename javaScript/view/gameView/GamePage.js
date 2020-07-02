@@ -43,6 +43,7 @@ import toast from '../../utils/toast';
 import game20 from '../../assets/icon/game/game20.png';
 import help from '../../lottie/help';
 import { updateUser } from '../../utils/update';
+import { bindData, getPath } from '../../global/global';
 
 const { height, width } = Dimensions.get('window');
 const CANVAS_WIDTH = width - 20;
@@ -71,6 +72,7 @@ export default class GamePage extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            user: bindData('user', this),
             loading: false, // 网络请求加载中
             gameInfo: null, // 整个页面的全部数据, 用于等待加载
             coordinate: null, // 格式化后的汉子对象列表，用于渲染填词背景，所有字的坐标已确定在该对象内
@@ -102,7 +104,8 @@ export default class GamePage extends Component {
                     info: {
                         ...ret.data,
                         ...this.state.gameInfo,
-                        userLevel: userLevel.get()
+                        userLevel: userLevel.get(),
+                        myGradeLevel: getPath(['myGradeLevel'], this.state.user, 1)
                     }
                 });
             }, 1000);

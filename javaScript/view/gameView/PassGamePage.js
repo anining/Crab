@@ -30,7 +30,7 @@ import { HEADER_HEIGHT } from '../tabView/HomePage';
 import LottieView from 'lottie-react-native';
 import chest from '../../lottie/chest';
 import PropTypes from 'prop-types';
-import { _if, _toFixed, toGoldCoin, transformMoney } from '../../utils/util';
+import { _if, _toFixed, setAndroidTime, toGoldCoin, transformMoney } from '../../utils/util';
 import ShiftView from '../../components/ShiftView';
 import IdiomCard from '../../components/IdiomCard';
 import { addNoteBook, choseGetAward } from '../../utils/api';
@@ -52,7 +52,7 @@ export default class PassGamePage extends Component {
         this.state = {
             user: bindData('user', this),
             gradeSetting: bindData('gradeSetting', this),
-            nextRedLevel: bindData('nextRedLevel', this),
+            nextRedLevel: getGlobal('nextRedLevel'),
             gradeRange: bindData('gradeRange', this),
             gameHeaderPosition: null, // 头部图像视图
             accuracyImagePosition: null // 答题按钮螃蟹视图
@@ -123,7 +123,7 @@ export default class PassGamePage extends Component {
                     </View>
                 </ImageBackground>,
                 close: async () => {
-                    // await this.getAward();
+                    DeviceEventEmitter.emit('hidePop');
                     this._isUpgrade();// 这个弹窗完以后，判断是否升级
                 }
             });
@@ -132,37 +132,42 @@ export default class PassGamePage extends Component {
 
     _isUpgrade () {
         try {
-            const myNowLevel = this.paramsInfo.userLevel;
-            const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
-            for (let i = 0; i < this.state.gradeRange.length; i++) {
-                const item = this.state.gradeRange[i];
-                if (item && (item === myNowLevel)) {
-                    const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
-                    const coinRate = getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting);
-                    if (nextGradeConfig && coinRate) {
-                        DeviceEventEmitter.emit('showPop', <GameDialog transparent={true} callback={() => {
-                            DeviceEventEmitter.emit('hidePop');
-                        }} btn={'知道啦'} content={
-                            <View style={[css.flex, css.fw, css.pr]}>
-                                <Text style={[styles.lottieUpgradeText, { fontSize: 20 }]}>恭喜你的渔船升级啦!</Text>
-                                <LottieView key={nextGradeConfig.lottie} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={nextGradeConfig.lottie} source={nextGradeConfig.upgrade} loop={false} autoPlay={true} speed={1}/>
-                                <Text style={[css.pa, styles.lottieUpgradeText]}>当前金币产量<Text style={{ color: '#F9D200' }}>{coinRate}</Text></Text>
-                            </View>
-                        }/>);
+            setAndroidTime(() => {
+                const myNowLevel = this.paramsInfo.userLevel;
+                const myGradeLevel = this.paramsInfo.myGradeLevel;
+                for (let i = 0; i < this.state.gradeRange.length; i++) {
+                    const item = this.state.gradeRange[i];
+                    if (item && (item === myNowLevel)) {
+                        const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
+                        const coinRate = getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting);
+                        if (nextGradeConfig && coinRate) {
+                            DeviceEventEmitter.emit('showPop', <GameDialog transparent={true} callback={() => {
+                                DeviceEventEmitter.emit('hidePop');
+                            }} btn={'知道啦'} content={
+                                <View style={[css.flex, css.fw, css.pr]}>
+                                    <Text style={[styles.lottieUpgradeText, { fontSize: 20 }]}>恭喜你的渔船升级啦!</Text>
+                                    <LottieView key={nextGradeConfig.lottie} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={nextGradeConfig.lottie} source={nextGradeConfig.upgrade} loop={false} autoPlay={true} speed={1}/>
+                                    <Text style={[css.pa, styles.lottieUpgradeText]}>当前金币产量<Text style={{ color: '#F9D200' }}>{coinRate}</Text></Text>
+                                </View>
+                            }/>);
+                        }
+                        break;
                     }
-                    break;
                 }
-            }
-            updateUser();
+            }, 500);
         } catch (e) {
             console.log(e);
-            updateUser();
         }
+    }
+
+    static updateSameInfo () {
+        updateUser();
+        updateNextRedLevel();
     }
 
     async componentDidMount () {
         this._showPop();
-        updateNextRedLevel();
+        PassGamePage.updateSameInfo();
         // _isUpgrade 是否升级判断完成后才更新用户信息1
     }
 
@@ -172,7 +177,7 @@ export default class PassGamePage extends Component {
                 const view = [];
                 this.paramsInfo.content.forEach((item, index) => {
                     view.push(
-                        <TouchableOpacity key={`content${index}`} activeOpacity={1}
+                        <TouchableOpacity activeOpacity={1} key={`content${index}`} activeOpacity={1}
                             style={[css.flex, styles.idiomItemWrap]} onPress={() => {
                                 DeviceEventEmitter.emit('showPop', <GameDialog callback={async () => {
                                     await PassGamePage._addNoteBook(item);
@@ -213,7 +218,7 @@ export default class PassGamePage extends Component {
 
     _renderProgress () {
         try {
-            const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
+            const myGradeLevel = this.paramsInfo.myGradeLevel;
             const preLevel = getPath([myGradeLevel - 1], this.state.gradeRange, 0);
             const nexLevel = getPath([myGradeLevel], this.state.gradeRange, 0);
             const myNowLevel = this.paramsInfo.userLevel;
@@ -240,7 +245,7 @@ export default class PassGamePage extends Component {
                             view.push(
                                 <ImageAuto key={`${item}${forwardNumber}`} style={[css.pa, styles.redImage, {
                                     left: forwardNumber * 100 + '%',
-                                    transform: [{ translateX: -15 }]
+                                    transform: forwardNumber ? [{ translateX: -15 }] : [{ translateX: 0 }]
                                 }]} source={game16} />
                             );
                         });
@@ -475,6 +480,7 @@ const styles = StyleSheet.create({
     progressWrap: {
         height: 100,
         marginTop: 20,
+        overflow: 'hidden',
         width: '70%'
     },
     redImage: {

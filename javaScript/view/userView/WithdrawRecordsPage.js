@@ -62,7 +62,7 @@ function RenderView ({ status }) {
         return (
             <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
                 <Text numberOfLines={1} style={ { color: '#999', fontSize: 12, maxWidth: 200 }}>提现失败(提现账户异常)，金币已退回</Text>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity activeOpacity={1} onPress={() => {
                     N.navigate('FeedBackPage');
                 }}>
                     <Text numberOfLines={1} style={{ color: '#FA0000', fontSize: 15 }}>我有疑问</Text>
