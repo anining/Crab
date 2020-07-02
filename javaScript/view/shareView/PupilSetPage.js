@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dimensions, SafeAreaView, StyleSheet, TouchableOpacity, ScrollView, Text, Image, TextInput, View } from 'react-native';
+import { Dimensions, SafeAreaView, StyleSheet, ScrollView, Text, Image, TextInput, View } from 'react-native';
 import { css } from '../../assets/style/css';
 import pupil5 from '../../assets/icon/pupil/pupil5.png';
 import Crab from '../../components/Crab';

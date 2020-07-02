@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Clipboard, ImageBackground, Dimensions, TouchableOpacity, ScrollView, Image, TextInput, DeviceEventEmitter } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, ImageBackground, Dimensions, TouchableOpacity, ScrollView, Image, TextInput, DeviceEventEmitter } from 'react-native';
+import Clipboard from '@react-native-community/clipboard';
 import { css } from '../../assets/style/css';
 import Header from '../../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
