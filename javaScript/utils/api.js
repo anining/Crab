@@ -99,8 +99,8 @@ export function withdrawLogsLatest (page = 1, size = 10) {
 }
 
 // 活动
-export function activity (page = 1, size = 10) {
-    return transformFetch('GET', '/activity', { page, size });
+export function activity () {
+    return transformFetch('GET', '/activity');
 }
 
 // 活动详情
