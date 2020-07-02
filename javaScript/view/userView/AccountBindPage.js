@@ -9,6 +9,7 @@ import toast from '../../utils/toast';
 import asyncStorage from '../../utils/asyncStorage';
 import { getter } from '../../utils/store';
 import { updateAccount } from '../../utils/update';
+import { getUrl } from '../../utils/util';
 
 const { user_id } = getter(['user.user_id']);
 const { taskPlatform } = getter(['taskPlatform']);
@@ -18,8 +19,8 @@ function AccountBindPage (props) {
     const { id, label } = props.route.params;
 
     function apiPostAccount () {
-        if (!url) {
-            toast('链接不能为空!');
+        if (!getUrl(url)) {
+            toast('链接错误!');
             return;
         }
         postAccount(id, url).then(r => {
@@ -52,7 +53,7 @@ function AccountBindPage (props) {
                             placeholderTextColor={'#999'}
                             onChangeText={url => setUrl(url)}/>
                     </View>
-                    <TouchableOpacity activeOpacity={1}  onPress={() => {
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
                         N.navigate('HelpCenterPage');
                     }}>
                         <Text style={{ textAlign: 'right', paddingLeft: 15, paddingRight: 15, fontSize: 14, fontWeight: '500', color: '#FF6C00' }}>{'绑定教程 >'}</Text>
@@ -64,7 +65,7 @@ function AccountBindPage (props) {
                         <Text style={styles.text}>3.请确认自己的账号已经达到最低绑定要求。分享账号给其他用户，确保自己的作品、粉丝等信息是所有人可见的状态。</Text>
                     </View>
                 </View>
-                <TouchableOpacity activeOpacity={1}  onPress={apiPostAccount} style={styles.bindBtn}>
+                <TouchableOpacity activeOpacity={1} onPress={apiPostAccount} style={styles.bindBtn}>
                     <Text style={styles.bindBtnText}>绑定账号</Text>
                 </TouchableOpacity>
             </View>

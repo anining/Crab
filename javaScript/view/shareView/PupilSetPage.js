@@ -10,11 +10,12 @@ import Button from '../../components/Button';
 
 const { width } = Dimensions.get('window');
 
-function PupilSetPage () {
-    const [qq, setQq] = useState('');
-    const [wx, setWx] = useState('');
-    const [num, setNum] = useState('');
-    const [totalMoney, setTotalMoney] = useState('');
+function PupilSetPage (props) {
+    const { setting } = props.route.params;
+    const [qq, setQq] = useState(setting.qq_group || '');
+    const [wx, setWx] = useState(setting.wx || '');
+    const [num, setNum] = useState(setting.need_invite_num.toString() || 0);
+    const [totalMoney, setTotalMoney] = useState(setting.need_income.toString() || 0);
 
     function save (callback) {
         childrenSetting(qq, wx, num, totalMoney).then(r => {
@@ -34,19 +35,19 @@ function PupilSetPage () {
                     <RenderShareTitle title='基本信息' icon={pupil5}/>
                     <View style={[css.flex, css.sp, styles.inputWrap]}>
                         <Text style={[styles.setInputText]} numberOfLines={1}>QQ群号</Text>
-                        <TextInput style={[styles.setInput]} maxLength={30} placeholder={'请输入QQ群号'} placeholderTextColor={'#BCBCBC'} onChangeText={e => setQq(e)}/>
+                        <TextInput style={[styles.setInput]} maxLength={30} value={qq} placeholder={'请输入QQ群号'} placeholderTextColor={'#BCBCBC'} onChangeText={e => setQq(e)}/>
                     </View>
                     <View style={[css.flex, css.sp, styles.inputWrap]}>
                         <Text style={[styles.setInputText]} numberOfLines={1}>微信号</Text>
-                        <TextInput style={[styles.setInput]} maxLength={30} placeholder={'请输入QQ群号'} placeholderTextColor={'#BCBCBC'} onChangeText={e => setWx(e)}/>
+                        <TextInput style={[styles.setInput]} maxLength={30} value={wx} placeholder={'请输入QQ群号'} placeholderTextColor={'#BCBCBC'} onChangeText={e => setWx(e)}/>
                     </View>
                     <View style={[css.flex, css.sp, styles.inputWrap]}>
                         <Text style={[styles.setInputText]} numberOfLines={1}>邀请人数</Text>
-                        <TextInput style={[styles.setInput]} maxLength={30} placeholder={'需邀请多少人才展示信息(无要求不填)'} placeholderTextColor={'#BCBCBC'} onChangeText={e => setNum(e)}/>
+                        <TextInput style={[styles.setInput]} maxLength={30} value={num} placeholder={'需邀请多少人才展示信息(无要求不填)'} placeholderTextColor={'#BCBCBC'} onChangeText={e => setNum(e)}/>
                     </View>
                     <View style={[css.flex, css.sp, styles.inputWrap]}>
                         <Text style={[styles.setInputText]} numberOfLines={1}>收益总和</Text>
-                        <TextInput style={[styles.setInput]} maxLength={30} placeholder={'需达到多少收益才展示信息(无要求不填)'} placeholderTextColor={'#BCBCBC'} onChangeText={e => setTotalMoney(e)}/>
+                        <TextInput style={[styles.setInput]} maxLength={30} value={totalMoney} placeholder={'需达到多少收益才展示信息(无要求不填)'} placeholderTextColor={'#BCBCBC'} onChangeText={e => setTotalMoney(e)}/>
                     </View>
                 </View>
                 <View style={styles.setInfoAllText}>

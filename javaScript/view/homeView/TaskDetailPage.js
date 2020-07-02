@@ -60,6 +60,7 @@ function TaskDetailPage (props) {
     const [progress, setProgress] = useState('等待上传');
     const [images, setImages] = useState(detail.images || []);
     const [num, setNum] = useState(0);
+    const [taskImage, setTaskImage] = useState(0);
     const [change, setChange] = useState(1);
 
     useEffect(() => {
@@ -140,8 +141,8 @@ function TaskDetailPage (props) {
                     <TitleView detail={detail} account={account}/>
                     <DetailView detail={detail} account={account} change={change}/>
                     <ClaimView detail={detail}/>
-                    <CourseView name={name} detail={detail} progress={progress} setProgress={setProgress} setName={setName} setImages={setImages} images={images} />
-                    <Btn sRef={sRef} setProgress={setProgress} setName={setName} setImages={setImages} detail={detail} name={name} account={account} images={images} setChange={setChange} setDetail={setDetail} setAccount={setAccount}/>
+                    <CourseView name={name} taskImage={taskImage} setTaskImage={setTaskImage} detail={detail} progress={progress} setProgress={setProgress} setName={setName} setImages={setImages} images={images} />
+                    <Btn taskImage={taskImage} sRef={sRef} setProgress={setProgress} setName={setName} setImages={setImages} detail={detail} name={name} account={account} images={images} setChange={setChange} setDetail={setDetail} setAccount={setAccount}/>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -306,16 +307,16 @@ function ClaimView ({ detail }) {
     );
 }
 
-function CourseView ({ detail, name, setName, images, setProgress, progress, setImages }) {
+function CourseView ({ detail, name, setName, taskImage, setTaskImage, images, setProgress, progress, setImages }) {
     const { course, status } = detail;
     const { submit = [], task = [] } = course;
     const submitView = [];
     const taskView = [];
     submit.forEach((item, index) => {
-        submitView.push(<RenderView inputName={name} length={submit.length} progress={progress} setProgress={setProgress} index={index} status={status} setName={setName} images={images} setImages={setImages} name="submit" key={item.label} item={item}/>);
+        submitView.push(<RenderView inputName={name} taskImage={taskImage} setTaskImage={setTaskImage} length={submit.length} progress={progress} setProgress={setProgress} index={index} status={status} setName={setName} images={images} setImages={setImages} name="submit" key={item.label} item={item}/>);
     });
     task.forEach((item, index) => {
-        taskView.push(<RenderView inputName={name} length={task.length} progress={progress} setProgress={setProgress} index={index} status={status} images={images} setImages={setImages} setName={setName} name="task" key={item.label} item={item}/>);
+        taskView.push(<RenderView taskImage={taskImage} setTaskImage={setTaskImage} inputName={name} length={task.length} progress={progress} setProgress={setProgress} index={index} status={status} images={images} setImages={setImages} setName={setName} name="task" key={item.label} item={item}/>);
     });
     return (
         <>
@@ -355,7 +356,7 @@ function CourseView ({ detail, name, setName, images, setProgress, progress, set
     );
 }
 
-function RenderView ({ name, inputName, length, index, setImages, setProgress, progress, status, images, item, setName }) {
+function RenderView ({ name, taskImage, setTaskImage, inputName, length, index, setImages, setProgress, progress, status, images, item, setName }) {
     const { type, label, content } = item;
     const [view, setView] = useState();
 
@@ -425,6 +426,7 @@ function RenderView ({ name, inputName, length, index, setImages, setProgress, p
                 </View>
             );
         }
+        setTaskImage(taskImage + 1);
         return (
             <>
                 <Text style={styles.taskCourseText}>{label}</Text>
@@ -476,12 +478,12 @@ function RenderImage ({ images, length, progress, setProgress, index, setImages,
     );
 }
 
-function Btn ({ images, sRef, setName, account, detail, setProgress, setImages, name, setChange, setDetail, setAccount }) {
+function Btn ({ images, taskImage, sRef, setName, account, detail, setProgress, setImages, name, setChange, setDetail, setAccount }) {
     const { status, nickname, home_url, receive_task_id, platform_category } = detail;
 
     function submit (callback) {
         const localImages = images.map(image => image.uri);
-        if (!localImages.length || !(name || nickname)) {
+        if ((taskImage && !localImages.length) || !(name || nickname)) {
             callback();
             toast('请填写完整的名称和执行图!');
             return;

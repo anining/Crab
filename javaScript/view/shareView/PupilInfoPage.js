@@ -20,6 +20,7 @@ import { transformTime } from '../../utils/util';
 import Choice from '../../components/Choice';
 import { getter } from '../../utils/store';
 import toast from '../../utils/toast';
+import Button from '../../components/Button';
 
 const { width } = Dimensions.get('window');
 const itemHeight = 135;
@@ -30,6 +31,7 @@ function PupilInfoPage () {
     const [children, setChildren] = useState([]);
     const [parent, setParent] = useState({});
     const [today, setToday] = useState({});
+    const [setting, setSetting] = useState({});
     const [yesterday, setYesterday] = useState({});
     const [total, setTotal] = useState({});
 
@@ -40,10 +42,11 @@ function PupilInfoPage () {
     function _childDetail () {
         childDetail().then(r => {
             if (!r.error) {
-                const { children_list, parent, today, yesterday, total } = r.data;
+                const { children_list, parent, today, children_settings, yesterday, total } = r.data;
                 setChildren(children_list);
                 parent && setParent(parent);
                 setToday(today);
+                setSetting(children_settings);
                 setYesterday(yesterday);
                 setTotal(total);
             }
@@ -52,17 +55,13 @@ function PupilInfoPage () {
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
-            <Header label={'师徒信息'} onPress={() => { N.navigate('PupilSetPage'); }} headerRight={<Text style={{ color: '#FF5C22' }}>收徒设置</Text>}/>
+            <Header label={'师徒信息'} onPress={() => { N.navigate('PupilSetPage', { setting }); }} headerRight={<Text style={{ color: '#FF5C22' }}>收徒设置</Text>}/>
             <ScrollView>
                 <View style={[styles.infoHeaderWrap, css.pr]}>
                     <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.infoHeaderBg]} />
                     <ParentView parent={parent} _childDetail={_childDetail}/>
                 </View>
                 <RenderData today={today} yesterday={yesterday} total={total}/>
-                <View style={[styles.pupListWrap, css.flex, css.sp]}>
-                    <RenderShareTitle title="徒弟列表" icon={pupil4} width={200}/>
-                    <Text style={styles.pupListTips}>总贡献排序</Text>
-                </View>
                 <RenderChild children={children}/>
             </ScrollView>
         </SafeAreaView>
@@ -71,29 +70,41 @@ function PupilInfoPage () {
 
 function RenderChild ({ children }) {
     const view = [];
-    children.forEach(item => {
-        const { today_income, total_income, children_num, avatar, total_task_num, created_at, nickname, user_id } = item;
-        view.push(
-            <View style={styles.itemContainer} key={user_id}>
-                <View style={[styles.containerT]}>
-                    <View style={{ alignItems: 'center', flexDirection: 'row', height: 55 }}>
-                        <Image source={{ uri: avatar }} style={{ width: 30, height: 30, borderRadius: 15 }}/>
-                        <Text style={{ color: 'rgba(53,53,53,1)', fontWeight: '600', fontSize: 15 }}>{nickname}</Text>
+
+    if (children.length) {
+        children.forEach(item => {
+            const { today_income, total_income, children_num, avatar, total_task_num, created_at, nickname, user_id } = item;
+            view.push(
+                <View style={styles.itemContainer} key={user_id}>
+                    <View style={[styles.containerT]}>
+                        <View style={{ alignItems: 'center', flexDirection: 'row', height: 55 }}>
+                            <Image source={{ uri: avatar }} style={{ width: 30, height: 30, borderRadius: 15 }}/>
+                            <Text style={{ color: 'rgba(53,53,53,1)', fontWeight: '600', fontSize: 15 }}>{nickname}</Text>
+                        </View>
+                        <Text style={{ color: 'rgba(153,153,153,1)', fontSize: 11 }}>收徒时间：{transformTime(created_at)}</Text>
                     </View>
-                    <Text style={{ color: 'rgba(153,153,153,1)', fontSize: 11 }}>收徒时间：{transformTime(created_at)}</Text>
+                    <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
+                        <Text style={{ color: 'rgba(85,85,85,1)' }}>今日贡献：<Text style={{ color: 'rgba(51,51,51,1)' }}>{today_income}</Text></Text>
+                        <Text style={{ color: 'rgba(85,85,85,1)' }}>累计贡献金币：<Text style={{ color: 'rgba(51,51,51,1)' }}>{total_income}</Text></Text>
+                    </View>
+                    <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
+                        <Text style={{ color: 'rgba(85,85,85,1)' }}>他的徒弟总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{children_num}</Text></Text>
+                        <Text style={{ color: 'rgba(85,85,85,1)' }}>他的做单总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{total_task_num}</Text></Text>
+                    </View>
                 </View>
-                <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
-                    <Text style={{ color: 'rgba(85,85,85,1)' }}>今日贡献：<Text style={{ color: 'rgba(51,51,51,1)' }}>{today_income}</Text></Text>
-                    <Text style={{ color: 'rgba(85,85,85,1)' }}>累计贡献金币：<Text style={{ color: 'rgba(51,51,51,1)' }}>{total_income}</Text></Text>
+            );
+        });
+        return (
+            <>
+                <View style={[styles.pupListWrap, css.flex, css.sp]}>
+                    <RenderShareTitle title="徒弟列表" icon={pupil4} width={200}/>
+                    <Text style={styles.pupListTips}>总贡献排序</Text>
                 </View>
-                <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
-                    <Text style={{ color: 'rgba(85,85,85,1)' }}>他的徒弟总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{children_num}</Text></Text>
-                    <Text style={{ color: 'rgba(85,85,85,1)' }}>他的做单总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{total_task_num}</Text></Text>
-                </View>
-            </View>
+                <View style={{ marginBottom: 15 }}>{view}</View>
+            </>
         );
-    });
-    return <View style={{ marginBottom: 15 }}>{view}</View>;
+    }
+    return <></>;
 }
 
 function RenderData ({ today, yesterday, total }) {
@@ -136,7 +147,7 @@ function RenderShareTitle ({ title, icon, width }) {
     );
 }
 
-function RenderForm ({ children_income, children_num, disciple_income, disciple_num }) {
+function RenderForm ({ children_income = 0, children_num = 0, disciple_income = 0, disciple_num = 0 }) {
     return (
         <View style={styles.formWrap}>
             <View style={[styles.formHeaderWrap, css.flex]}>
@@ -158,8 +169,9 @@ function RenderForm ({ children_income, children_num, disciple_income, disciple_
 function ParentView ({ parent, _childDetail }) {
     const [inviteCode, setInviteCode] = useState('');
 
-    function bind () {
+    function bind (callback) {
         if (!inviteCode) {
+            callback();
             return;
         }
         DeviceEventEmitter.emit('showPop',
@@ -170,11 +182,16 @@ function ParentView ({ parent, _childDetail }) {
                 lt: '取消',
                 rc: () => {
                     bindParent(inviteCode).then(r => {
+                        callback();
                         if (!r.error) {
+                            toast('绑定师父成功!');
                             setInviteCode('');
                             _childDetail();
                         }
                     });
+                },
+                lc: () => {
+                    callback();
                 },
                 rt: '确定'
             }} />);
@@ -223,9 +240,11 @@ function ParentView ({ parent, _childDetail }) {
             <RenderShareTitle title="我的师父" icon={pupil5}/>
             <View style={[css.flexRCSB, styles.bindView]}>
                 <TextInput style={styles.bindInput} maxLength={30} placeholder={'请填写师父邀请码'} placeholderTextColor={'#999'} onChangeText={e => setInviteCode(e)}/>
-                <TouchableOpacity activeOpacity={1} style={styles.bindBtn} onPress={bind}>
-                    <Text style={{ fontSize: 13, color: '#fff' }}>绑定师父</Text>
-                </TouchableOpacity>
+                <View style={styles.bindBtn}>
+                    <Button name={'绑定师父'} width={120} onPress={ callback => {
+                        bind(callback);
+                    }}/>
+                </View>
             </View>
         </ImageBackground>
     );
@@ -234,8 +253,6 @@ function ParentView ({ parent, _childDetail }) {
 const styles = StyleSheet.create({
     bindBtn: {
         alignItems: 'center',
-        backgroundColor: '#FF9C00',
-        borderRadius: 19,
         height: 40,
         justifyContent: 'center',
         width: '35%'
