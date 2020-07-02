@@ -30,32 +30,25 @@ import { dyCrack } from '../../crack/dy';
 import toast from '../../utils/toast';
 import asyncStorage from '../../utils/asyncStorage';
 import { task } from '../../utils/update';
+import Button from '../../components/Button';
 
 const { user_id, today_pass_num, activityObj } = getter(['user.user_id', 'activityObj', 'user.today_pass_num']);
 const { width } = Dimensions.get('window');
 const MENU_STATUS = {
     1: {
         text: '提交任务',
-        color: '#fff',
-        backgroundColor: '#FF3E00',
-        disabled: true
+        color: '#fff'
     },
     4: {
         text: '审核中',
-        color: '#4F4F4F',
-        backgroundColor: '#ABABAB',
         disabled: false
     },
     5: {
         text: '已通过',
-        color: '#4F4F4F',
-        backgroundColor: '#ABABAB',
         disabled: false
     },
     6: {
         text: '未通过',
-        color: '#4F4F4F',
-        backgroundColor: '#ABABAB',
         disabled: false
     }
 };
@@ -468,9 +461,10 @@ function RenderImage ({ images, length, progress, setProgress, index, setImages,
 function Btn ({ images, sRef, setName, account, detail, setProgress, setImages, name, setChange, setDetail, setAccount }) {
     const { status, nickname, home_url, receive_task_id, platform_category } = detail;
 
-    function submit () {
+    function submit (callback) {
         const localImages = images.map(image => image.uri);
         if (!localImages.length || !(name || nickname)) {
+            callback();
             toast('请填写完整的名称和执行图!');
             return;
         }
@@ -484,6 +478,7 @@ function Btn ({ images, sRef, setName, account, detail, setProgress, setImages, 
                 // 缓存用于新手福利判断
                 asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
                 getTask(platform_category).then(r => {
+                    callback();
                     if (!r.error) {
                         toast('提交任务成功!自动继续下一个任务!');
                         taskReceiveDetail(r.data.receive_task_id).then(response => {
@@ -496,18 +491,18 @@ function Btn ({ images, sRef, setName, account, detail, setProgress, setImages, 
                         });
                     }
                 });
+            } else {
+                callback();
             }
         });
     }
 
     return (
-        <TouchableOpacity onPress={() => {
-            if (MENU_STATUS[status].disabled) {
-                submit();
-            }
-        }} style={[styles.submitBtn, { backgroundColor: MENU_STATUS[status].backgroundColor }]}>
-            <Text style={[styles.submitBtnText, { color: MENU_STATUS[status].color }]}>{MENU_STATUS[status].text}</Text>
-        </TouchableOpacity>
+        <View style={styles.submitBtn}>
+            <Button name={MENU_STATUS[status].text} onPress={callback => {
+                submit(callback);
+            }} disable={MENU_STATUS[status].disabled}/>
+        </View>
     );
 }
 
@@ -595,10 +590,11 @@ const styles = StyleSheet.create({
         paddingTop: 5
     },
     submitBtn: {
-        borderRadius: 22,
-        height: 44,
-        marginBottom: 100,
-        marginTop: 20
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 15,
+        marginTop: 15,
+        width
     },
     submitBtnText: {
         fontSize: 17,
