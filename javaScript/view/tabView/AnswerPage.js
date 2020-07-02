@@ -21,12 +21,13 @@ import { _if, _tc, bannerAction, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
 import { N } from '../../utils/router';
 import { getter, store } from '../../utils/store';
-import { getNewUserTask, newUserTask, sign, signLogs, taskReceive } from '../../utils/api';
+import { getNewUserTask, giveUp, newUserTask, sign, signLogs, taskReceive } from '../../utils/api';
 import Choice from '../../components/Choice';
 import * as U from 'karet.util';
 import asyncStorage from '../../utils/asyncStorage';
 import pop3 from '../../assets/icon/pop/pop3.png';
 import { getTaskPlatform, task } from '../../utils/update';
+import toast from '../../utils/toast';
 
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
 const { width } = Dimensions.get('window');
@@ -345,28 +346,31 @@ function RenderBtn ({ item }) {
     const { btnStatus, btnText, platform_category } = item;
 
     function check () {
-        task(platform_category);
-        // taskReceive(1, 10, 1).then(r => {
-        //     if (!r.error) {
-        //         const { data } = r;
-        //         if (data.length) {
-        //             DeviceEventEmitter.emit('showPop', <Choice info={{
-        //                 icon: pop8,
-        //                 tips: '提现申请成功，请耐心等待审核。一般1个工作日内审核完成。',
-        //                 rt: '我知道了',
-        //                 lt: '',
-        //                 rc: () => {
-        //                     N.goBack();
-        //                 },
-        //                 lc: () => {
-        //                     N.goBack();
-        //                 }
-        //             }}/>);
-        //         } else {
-        //             task(platform_category);
-        //         }
-        //     }
-        // });
+        taskReceive(1, 10, 1).then(r => {
+            if (!r.error) {
+                const { data } = r;
+                if (data.length) {
+                    DeviceEventEmitter.emit('showPop', <Choice info={{
+                        icon: pop8,
+                        tips: '您有一个任务在进行，最多只能同时领取一个任务！',
+                        rt: '继续任务',
+                        lt: '放弃任务',
+                        rc: () => {
+                            task(platform_category);
+                        },
+                        lc: () => {
+                            data.forEach(task => {
+                                giveUp(task.receive_task_id).then(r => {
+                                    !r.error && toast('放弃任务成功!');
+                                });
+                            });
+                        }
+                    }}/>);
+                } else {
+                    task(platform_category);
+                }
+            }
+        });
     }
 
     switch (btnStatus) {
