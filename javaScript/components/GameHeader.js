@@ -38,6 +38,7 @@ import {
 import asyncStorage from '../utils/asyncStorage';
 import CountDown from './CountDown';
 import { updateUser } from '../utils/update';
+import { DelayGetDomeTime } from '../utils/animationConfig';
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
@@ -154,7 +155,7 @@ export default class GameHeader extends Component {
                                     this.imagePosition1 = [l, t];
                                 }
                             });
-                        }, 600);
+                        }, DelayGetDomeTime);
                     }}/>
                     <View style={styles.hdnTextWrap}>
                         <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }}>{propNumber}</Text>/10</Text>
@@ -177,7 +178,7 @@ export default class GameHeader extends Component {
                                         this.imagePosition2 = [l, t];
                                     }
                                 });
-                            }, 600);
+                            }, DelayGetDomeTime);
                         }}/>
                         <TextInput multiline={false} style={[styles.hdnText]} ref={ref => this.secondText = ref} onFocus={() => {
                             this.secondText.blur();

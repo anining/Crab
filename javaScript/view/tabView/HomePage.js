@@ -33,7 +33,7 @@ import GameHeader from '../../components/GameHeader';
 import { bindData, getPath } from '../../global/global';
 import toast from '../../utils/toast';
 import { getGradeConfig, homeProLevelPosition, avatarProLevelPosition } from '../../utils/levelConfig';
-import { HomeDelayMonitorTime, HomeStartAnimationTime } from '../../utils/animationConfig';
+import {DelayGetDomeTime, HomeDelayMonitorTime, HomeStartAnimationTime} from '../../utils/animationConfig';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
@@ -245,7 +245,7 @@ export default class HomePage extends Component {
                                                             });
                                                         }
                                                     });
-                                                }, 600);
+                                                }, DelayGetDomeTime);
                                             }}/>
                                         </ImageBackground>
                                     </TouchableOpacity>
