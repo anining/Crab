@@ -29,6 +29,8 @@ function AccountBindPage (props) {
                 updateAccount();
                 toast('绑定操作成功!');
                 N.goBack();
+            } else {
+                console.log(r);
             }
         });
     }
