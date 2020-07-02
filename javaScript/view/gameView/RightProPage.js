@@ -67,7 +67,7 @@ export default class RightProPage extends Component {
                 });
                 return view;
             } else {
-                return <Text style={[styles.emptyText]}>你还没有打错过成语~</Text>;
+                return <Text style={[styles.emptyText]}>你还没有答错过成语~</Text>;
             }
         } catch (e) {
             console.log(e);
@@ -79,45 +79,47 @@ export default class RightProPage extends Component {
         return (
             <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
                 <Header color={'#fff'} label={'答题正确率'} style={[{ backgroundColor: '#FED465', borderBottomWidth: 0 }]} icon={header3}/>
-                <View style={[css.flex, css.fw, styles.rpPageWrap]}>
-                    <Text style={[styles.rpTitleText, { textAlign: 'center' }]}>答题正确率</Text>
-                    <View style={[css.flex, { marginTop: 20 }]}>
-                        <ImageAuto source={game66} style={{ width: 30 }}/>
-                        <Text style={[styles.rpTitleText, { textAlign: 'center', width: 120, color: '#FF6C00', fontSize: 28 }]}>{this.state.trCorrectRate}</Text>
-                    </View>
-                    <ImageBackground source={game11} style={[css.flex, styles.LineTextBg, css.fw]}>
-                        <View style={[css.flex, styles.progressBox, css.js, css.pr]}>
-                            <View style={[css.flex, styles.progressInner, {
-                                width: this.state.trCorrectRate
-                            }]}/>
-                            <View style={[css.pa, styles.zsView, { left: 10 }]}/>
-                            <View style={[css.pa, styles.zsView, { left: progressBoxWidth * 0.5 - 8 }]}/>
-                            <View style={[css.pa, styles.zsView, { right: 10 }]}/>
+                <ScrollView style={{ flex: 1 }}>
+                    <View style={[css.flex, css.fw, styles.rpPageWrap]}>
+                        <Text style={[styles.rpTitleText, { textAlign: 'center' }]}>答题正确率</Text>
+                        <View style={[css.flex, { marginTop: 20 }]}>
+                            <ImageAuto source={game66} style={{ width: 30 }}/>
+                            <Text style={[styles.rpTitleText, { textAlign: 'center', width: 120, color: '#FF6C00', fontSize: 28 }]}>{this.state.trCorrectRate}</Text>
                         </View>
-                        <View style={[css.flex, css.sp, { width: progressBoxWidth }]}>
-                            <Text style={styles.proText}>一般</Text>
-                            <Text style={styles.proText}>平平</Text>
-                            <Text style={styles.proText}>优秀</Text>
+                        <ImageBackground source={game11} style={[css.flex, styles.LineTextBg, css.fw]}>
+                            <View style={[css.flex, styles.progressBox, css.js, css.pr]}>
+                                <View style={[css.flex, styles.progressInner, {
+                                    width: this.state.trCorrectRate
+                                }]}/>
+                                <View style={[css.pa, styles.zsView, { left: 10 }]}/>
+                                <View style={[css.pa, styles.zsView, { left: progressBoxWidth * 0.5 - 8 }]}/>
+                                <View style={[css.pa, styles.zsView, { right: 10 }]}/>
+                            </View>
+                            <View style={[css.flex, css.sp, { width: progressBoxWidth }]}>
+                                <Text style={styles.proText}>一般</Text>
+                                <Text style={styles.proText}>平平</Text>
+                                <Text style={styles.proText}>优秀</Text>
+                            </View>
+                        </ImageBackground>
+                        <Text style={styles.rpTitleText}>答题正确率越高，收益越大</Text>
+                        <View style={[css.flex]}>
+                            <Text style={styles.rpRedText}>答题收益</Text>
+                            <View style={styles.rpRedEmptyBox}/>
+                            <Text style={styles.rpRedMinText}>=</Text>
+                            <View style={styles.rpRedEmptyBox}/>
+                            <Text style={styles.rpRedText}>答题获得的金币</Text>
+                            <View style={styles.rpRedEmptyBox}/>
+                            <Text style={styles.rpRedMinText}>*</Text>
+                            <View style={styles.rpRedEmptyBox}/>
+                            <Text style={styles.rpRedText}>答题正确率</Text>
                         </View>
-                    </ImageBackground>
-                    <Text style={styles.rpTitleText}>答题正确率越高，收益越大</Text>
-                    <View style={[css.flex]}>
-                        <Text style={styles.rpRedText}>答题收益</Text>
-                        <View style={styles.rpRedEmptyBox}/>
-                        <Text style={styles.rpRedMinText}>=</Text>
-                        <View style={styles.rpRedEmptyBox}/>
-                        <Text style={styles.rpRedText}>答题获得的金币</Text>
-                        <View style={styles.rpRedEmptyBox}/>
-                        <Text style={styles.rpRedMinText}>*</Text>
-                        <View style={styles.rpRedEmptyBox}/>
-                        <Text style={styles.rpRedText}>答题正确率</Text>
                     </View>
-                </View>
-                <View style={[css.flex, css.fw, styles.rpPageWrap, css.js]}>
-                    <Text style={styles.rpTitleText}>累计答题154次，答错10次</Text>
-                    <Text style={styles.rpTitleMinText}>答错记录:</Text>
-                    {this._renderIdiomList()}
-                </View>
+                    <View style={[css.flex, css.fw, styles.rpPageWrap, css.js]}>
+                        <Text style={styles.rpTitleText}>累计答题{getPath(['user_level', 'total_num'], this.state.user, 0)}次，答错{getPath(['user_level', 'error_num'], this.state.user, 0)}次</Text>
+                        <Text style={styles.rpTitleMinText}>答错记录:</Text>
+                        {this._renderIdiomList()}
+                    </View>
+                </ScrollView>
             </SafeAreaView>
         );
     }
