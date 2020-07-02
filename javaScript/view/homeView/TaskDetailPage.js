@@ -142,7 +142,7 @@ function TaskDetailPage (props) {
                     <DetailView detail={detail} account={account} change={change}/>
                     <ClaimView detail={detail}/>
                     <CourseView name={name} taskImage={taskImage} setTaskImage={setTaskImage} detail={detail} progress={progress} setProgress={setProgress} setName={setName} setImages={setImages} images={images} />
-                    <Btn taskImage={taskImage} sRef={sRef} setProgress={setProgress} setName={setName} setImages={setImages} detail={detail} name={name} account={account} images={images} setChange={setChange} setDetail={setDetail} setAccount={setAccount}/>
+                    <Btn taskImage={taskImage} sRef={sRef} setProgress={setProgress} setName={setName} setImages={setImages} detail={detail} name={name} images={images} setDetail={setDetail} setAccount={setAccount}/>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -478,7 +478,7 @@ function RenderImage ({ images, length, progress, setProgress, index, setImages,
     );
 }
 
-function Btn ({ images, taskImage, sRef, setName, account, detail, setProgress, setImages, name, setChange, setDetail, setAccount }) {
+function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages, name, setDetail, setAccount }) {
     const { status, nickname, home_url, receive_task_id, platform_category } = detail;
 
     function submit (callback) {
