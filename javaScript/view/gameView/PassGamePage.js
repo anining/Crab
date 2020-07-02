@@ -30,16 +30,14 @@ import { HEADER_HEIGHT } from '../tabView/HomePage';
 import LottieView from 'lottie-react-native';
 import chest from '../../lottie/chest';
 import PropTypes from 'prop-types';
-import { _toFixed, toGoldCoin, transformMoney } from '../../utils/util';
+import { _if, _toFixed, toGoldCoin, transformMoney } from '../../utils/util';
 import ShiftView from '../../components/ShiftView';
-import game20 from '../../assets/icon/game/game20.png';
 import IdiomCard from '../../components/IdiomCard';
 import { addNoteBook, choseGetAward } from '../../utils/api';
 import toast from '../../utils/toast';
-import * as U from 'karet.util';
 import GameHeader from '../../components/GameHeader';
 import { updateNextRedLevel, updateUser } from '../../utils/update';
-import { bindData, getPath } from '../../global/global';
+import { bindData, getGlobal, getPath } from '../../global/global';
 import { avatarProLevelPosition, getGradeConfig, homeProLevelPosition } from '../../utils/levelConfig';
 
 const { height, width } = Dimensions.get('window');
@@ -138,8 +136,7 @@ export default class PassGamePage extends Component {
             const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
             for (let i = 0; i < this.state.gradeRange.length; i++) {
                 const item = this.state.gradeRange[i];
-                console.log(item, myNowLevel, '???????==', item === myNowLevel - 1, myNowLevel);
-                if (item === myNowLevel - 1) {
+                if (item && (item === myNowLevel)) {
                     const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
                     const coinRate = getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting);
                     if (nextGradeConfig && coinRate) {
@@ -157,16 +154,16 @@ export default class PassGamePage extends Component {
                 }
             }
             updateUser();
-            // updateNextRedLevel();
         } catch (e) {
             console.log(e);
+            updateUser();
         }
     }
 
     async componentDidMount () {
         this._showPop();
-        // updateNextRedLevel();
-        // _isUpgrade 是否升级判断完成后才更新用户信息
+        updateNextRedLevel();
+        // _isUpgrade 是否升级判断完成后才更新用户信息1
     }
 
     _renderIdiomList () {
@@ -195,17 +192,20 @@ export default class PassGamePage extends Component {
 
     static _countNextLevel (now, array) {
         try {
-            console.log(now, array, '=======');
-            let retNumber = 0;
-            for (let i = 0; i < array.length; i++) {
-                const item = array[i];
-                if (item > now) {
-                    retNumber = item;
-                    console.log(retNumber);
-                    break;
+            if (array && array.length) {
+                let retNumber = 0;
+                for (let i = 0; i < array.length; i++) {
+                    const item = array[i];
+                    if (item > now) {
+                        retNumber = item;
+                        console.log(retNumber);
+                        break;
+                    }
                 }
+                return retNumber - now;
+            } else {
+                return 0;
             }
-            return retNumber - now;
         } catch (e) {
             console.log(e);
         }
@@ -213,27 +213,17 @@ export default class PassGamePage extends Component {
 
     _renderProgress () {
         try {
-            console.log(this.state.nextRedLevel, '????', this.state.user, this.state.gradeSetting, '==========uio');
-            if (this.state.nextRedLevel && this.state.nextRedLevel.length) {
-                const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
-                const preLevel = getPath([myGradeLevel - 1], this.state.gradeRange, 0);
-                const nexLevel = getPath([myGradeLevel], this.state.gradeRange, 0);
-                const myNowLevel = getPath(['user_level', 'level_num'], this.state.user, 1);
-                const levelLength = nexLevel - preLevel;
-                const progressInnerLength = Number((myNowLevel - preLevel) / levelLength);
-                return <View style={[css.flex, css.fw, styles.progressWrap, css.pr]}>
-                    {(() => {
-                        const view = [];
-                        this.state.nextRedLevel.splice(0, 2).forEach((item, index) => {
-                            const forwardNumber = Math.floor((item - preLevel) / levelLength);
-                            view.push(
-                                <ImageAuto style={[css.pa, styles.redImage, {
-                                    left: forwardNumber * 90 + '%'
-                                }]} source={game16} key={`red${index}`}/>
-                            );
-                        });
-                        return view;
-                    })()}
+            const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
+            const preLevel = getPath([myGradeLevel - 1], this.state.gradeRange, 0);
+            const nexLevel = getPath([myGradeLevel], this.state.gradeRange, 0);
+            const myNowLevel = this.paramsInfo.userLevel;
+            const levelLength = nexLevel - preLevel;
+            const progressInnerLength = Number((myNowLevel - preLevel) / levelLength);
+            return <View style={[css.flex, css.fw, styles.progressWrap]} key={`${JSON.stringify(this.state.nextRedLevel)}`}>
+                {_if(this.state.nextRedLevel && this.state.nextRedLevel.length, res => <View style={[css.flex, css.fw, css.pr, {
+                    height: '100%',
+                    paddingTop: 35
+                }]} key={`${JSON.stringify(this.state.nextRedLevel)}`}>
                     <View style={[css.flex, styles.progressBox, css.js]}>
                         <View style={[css.flex, styles.progressInner, {
                             width: progressInnerLength * 100 + '%'
@@ -242,14 +232,24 @@ export default class PassGamePage extends Component {
                     <View style={{ height: 20, width: '100%' }}/>
                     <Text style={[styles.gamePassTips, css.gf, { fontSize: 15 }]}>再闯关<Text
                         style={{ fontSize: 17, color: 'red' }}>{PassGamePage._countNextLevel(myNowLevel, this.state.nextRedLevel)}</Text>关领红包</Text>
-                </View>;
-            } else {
-                return <View style={[css.flex, css.fw, styles.progressWrap, {
-                    height: 50
-                }]}>
-                    <Text style={styles.noRedText}>更多红包在后面关卡等你拿～</Text>
-                </View>;
-            }
+                    {(() => {
+                        const view = [];
+                        [...this.state.nextRedLevel].forEach((item, index) => {
+                            const forwardNumber = (item - preLevel) / levelLength;
+                            console.log(item, preLevel, levelLength, forwardNumber, (item - preLevel) / levelLength, '===+++++====');
+                            view.push(
+                                <ImageAuto key={`${item}${forwardNumber}`} style={[css.pa, styles.redImage, {
+                                    left: forwardNumber * 100 + '%',
+                                    transform: [{ translateX: -15 }]
+                                }]} source={game16} />
+                            );
+                        });
+                        return view;
+                    })()}
+                </View>, () => {
+                    return <Text style={styles.noRedText}>更多红包在后面关卡等你拿～</Text>;
+                })}
+            </View>;
         } catch (e) {
             console.log(e);
             return null;
@@ -473,11 +473,9 @@ const styles = StyleSheet.create({
         width: 30,
     },
     progressWrap: {
-        // backgroundColor: 'red',
         height: 100,
         marginTop: 20,
-        paddingTop: 30,
-        width: '70%',
+        width: '70%'
     },
     redImage: {
         left: 20,

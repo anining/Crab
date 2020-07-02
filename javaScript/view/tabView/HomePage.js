@@ -92,7 +92,7 @@ export default class HomePage extends Component {
             if (this.animationCanstart) {
                 this._getPosition();
                 updateUser();
-                updateNextRedLevel();
+                // updateNextRedLevel();
             }
         }, HomeStartAnimationTime);
     }
@@ -124,7 +124,7 @@ export default class HomePage extends Component {
             const nexLevel = getPath([myGradeLevel], this.state.gradeRange, 0);
             const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
             const levelLength = nexLevel - preLevel;
-            const myForwardNumber = parseInt(avatarProLevelPosition.length * (myNowLevel - preLevel) / levelLength);
+            const myForwardNumber = Math.floor(avatarProLevelPosition.length * (myNowLevel - preLevel) / levelLength);
             console.log(myGradeLevel, preLevel, nexLevel, myNowLevel, this.state.gradeRange);
             const view = [];
             if (this.state.nextRedLevel.length) {
