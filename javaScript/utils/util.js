@@ -399,11 +399,11 @@ export function rangeLevel (level, rangeArray) {
         for (let i = 0; i < rangeArray.length; i++) {
             const item = rangeArray[i];
             if (level < item) {
-                grade = i + 1;
+                grade = i;
                 break;
             }
             if ((i === rangeArray.length - 1) && (level >= item)) {
-                grade = i + 1;
+                grade = i;
             }
         }
         console.log(grade, '=======计算结果');

@@ -39,7 +39,7 @@ function NoticePage () {
                                         <Text numberOfLines={1} style={{ fontSize: 13, color: '#999' }}>{transformTime(updated_at)}</Text>
                                     </View>
                                     <Text numberOfLines={2} style={styles.content}>{content}</Text>
-                                    <TouchableOpacity onPress={() => {
+                                    <TouchableOpacity activeOpacity={1} onPress={() => {
                                         N.navigate('NoticeDetailPage', { content });
                                     }}>
                                         <Text numberOfLines={1} style={styles.btn}>查看详情 》</Text>

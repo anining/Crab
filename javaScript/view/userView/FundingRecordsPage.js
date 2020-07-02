@@ -113,7 +113,7 @@ function RenderSelect ({ setSource, source }) {
 
     STATUS_DATA.forEach(item => {
         view.push(
-            <TouchableOpacity onPress={() => setSource(item.id)} style={[styles.selectBtn, { backgroundColor: source === item.id ? '#FFEBDC' : '#F5F5F5' }]} key={item.id}>
+            <TouchableOpacity activeOpacity={1}  onPress={() => setSource(item.id)} style={[styles.selectBtn, { backgroundColor: source === item.id ? '#FFEBDC' : '#F5F5F5' }]} key={item.id}>
                 <Text style={[styles.selectBtnText, { color: source === item.id ? '#FF6C00' : '#333' }]}>{item.label}</Text>
             </TouchableOpacity>
         );

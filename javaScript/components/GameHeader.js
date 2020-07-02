@@ -38,6 +38,7 @@ import {
 import asyncStorage from '../utils/asyncStorage';
 import CountDown from './CountDown';
 import { updateUser } from '../utils/update';
+import { DelayGetDomeTime } from '../utils/animationConfig';
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
@@ -59,7 +60,7 @@ export default class GameHeader extends Component {
 
     async componentDidMount () {
         this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user));
-        nowBalance = parseFloat(this.state.user.goldCoin || 0);
+        nowBalance = getPath(['goldCoin'], this.state.user, 0);
         await this.getCoin();
         this.secondText && this.secondText.setNativeProps({
             text: `${_toFixed(nowBalance, 4)}`
@@ -70,7 +71,7 @@ export default class GameHeader extends Component {
     async getCoin () {
         try {
             const ret = await asyncStorage.getItem(`${getPath(['phone'], this.state.user)}coin`);
-            nowBalance = JsonParse(ret).coin || parseFloat(this.state.user.goldCoin || 0);
+            nowBalance = JsonParse(ret).coin || getPath(['goldCoin'], this.state.user, 0);
         } catch (e) {
             console.log(e);
         }
@@ -106,6 +107,11 @@ export default class GameHeader extends Component {
                         }
                     }, 50 * i);
                 }
+            } else {
+                if (!this.secondIncome) {
+                    this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user, 0.00005));
+                    nowBalance = getPath(['goldCoin'], this.state.user, 0);
+                }
             }
         } catch (e) {
             console.log(e);
@@ -127,49 +133,61 @@ export default class GameHeader extends Component {
     }
 
     render () {
-        const propNumber = getPath(['propNumsObj', '2'], this.state.user, 0);// 游戏道具数量
-        return <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
-            {_if(getPath(['last_get_game_prop_time'], this.state.user) && (propNumber < 10), res => {
-                return <CountDown callback={() => {
-                    updateUser();
-                }} style={styles.countDownText} viewStyle={{ ...css.pa, ...styles.countDownView }} time={+new Date(djangoTime(getPath(['last_get_game_prop_time'], this.state.user))) + propsTime}/>;
-            })}
-            <TouchableOpacity karet-lift activeOpacity={1} style={[styles.headerDataNumber, css.flex, {
-                backgroundColor: this.props.backgroundColor
-            }]}
-            onPress={() => {
-                this.showPop();
-            }}>
-                <ImageAuto source={game25} width={33} onLayout={(e) => {
-                    UIManager.measure(e.target, (x, y, w, h, l, t) => {
-                        this.imagePosition1 = [l, t];
-                    });
-                }}/>
-                <View style={styles.hdnTextWrap}>
-                    <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }}>{propNumber}</Text>/10</Text>
-                </View>
-                <ImageAuto source={game31} width={22}/>
-            </TouchableOpacity>
-            <EnlargeView ref={ref => this.enlarge = ref}>
-                <View style={[styles.headerDataNumber, css.flex, css.sp, css.pr, {
-                    width: 190,
+        if (this.state.user) {
+            const propNumber = getPath(['propNumsObj', '2'], this.state.user, 0);// 游戏道具数量
+            return <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
+                {_if(getPath(['last_get_game_prop_time'], this.state.user) && (propNumber < 10), res => {
+                    return <CountDown callback={() => {
+                        updateUser();
+                    }} style={styles.countDownText} viewStyle={{ ...css.pa, ...styles.countDownView }} time={+new Date(djangoTime(getPath(['last_get_game_prop_time'], this.state.user))) + propsTime}/>;
+                })}
+                <TouchableOpacity activeOpacity={1} karet-lift style={[styles.headerDataNumber, css.flex, {
                     backgroundColor: this.props.backgroundColor
-                }]}>
-                    <TouchableOpacity activeOpacity={1} style={[css.pa, styles.topHDN]} onPress={() => {
-                        N.navigate('WithdrawPage');
+                }]}
+                onPress={() => {
+                    this.showPop();
+                }}>
+                    <ImageAuto key={`li${getPath(['phone'], this.state.user, 0)}`} source={game25} width={33} onLayout={(e) => {
+                        const target = e.target;
+                        setAndroidTime(() => {
+                            UIManager.measure(target, (x, y, w, h, l, t) => {
+                                if (l && t) {
+                                    this.imagePosition1 = [l, t];
+                                }
+                            });
+                        }, DelayGetDomeTime);
                     }}/>
-                    <ImageAuto source={game22} width={33} onLayout={(e) => {
-                        UIManager.measure(e.target, (x, y, w, h, l, t) => {
-                            this.imagePosition2 = [l, t];
-                        });
-                    }}/>
-                    <TextInput multiline={false} style={[styles.hdnText]} ref={ref => this.secondText = ref} onFocus={() => {
-                        this.secondText.blur();
-                    }}/>
-                    <Text style={styles.withdrawBtn}>提现</Text>
-                </View>
-            </EnlargeView>
-        </View>;
+                    <View style={styles.hdnTextWrap}>
+                        <Text style={styles.hdnText}> <Text style={{ color: '#FF6C00' }}>{propNumber}</Text>/10</Text>
+                    </View>
+                    <ImageAuto source={game31} width={22}/>
+                </TouchableOpacity>
+                <EnlargeView ref={ref => this.enlarge = ref}>
+                    <View style={[styles.headerDataNumber, css.flex, css.sp, css.pr, {
+                        width: 190,
+                        backgroundColor: this.props.backgroundColor
+                    }]}>
+                        <TouchableOpacity activeOpacity={1} style={[css.pa, styles.topHDN]} onPress={() => {
+                            N.navigate('WithdrawPage');
+                        }}/>
+                        <ImageAuto key={`ri${getPath(['phone'], this.state.user, 0)}`} source={game22} width={33} onLayout={(e) => {
+                            const target = e.target;
+                            setAndroidTime(() => {
+                                UIManager.measure(target, (x, y, w, h, l, t) => {
+                                    if (l && t) {
+                                        this.imagePosition2 = [l, t];
+                                    }
+                                });
+                            }, DelayGetDomeTime);
+                        }}/>
+                        <TextInput multiline={false} style={[styles.hdnText]} ref={ref => this.secondText = ref} onFocus={() => {
+                            this.secondText.blur();
+                        }}/>
+                        <Text style={styles.withdrawBtn}>提现</Text>
+                    </View>
+                </EnlargeView>
+            </View>;
+        }
     }
 }
 GameHeader.propTypes = {

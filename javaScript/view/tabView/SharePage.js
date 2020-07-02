@@ -78,13 +78,13 @@ export default class SharePage extends PureComponent {
                       <Text style={[{ fontSize: 15, color: '#353535', fontWeight: '500', transform: [{ translateY: -40 }] }]}>您真的太棒了！</Text>
                       <Text style={[{ fontSize: 13, color: '#353535', fontWeight: '500', transform: [{ translateY: -30 }] }]}>您又有 <Text style={[{ color: '#FF3B00' }]}>{children_num} 位</Text> 徒弟一共为你贡献了</Text>
                       <Text style={[{ fontSize: 36, color: '#FF6C00', fontWeight: '800', transform: [{ translateY: -20 }] }]}>{add_balance}<Text style={[{ fontSize: 18 }]}>元</Text></Text>
-                      <TouchableOpacity onPress={() => {
+                      <TouchableOpacity activeOpacity={1} onPress={() => {
                           DeviceEventEmitter.emit('hidePop');
                           N.navigate('PupilInfoPage');
                       }}>
                           <Text style={[{ fontSize: 10, color: '#999', borderBottomColor: '#999', borderBottomWidth: 1 }]}>{'查看此次贡献收益的徒弟>>'}</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => {
+                      <TouchableOpacity activeOpacity={1} onPress={() => {
                           DeviceEventEmitter.emit('hidePop');
                       }} style={styles.popBtn}>
                           <Text style={[{ fontSize: 15, color: '#fff' }]}>我知道了</Text>
@@ -210,7 +210,7 @@ export default class SharePage extends PureComponent {
                         <View style={[styles.inviteWrap, css.auto]}>
                             <Animatable.View useNativeDriver={true} iterationDelay={5000} iterationCount="infinite"
                                 animation="tada" style={[css.auto]}>
-                                <TouchableOpacity onPress={() => {
+                                <TouchableOpacity activeOpacity={1} onPress={() => {
                                     DeviceEventEmitter.emit('showPop', {
                                         dom: <Share/>,
                                         close: () => {}
@@ -224,7 +224,7 @@ export default class SharePage extends PureComponent {
                                     </Shadow>
                                 </TouchableOpacity>
                             </Animatable.View>
-                            <TouchableOpacity activeOpacity={1} style={[css.flex, css.sp, styles.tipsWrap]}
+                            <TouchableOpacity activeOpacity={1} activeOpacity={1} style={[css.flex, css.sp, styles.tipsWrap]}
                                 onPress={() => {
                                     N.navigate('PupilInfoPage');
                                 }}>
@@ -245,7 +245,7 @@ export default class SharePage extends PureComponent {
                                         paddingTop: 30,
                                         paddingHorizontal: 10,
                                     }]}>
-                                        {SharePage._renderShareTitle(<Text style={styles.wTitleText}>徒弟提现送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>, <TouchableOpacity onPress={this.getReward}><Text style={{ fontSize: 11, color: 'rgba(255,92,34,1)', paddingRight: 15 }}>领取奖励</Text></TouchableOpacity>)}
+                                        {SharePage._renderShareTitle(<Text style={styles.wTitleText}>徒弟提现送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>, <TouchableOpacity activeOpacity={1} onPress={this.getReward}><Text style={{ fontSize: 11, color: 'rgba(255,92,34,1)', paddingRight: 15 }}>领取奖励</Text></TouchableOpacity>)}
                                         {this._renderCashBack()}
                                     </View>
                                 </Shadow>
@@ -282,21 +282,21 @@ export default class SharePage extends PureComponent {
 function Share () {
     return (
         <View style={styles.shareContainer}>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 N.navigate('ShareUrlPage');
                 DeviceEventEmitter.emit('hidePop');
             }} style={styles.shareView}>
                 <Image source={share11} style={styles.shareImg}/>
                 <Text style={styles.shareText}>链接收徒</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 N.navigate('ShareQRCodePage');
                 DeviceEventEmitter.emit('hidePop');
             }} style={styles.shareView}>
                 <Image source={share10} style={styles.shareImg}/>
                 <Text style={styles.shareText}>二维码收徒</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 Clipboard.setString(invite_code.get().toString());
                 DeviceEventEmitter.emit('hidePop');
                 toast('复制成功');

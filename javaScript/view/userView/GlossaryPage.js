@@ -62,7 +62,7 @@ export default class GlossaryPage extends Component {
                 const view = [];
                 this.state.glossaryInfo.forEach((item, index) => {
                     view.push(
-                        <TouchableOpacity key={`content${index}`} activeOpacity={1} style={[css.flex, styles.idiomItemWrap]} onPress={() => {
+                        <TouchableOpacity activeOpacity={1} key={`content${index}`} style={[css.flex, styles.idiomItemWrap]} onPress={() => {
                             DeviceEventEmitter.emit('showPop', <GameDialog callback={async () => {
                                 await this._deleteNoteBook(item.idiom.idiom_id);
                             }} btn={'移除生词本'} content={<IdiomCard content={item.idiom.idiom} idiom={item.idiom}/>}/>);
@@ -78,7 +78,7 @@ export default class GlossaryPage extends Component {
             }
         } catch (e) {
             console.log(e);
-            return null;
+            return <Text style={[styles.emptyText]}>你还没有加入过成语~</Text>;
         }
     }
 

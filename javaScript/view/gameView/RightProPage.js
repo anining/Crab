@@ -57,7 +57,7 @@ export default class RightProPage extends Component {
                 const view = [];
                 this.state.glossaryInfo.forEach((item, index) => {
                     view.push(
-                        <TouchableOpacity key={`content${index}`} activeOpacity={1} style={[css.flex, styles.idiomItemWrap]} onPress={() => {
+                        <TouchableOpacity activeOpacity={1} key={`content${index}`} activeOpacity={1} style={[css.flex, styles.idiomItemWrap]} onPress={() => {
                             DeviceEventEmitter.emit('showPop', <GameDialog btn={'我学会了'} content={<IdiomCard content={item.idiom.idiom} idiom={item.idiom}/>}/>);
                         }}>
                             <ImageAuto source={game37} style={{ width: 16, marginRight: 5 }}/>

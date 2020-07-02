@@ -30,16 +30,14 @@ import { HEADER_HEIGHT } from '../tabView/HomePage';
 import LottieView from 'lottie-react-native';
 import chest from '../../lottie/chest';
 import PropTypes from 'prop-types';
-import { _toFixed, toGoldCoin, transformMoney } from '../../utils/util';
+import { _if, _toFixed, setAndroidTime, toGoldCoin, transformMoney } from '../../utils/util';
 import ShiftView from '../../components/ShiftView';
-import game20 from '../../assets/icon/game/game20.png';
 import IdiomCard from '../../components/IdiomCard';
 import { addNoteBook, choseGetAward } from '../../utils/api';
 import toast from '../../utils/toast';
-import * as U from 'karet.util';
 import GameHeader from '../../components/GameHeader';
 import { updateNextRedLevel, updateUser } from '../../utils/update';
-import { bindData, getPath } from '../../global/global';
+import { bindData, getGlobal, getPath } from '../../global/global';
 import { avatarProLevelPosition, getGradeConfig, homeProLevelPosition } from '../../utils/levelConfig';
 
 const { height, width } = Dimensions.get('window');
@@ -54,7 +52,7 @@ export default class PassGamePage extends Component {
         this.state = {
             user: bindData('user', this),
             gradeSetting: bindData('gradeSetting', this),
-            nextRedLevel: bindData('nextRedLevel', this),
+            nextRedLevel: getGlobal('nextRedLevel'),
             gradeRange: bindData('gradeRange', this),
             gameHeaderPosition: null, // 头部图像视图
             accuracyImagePosition: null // 答题按钮螃蟹视图
@@ -67,6 +65,21 @@ export default class PassGamePage extends Component {
         console.log(ret);
         if (ret && !ret.error) {
             toast('加入成功');
+        }
+    }
+
+    async getAward () {
+        try {
+            // 直接领取
+            const ret = await choseGetAward();
+            DeviceEventEmitter.emit('hidePop');
+            if (ret && !ret.error) {
+                const addBalance = getPath(['data', 'add_balance'], ret);
+                this.gameHeader && this.gameHeader.start(toGoldCoin(addBalance));
+                toast('领取成功');
+            }
+        } catch (e) {
+            console.log(e);
         }
     }
 
@@ -91,66 +104,71 @@ export default class PassGamePage extends Component {
             </View>);
         }
         if (this.paramsInfo && this.paramsInfo.rate > 1) {
-            DeviceEventEmitter.emit('showPop', <ImageBackground source={game17} style={[styles.gameRedPackage, css.flex, css.pr]}>
-                <Text style={styles.hdnRedPackageText}>+{transformMoney(this.paramsInfo.add_balance)}<Text style={{ fontSize: 15 }}>金币</Text></Text>
-                <View style={styles.hdnRedBtnWrap}>
-                    <Text style={styles.hdnRedBtnText} onPress={async () => {
-                        // 双倍领取
-                        const ret = await choseGetAward(true);
-                        DeviceEventEmitter.emit('hidePop');
-                        if (ret && !ret.error) {
-                            N.navigate('AnswerPage');
-                            toast('完成任务后即可领取双倍奖励');
-                        }
-                    }}/>
-                    <Text style={styles.hdnRedBtnText} onPress={async () => {
-                        // 直接领取
-                        const ret = await choseGetAward();
-                        DeviceEventEmitter.emit('hidePop');
-                        if (ret && !ret.error) {
-                            const addBalance = getPath(['data', 'add_balance'], ret);
-                            this.gameHeader && this.gameHeader.start(toGoldCoin(addBalance));
-                            toast('领取成功');
-                        }
-                    }}/>
-                </View>
-            </ImageBackground>);
+            DeviceEventEmitter.emit('showPop', {
+                dom: <ImageBackground source={game17} style={[styles.gameRedPackage, css.flex, css.pr]}>
+                    <Text style={styles.hdnRedPackageText}>+{transformMoney(this.paramsInfo.add_balance)}<Text style={{ fontSize: 15 }}>金币</Text></Text>
+                    <View style={styles.hdnRedBtnWrap}>
+                        <Text style={styles.hdnRedBtnText} onPress={async () => {
+                            // 双倍领取
+                            const ret = await choseGetAward(true);
+                            DeviceEventEmitter.emit('hidePop');
+                            if (ret && !ret.error) {
+                                N.navigate('AnswerPage');
+                                toast('完成任务后即可领取双倍奖励');
+                            }
+                        }}/>
+                        <Text style={styles.hdnRedBtnText} onPress={async () => {
+                            await this.getAward();
+                        }}/>
+                    </View>
+                </ImageBackground>,
+                close: async () => {
+                    DeviceEventEmitter.emit('hidePop');
+                    this._isUpgrade();// 这个弹窗完以后，判断是否升级
+                }
+            });
         }
     }
 
     _isUpgrade () {
         try {
-            const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
-            const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
-            for (let i = 0; i < this.state.gradeRange.length; i++) {
-                const item = this.state.gradeRange[i];
-                if (item === (myNowLevel + 1)) {
-                    const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
-                    const coinRate = getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting);
-                    if (nextGradeConfig && coinRate) {
-                        DeviceEventEmitter.emit('showPop', <GameDialog transparent={true} callback={() => {
-                            DeviceEventEmitter.emit('hidePop');
-                        }} btn={'知道啦'} content={
-                            <View style={[css.flex, css.fw, css.pr]}>
-                                <LottieView key={nextGradeConfig.lottie} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={nextGradeConfig.lottie} source={nextGradeConfig.upgrade} loop={false} autoPlay={true} speed={1}/>
-                                <Text style={[css.pa, styles.lottieUpgradeText]}>当前金币产量<Text style={{ color: '#F9D200' }}>{coinRate}</Text></Text>
-                            </View>
-                        }/>);
+            setAndroidTime(() => {
+                const myNowLevel = this.paramsInfo.userLevel;
+                const myGradeLevel = this.paramsInfo.myGradeLevel;
+                for (let i = 0; i < this.state.gradeRange.length; i++) {
+                    const item = this.state.gradeRange[i];
+                    if (item && (item === myNowLevel)) {
+                        const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
+                        const coinRate = getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting);
+                        if (nextGradeConfig && coinRate) {
+                            DeviceEventEmitter.emit('showPop', <GameDialog transparent={true} callback={() => {
+                                DeviceEventEmitter.emit('hidePop');
+                            }} btn={'知道啦'} content={
+                                <View style={[css.flex, css.fw, css.pr]}>
+                                    <Text style={[styles.lottieUpgradeText, { fontSize: 20 }]}>恭喜你的渔船升级啦!</Text>
+                                    <LottieView key={nextGradeConfig.lottie} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={nextGradeConfig.lottie} source={nextGradeConfig.upgrade} loop={false} autoPlay={true} speed={1}/>
+                                    <Text style={[css.pa, styles.lottieUpgradeText]}>当前金币产量<Text style={{ color: '#F9D200' }}>{coinRate}</Text></Text>
+                                </View>
+                            }/>);
+                        }
+                        break;
                     }
-                    break;
                 }
-            }
-            updateUser();
-            updateNextRedLevel();
+            }, 500);
         } catch (e) {
             console.log(e);
         }
     }
 
+    static updateSameInfo () {
+        updateUser();
+        updateNextRedLevel();
+    }
+
     async componentDidMount () {
         this._showPop();
-        updateNextRedLevel();
-        // _isUpgrade 是否升级判断完成后才更新用户信息
+        PassGamePage.updateSameInfo();
+        // _isUpgrade 是否升级判断完成后才更新用户信息1
     }
 
     _renderIdiomList () {
@@ -159,7 +177,7 @@ export default class PassGamePage extends Component {
                 const view = [];
                 this.paramsInfo.content.forEach((item, index) => {
                     view.push(
-                        <TouchableOpacity key={`content${index}`} activeOpacity={1}
+                        <TouchableOpacity activeOpacity={1} key={`content${index}`}
                             style={[css.flex, styles.idiomItemWrap]} onPress={() => {
                                 DeviceEventEmitter.emit('showPop', <GameDialog callback={async () => {
                                     await PassGamePage._addNoteBook(item);
@@ -179,17 +197,20 @@ export default class PassGamePage extends Component {
 
     static _countNextLevel (now, array) {
         try {
-            let ret = 0;
-            for (let i = 0; i < array.length; i++) {
-                const item = array[i];
-                console.log(item, 'dsadsa???', now, item > now);
-                if (item > now) {
-                    ret = item;
-                    console.log(ret);
-                    break;
+            if (array && array.length) {
+                let retNumber = 0;
+                for (let i = 0; i < array.length; i++) {
+                    const item = array[i];
+                    if (item > now) {
+                        retNumber = item;
+                        console.log(retNumber);
+                        break;
+                    }
                 }
+                return retNumber - now;
+            } else {
+                return 0;
             }
-            return ret;
         } catch (e) {
             console.log(e);
         }
@@ -197,27 +218,17 @@ export default class PassGamePage extends Component {
 
     _renderProgress () {
         try {
-            console.log(this.state.nextRedLevel, '????', this.state.user);
-            if (this.state.nextRedLevel && this.state.nextRedLevel.length) {
-                const preLevel = getPath([getPath(['myGradeLevel'], this.state.user) - 1, 'level'], this.state.gradeSetting) || 0;
-                const nexLevel = getPath(['myGrade', 'level'], this.state.user);
-                const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
-                const levelLength = nexLevel - preLevel;
-                const progressInnerLength = Number((myNowLevel - preLevel) / levelLength);
-                console.log(myNowLevel, this.state.nextRedLevel, '????');
-                return <View style={[css.flex, css.fw, styles.progressWrap, css.pr]}>
-                    {(() => {
-                        const view = [];
-                        this.state.nextRedLevel.splice(0, 2).forEach((item, index) => {
-                            const forwardNumber = Math.floor((item - preLevel) / levelLength);
-                            view.push(
-                                <ImageAuto style={[css.pa, styles.redImage, {
-                                    left: forwardNumber * 100 + '%'
-                                }]} source={game16} key={`red${index}`}/>
-                            );
-                        });
-                        return view;
-                    })()}
+            const myGradeLevel = this.paramsInfo.myGradeLevel;
+            const preLevel = getPath([myGradeLevel - 1], this.state.gradeRange, 0);
+            const nexLevel = getPath([myGradeLevel], this.state.gradeRange, 0);
+            const myNowLevel = this.paramsInfo.userLevel;
+            const levelLength = nexLevel - preLevel;
+            const progressInnerLength = Number((myNowLevel - preLevel) / levelLength);
+            return <View style={[css.flex, css.fw, styles.progressWrap]} key={`${JSON.stringify(this.state.nextRedLevel)}`}>
+                {_if(this.state.nextRedLevel && this.state.nextRedLevel.length, res => <View style={[css.flex, css.fw, css.pr, {
+                    height: '100%',
+                    paddingTop: 35
+                }]} key={`${JSON.stringify(this.state.nextRedLevel)}`}>
                     <View style={[css.flex, styles.progressBox, css.js]}>
                         <View style={[css.flex, styles.progressInner, {
                             width: progressInnerLength * 100 + '%'
@@ -226,14 +237,24 @@ export default class PassGamePage extends Component {
                     <View style={{ height: 20, width: '100%' }}/>
                     <Text style={[styles.gamePassTips, css.gf, { fontSize: 15 }]}>再闯关<Text
                         style={{ fontSize: 17, color: 'red' }}>{PassGamePage._countNextLevel(myNowLevel, this.state.nextRedLevel)}</Text>关领红包</Text>
-                </View>;
-            } else {
-                return <View style={[css.flex, css.fw, styles.progressWrap, {
-                    height: 50
-                }]}>
-                    <Text style={styles.noRedText}>更多红包在后面关卡等你拿～</Text>
-                </View>;
-            }
+                    {(() => {
+                        const view = [];
+                        [...this.state.nextRedLevel].forEach((item, index) => {
+                            const forwardNumber = (item - preLevel) / levelLength;
+                            console.log(item, preLevel, levelLength, forwardNumber, (item - preLevel) / levelLength, '===+++++====');
+                            view.push(
+                                <ImageAuto key={`${item}${forwardNumber}`} style={[css.pa, styles.redImage, {
+                                    left: forwardNumber * 100 + '%',
+                                    transform: (forwardNumber) ? (forwardNumber < 0.9) ? [{ translateX: -15 }] : [{ translateX: -30 }] : [{ translateX: 0 }]
+                                }]} source={game16} />
+                            );
+                        });
+                        return view;
+                    })()}
+                </View>, () => {
+                    return <Text style={styles.noRedText}>更多红包在后面关卡等你拿～</Text>;
+                })}
+            </View>;
         } catch (e) {
             console.log(e);
             return null;
@@ -242,47 +263,49 @@ export default class PassGamePage extends Component {
 
     render () {
         try {
-            return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
-                <ScrollView style={{ flex: 1 }}>
-                    {/* 头部显示区域 */}
-                    <GameHeader ref={ref => this.gameHeader = ref} backgroundColor={'rgba(0,0,0,.3)'}/>
-                    <ShiftView callback={() => {
-                        N.replace('GamePage');
-                    }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
-                    startSite={[25, HEADER_HEIGHT - 28]} endSite={[width * 0.5 + 90, width * 1.4]}>
-                        <ImageAuto source={game25} width={33}/>
-                    </ShiftView>
-                    {/* 核心显示区域 */}
-                    <View style={[styles.gameResWrap, css.pr]}>
-                        <ImageBackground source={game4} style={[css.flex, css.pa, styles.gamePassHeader]}>
-                            <Text style={styles.gamePassText} numberOfLines={1} karet-lift>恭喜通过第{getPath(['userLevel'], this.paramsInfo, 0)}关</Text>
-                        </ImageBackground>
-                        <View style={[styles.gameCanvasWrap]}>
-                            <View style={[styles.gameCanvasInner, css.flex, css.fw, css.afs]}>
-                                <Text style={[styles.gamePassTips, css.gf]}>您已超越<Text
-                                    style={{ fontSize: 20, color: 'red' }}>{_toFixed(getPath(['surpass'], this.state.user, 0) * 100) + '%'}</Text>用户</Text>
-                                <View style={[css.flex, css.fw, styles.idiomWrap, css.afs, css.js]}>
-                                    {this._renderIdiomList()}
-                                </View>
-                                {this._renderProgress()}
-                                <View style={[css.flex, css.sp, styles.nextBtnWrap]}>
-                                    <TouchableOpacity activeOpacity={1} onPress={() => {
-                                        N.goBack();
-                                    }}>
-                                        <ImageAuto source={game14} style={{ width: 55 }}/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity activeOpacity={1} onPress={() => {
-                                        // N.navigate('GamePage');
-                                        this.startGame && this.startGame.start();
-                                    }}>
-                                        <ImageAuto source={game8} style={{ width: 200 }}/>
-                                    </TouchableOpacity>
+            if (this.state.user && this.state.gradeSetting && this.state.nextRedLevel && this.state.gradeRange) {
+                return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
+                    <ScrollView style={{ flex: 1 }}>
+                        {/* 头部显示区域 */}
+                        <GameHeader ref={ref => this.gameHeader = ref} backgroundColor={'rgba(0,0,0,.3)'}/>
+                        <ShiftView callback={() => {
+                            N.replace('GamePage');
+                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
+                        startSite={[25, HEADER_HEIGHT - 28]} endSite={[width * 0.5 + 90, width * 1.4]}>
+                            <ImageAuto source={game25} width={33}/>
+                        </ShiftView>
+                        {/* 核心显示区域 */}
+                        <View style={[styles.gameResWrap, css.pr]}>
+                            <ImageBackground source={game4} style={[css.flex, css.pa, styles.gamePassHeader]}>
+                                <Text style={styles.gamePassText} numberOfLines={1} karet-lift>恭喜通过第{getPath(['userLevel'], this.paramsInfo, 0)}关</Text>
+                            </ImageBackground>
+                            <View style={[styles.gameCanvasWrap]}>
+                                <View style={[styles.gameCanvasInner, css.flex, css.fw, css.afs]}>
+                                    <Text style={[styles.gamePassTips, css.gf]}>您已超越<Text
+                                        style={{ fontSize: 20, color: 'red' }}>{_toFixed(getPath(['surpass'], this.state.user, 0) * 100) + '%'}</Text>用户</Text>
+                                    <View style={[css.flex, css.fw, styles.idiomWrap, css.afs, css.js]}>
+                                        {this._renderIdiomList()}
+                                    </View>
+                                    {this._renderProgress()}
+                                    <View style={[css.flex, css.sp, styles.nextBtnWrap]}>
+                                        <TouchableOpacity activeOpacity={1} onPress={() => {
+                                            N.goBack();
+                                        }}>
+                                            <ImageAuto source={game14} style={{ width: 55 }}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity activeOpacity={1} onPress={() => {
+                                            // N.navigate('GamePage');
+                                            this.startGame && this.startGame.start();
+                                        }}>
+                                            <ImageAuto source={game8} style={{ width: 200 }}/>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             </View>
                         </View>
-                    </View>
-                </ScrollView>
-            </SafeAreaView>;
+                    </ScrollView>
+                </SafeAreaView>;
+            }
         } catch (e) {
             console.log(e);
             return null;
@@ -455,11 +478,10 @@ const styles = StyleSheet.create({
         width: 30,
     },
     progressWrap: {
-        // backgroundColor: 'red',
         height: 100,
         marginTop: 20,
-        paddingTop: 30,
-        width: '70%',
+        overflow: 'hidden',
+        width: '70%'
     },
     redImage: {
         left: 20,

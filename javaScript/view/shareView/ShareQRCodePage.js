@@ -65,10 +65,10 @@ function ShareQRCodePage () {
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#fff', justifyContent: 'space-around', paddingBottom: 10 }]}>
             <Slider view={view} setCapture={setCapture}/>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                <TouchableOpacity style={styles.btn} onPress={onShare}>
+                <TouchableOpacity activeOpacity={1} style={styles.btn} onPress={onShare}>
                     <Text style={{ fontSize: 16, fontWeight: '500', color: '#fff' }}>分享给好友</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.btn, { backgroundColor: '#FF6C00' }]} onPress={save}>
+                <TouchableOpacity activeOpacity={1} style={[styles.btn, { backgroundColor: '#FF6C00' }]} onPress={save}>
                     <Text style={{ fontSize: 16, fontWeight: '500', color: '#fff' }}>保存图片</Text>
                 </TouchableOpacity>
             </View>
@@ -117,7 +117,7 @@ function Slider ({ view, setCapture }) {
                 renderItem={({ item }) => {
                     const { source, id, size, left, top } = item;
                     return (
-                        <TouchableOpacity key={id} style={{ borderRadius: 8, overflow: 'hidden' }}>
+                        <TouchableOpacity activeOpacity={1} key={id} style={{ borderRadius: 8, overflow: 'hidden' }}>
                             <ImageBackground source={source} style={{ width: width * 0.7, height, position: 'relative' }} ref={ref => {
                                 let localView = view.get();
                                 localView = [...localView, ...[ref]].slice(0, 4);

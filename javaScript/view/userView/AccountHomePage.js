@@ -62,7 +62,7 @@ function RenderSelect () {
     TYPE.forEach(item => {
         const { id, label } = item;
         view.push(
-            <TouchableOpacity key={id} onPress={() => {
+            <TouchableOpacity activeOpacity={1}  key={id} onPress={() => {
                 DeviceEventEmitter.emit('hidePop');
                 N.navigate('AccountBindPage', { id, label });
             }} style={[styles.selectViewBtn, css.flexRCSB]}>
@@ -82,7 +82,7 @@ function RenderView () {
     const children = (
         <>
             <Text style={{ marginTop: 7, marginBottom: 20 }}>快去绑定账号做任务吧～</Text>
-            <TouchableOpacity onPress={() => { DeviceEventEmitter.emit('showPop', <RenderSelect />); }} style={{ width: 206, height: 44, backgroundColor: '#FF9C00', borderRadius: 22 }}>
+            <TouchableOpacity activeOpacity={1}  onPress={() => { DeviceEventEmitter.emit('showPop', <RenderSelect />); }} style={{ width: 206, height: 44, backgroundColor: '#FF9C00', borderRadius: 22 }}>
                 <Text numberOfLines={1} style={{ color: '#fff', lineHeight: 44, textAlign: 'center', fontSize: 17 }}>添加绑定</Text>
             </TouchableOpacity>
         </>
@@ -125,7 +125,7 @@ function RenderBindView () {
                             <Text karet-lift numberOfLines={1} style={{ fontSize: 10, color: '#353535' }}>账号类型：{label}</Text>
                         </View>
                     </View>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity activeOpacity={1}  onPress={() => {
                         DeviceEventEmitter.emit('showPop', <RenderChange karet-lift label={label} account_id={account_id} platform_category={platform_category}/>);
                     }} style={styles.changeBindBtn}>
                         <Text numberOfLines={1} style={{ color: '#fff', lineHeight: 35, textAlign: 'center', fontSize: 13 }}>切换账号</Text>
@@ -143,15 +143,15 @@ function RenderBindView () {
                 </View>
                 <View style={[css.flexRCSB, styles.item, styles.urlView]}>
                     <Text karet-lift numberOfLines={1} style={styles.urlText}>绑定链接：{home_url}</Text>
-                    <TouchableOpacity karet-lift onPress={clipboard}>
+                    <TouchableOpacity activeOpacity={1}  karet-lift onPress={clipboard}>
                         <Text numberOfLines={1} style={{ fontSize: 12, color: '#FF6C00' }}>复制链接</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={[css.flexRCSB, styles.item, styles.btnView]}>
-                    <TouchableOpacity karet-lift onPress={delClick} style={styles.giveUpBtn}>
+                    <TouchableOpacity activeOpacity={1}  karet-lift onPress={delClick} style={styles.giveUpBtn}>
                         <Text karet-lift numberOfLines={1} style={styles.bindBtnText }>{U.ifElse(status3, '换号重绑', '刷新状态')}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity karet-lift onPress={delClick} style={styles.delBtn}>
+                    <TouchableOpacity activeOpacity={1}  karet-lift onPress={delClick} style={styles.delBtn}>
                         <Text numberOfLines={1} style={[styles.bindBtnText, { color: '#FF6C00' }]}>取消绑定</Text>
                     </TouchableOpacity>
                 </View>
@@ -184,7 +184,7 @@ function RenderChange ({ label, account_id, platform_category }) {
             </View>
         );
         const component = (
-            <TouchableOpacity karet-lift style={styles.changeBtn} onPress={click} key={i}>
+            <TouchableOpacity activeOpacity={1}  karet-lift style={styles.changeBtn} onPress={click} key={i}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image karet-lift source={U.template({ uri: avatar })} style={{ height: 32, width: 32, borderRadius: 16, marginRight: 5 }} />
                     <Text karet-lift >{nickname}</Text>
@@ -203,7 +203,7 @@ function RenderChange ({ label, account_id, platform_category }) {
                     <>{view}</>
                 </ScrollView>
             </View>
-            <TouchableOpacity style={styles.addBtn} onPress={() => {
+            <TouchableOpacity activeOpacity={1}  style={styles.addBtn} onPress={() => {
                 DeviceEventEmitter.emit('hidePop');
                 N.navigate('AccountBindPage', { id: platform_category, label });
             }}>
@@ -211,12 +211,12 @@ function RenderChange ({ label, account_id, platform_category }) {
                 <Text style={{ color: '#FF3B00', fontSize: 15 }}>添加新账号</Text>
             </TouchableOpacity>
             <View style={[css.flexRCSB, { paddingLeft: 5, paddingRight: 5, paddingTop: 20, paddingBottom: 20 }]}>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity activeOpacity={1}  onPress={() => {
                     DeviceEventEmitter.emit('hidePop');
                 }} style={styles.changeLBtn}>
                     <Text style={{ lineHeight: 33, textAlign: 'center', color: '#FF3B00', fontSize: 15 }}>取消</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity activeOpacity={1}  onPress={() => {
                     apiPutAccount();
                     DeviceEventEmitter.emit('hidePop');
                 }} style={styles.changeRBtn}>

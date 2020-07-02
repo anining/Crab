@@ -45,8 +45,8 @@ function OpenMoneyPage (props) {
                 } else {
                     setReceivedStatus(1);
                     DeviceEventEmitter.emit('showPop', {
-                        dom: <TouchableOpacity style={css.pr} onPress={_openRedPackage}>
-                            <TouchableOpacity style={[styles.redInnerWrap, css.pa, css.flex, css.fw]}>
+                        dom: <TouchableOpacity activeOpacity={1} style={css.pr} onPress={_openRedPackage}>
+                            <TouchableOpacity activeOpacity={1} style={[styles.redInnerWrap, css.pa, css.flex, css.fw]}>
                                 <ImageAuto style={{
                                     width: 48,
                                     borderRadius: 20,
@@ -96,7 +96,7 @@ function RenderRedPackage ({ receivedStatus, activityId, money, data }) {
             </View>
             <Text style={{ fontSize: 15, color: '#FDEAB9' }}>恭喜您获得现金</Text>
             <Text style={{ fontWeight: '500', color: 'rgba(254,204,81,1)' }}>¥ <Text style={{ fontSize: 49, fontWeight: '800' }}>{money}W</Text> 金币</Text>
-            <TouchableOpacity style={styles.withdrawBtn} onPress={() => {
+            <TouchableOpacity activeOpacity={1} style={styles.withdrawBtn} onPress={() => {
                 N.navigate('DailyMoneyPage', { activityId, pageInfo: data });
             }}>
                 <Text style={{ fontSize: 16, color: '#fff' }}>立即提现</Text>

@@ -203,7 +203,7 @@ function RenderSignList ({ signDay }) {
 function RenderActivity () {
     const view = [];
     view.push(
-        <TouchableOpacity onPress={() => {
+        <TouchableOpacity activeOpacity={1}  onPress={() => {
             _tc(() => N.navigate('DailyRedPackagePage', { activityId: (activityObj.get() || {})[1].activity_id }));
         }} key={'DailyRedPackagePage'}>
             <ImageAuto source={answer5} width={width * 0.9 * 0.48}/>
@@ -211,10 +211,10 @@ function RenderActivity () {
     );
     view.push(
         <View style={[css.flex, css.fw, styles.activityRight]} key={'appPage'}>
-            <TouchableOpacity style={styles.arItemWrap} onPress={() => N.navigate('SharePage')} key={'SharePage'}>
+            <TouchableOpacity activeOpacity={1}  style={styles.arItemWrap} onPress={() => N.navigate('SharePage')} key={'SharePage'}>
                 <ImageAuto source={answer6} width={width * 0.9 * 0.48}/>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.arItemWrap} onPress={() => {
+            <TouchableOpacity activeOpacity={1}  style={styles.arItemWrap} onPress={() => {
                 _tc(() => N.navigate('OpenMoneyPage', { activityId: (activityObj.get() || {})[2].activity_id }));
             }} key={'OpenMoneyPage'}>
                 <ImageAuto source={answer8} width={width * 0.9 * 0.48}/>

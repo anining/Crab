@@ -64,7 +64,7 @@ function WithdrawAliPayPage (props) {
                 <Crab text="提现说明：" paddingLeft={0}/>
                 <Text style={{ fontSize: 12, color: '#999' }}>1.支付宝账号姓名必须匹配，否则提现不会到账。</Text>
             </View>
-            <TouchableOpacity onPress={withdraw} style={styles.btn}>
+            <TouchableOpacity activeOpacity={1} onPress={withdraw} style={styles.btn}>
                 <Text style={styles.btnText}>提现到支付宝</Text>
             </TouchableOpacity>
         </SafeAreaView>

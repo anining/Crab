@@ -98,7 +98,7 @@ function RenderRedItem ({ rule, activityId, detail }) {
     rule.forEach(item => {
         const { min_add_balance, isOpen, level, need_task_num } = item;
         view.push(
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 if (!isOpen && Number(need_task_num) <= Number(today_pass_num.get())) {
                     ReceiveTaskAward(level);
                 }

@@ -70,7 +70,7 @@ export function bindData (key, local) {
 }
 
 export function setGlobal (key, value, callback) {
-    if (global && key in global) {
+    if (global && typeof key === 'string') {
         console.log(`全局设置${key}`, value);
         global[key] = value;
         if (callback) {

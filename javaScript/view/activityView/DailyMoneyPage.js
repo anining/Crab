@@ -72,7 +72,7 @@ function DailyMoneyPage (props) {
                         <Text style={{ color: '#fff' }}>活动规则</Text>
                     } onPress={() => {
                         DeviceEventEmitter.emit('showPop',
-                            <TouchableOpacity onPress={() => { DeviceEventEmitter.emit('hidePop'); }}>
+                            <TouchableOpacity activeOpacity={1} onPress={() => { DeviceEventEmitter.emit('hidePop'); }}>
                                 <ImageAuto source={activity6} width={width * 0.8}/>
                             </TouchableOpacity>
                         );
@@ -116,7 +116,7 @@ function PopupView ({ money }) {
             <ImageBackground source={activity18} style={[styles.popupBg, { left: localLeft }]}>
                 <Text numberOfLines={1} style={styles.popText}>仅差{(30 - Number(money).toFixed(4))}W金币</Text>
             </ImageBackground>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 DeviceEventEmitter.emit('hidePop');
                 N.navigate('AnswerPage');
             }} style={styles.popupViewBtn}/>

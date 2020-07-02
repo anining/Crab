@@ -43,7 +43,7 @@ function Upload ({ children, images = [], setImages, setProgress, editable = tru
     }, [file]);
 
     return (
-        <TouchableOpacity onPress={() => {
+        <TouchableOpacity activeOpacity={1} onPress={() => {
             editable && ImagePicker.openPicker({
                 cropping: false,
                 includeBase64: true,

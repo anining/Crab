@@ -10,7 +10,7 @@ import {
     taskPlatform,
     user,
     getNextRedLevel,
-    account,
+    account, withdrawLogsLatest,
 } from './api';
 import { _tc, _toFixed, rangeLevel, toGoldCoin, transformMoney } from './util';
 import { getter, setter } from './store';
@@ -225,6 +225,17 @@ export function updateNextRedLevel () {
             resolve();
             if (res && !res.error && res.data) {
                 setter([['nextRedLevel', getPath(['data', 'next_red_level'], res)]], true);
+            }
+        });
+    });
+}
+
+export function getWithdrawLatest () {
+    return new Promise((resolve, reject) => {
+        withdrawLogsLatest().then(res => {
+            resolve();
+            if (res && !res.error && res.data) {
+                setter([['withdrawLogsLatest', getPath(['data'], res)]], true);
             }
         });
     });

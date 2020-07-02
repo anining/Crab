@@ -193,13 +193,13 @@ function ParentView ({ parent, _childDetail }) {
                     <Text style={{ color: '#999', fontSize: 12 }}>他的邀请码：{invite_code} </Text>
                 </View>
                 <View style={[css.flex, styles.pupBtnWrap, css.auto, css.sp]}>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
                         Clipboard.setString(wx.toString());
                         toast('复制成功');
                     }}>
                         <ImageAuto source={pupil7} width={width * 0.35}/>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
                         Clipboard.setString(qq_group.toString());
                         toast('复制成功');
                     }}>
@@ -223,7 +223,7 @@ function ParentView ({ parent, _childDetail }) {
             <RenderShareTitle title="我的师父" icon={pupil5}/>
             <View style={[css.flexRCSB, styles.bindView]}>
                 <TextInput style={styles.bindInput} maxLength={30} placeholder={'请填写师父邀请码'} placeholderTextColor={'#999'} onChangeText={e => setInviteCode(e)}/>
-                <TouchableOpacity style={styles.bindBtn} onPress={bind}>
+                <TouchableOpacity activeOpacity={1} style={styles.bindBtn} onPress={bind}>
                     <Text style={{ fontSize: 13, color: '#fff' }}>绑定师父</Text>
                 </TouchableOpacity>
             </View>
