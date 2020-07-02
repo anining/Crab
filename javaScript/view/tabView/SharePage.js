@@ -50,6 +50,7 @@ export default class SharePage extends PureComponent {
             awardLength: 0,
             rebate: [0, 0], // 返佣比例
         };
+        this.getReward = this.getReward.bind(this);
     }
 
     async _awardDetail () {
