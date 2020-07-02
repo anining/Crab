@@ -78,10 +78,10 @@ function L ({ type, itemHeight }) {
                                 task(null, receive_task_id);
                             }}>
                                 <View style={styles.itemViewTop}>
-                                    <Text style={{ color: '#353535', fontSize: 15, fontWeight: '500' }}>任务类型：{category}</Text>
+                                    <Text style={{ color: '#353535', fontSize: 13, fontWeight: '500' }}>任务类型：{category}</Text>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                         <Image source={task10} style={{ height: 20, width: 19, marginRight: 5 }}/>
-                                        <Text style={{ color: '#FF6C00', fontSize: 24, fontWeight: '600' }}>{transformMoney(money)} <Text style={{ fontSize: 14 }}>金币</Text></Text>
+                                        <Text style={{ color: '#FF6C00', fontSize: 19, fontWeight: '600' }}>{transformMoney(money)} <Text style={{ fontSize: 12 }}>金币</Text></Text>
                                     </View>
                                 </View>
                                 <View style={styles.viewCenter}>
@@ -89,7 +89,7 @@ function L ({ type, itemHeight }) {
                                     <Text style={{ fontSize: 12, color: '#999' }}>当前账号任务通过率：<Text style={{ color: '#FF6C00' }}>{Number.parseInt(success_rate * 100)}</Text> %</Text>
                                 </View>
                                 <View style={styles.itemViewCenter}>
-                                    <Text style={{ color: '#353535', fontSize: 14 }}>接任务ID：{receive_task_id}</Text>
+                                    <Text style={{ color: '#353535', fontSize: 12 }}>接任务ID：{receive_task_id}</Text>
                                     <TouchableOpacity onPress={() => {
                                         Clipboard.setString(receive_task_id.toString());
                                         toast('复制成功!');
@@ -127,33 +127,33 @@ function RenderItem ({ type, updated_at, receive_task_id, reason, finish_deadlin
                 <TouchableOpacity onPress={() => {
                     apiGiveUp();
                 }} style={styles.giveUpBtn}>
-                    <Text style={{ fontSize: 17, color: '#FF6C00', lineHeight: 42, textAlign: 'center' }}>放弃任务</Text>
+                    <Text style={{ fontSize: 15, color: '#FF6C00', lineHeight: 42, textAlign: 'center' }}>放弃任务</Text>
                 </TouchableOpacity>
             </>
         );
     case 4:
         return (
             <View style={styles.viewBottomBtn}>
-                <Text style={{ color: '#353535' }}>提交时间：{transformTime(updated_at)}</Text>
-                <Text style={{ color: '#2D6DFF', fontWeight: '500' }}>审核中(24小时内审核)</Text>
+                <Text style={{ color: '#353535', fontSize: 12 }}>提交时间：{transformTime(updated_at)}</Text>
+                <Text style={{ color: '#2D6DFF', fontWeight: '500', fontSize: 12 }}>24小时内审核</Text>
             </View>
         );
     case 5:
         return (
             <View style={styles.viewBottomBtn}>
-                <Text style={{ color: '#353535' }}>审核时间：{transformTime(updated_at)}</Text>
-                <Text style={{ color: '#53C23B', fontWeight: '500' }}>已通过</Text>
+                <Text style={{ color: '#353535', fontSize: 12 }}>审核时间：{transformTime(updated_at)}</Text>
+                <Text style={{ color: '#53C23B', fontWeight: '500', fontSize: 12 }}>已通过</Text>
             </View>
         );
     default:
         return (
             <>
                 <View style={[styles.viewBottomBtn, { height: 50 }]}>
-                    <Text style={{ color: '#353535' }}>审核时间：{transformTime(updated_at)}</Text>
-                    <Text style={{ color: '#FF3154', fontWeight: '500' }}>未通过</Text>
+                    <Text style={{ color: '#353535', fontSize: 12 }}>审核时间：{transformTime(updated_at)}</Text>
+                    <Text style={{ color: '#FF3154', fontWeight: '500', fontSize: 12 }}>未通过</Text>
                 </View>
                 <View style={styles.defaultView}>
-                    <Text style={{ color: '#353535', fontSize: 14 }}>未通过原因：<Text style={{ color: '#FF3154' }}>{reason}</Text></Text>
+                    <Text style={{ color: '#353535', fontSize: 12 }}>未通过原因：<Text style={{ color: '#FF3154' }}>{reason}</Text></Text>
                     <TouchableOpacity onPress={() => {
                         N.navigate('FeedBackPage');
                     }} style={styles.answerBtn}>
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     },
     deadline: {
         color: '#353535',
-        fontSize: 14,
+        fontSize: 12,
         lineHeight: 40,
     },
     defaultView: {
@@ -233,8 +233,8 @@ const styles = StyleSheet.create({
     },
     itemViewTopName: {
         color: '#353535',
-        fontSize: 14,
-        maxWidth: 120
+        fontSize: 12,
+        maxWidth: 170
     },
     viewBottom: {
         borderBottomColor: '#EDEDED',

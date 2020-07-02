@@ -35,19 +35,20 @@ const { width } = Dimensions.get('window');
 const MENU_STATUS = {
     1: {
         text: '提交任务',
-        color: '#fff'
+        color: '#fff',
+        disabled: false
     },
     4: {
         text: '审核中',
-        disabled: false
+        disabled: true
     },
     5: {
         text: '已通过',
-        disabled: false
+        disabled: true
     },
     6: {
         text: '未通过',
-        disabled: false
+        disabled: true
     }
 };
 
