@@ -280,14 +280,8 @@ function AppStackNavigator () {
                             set(); // 先进入主页，后发起更新请求
                             await initNetInfo();
                         } else {
-                            const authorization = U.view(['authorization'], store).get();
-                            if (authorization) {
-                                await initNetInfo();
-                                set();
-                            } else {
-                                set();
-                                N.replace('VerificationStackNavigator');
-                            }
+                            U.view(['authorization'], store).get() && await initNetInfo();
+                            set();
                         }
                     });
             })
