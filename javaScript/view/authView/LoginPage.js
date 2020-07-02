@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, StyleSheet, TouchableOpacity, TextInput, Text, Image } from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
@@ -9,11 +9,38 @@ import { apiLogin, verifyCode } from '../../utils/api';
 import { setter } from '../../utils/store';
 import Button from '../../components/Button';
 import { initNetInfo } from '../../navigation/AppStackNavigator';
-
+import android from '../../components/Android';
+import { getPath } from '../../global/global';
 function LoginPage () {
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('');
     const [codeText, setCodeText] = useState('获取验证码');
+
+    useEffect(() => {
+        _fastLogin();
+    }, []);
+
+    async function _fastLogin () {
+        try {
+            const ret = await android.verifyLogin();
+            console.log(ret, ret.token);
+            if (ret && ret.token && ret.opToken && ret.operator) {
+                console.log(ret, ret.token);
+                const loginRet = await apiLogin(null, null, null, ret.token, ret.opToken, ret.operator);
+                if (loginRet && !loginRet.error) {
+                    console.log(loginRet, '???登录信息');
+                    const { access_token, token_type } = loginRet.data;
+                    setter([['authorization', `${token_type} ${access_token}`]], true);
+                    await initNetInfo();
+                    N.replace('MaterialTopTabNavigator');
+                }
+            } else {
+                toast('登录失败!');
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     async function login (callback) {
         if (!phone || !code) {
@@ -121,7 +148,7 @@ const styles = StyleSheet.create({
         height: 200,
         paddingLeft: 30,
         paddingRight: 30,
-        paddingTop: 60
+        paddingTop: 100,
     },
     inputTitle: {
         marginBottom: 5,

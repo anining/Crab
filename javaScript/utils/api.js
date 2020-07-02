@@ -7,12 +7,16 @@ import { getGlobal } from '../global/global';
 import android from '../components/Android';
 
 // login
-export function apiLogin (phone, code, invite_code) {
-    let data = {
-        phone, code
-    };
+export function apiLogin (phone, code, invite_code, token, op_token, operator) {
+    let data = {};
+    if (phone && code) {
+        data = Object.assign(data, { phone, code });
+    }
     if (invite_code) {
         data = Object.assign(data, { invite_code });
+    }
+    if (token && op_token && operator) {
+        data = Object.assign(data, { token, op_token, operator });
     }
     return transformFetch('POST', '/login', data);
 }

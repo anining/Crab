@@ -57,11 +57,7 @@ import NoticeDetailPage from '../view/homeView/NoticeDetailPage';
 import ShareUrlPage from '../view/shareView/ShareUrlPage';
 import ShareQRCodePage from '../view/shareView/ShareQRCodePage';
 import PassGamePage from '../view/gameView/PassGamePage';
-import toast from '../utils/toast';
 import RightProPage from '../view/gameView/RightProPage';
-import { N } from '../utils/router';
-import * as U from 'karet.util';
-import { store } from '../utils/store';
 
 const Stack = createStackNavigator();
 
@@ -276,13 +272,8 @@ function AppStackNavigator () {
                 asyncStorage.multiGet(response.filter(x => !new RegExp('[0-9]').test(x))) // 去除含有数字的key值
                     .then(async r => {
                         initializationStore(r);
-                        if (r && r.length) {
-                            set(); // 先进入主页，后发起更新请求
-                            await initNetInfo();
-                        } else {
-                            U.view(['authorization'], store).get() && await initNetInfo();
-                            set();
-                        }
+                        set(); // 先进入主页，后发起更新请求
+                        await initNetInfo();
                     });
             })
             .catch(() => {
