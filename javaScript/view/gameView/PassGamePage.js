@@ -124,7 +124,7 @@ export default class PassGamePage extends Component {
             const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
             for (let i = 0; i < this.state.gradeRange.length; i++) {
                 const item = this.state.gradeRange[i];
-                if (item === (myNowLevel + 1)) {
+                if (item === myNowLevel) {
                     const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
                     const coinRate = getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting);
                     if (nextGradeConfig && coinRate) {
@@ -179,6 +179,7 @@ export default class PassGamePage extends Component {
 
     static _countNextLevel (now, array) {
         try {
+            console.log(now, array, '=======');
             let retNumber = 0;
             for (let i = 0; i < array.length; i++) {
                 const item = array[i];
@@ -199,12 +200,11 @@ export default class PassGamePage extends Component {
             console.log(this.state.nextRedLevel, '????', this.state.user, this.state.gradeSetting, '==========uio');
             if (this.state.nextRedLevel && this.state.nextRedLevel.length) {
                 const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
-                const preLevel = getPath([myGradeLevel - 1, 'level'], this.state.gradeSetting, 0);
-                const nexLevel = getPath(['myGrade', 'level'], this.state.user, 1);
+                const preLevel = getPath([myGradeLevel - 1], this.state.gradeRange, 0);
+                const nexLevel = getPath([myGradeLevel], this.state.gradeRange, 0);
                 const myNowLevel = getPath(['user_level', 'level_num'], this.state.user, 1);
                 const levelLength = nexLevel - preLevel;
                 const progressInnerLength = Number((myNowLevel - preLevel) / levelLength);
-                console.log(myNowLevel, this.state.nextRedLevel, '????');
                 return <View style={[css.flex, css.fw, styles.progressWrap, css.pr]}>
                     {(() => {
                         const view = [];
@@ -242,47 +242,49 @@ export default class PassGamePage extends Component {
 
     render () {
         try {
-            return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
-                <ScrollView style={{ flex: 1 }}>
-                    {/* 头部显示区域 */}
-                    <GameHeader ref={ref => this.gameHeader = ref} backgroundColor={'rgba(0,0,0,.3)'}/>
-                    <ShiftView callback={() => {
-                        N.replace('GamePage');
-                    }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
-                    startSite={[25, HEADER_HEIGHT - 28]} endSite={[width * 0.5 + 90, width * 1.4]}>
-                        <ImageAuto source={game25} width={33}/>
-                    </ShiftView>
-                    {/* 核心显示区域 */}
-                    <View style={[styles.gameResWrap, css.pr]}>
-                        <ImageBackground source={game4} style={[css.flex, css.pa, styles.gamePassHeader]}>
-                            <Text style={styles.gamePassText} numberOfLines={1} karet-lift>恭喜通过第{getPath(['userLevel'], this.paramsInfo, 0)}关</Text>
-                        </ImageBackground>
-                        <View style={[styles.gameCanvasWrap]}>
-                            <View style={[styles.gameCanvasInner, css.flex, css.fw, css.afs]}>
-                                <Text style={[styles.gamePassTips, css.gf]}>您已超越<Text
-                                    style={{ fontSize: 20, color: 'red' }}>{_toFixed(getPath(['surpass'], this.state.user, 0) * 100) + '%'}</Text>用户</Text>
-                                <View style={[css.flex, css.fw, styles.idiomWrap, css.afs, css.js]}>
-                                    {this._renderIdiomList()}
-                                </View>
-                                {this._renderProgress()}
-                                <View style={[css.flex, css.sp, styles.nextBtnWrap]}>
-                                    <TouchableOpacity activeOpacity={1} onPress={() => {
-                                        N.goBack();
-                                    }}>
-                                        <ImageAuto source={game14} style={{ width: 55 }}/>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity activeOpacity={1} onPress={() => {
-                                        // N.navigate('GamePage');
-                                        this.startGame && this.startGame.start();
-                                    }}>
-                                        <ImageAuto source={game8} style={{ width: 200 }}/>
-                                    </TouchableOpacity>
+            if (this.state.user && this.state.gradeSetting && this.state.nextRedLevel && this.state.gradeRange) {
+                return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
+                    <ScrollView style={{ flex: 1 }}>
+                        {/* 头部显示区域 */}
+                        <GameHeader ref={ref => this.gameHeader = ref} backgroundColor={'rgba(0,0,0,.3)'}/>
+                        <ShiftView callback={() => {
+                            N.replace('GamePage');
+                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
+                        startSite={[25, HEADER_HEIGHT - 28]} endSite={[width * 0.5 + 90, width * 1.4]}>
+                            <ImageAuto source={game25} width={33}/>
+                        </ShiftView>
+                        {/* 核心显示区域 */}
+                        <View style={[styles.gameResWrap, css.pr]}>
+                            <ImageBackground source={game4} style={[css.flex, css.pa, styles.gamePassHeader]}>
+                                <Text style={styles.gamePassText} numberOfLines={1} karet-lift>恭喜通过第{getPath(['userLevel'], this.paramsInfo, 0)}关</Text>
+                            </ImageBackground>
+                            <View style={[styles.gameCanvasWrap]}>
+                                <View style={[styles.gameCanvasInner, css.flex, css.fw, css.afs]}>
+                                    <Text style={[styles.gamePassTips, css.gf]}>您已超越<Text
+                                        style={{ fontSize: 20, color: 'red' }}>{_toFixed(getPath(['surpass'], this.state.user, 0) * 100) + '%'}</Text>用户</Text>
+                                    <View style={[css.flex, css.fw, styles.idiomWrap, css.afs, css.js]}>
+                                        {this._renderIdiomList()}
+                                    </View>
+                                    {this._renderProgress()}
+                                    <View style={[css.flex, css.sp, styles.nextBtnWrap]}>
+                                        <TouchableOpacity activeOpacity={1} onPress={() => {
+                                            N.goBack();
+                                        }}>
+                                            <ImageAuto source={game14} style={{ width: 55 }}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity activeOpacity={1} onPress={() => {
+                                            // N.navigate('GamePage');
+                                            this.startGame && this.startGame.start();
+                                        }}>
+                                            <ImageAuto source={game8} style={{ width: 200 }}/>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             </View>
                         </View>
-                    </View>
-                </ScrollView>
-            </SafeAreaView>;
+                    </ScrollView>
+                </SafeAreaView>;
+            }
         } catch (e) {
             console.log(e);
             return null;

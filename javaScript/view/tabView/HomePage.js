@@ -48,6 +48,7 @@ export default class HomePage extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            gradeRange: bindData('gradeRange', this),
             gradeSetting: bindData('gradeSetting', this),
             nextRedLevel: bindData('nextRedLevel', this),
             user: bindData('user', this),
@@ -113,12 +114,12 @@ export default class HomePage extends Component {
     _renderHomeProcess () {
         try {
             const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
-            const preLevel = getPath([myGradeLevel - 1, 'level'], this.state.gradeSetting, 0);
-            const nexLevel = getPath(['myGrade', 'level'], this.state.user);
+            const preLevel = getPath([myGradeLevel - 1], this.state.gradeRange, 0);
+            const nexLevel = getPath([myGradeLevel], this.state.gradeRange, 0);
             const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
             const levelLength = nexLevel - preLevel;
-            const myForwardNumber = Math.floor(avatarProLevelPosition.length * (myNowLevel - preLevel) / levelLength);
-            // console.log(getPath([getPath(['myGradeLevel'], this.state.user) + 1], this.state.gradeSetting), this.state.gradeSetting, getPath(['myGradeLevel'], this.state.user), '===============');
+            const myForwardNumber = parseInt(avatarProLevelPosition.length * (myNowLevel - preLevel) / levelLength);
+            console.log(myGradeLevel, preLevel, nexLevel, myNowLevel, this.state.gradeRange);
             const view = [];
             if (this.state.nextRedLevel.length) {
                 if (this.state.nextRedLevel.length >= 12) {
@@ -155,11 +156,10 @@ export default class HomePage extends Component {
 
     render () {
         try {
-            const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
-            const myGradeConfig = getGradeConfig(myGradeLevel);
-            const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
-            console.log('我的渔船等级==========', myGradeLevel, myGradeConfig);
-            if (this.state.user && this.state.nextRedLevel && this.state.gradeSetting) {
+            if (this.state.user && this.state.nextRedLevel && this.state.gradeSetting && this.state.gradeRange) {
+                const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
+                const myGradeConfig = getGradeConfig(myGradeLevel);
+                const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
                 return (
                     <SafeAreaProvider>
                         <ImageBackground source={game41} style={[css.flex, css.pr, css.cover, css.afs]}>
