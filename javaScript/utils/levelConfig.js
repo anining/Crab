@@ -64,10 +64,10 @@ const LevelConfiguration = [{
     wholeLottie: 'whole7',
 }];
 
-export function getLevelConfig (level) {
+export function getGradeConfig (grade) {
     try {
-        if (LevelConfiguration[level - 1]) {
-            return LevelConfiguration[level - 1];
+        if (LevelConfiguration[grade - 1]) {
+            return LevelConfiguration[grade - 1];
         } else {
             return LevelConfiguration[LevelConfiguration.length - 1];
         }

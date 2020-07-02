@@ -37,7 +37,7 @@ import GameHeader from '../../components/GameHeader';
 import { bind } from 'kefir.ramda';
 import { bindData, getPath } from '../../global/global';
 import toast from '../../utils/toast';
-import { getLevelConfig, homeProLevelPosition, avatarProLevelPosition } from '../../utils/levelConfig';
+import { getGradeConfig, homeProLevelPosition, avatarProLevelPosition } from '../../utils/levelConfig';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
@@ -115,7 +115,7 @@ export default class HomePage extends Component {
 
     _renderHomeProcess () {
         try {
-            const preLevel = getPath([getPath(['myGradeLevel'], this.state.user) - 1, 'level'], this.state.gradeSetting) || 0;
+            const preLevel = getPath([getPath(['myGradeLevel'], this.state.user, 1) - 1, 'level'], this.state.gradeSetting, 0);
             const nexLevel = getPath(['myGrade', 'level'], this.state.user);
             const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
             const levelLength = nexLevel - preLevel;
@@ -156,90 +156,97 @@ export default class HomePage extends Component {
     }
 
     render () {
-        return (
-            <SafeAreaProvider>
-                <ImageBackground source={game41} style={[css.flex, css.pr, css.cover, css.afs]}>
-                    <LottieView ref={ref => this.lottie = ref} key={'lottie'} renderMode={'HARDWARE'}
-                        style={{ width: width, height: 'auto' }} imageAssetsFolder={'whole'} source={whole1}
-                        loop={true} autoPlay={false} speed={1}/>
-                    <View style={[css.pa, css.cover]}>
-                        {/* eslint-disable-next-line no-return-assign */}
-                        {_if(this.state.gameHeaderPosition, res => <ShiftView callback={() => {
-                            this.gameHeader && this.gameHeader.start();
-                        }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={1300} startSite={[width * 0.25, width * 0.55]} endSite={res[1]}>
-                            <ImageAuto source={game22} width={33}/>
-                        </ShiftView>)}
-                        {_if(this.state.gameHeaderPosition && this.state.accuracyImagePosition, res => <ShiftView callback={() => {
-                            N.navigate('GamePage');
-                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} startSite={this.state.gameHeaderPosition[0]} endSite={this.state.accuracyImagePosition}>
-                            <ImageAuto source={game25} width={33}/>
-                        </ShiftView>)}
-                        {/* /!* 头部显示区域 *!/ */}
-                        <GameHeader ref={ref => this.gameHeader = ref}/>
-                        {/* 中部显示区域 */}
-                        <View style={[css.flex, css.pa, styles.homeMidWrap, css.afs]}>
-                            {_if(getPath(['myGrade', 'incomeRate'], this.state.user), res =>
-                                <TouchableOpacity style={[css.pa, styles.outputWrap]} activeOpacity={1} onPress={() => {
-                                    DeviceEventEmitter.emit('showPop', <GameDialog btn={'我知道了'} tips={<Text>
-                                        渔船等级越高，产金币越多</Text>}/>);
-                                }}>
-                                    <ImageBackground source={game5} style={[css.flex, css.fw, styles.outputWrapImg]}>
-                                        <Text style={[styles.outputText]}>金币产量</Text>
-                                        <Text style={styles.outputText}>{res}</Text>
-                                    </ImageBackground>
-                                </TouchableOpacity>)}
-                            {/* NoticePage */}
-                            <TouchableOpacity activeOpacity={1} style={[css.pa, styles.noticeIcon]} onPress={() => {
-                                N.navigate('NoticePage');
-                            }}>
-                                <ImageBackground source={game35} style={[{ width: '100%', height: '100%' }]}>
-                                    {_if(false, res => <Text style={[css.pa, styles.noticeNumber]}>10</Text>)}
-                                </ImageBackground>
-                            </TouchableOpacity>
+        try {
+            const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
+            const myGradeConfig = getGradeConfig(myGradeLevel);
+            return (
+                <SafeAreaProvider>
+                    <ImageBackground source={game41} style={[css.flex, css.pr, css.cover, css.afs]}>
+                        <LottieView ref={ref => this.lottie = ref} key={myGradeConfig.wholeLottie} renderMode={'HARDWARE'}
+                            style={{ width: width, height: 'auto' }} imageAssetsFolder={myGradeConfig.wholeLottie} source={myGradeConfig.whole}
+                            loop={true} autoPlay={false} speed={1}/>
+                        <View style={[css.pa, css.cover]}>
                             {/* eslint-disable-next-line no-return-assign */}
-                            <Lamp ref={ref => this.lamp = ref} width={'100%'} backgroundColor={'rgba(0,179,216,.5)'}
-                                color={'#005262'} color1={'#FF6C00'} autoPlay={false}/>
-                        </View>
-                        {/* 底部显示区域 */}
-                        <ImageBackground source={game12}
-                            style={[css.flex, css.pa, styles.homeBottomWrap, css.fw, css.afs]}>
-                            {/* 主页进度显示 */}
-                            <View style={[styles.progressWrap, css.pr]}>
-                                {this._renderHomeProcess()}
-                                <ImageAuto source={getLevelConfig(getPath(['user_level', 'level_num'], this.state.user)).ship} style={[css.pa, {
-                                    width: 80,
-                                    right: 0,
-                                    bottom: 0,
-                                }]}/>
-                                {_if(getPath([getPath(['myGradeLevel'], this.state.user) + 1, 'incomeRate'], this.state.gradeSetting), res => <Text style={styles.incomeRateText}>产量{res}</Text>)}
+                            {_if(this.state.gameHeaderPosition, res => <ShiftView callback={() => {
+                                this.gameHeader && this.gameHeader.start();
+                            }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={1300} startSite={[width * 0.25, width * 0.55]} endSite={res[1]}>
+                                <ImageAuto source={game22} width={33}/>
+                            </ShiftView>)}
+                            {_if(this.state.gameHeaderPosition && this.state.accuracyImagePosition, res => <ShiftView callback={() => {
+                                N.navigate('GamePage');
+                            }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} startSite={this.state.gameHeaderPosition[0]} endSite={this.state.accuracyImagePosition}>
+                                <ImageAuto source={game25} width={33}/>
+                            </ShiftView>)}
+                            {/* /!* 头部显示区域 *!/ */}
+                            <GameHeader ref={ref => this.gameHeader = ref}/>
+                            {/* 中部显示区域 */}
+                            <View style={[css.flex, css.pa, styles.homeMidWrap, css.afs]}>
+                                {_if(getPath(['myGrade', 'incomeRate'], this.state.user), res =>
+                                    <TouchableOpacity style={[css.pa, styles.outputWrap]} activeOpacity={1} onPress={() => {
+                                        DeviceEventEmitter.emit('showPop', <GameDialog btn={'我知道了'} tips={<Text>
+                                            渔船等级越高，产金币越多</Text>}/>);
+                                    }}>
+                                        <ImageBackground source={game5} style={[css.flex, css.fw, styles.outputWrapImg]}>
+                                            <Text style={[styles.outputText]}>金币产量</Text>
+                                            <Text style={styles.outputText}>{res}</Text>
+                                        </ImageBackground>
+                                    </TouchableOpacity>)}
+                                {/* NoticePage */}
+                                <TouchableOpacity activeOpacity={1} style={[css.pa, styles.noticeIcon]} onPress={() => {
+                                    N.navigate('NoticePage');
+                                }}>
+                                    <ImageBackground source={game35} style={[{ width: '100%', height: '100%' }]}>
+                                        {_if(false, res => <Text style={[css.pa, styles.noticeNumber]}>10</Text>)}
+                                    </ImageBackground>
+                                </TouchableOpacity>
+                                {/* eslint-disable-next-line no-return-assign */}
+                                <Lamp ref={ref => this.lamp = ref} width={'100%'} backgroundColor={'rgba(0,179,216,.5)'}
+                                    color={'#005262'} color1={'#FF6C00'} autoPlay={false}/>
                             </View>
-                            {/* 主页答题按钮 */}
-                            <TouchableOpacity activeOpacity={1} onPress={() => {
-                                if (getPath(['propNumsObj', '2'], this.state.user)) {
-                                    this.startGame && this.startGame.start();
-                                    this._homeStop();
-                                } else {
-                                    toast('游戏道具不足');
-                                    this.gameHeader && this.gameHeader.showPop();
-                                }
-                            }}>
-                                <ImageBackground source={game1} style={[css.flex, styles.homeBtnWrap]}>
-                                    <Text style={styles.homeBtnText}>升渔船</Text>
-                                    <ImageAuto source={game7} style={{ width: 33, marginLeft: 10 }} onLayout={(e) => {
-                                        UIManager.measure(e.target, (x, y, w, h, l, t) => {
-                                            this.setState({
-                                                accuracyImagePosition: [l, t]
+                            {/* 底部显示区域 */}
+                            <ImageBackground source={game12}
+                                style={[css.flex, css.pa, styles.homeBottomWrap, css.fw, css.afs]}>
+                                {/* 主页进度显示 */}
+                                <View style={[styles.progressWrap, css.pr]}>
+                                    {this._renderHomeProcess()}
+                                    <ImageAuto source={myGradeConfig.ship} style={[css.pa, {
+                                        width: 80,
+                                        right: 0,
+                                        bottom: 0,
+                                    }]}/>
+                                    {_if(getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting), res => <Text style={styles.incomeRateText}>产量{res}</Text>)}
+                                </View>
+                                {/* 主页答题按钮 */}
+                                <TouchableOpacity activeOpacity={1} onPress={() => {
+                                    if (getPath(['propNumsObj', '2'], this.state.user)) {
+                                        this.startGame && this.startGame.start();
+                                        this._homeStop();
+                                    } else {
+                                        toast('游戏道具不足');
+                                        this.gameHeader && this.gameHeader.showPop();
+                                    }
+                                }}>
+                                    <ImageBackground source={game1} style={[css.flex, styles.homeBtnWrap]}>
+                                        <Text style={styles.homeBtnText}>升渔船</Text>
+                                        <ImageAuto source={game7} style={{ width: 33, marginLeft: 10 }} onLayout={(e) => {
+                                            UIManager.measure(e.target, (x, y, w, h, l, t) => {
+                                                this.setState({
+                                                    accuracyImagePosition: [l, t]
+                                                });
                                             });
-                                        });
-                                    }}/>
-                                </ImageBackground>
-                            </TouchableOpacity>
-                            <Text style={styles.accuracyText}>正确率: <Text style={{ color: '#FF6C00' }} karet-lift>{trCorrectRate}</Text></Text>
-                        </ImageBackground>
-                    </View>
-                </ImageBackground>
-            </SafeAreaProvider>
-        );
+                                        }}/>
+                                    </ImageBackground>
+                                </TouchableOpacity>
+                                <Text style={styles.accuracyText}>正确率: <Text style={{ color: '#FF6C00' }} karet-lift>{trCorrectRate}</Text></Text>
+                            </ImageBackground>
+                        </View>
+                    </ImageBackground>
+                </SafeAreaProvider>
+            );
+        } catch (e) {
+            console.log(e);
+            return null;
+        }
     }
 }
 const styles = StyleSheet.create({

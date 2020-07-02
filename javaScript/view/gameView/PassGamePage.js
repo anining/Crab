@@ -40,8 +40,7 @@ import * as U from 'karet.util';
 import GameHeader from '../../components/GameHeader';
 import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { bindData, getPath } from '../../global/global';
-import { avatarProLevelPosition, getLevelConfig, homeProLevelPosition } from '../../utils/levelConfig';
-import upgrade1 from '../../lottie/upgrade1';
+import { avatarProLevelPosition, getGradeConfig, homeProLevelPosition } from '../../utils/levelConfig';
 
 const { height, width } = Dimensions.get('window');
 // const { level_num: userLevel } = getter(['user.user_level.level_num']);
@@ -122,17 +121,18 @@ export default class PassGamePage extends Component {
     _isUpgrade () {
         try {
             const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
+            const myGradeLevel = getPath(['myGradeLevel'], this.state.user, 1);
             for (let i = 0; i < this.state.gradeRange.length; i++) {
                 const item = this.state.gradeRange[i];
                 if (item === (myNowLevel + 1)) {
-                    const nextConfig = getLevelConfig(getPath(['user_level', 'level_num'] + 1, this.state.user));
-                    const coinRate = getPath([getPath(['myGradeLevel'], this.state.user) + 1, 'incomeRate'], this.state.gradeSetting);
-                    if (nextConfig && coinRate) {
+                    const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
+                    const coinRate = getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting);
+                    if (nextGradeConfig && coinRate) {
                         DeviceEventEmitter.emit('showPop', <GameDialog transparent={true} callback={() => {
-                            this.lottieHelp && this.lottieHelp.pause();
+                            DeviceEventEmitter.emit('hidePop');
                         }} btn={'知道啦'} content={
                             <View style={[css.flex, css.fw, css.pr]}>
-                                <LottieView key={'lottieUpgrade1'} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={nextConfig.lottie} source={nextConfig.upgrade} loop={false} autoPlay={true} speed={1}/>
+                                <LottieView key={nextGradeConfig.lottie} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={nextGradeConfig.lottie} source={nextGradeConfig.upgrade} loop={false} autoPlay={true} speed={1}/>
                                 <Text style={[css.pa, styles.lottieUpgradeText]}>当前金币产量<Text style={{ color: '#F9D200' }}>{coinRate}</Text></Text>
                             </View>
                         }/>);
