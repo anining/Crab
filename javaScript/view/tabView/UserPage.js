@@ -123,7 +123,7 @@ function UserPage () {
                             </View>
                             <View style={styles.userCardBottom}>
                                 <Text karet-lift numberOfLines={1} style={styles.inviteCode}>邀请码:{invite_code}</Text>
-                                <TouchableOpacity activeOpacity={1}  onPress={() => {
+                                <TouchableOpacity activeOpacity={1} onPress={() => {
                                     Clipboard.setString(invite_code.get());
                                     toast('复制成功!');
                                 }} style={styles.copyBtn}>
@@ -132,7 +132,7 @@ function UserPage () {
                             </View>
                         </View>
                     </View>
-                    <TouchableOpacity activeOpacity={1}  onPress={() => {
+                    <TouchableOpacity activeOpacity={1} onPress={() => {
                         N.navigate('WeChatBindPage');
                     }} style={styles.bindBtn}>
                         <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
@@ -143,7 +143,7 @@ function UserPage () {
                     <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
                         <View style={styles.moneyViewTop}>
                             <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
-                            <TouchableOpacity activeOpacity={1}  onPress={() => {
+                            <TouchableOpacity activeOpacity={1} onPress={() => {
                                 N.navigate('WithdrawPage');
                             }} style={styles.withDrawBtn}>
                                 <Text style={{ lineHeight: 30, textAlign: 'center', color: '#fff' }}>立即提现</Text>
@@ -177,11 +177,11 @@ function UserPage () {
 
 function RenderTaskMenu () {
     const view = [];
-    TASK_MENU.forEach((menu, index) => {
+    authorization.get() && TASK_MENU.forEach((menu, index) => {
         const { id, icon, label } = menu;
         const number = U.mapValue(num => U.ifElse(R.equals(num, undefined), 0, num[id]), receive_task_status);
         view.push(
-            <TouchableOpacity activeOpacity={1}  onPress={() => N.navigate('MyTaskPage', { id: index })} style={styles.myTaskBtn} key={id}>
+            <TouchableOpacity activeOpacity={1} onPress={() => N.navigate('MyTaskPage', { id: index })} style={styles.myTaskBtn} key={id}>
                 <Image source={icon} style={styles.myTaskBtnIcon}/>
                 <Text style={styles.myTaskBtnText}>{label}<Text karet-lift style={{ color: '#FF7751' }}> {number}</Text></Text>
             </TouchableOpacity>
@@ -199,7 +199,7 @@ function RenderMenu () {
     MENU_LIST.forEach(menu => {
         const { title, icon, path, remark } = menu;
         view.push(
-            <TouchableOpacity activeOpacity={1}  onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
                 if (path === 'VerificationStackNavigator') {
                     clear();
                     N.replace(menu.path);
