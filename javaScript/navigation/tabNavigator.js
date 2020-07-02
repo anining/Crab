@@ -78,7 +78,7 @@ export default function TabNavigator ({ navigation }) {
             }}
         >
             <Tab.Screen name="HomePage" component={HomePage} options={{ title: '主页', tabBarVisible: true, unmountOnBlur: true }}/>
-            <Tab.Screen name="AnswerPage" component={AnswerPage} options={{ title: '活动' }}/>
+            <Tab.Screen name="AnswerPage" component={AnswerPage} options={{ title: '任务' }}/>
             <Tab.Screen name="SharePage" component={SharePage} options={{ title: '躺赚', unmountOnBlur: true }}/>
             <Tab.Screen name="UserPage" component={UserPage} options={{ title: '我的' }}/>
         </Tab.Navigator>
