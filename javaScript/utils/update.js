@@ -146,17 +146,7 @@ function taskDetail (receive_task_id) {
             toast(r.msg || '当前做任务人数过多！稍后再试！');
         } else {
             const { data: detail } = r;
-            const { home_url, platform_category } = detail;
-            if (platform_category === 1) {
-                dyCrack(home_url).then(account => {
-                    console.log(account);
-                    N.navigate('TaskDetailPage', { detail, account: account.liked ? account : undefined });
-                }).catch(e => {
-                    N.navigate('TaskDetailPage', { detail, account: undefined });
-                });
-            } else {
-                N.navigate('TaskDetailPage', { detail, account: undefined });
-            }
+            N.navigate('TaskDetailPage', { detail, account: undefined });
         }
     });
 }

@@ -490,17 +490,8 @@ function Btn ({ images, sRef, setName, account, detail, setProgress, setImages, 
                             if (response.error) {
                                 N.goBack();
                             } else {
-                                const { data: detail } = response;
-                                const { home_url, platform_category } = detail;
-                                if (platform_category === 1) {
-                                    dyCrack(home_url).then(account => {
-                                        setDetail(detail);
-                                        setAccount(account.liked ? account : undefined);
-                                    });
-                                } else {
-                                    setDetail(detail);
-                                    setAccount(undefined);
-                                }
+                                setDetail(response.data);
+                                setAccount(undefined);
                             }
                         });
                     }
@@ -509,45 +500,10 @@ function Btn ({ images, sRef, setName, account, detail, setProgress, setImages, 
         });
     }
 
-    function check () {
-        if (account) {
-            dyCrack(home_url).then(r => {
-                if (r) {
-                    const { focus, follower, liked, userTab, likeTab } = r;
-                    if (r.focus !== focus || r.follower !== follower || r.liked !== liked || r.userTab !== userTab || r.likeTab !== likeTab) {
-                        setChange(3);
-                        submit();
-                    }
-                } else {
-                    setChange(2);
-                    DeviceEventEmitter.emit('showPop', {
-                        dom: <Choice info={{
-                            icon: pop9,
-                            tips: '您的账号可能已经不健康',
-                            minTips: '提交的任务可能会不通过！建议更换账号做单,您可以重新打开链接复查做单结果!',
-                            rt: '更换账号',
-                            lt: '继续提交',
-                            rc: () => {
-                                N.navigate('AccountHomePage');
-                            },
-                            lc: () => {
-                                submit();
-                            },
-                        }} />,
-                        close: () => {}
-                    }
-                    );
-                }
-            });
-        } else {
-            submit();
-        }
-    }
-
     return (
         <TouchableOpacity onPress={() => {
             if (MENU_STATUS[status].disabled) {
-                check();
+                submit();
             }
         }} style={[styles.submitBtn, { backgroundColor: MENU_STATUS[status].backgroundColor }]}>
             <Text style={[styles.submitBtnText, { color: MENU_STATUS[status].color }]}>{MENU_STATUS[status].text}</Text>
