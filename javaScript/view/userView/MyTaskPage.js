@@ -8,9 +8,9 @@ import toast from '../../utils/toast';
 import task10 from '../../assets/icon/task/task10.png';
 import { N } from '../../utils/router';
 import { giveUp, taskReceive } from '../../utils/api';
-import { transformMoney, transformTime } from '../../utils/util';
-import { Down } from '../../components/Down';
+import { djangoTime, transformMoney, transformTime } from '../../utils/util';
 import { task } from '../../utils/update';
+import CountDown from '../../components/CountDown';
 
 const itemMarginTop = 10;
 const HEADER_DATA = [
@@ -122,7 +122,7 @@ function RenderItem ({ type, updated_at, receive_task_id, reason, finish_deadlin
             <>
                 <View style={[css.flex, css.js, styles.viewBottom]}>
                     <Text style={styles.deadline}>剩余时间：</Text>
-                    <Down time={finish_deadline} style={styles.deadline}/>
+                    <CountDown time={+new Date(djangoTime(finish_deadline))} style={styles.deadline}/>
                 </View>
                 <TouchableOpacity onPress={() => {
                     apiGiveUp();

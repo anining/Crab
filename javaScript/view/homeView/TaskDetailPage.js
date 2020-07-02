@@ -15,7 +15,7 @@ import task16 from '../../assets/icon/task/task16.png';
 import Upload from '../../components/Upload';
 import { N } from '../../utils/router';
 import { activityDetail, getTask, giveUp, taskReceiveDetail, taskSubmit } from '../../utils/api';
-import { getUrl, requestPermission, transformMoney } from '../../utils/util';
+import { djangoTime, getUrl, requestPermission, transformMoney } from '../../utils/util';
 import { captureRef } from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
 import Choice from '../../components/Choice';
@@ -24,11 +24,11 @@ import Header from '../../components/Header';
 import { getter, store } from '../../utils/store';
 import * as U from 'karet.util';
 import { useFocusEffect } from '@react-navigation/native';
-import { Down } from '../../components/Down';
 import toast from '../../utils/toast';
 import asyncStorage from '../../utils/asyncStorage';
 import { task, updateUser } from '../../utils/update';
 import Button from '../../components/Button';
+import CountDown from '../../components/CountDown';
 
 const { user_id, today_pass_num, activityObj } = getter(['user.user_id', 'activityObj', 'user.today_pass_num']);
 const { width } = Dimensions.get('window');
@@ -185,7 +185,7 @@ function EndTimeView ({ detail }) {
             <View style={styles.endTimeViewItem}>
                 <View style={{ flexDirection: 'row' }}>
                     <Text style={{ color: '#fff', fontSize: 16, fontWeight: '500' }}>剩余时间：</Text>
-                    <Down time={finish_deadline} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }}/>
+                    <CountDown time={+new Date(djangoTime(finish_deadline))} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }}/>
                 </View>
                 <TouchableOpacity onPress={apiGiveUp} style={styles.giveUpBtn}>
                     <Text style={{ color: '#fff', fontSize: 12, lineHeight: 25, textAlign: 'center' }}>放弃任务</Text>

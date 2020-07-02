@@ -14,7 +14,7 @@ import ImageAuto from '../../components/ImageAuto';
 import CountDown from '../../components/CountDown';
 import { N } from '../../utils/router';
 import { activityDetail, getReceiveTaskAward } from '../../utils/api';
-import { transformMoney } from '../../utils/util';
+import { djangoTime, transformMoney } from '../../utils/util';
 import { getter } from '../../utils/store';
 
 const { width } = Dimensions.get('window');
@@ -70,7 +70,7 @@ function DailyRedPackagePage (props) {
                     <ImageBackground source={activity9} style={[css.pa, styles.arpImage, css.flex]}>
                         <View style={[styles.activeTitleWrap, css.flex, css.fw]}>
                             <Text style={styles.atwTitle}>活动倒计时</Text>
-                            <CountDown time={+new Date(endDatetime)} style={{ color: '#fff', fontSize: 15, letterSpacing: 4 }}/>
+                            <CountDown time={+new Date(djangoTime(endDatetime))} style={{ color: '#fff', fontSize: 15, letterSpacing: 4 }}/>
                         </View>
                     </ImageBackground>
                     <RenderRedItem rule={rule} activityId={activityId} detail={detail}/>
