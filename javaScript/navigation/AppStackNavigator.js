@@ -43,7 +43,7 @@ import Prompt from '../components/Prompt';
 import {
     getGradeSetting,
     getSignConfig,
-    getTaskPlatform, updateAccount,
+    getTaskPlatform, getWithdrawLatest, updateAccount,
     updateActivity,
     updateApp,
     updateBanner,
@@ -255,7 +255,7 @@ function setStatusBar () {
 }
 
 export function initNetInfo () {
-    return Promise.all([updateAccount(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome(), updateNextRedLevel()]);
+    return Promise.all([updateAccount(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome(), updateNextRedLevel(), getWithdrawLatest()]);
 }
 
 function AppStackNavigator () {

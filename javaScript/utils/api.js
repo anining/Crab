@@ -95,7 +95,7 @@ export function withdrawLogs (page, size) {
 
 // 提现跑马灯
 export function withdrawLogsLatest (page = 1, size = 10) {
-    return transformFetch('GET', '/withdraw/logs', { page, size });
+    return transformFetch('GET', '/withdraw/logs/latest', { page, size });
 }
 
 // 活动

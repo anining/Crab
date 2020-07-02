@@ -44,6 +44,7 @@ export default class HomePage extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            withdrawLogsLatest: bindData('withdrawLogsLatest', this),
             gradeRange: bindData('gradeRange', this),
             gradeSetting: bindData('gradeSetting', this),
             nextRedLevel: bindData('nextRedLevel', this),
@@ -92,7 +93,6 @@ export default class HomePage extends Component {
             if (this.animationCanstart) {
                 this._getPosition();
                 updateUser();
-                // updateNextRedLevel();
             }
         }, HomeStartAnimationTime);
     }
@@ -207,8 +207,8 @@ export default class HomePage extends Component {
                                         </ImageBackground>
                                     </TouchableOpacity>
                                     {/* eslint-disable-next-line no-return-assign */}
-                                    <Lamp ref={ref => this.lamp = ref} width={'100%'} backgroundColor={'rgba(0,179,216,.5)'}
-                                        color={'#005262'} color1={'#FF6C00'} autoPlay={false}/>
+                                    {_if(this.state.withdrawLogsLatest, res => <Lamp LampList={res} ref={ref => this.lamp = ref} width={'100%'} backgroundColor={'rgba(0,179,216,.5)'}
+                                        color={'#005262'} color1={'#FF6C00'} autoPlay={false}/>)}
                                 </View>
                                 {/* 底部显示区域 */}
                                 <ImageBackground source={game12}
