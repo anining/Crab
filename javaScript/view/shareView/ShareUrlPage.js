@@ -7,7 +7,6 @@ import { childrenLink } from '../../utils/api';
 
 function ShareUrlPage () {
     const [links, setLink] = useState([]);
-    const [input, setInput] = useState('');
     const [inviteCode, setInviteCode] = useState('');
     const view = [];
 
@@ -22,19 +21,17 @@ function ShareUrlPage () {
         });
     }, []);
 
-    async function onShare (message) {
+    function onShare (title = 'xxx', message = 'xxx') {
         try {
-            const result = await Share.share({
-                // title: 'title',
-                message,
+            Share.share({ title, message }).then(result => {
+                if (result.action === Share.sharedAction) {
+
+                } else if (result.action === Share.dismissedAction) {
+
+                }
             });
-            if (result.action === Share.sharedAction) {
-
-            } else if (result.action === Share.dismissedAction) {
-
-            }
         } catch (error) {
-            console.log(error.message);
+            console.log(error);
         }
     }
 
@@ -57,7 +54,7 @@ function ShareUrlPage () {
                         <Text style={{ color: '#fff' }}>复制文案</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.lBtn, { backgroundColor: '#FF6C00' }]} onPress={() => {
-                        onShare(message);
+                        onShare(info, message);
                     }}>
                         <Text style={{ color: '#fff' }}>邀请好友</Text>
                     </TouchableOpacity>

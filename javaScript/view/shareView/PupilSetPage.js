@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { Dimensions, SafeAreaView, StyleSheet, TouchableOpacity, ScrollView, Text, Image, TextInput, View } from 'react-native';
+import { Dimensions, SafeAreaView, StyleSheet, ScrollView, Text, Image, TextInput, View } from 'react-native';
 import { css } from '../../assets/style/css';
 import pupil5 from '../../assets/icon/pupil/pupil5.png';
 import Crab from '../../components/Crab';
 import { childrenSetting } from '../../utils/api';
+import toast from '../../utils/toast';
+import { N } from '../../utils/router';
+import Button from '../../components/Button';
+
 const { width } = Dimensions.get('window');
 
 function PupilSetPage () {
@@ -12,9 +16,13 @@ function PupilSetPage () {
     const [num, setNum] = useState('');
     const [totalMoney, setTotalMoney] = useState('');
 
-    function save () {
+    function save (callback) {
         childrenSetting(qq, wx, num, totalMoney).then(r => {
-            console.log(r);
+            callback();
+            if (!r.error) {
+                toast('保存成功!');
+                N.goBack();
+            }
         });
     }
 
@@ -51,9 +59,11 @@ function PupilSetPage () {
                     <Text style={styles.setLineText}>6.信息可以随时更换，更换信息之后只影响到之后的徒弟。</Text>
                 </View>
             </ScrollView>
-            <TouchableOpacity onPress={save} style={styles.btn}>
-                <Text style={{ fontSize: 17, color: '#fff' }}>保存设置</Text>
-            </TouchableOpacity>
+            <View style={styles.btn}>
+                <Button name={'保存设置'} onPress={ callback => {
+                    save(callback);
+                }}/>
+            </View>
         </SafeAreaView>
     );
 }
@@ -70,10 +80,7 @@ function RenderShareTitle ({ title, icon, width = '100%' }) {
 const styles = StyleSheet.create({
     btn: {
         alignItems: 'center',
-        backgroundColor: 'rgba(255,62,0,1)',
-        height: 45,
-        justifyContent: 'center',
-        width
+        justifyContent: 'center'
     },
     formAllWrap: {
         backgroundColor: '#fff',

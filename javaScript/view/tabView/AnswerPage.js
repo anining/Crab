@@ -15,21 +15,23 @@ import answer11 from '../../assets/icon/answer/answer11.png';
 import answer13 from '../../assets/icon/answer/answer13.png';
 import answer14 from '../../assets/icon/answer/answer14.png';
 import pop5 from '../../assets/icon/pop/pop5.png';
+import pop8 from '../../assets/icon/pop/pop8.png';
 import Shadow from '../../components/Shadow';
 import { _if, _tc, bannerAction, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
 import { N } from '../../utils/router';
 import { getter, store } from '../../utils/store';
-import { getNewUserTask, newUserTask, sign, signLogs } from '../../utils/api';
+import { getNewUserTask, giveUp, newUserTask, sign, signLogs, taskReceive } from '../../utils/api';
 import Choice from '../../components/Choice';
 import * as U from 'karet.util';
 import asyncStorage from '../../utils/asyncStorage';
 import pop3 from '../../assets/icon/pop/pop3.png';
 import { getTaskPlatform, task } from '../../utils/update';
+import toast from '../../utils/toast';
 
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
 const { width } = Dimensions.get('window');
-const { banner, signConfig, activityObj, user, today_task_num, taskPlatform, user_id } = getter(['banner', 'signConfig', 'activityObj', 'user', 'user.today_task_num', 'user.user_id', 'taskPlatform']);
+const { banner, signConfig, activityObj, authorization, today_task_num, taskPlatform, user_id } = getter(['banner', 'signConfig', 'authorization', 'activityObj', 'user', 'user.today_task_num', 'user.user_id', 'taskPlatform']);
 const NEW_USER_TASK_TYPE = {
     1: {
         label: '看视频领金币',
@@ -51,6 +53,8 @@ const NEW_USER_TASK_TYPE = {
 function AnswerPage () {
     const [signDay, setSignDay] = useState(0);
     const [newUser, setNewUser] = useState([]);
+
+    !authorization.get() && N.replace('VerificationStackNavigator');
 
     useEffect(() => {
         init();
@@ -99,18 +103,29 @@ function AnswerPage () {
                     <ComTitle title={'每日签到'} minTitle={<Text style={css.minTitle}>连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text></Text>}/>
                     <RenderDaySign signDay={signDay} setSignDay={setSignDay}/>
                 </View>
-                <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8', borderBottomWidth: 15, borderBottomColor: '#f8f8f8' }]}>
+                <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
                     <ComTitle title={'火爆活动'}/>
                     <RenderActivity />
                 </View>
-                <View style={styles.answerWrap}>
-                    <ComTitle title={'新手福利'}/>
-                    <RenderNewList list={newUser} _newUserTask={_newUserTask}/>
-                </View>
+                <Reward newUser={newUser} _newUserTask={_newUserTask}/>
                 <RenderTaskView />
             </ScrollView>
         </SafeAreaView>
     );
+}
+
+function Reward ({ newUser = [], _newUserTask }) {
+    const localNewUser = newUser.filter(item => item.btnStatus !== 3);
+
+    if (localNewUser.length) {
+        return (
+            <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
+                <ComTitle title={'新手福利'}/>
+                <RenderNewList list={newUser} _newUserTask={_newUserTask}/>
+            </View>
+        );
+    }
+    return <></>;
 }
 
 function RenderDaySign ({ signDay, setSignDay }) {
@@ -343,9 +358,37 @@ function RenderList ({ list = [] }) {
 function RenderBtn ({ item }) {
     const { btnStatus, btnText, platform_category } = item;
 
+    function check () {
+        taskReceive(1, 10, 1).then(r => {
+            if (!r.error) {
+                const { data } = r;
+                if (data.length) {
+                    DeviceEventEmitter.emit('showPop', <Choice info={{
+                        icon: pop8,
+                        tips: '您有一个任务在进行，最多只能同时领取一个任务！',
+                        rt: '继续任务',
+                        lt: '放弃任务',
+                        rc: () => {
+                            task(platform_category);
+                        },
+                        lc: () => {
+                            data.forEach(task => {
+                                giveUp(task.receive_task_id).then(r => {
+                                    !r.error && toast('放弃任务成功!');
+                                });
+                            });
+                        }
+                    }}/>);
+                } else {
+                    task(platform_category);
+                }
+            }
+        });
+    }
+
     switch (btnStatus) {
     case 2:
-    case 5:return <Text style={styles.todoTaskText} karet-lift onPress={ () => { task(platform_category); }}>{btnText}</Text>;
+    case 5:return <Text style={styles.todoTaskText} onPress={check}>{btnText}</Text>;
     case 6:return <Text style={[styles.todoTaskText, { borderColor: '#53C23B', color: '#53C23B' }]} karet-lift onPress={ () => { N.navigate('AccountHomePage'); }}>{btnText}</Text>;
     default:return <Shadow style={styles.todoBtn} color={'#d43912'}><Text style={styles.todoBtnText} karet-lift>{btnText}</Text></Shadow>;
     }
