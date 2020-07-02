@@ -1,4 +1,5 @@
 import * as React from 'karet';
+import * as R from 'kefir.ramda';
 import { View, SafeAreaView, StyleSheet, ScrollView, ImageBackground, Image, Text, TouchableOpacity, Dimensions } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { css } from '../../assets/style/css';
@@ -176,13 +177,13 @@ function UserPage () {
 
 function RenderTaskMenu () {
     const view = [];
-    const read = receive_task_status.get();
     TASK_MENU.forEach((menu, index) => {
         const { id, icon, label } = menu;
+        const number = U.mapValue(num => U.ifElse(R.equals(num, undefined), 0, num[id]), receive_task_status);
         view.push(
             <TouchableOpacity onPress={() => N.navigate('MyTaskPage', { id: index })} style={styles.myTaskBtn} key={id}>
                 <Image source={icon} style={styles.myTaskBtnIcon}/>
-                <Text style={styles.myTaskBtnText}>{label}<Text style={{ color: '#FF7751' }}> {(read && read[id]) || 0}</Text></Text>
+                <Text style={styles.myTaskBtnText}>{label}<Text karet-lift style={{ color: '#FF7751' }}> {number}</Text></Text>
             </TouchableOpacity>
         );
     });

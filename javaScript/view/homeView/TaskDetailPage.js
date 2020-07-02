@@ -27,7 +27,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Down } from '../../components/Down';
 import toast from '../../utils/toast';
 import asyncStorage from '../../utils/asyncStorage';
-import { task } from '../../utils/update';
+import { task, updateUser } from '../../utils/update';
 import Button from '../../components/Button';
 
 const { user_id, today_pass_num, activityObj } = getter(['user.user_id', 'activityObj', 'user.today_pass_num']);
@@ -105,6 +105,7 @@ function TaskDetailPage (props) {
                         lt: '返回首页',
                         lc: () => {
                             giveUp(detail.receive_task_id);
+                            updateUser();
                             N.goBack();
                         },
                         rt: '继续任务'
