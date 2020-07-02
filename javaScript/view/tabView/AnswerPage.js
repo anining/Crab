@@ -20,7 +20,7 @@ import { _if, _tc, bannerAction, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
 import { N } from '../../utils/router';
 import { getter, store } from '../../utils/store';
-import { getNewUserTask, newUserTask, sign, signLogs } from '../../utils/api';
+import { getNewUserTask, newUserTask, sign, signLogs, taskReceive } from '../../utils/api';
 import Choice from '../../components/Choice';
 import * as U from 'karet.util';
 import asyncStorage from '../../utils/asyncStorage';
@@ -343,9 +343,23 @@ function RenderList ({ list = [] }) {
 function RenderBtn ({ item }) {
     const { btnStatus, btnText, platform_category } = item;
 
+    function check () {
+        task(platform_category);
+        // taskReceive(1, 10, 1).then(r => {
+        //     if (!r.error) {
+        //         const { data } = r;
+        //         if (data.length) {
+        //
+        //         } else {
+        //             task(platform_category);
+        //         }
+        //     }
+        // });
+    }
+
     switch (btnStatus) {
     case 2:
-    case 5:return <Text style={styles.todoTaskText} karet-lift onPress={ () => { task(platform_category); }}>{btnText}</Text>;
+    case 5:return <Text style={styles.todoTaskText} onPress={check}>{btnText}</Text>;
     case 6:return <Text style={[styles.todoTaskText, { borderColor: '#53C23B', color: '#53C23B' }]} karet-lift onPress={ () => { N.navigate('AccountHomePage'); }}>{btnText}</Text>;
     default:return <Shadow style={styles.todoBtn} color={'#d43912'}><Text style={styles.todoBtnText} karet-lift>{btnText}</Text></Shadow>;
     }
