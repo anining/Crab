@@ -22,6 +22,7 @@ function LoginPage () {
 
     async function _fastLogin () {
         try {
+            toast('开始登录');
             const ret = await android.verifyLogin();
             console.log(ret, ret.token);
             if (ret && ret.token && ret.opToken && ret.operator) {
@@ -33,12 +34,15 @@ function LoginPage () {
                     setter([['authorization', `${token_type} ${access_token}`]], true);
                     await initNetInfo();
                     N.replace('MaterialTopTabNavigator');
+                } else {
+                    toast(`${JSON.stringify(ret)}`);
                 }
             } else {
-                toast('登录失败!');
+                toast('登录失败111');
             }
         } catch (e) {
             console.log(e);
+            toast(JSON.stringify(e));
         }
     }
 

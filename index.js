@@ -15,8 +15,12 @@ TextInput.defaultProps = Object.assign({}, TextInput.defaultProps, {
 Text.defaultProps = Object.assign({}, Text.defaultProps, {
     allowFontScaling: false,
 });
-const sourceRender = Text.render;
+const sourceRenderText = Text.render;
+const sourceRenderTextInput = TextInput.render;
 Text.render = function render (props, ref) {
-    return sourceRender.apply(this, [{ ...props, style: [{ fontFamily: 'sy-bold' }, props.style] }, ref]);
+    return sourceRenderText.apply(this, [{ ...props, style: [{ fontFamily: 'sy-bold' }, props.style] }, ref]);
+}; // 全局修改字体
+TextInput.render = function render (props, ref) {
+    return sourceRenderTextInput.apply(this, [{ ...props, style: [{ fontFamily: 'sy-bold' }, props.style] }, ref]);
 }; // 全局修改字体
 AppRegistry.registerComponent(appName, () => AppStackNavigator);
