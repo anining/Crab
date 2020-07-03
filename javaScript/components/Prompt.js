@@ -16,8 +16,6 @@ export default class Prompt extends Component {
     }
 
     onClose () {
-        console.log(this);
-        console.log('111');
         this.setState({ show: false });
         this.close && this.close();
     }
