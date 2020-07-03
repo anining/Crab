@@ -15,7 +15,6 @@ function HelpCenterDetailPage (props) {
                 <Video
                     source={{ uri }}
                     controls={true}
-                    fullscreen={true}
                     posterResizeMode={'center'}
                     resizeMode={'contain'}
                     style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }} />
