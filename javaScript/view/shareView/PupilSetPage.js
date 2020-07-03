@@ -14,8 +14,8 @@ function PupilSetPage (props) {
     const { setting } = props.route.params;
     const [qq, setQq] = useState(setting.qq_group || '');
     const [wx, setWx] = useState(setting.wx || '');
-    const [num, setNum] = useState(setting.need_invite_num.toString() || 0);
-    const [totalMoney, setTotalMoney] = useState(setting.need_income.toString() || 0);
+    const [num, setNum] = useState((setting.need_invite_num && setting.need_invite_num.toString()) || 0);
+    const [totalMoney, setTotalMoney] = useState((setting.need_income && setting.need_income.toString()) || 0);
 
     function save (callback) {
         childrenSetting(qq, wx, num, totalMoney).then(r => {
