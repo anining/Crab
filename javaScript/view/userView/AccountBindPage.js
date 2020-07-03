@@ -25,8 +25,6 @@ function AccountBindPage (props) {
         }
         postAccount(id, url).then(r => {
             if (!r.error) {
-                // 缓存用于新手福利判断
-                asyncStorage.setItem(`NEW_USER_TASK_TYPE2${user_id.get()}`, 'true');
                 updateAccount();
                 getTaskPlatform();
                 toast('绑定操作成功!');

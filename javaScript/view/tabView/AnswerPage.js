@@ -32,7 +32,7 @@ import toast from '../../utils/toast';
 
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
 const { width } = Dimensions.get('window');
-const { banner, signConfig, activityObj, authorization, today_task_num, taskPlatform, user_id } = getter(['banner', 'signConfig', 'authorization', 'activityObj', 'user', 'user.today_task_num', 'user.user_id', 'taskPlatform']);
+const { banner, signConfig, activityObj, openid, authorization, today_task_num, taskPlatform, user_id } = getter(['banner', 'signConfig', 'authorization', 'activityObj', 'user.openid', 'user.today_task_num', 'user.user_id', 'taskPlatform']);
 const NEW_USER_TASK_TYPE = {
     1: {
         label: '看视频领金币',
@@ -74,9 +74,11 @@ function AnswerPage () {
 
     async function _newUserTask () {
         // asyncStorage.setItem(`NEW_USER_TASK_TYPE1${user_id.get()}`, 'true');
+        // asyncStorage.setItem(`NEW_USER_TASK_TYPE2${user_id.get()}`, 'true');
+        // asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
         const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
-        const local2 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE2${user_id.get()}`);
         const local3 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE3${user_id.get()}`);
+        const localArray = [false, local1, openid.get(), local3];
         const ret = await newUserTask();
         if (!ret.error) {
             const localData = ret.data.map(task => {
@@ -88,8 +90,8 @@ function AnswerPage () {
                     minTitle: NEW_USER_TASK_TYPE[task_type].label,
                     icon: NEW_USER_TASK_TYPE[task_type].icon,
                     path: NEW_USER_TASK_TYPE[task_type].path,
-                    btnText: is_finish ? '已完成' : `local${task_type}` ? '领取奖励' : '去完成',
-                    btnStatus: is_finish ? 3 : `local${task_type}` ? 2 : 5,
+                    btnText: is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成',
+                    btnStatus: is_finish ? 3 : localArray[task_type] ? 2 : 5,
                 };
             });
             setNewUser(localData);
