@@ -6,7 +6,7 @@
 #
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
-
+-ignorewarnings
 # Add any project specific keep options here:
 # for SecVerify
 -keep class com.mob.**{*;}
