@@ -12,6 +12,7 @@ import task13 from '../../assets/icon/task/task13.png';
 import task14 from '../../assets/icon/task/task14.png';
 import task15 from '../../assets/icon/task/task15.png';
 import task16 from '../../assets/icon/task/task16.png';
+import task17 from '../../assets/icon/task/task17.png';
 import Upload from '../../components/Upload';
 import { N } from '../../utils/router';
 import { activityDetail, getTask, giveUp, taskReceiveDetail, taskSubmit } from '../../utils/api';
@@ -30,7 +31,7 @@ import { task, updateUser } from '../../utils/update';
 import Button from '../../components/Button';
 import CountDown from '../../components/CountDown';
 
-const { user_id, user, today_pass_num, activityObj } = getter(['user.user_id', 'user', 'activityObj', 'user.today_pass_num']);
+const { user_id, user, total_task_num, today_pass_num, activityObj } = getter(['user.user_id', 'user.total_task_num', 'user', 'activityObj', 'user.today_pass_num']);
 const { width } = Dimensions.get('window');
 const MENU_STATUS = {
     1: {
@@ -478,29 +479,89 @@ function RenderImage ({ images, length, progress, setProgress, index, setImages,
     );
 }
 
+function UserPop ({ view }) {
+    return (
+        <ImageBackground source={task17} style={{ width: width * 0.8, height: width * 0.8 * (1245 / 999), position: 'relative' }}>
+            {view}
+        </ImageBackground>
+    );
+}
+
 function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages, name, setDetail, setAccount }) {
     const { status, nickname, home_url, receive_task_id, platform_category } = detail;
 
-    function checkWindow () {
-        console.log(user.get());
-        // getTask(platform_category).then(r => {
-        //     callback();
-        //     if (!r.error) {
-        //         toast('提交任务成功!自动继续下一个任务!');
-        //         taskReceiveDetail(r.data.receive_task_id).then(response => {
-        //             if (response.error) {
-        //                 N.goBack();
-        //             } else {
-        //                 setDetail(response.data);
-        //                 setAccount(undefined);
-        //             }
-        //         });
-        //     }
-        // });
+    function getApiTask () {
+        DeviceEventEmitter.emit('hidePop');
+        getTask(platform_category).then(r => {
+            if (!r.error) {
+                toast('提交任务成功!自动继续下一个任务!');
+                taskReceiveDetail(r.data.receive_task_id).then(response => {
+                    if (response.error) {
+                        N.goBack();
+                    } else {
+                        setDetail(response.data);
+                        setAccount(undefined);
+                    }
+                });
+            }
+        });
+    }
+
+    function showPop (type, number) {
+        let view;
+        switch (type) {
+        case 1:view = (
+            <>
+                <Text style={styles.userPopTitle}>恭喜您，额外获得</Text>
+                <Text style={styles.userPopTips}>{number}<Text style={{ fontSize: 20 }}> 金币</Text></Text>
+                <Text style={styles.userPopText}>马上就可以提现啦</Text>
+                <TouchableOpacity style={styles.userPopBtn} onPress={getApiTask}>
+                    <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>继续零钱</Text>
+                </TouchableOpacity>
+            </>
+        ); break;
+        case 2:view = (
+            <>
+                <Text style={styles.userPopTitle}>你太棒了！</Text>
+                <Text style={[styles.userPopText, { top: '40%' }]}>再做 <Text style={{ color: '#FF3B00', fontSize: 18 }}>{number}单</Text> 就能获得全部奖励啦</Text>
+                <Text style={[styles.userPopText, { top: '50%' }]}>再接再厉哦~</Text>
+                <TouchableOpacity style={styles.userPopBtn} onPress={getApiTask}>
+                    <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>继续零钱</Text>
+                </TouchableOpacity>
+            </>
+        ); break;
+        default:view = (
+            <>
+                <Text style={styles.userPopTitle}>哇！太厉害了！</Text>
+                <Text style={[styles.userPopText, { top: '40%' }]}>你已经获得全部奖励了</Text>
+                <Text style={[styles.userPopText, { top: '50%' }]}>快去提现试试吧~</Text>
+                <TouchableOpacity style={styles.userPopBtn} onPress={() => {
+                    DeviceEventEmitter.emit('hidePop');
+                    N.navigate('WithdrawPage');
+                }}>
+                    <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>去提现</Text>
+                </TouchableOpacity>
+            </>
+        );
+        }
+        DeviceEventEmitter.emit('showPop', { dom: <UserPop view={view}/>, close: () => { console.log('关闭'); } });
+    }
+
+    function checkWindow (money) {
+        const total = total_task_num.get();
+        if (total === 0) {
+            showPop(1, money);
+        } else if (total < 10) {
+            showPop(2, 10 - total);
+        } else if (total === 10) {
+            showPop(3, 0);
+        } else {
+            getApiTask();
+        }
+        updateUser();
     }
 
     function submit (callback) {
-        checkWindow();return;
         const localImages = images.map(image => image.uri);
         if ((taskImage && !localImages.length) || !(name || nickname)) {
             callback();
@@ -509,14 +570,16 @@ function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages
         }
         taskSubmit(receive_task_id, localImages, name || nickname).then(r => {
             if (!r.error) {
+                const { add_balance } = r.data;
                 setName('');
                 setProgress('等待上传');
                 setImages([]);
-                sRef && sRef.scrollTo({ x: 0, y: 0, animated: true });
+                checkWindow(add_balance || 0);
                 U.set(U.view(['user', 'today_pass_num'], store), Number.parseInt(today_pass_num.get()) + 1);
                 // 缓存用于新手福利判断
                 asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
-                checkWindow();
+                sRef && sRef.scrollTo({ x: 0, y: 0, animated: true });
+                callback();
             } else {
                 callback();
             }
@@ -742,6 +805,44 @@ const styles = StyleSheet.create({
         height: 199,
         marginTop: 10,
         width: 156
+    },
+    userPopBtn: {
+        alignItems: 'center',
+        backgroundColor: '#FFE062',
+        borderRadius: 30,
+        bottom: '12%',
+        height: 50,
+        justifyContent: 'center',
+        left: '15%',
+        position: 'absolute',
+        width: '70%'
+    },
+    userPopText: {
+        color: '#80120F',
+        fontSize: 16,
+        marginTop: '5%',
+        position: 'absolute',
+        textAlign: 'center',
+        top: '50%',
+        width: '100%'
+    },
+    userPopTips: {
+        color: '#FF3B00',
+        fontSize: 30,
+        fontWeight: '500',
+        position: 'absolute',
+        textAlign: 'center',
+        top: '40%',
+        width: '100%'
+    },
+    userPopTitle: {
+        color: '#80120F',
+        fontSize: 21,
+        fontWeight: '500',
+        position: 'absolute',
+        textAlign: 'center',
+        top: '30%',
+        width: '100%'
     }
 });
 

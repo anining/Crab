@@ -34,8 +34,8 @@ function OpenMoneyPage (props) {
             if (r && !r.error) {
                 const { data } = r;
                 const { total_num, all_history, log } = data;
-                const { money = -1 } = log;
-                if (money > 0) {
+                const { money } = log;
+                if (money) {
                     setData(data);
                     setReceivedStatus(2);
                     setPageInfo(all_history);
@@ -59,7 +59,7 @@ function OpenMoneyPage (props) {
                                 <ImageAuto width={width * 0.8} source={activity14}/>
                             </TouchableOpacity>
                         ),
-                        close: () => { money > 0 && N.goBack(); }
+                        close: () => { !money && N.goBack(); }
                     });
                 }
             } else {
