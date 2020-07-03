@@ -33,10 +33,10 @@ function BlackHousePage () {
                                             <Image source={{ uri: avatar }} style={styles.image} />
                                             <Text numberOfLines={1} style={{ fontSize: 14, color: '#222', maxWidth: 130 }}>{nickname}</Text>
                                         </View>
-                                        <Text numberOfLines={1} style={{ fontSize: 13, color: '#999' }}>封停时间：{transformTime(updated_at)}</Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 12, color: '#999' }}>封停时间：{transformTime(updated_at)}</Text>
                                     </View>
                                     <View style={[css.flexRCSB, styles.item]}>
-                                        <Text numberOfLines={1} style={[styles.text, { maxWidth: 150 }]}>封停原因：{baned_reason || '错误使用账号'}</Text>
+                                        <Text numberOfLines={1} style={[styles.text, { maxWidth: 220 }]}>封停原因：{baned_reason || '错误使用账号'}</Text>
                                         <Text numberOfLines={1} style={styles.text}>解封时间：{transformTime(baned_time)}</Text>
                                     </View>
                                 </View>
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#353535',
-        fontSize: 14
+        fontSize: 12
     }
 });
 

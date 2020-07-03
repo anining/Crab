@@ -77,7 +77,7 @@ export default class Button extends Component {
                     </Text>
                 </Shadow>;
             } else {
-                return <View style={{ marginVertical: 20 }}>
+                return <View style={{ marginVertical: this.props.type === 2 ? 0 : 20 }}>
                     <Shadow style={[styles.buntWrap, typeStyleProxy[this.type]]} color={this.shadow}>
                         <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.buntWrap, styles.lineStyle, typeStyleProxy[this.type]]}>
                             <TouchableOpacity style={styles.touchBtn} activeOpacity={1} onPress={() => { this.btnOnPress(); }}>
