@@ -23,7 +23,7 @@ import game12 from '../../assets/icon/game/game12.png';
 import game16 from '../../assets/icon/game/game16.png';
 import ImageAuto from '../../components/ImageAuto';
 import ShiftView from '../../components/ShiftView';
-import { N } from '../../utils/router';
+import {N, proxyRouter} from '../../utils/router';
 import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
 import { _if, setAndroidTime } from '../../utils/util';
@@ -69,6 +69,7 @@ export default class HomePage extends Component {
     }
 
     componentDidMount () {
+        proxyRouter(this.props.navigation);
         this.delayEmitter();
         this._homeStart();
     }

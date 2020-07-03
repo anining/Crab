@@ -20,7 +20,7 @@ import { getGlobal } from '../global/global';
 const Tab = createBottomTabNavigator();
 
 function TabNavigator ({ navigation }) {
-    proxyRouter(navigation, ['MaterialTopTabNavigator', 'LoginPage'], 'VerificationStackNavigator');
+    proxyRouter(navigation);
     if (!getGlobal('authorization')) {
         N.replace('VerificationStackNavigator');
     }
