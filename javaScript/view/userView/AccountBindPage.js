@@ -8,7 +8,7 @@ import { postAccount } from '../../utils/api';
 import toast from '../../utils/toast';
 import asyncStorage from '../../utils/asyncStorage';
 import { getter } from '../../utils/store';
-import { updateAccount } from '../../utils/update';
+import { getTaskPlatform, updateAccount } from '../../utils/update';
 import { getUrl } from '../../utils/util';
 
 const { user_id } = getter(['user.user_id']);
@@ -28,6 +28,7 @@ function AccountBindPage (props) {
                 // 缓存用于新手福利判断
                 asyncStorage.setItem(`NEW_USER_TASK_TYPE2${user_id.get()}`, 'true');
                 updateAccount();
+                getTaskPlatform();
                 toast('绑定操作成功!');
                 N.goBack();
             } else {
