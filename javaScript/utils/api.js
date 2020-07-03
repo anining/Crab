@@ -173,8 +173,8 @@ export function getChildAward () {
 }
 
 // 领取推手奖励
-export function getPromoteAward () {
-    return transformFetch('POST', '/children/award/promote');
+export function getPromoteAward (level) {
+    return transformFetch('POST', '/children/award/promote', { level });
 }
 
 // 绑定父级

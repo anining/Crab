@@ -22,8 +22,10 @@ import { N } from '../../utils/router';
 import { getter } from '../../utils/store';
 import Clipboard from '@react-native-community/clipboard';
 import toast from '../../utils/toast';
-import { awardDetail, getChildAward } from '../../utils/api';
+import { awardDetail, getChildAward, getPromoteAward } from '../../utils/api';
 import { _gv, _if } from '../../utils/util';
+import answer16 from '../../assets/icon/answer/answer16.png';
+import answer15 from '../../assets/icon/answer/answer15.png';
 
 const { width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
@@ -40,7 +42,15 @@ const cashBack = [{
     title: '徒弟第三次提现到账',
     label: '师傅得3元',
 }];
-const { invite_code, authorization } = getter(['user.invite_code', 'authorization']);
+const { invite_code, label, authorization } = getter(['user.invite_code', 'authorization', 'app.label']);
+
+function RewardPop ({ view, source }) {
+    return (
+        <ImageBackground source={source} style={{ width: width * 0.8, height: width * 0.8 * (1245 / 885), position: 'relative' }}>
+            {view}
+        </ImageBackground>
+    );
+}
 
 export default class SharePage extends PureComponent {
     constructor (props) {
@@ -48,9 +58,12 @@ export default class SharePage extends PureComponent {
         this.state = {
             detailInfo: null,
             awardLength: 0,
+            valid_children: 0,
             rebate: [0, 0], // 返佣比例
         };
         this.getReward = this.getReward.bind(this);
+        this.getBigReward = this.getBigReward.bind(this);
+        this.renderPop = this.renderPop.bind(this);
     }
 
     async _awardDetail () {
@@ -66,7 +79,73 @@ export default class SharePage extends PureComponent {
                     rebate[1] = second_rebate;
                 }
             });
-            this.setState({ detailInfo: ret.data, rebate, awardLength: children_withdraw_award_logs.length });
+            this.setState({ detailInfo: ret.data, rebate, valid_children, awardLength: children_withdraw_award_logs.length });
+        }
+    }
+
+    renderPop (money = 0, number = 0, next_money = 0) {
+        const view = (
+            <>
+                <Text style={[styles.rewardPopText, { top: '10%' }]}>恭喜您，打开红包获得</Text>
+                <Text style={[styles.rewardPopText, { top: '20%', color: '#EB432E' }]}>{money}元</Text>
+                <Text style={[styles.rewardPopText, { top: '30%' }]}>您这也太强了吧！现在再收 <Text style={{ color: '#E83A29' }}>{number}</Text> 徒弟</Text>
+                <Text style={[styles.rewardPopText, { top: '40%' }]}>最多还能再开 <Text style={{ color: '#E83A29' }}>{next_money}</Text> 元</Text>
+                <TouchableOpacity style={styles.rewardPopBtn} onPress={() => {
+                    DeviceEventEmitter.emit('hidePop');
+                }}>
+                    <Text style={{ color: '#8F5806', fontSize: 18, fontWeight: '500' }}>我知道了</Text>
+                </TouchableOpacity>
+            </>
+        );
+        DeviceEventEmitter.emit('showPop', { dom: <RewardPop view={view} source={answer15}/>, close: () => { console.log('关闭'); } });
+    }
+
+    async getBigReward (info, item, index) {
+        const { detailInfo } = this.state;
+        const { promote_level } = detailInfo;
+        const { need_children_num, level, get_type, label } = info;
+        const number = ((promote_level[index + 1] && promote_level[index + 1].need_children_num) || 0) - need_children_num;
+        const next_money = (promote_level[index + 1] && promote_level[index + 1].min_money) || 0;
+        let view;
+        if (get_type === 2) {
+            view = (
+                <>
+                    <Text style={[styles.rewardPopText, { top: '10%' }]}>您真的太厉害了！</Text>
+                    <Text style={[styles.rewardPopText, { top: '20%', color: '#EB432E' }]}>添加微信领取奖励</Text>
+                    <Text style={[styles.rewardPopText, { top: '30%' }]}>您还可以选择成为我们的合伙人</Text>
+                    <Text style={[styles.rewardPopText, { top: '40%' }]}>还有更多的福利机会等着您哟~</Text>
+                    <TouchableOpacity style={styles.rewardPopBtn} onPress={() => {
+                        DeviceEventEmitter.emit('hidePop');
+                        Clipboard.setString(label.get());
+                        toast('复制成功!');
+                    }}>
+                        <Text style={{ color: '#8F5806', fontSize: 18, fontWeight: '500' }}>复制微信号</Text>
+                    </TouchableOpacity>
+                </>
+            );
+            DeviceEventEmitter.emit('showPop', {
+                dom: <RewardPop view={view} source={answer15}/>,
+                close: () => { Clipboard.setString(label.get()); }
+            });
+        } else {
+            getPromoteAward(level).then(r => {
+                if (!r.error) {
+                    const { add_balance } = r.data;
+                    view = (
+                        <>
+                            <Text style={[styles.rewardPopText, { top: '10%', color: '#FFE6A1', fontSize: 23 }]}>恭喜您</Text>
+                            <Text style={[styles.rewardPopText, { top: '20%', color: '#FFE6A1', fontSize: 23 }]}>晋升{label}</Text>
+                            <Text style={[styles.rewardPopText, { top: '35%', color: '#FFE6A1', fontSize: 12 }]}>我们给您准备了一个大红包</Text>
+                        </>
+                    );
+                    DeviceEventEmitter.emit('showPop', {
+                        dom: <RewardPop view={view} source={answer16}/>,
+                        close: () => {
+                            this.renderPop(add_balance, number, next_money);
+                        }
+                    });
+                }
+            });
         }
     }
 
@@ -116,10 +195,16 @@ export default class SharePage extends PureComponent {
         const view = [];
         const shareLevel = [{
             icon: share4,
+            text: '领取奖励',
+            color: '#FF5C22'
         }, {
             icon: share5,
+            text: '领取奖励',
+            color: '#FF5C22'
         }, {
             icon: share6,
+            text: '加入内部群',
+            color: '#666'
         }];
         const validNumber = parseInt(_gv(this.state.detailInfo, 'valid_children', 0));
         shareLevel.forEach((item, index) => {
@@ -137,8 +222,24 @@ export default class SharePage extends PureComponent {
                 view.push(
                     <View style={[styles.welfareProgressWrap, css.flex, css.fw, css.afs]} key={`shareLevel${index}`}>
                         <View style={[css.flex, css.js, styles.wpiTitleWrap]}>
-                            <ImageAuto source={item.icon} style={{ width: 32, marginRight: 10 }}/>
-                            <Text style={[styles.welfareTitleText]}>{info.label}</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <ImageAuto source={item.icon} style={{ width: 32, marginRight: 10 }}/>
+                                <Text style={[styles.welfareTitleText]}>{info.label}</Text>
+                            </View>
+                            {(() => {
+                                const { valid_children, detailInfo } = this.state;
+                                const { need_children_num } = info;
+                                if (Number(need_children_num) > Number(valid_children)) {
+                                    return undefined;
+                                }
+                                return (
+                                    <TouchableOpacity onPress={() => {
+                                        this.getBigReward(info, item, index);
+                                    }}>
+                                        <Text style={{ color: item.color }}>{item.text}</Text>
+                                    </TouchableOpacity>
+                                );
+                            })()}
                         </View>
                         {<Text numberOfLines={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>{info.min_money}{info.max_money > info.min_money ? `-${info.max_money}` : ''}元</Text>现金红包，永久获得{info.first_rebate * 100 + '%'}徒弟{info.second_rebate * 100 + '%'}徒孙提现返佣。</Text>}
                         {SharePage._renderProgress(validNumber / parseInt(info.need_children_num))}
@@ -407,6 +508,26 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         width: '94%',
     },
+    rewardPopBtn: {
+        alignItems: 'center',
+        backgroundColor: '#FFF66C',
+        borderRadius: 30,
+        bottom: '9%',
+        height: 50,
+        justifyContent: 'center',
+        left: '15%',
+        position: 'absolute',
+        width: '70%'
+    },
+    rewardPopText: {
+        color: '#834D00',
+        fontSize: 16,
+        marginTop: '5%',
+        position: 'absolute',
+        textAlign: 'center',
+        top: '50%',
+        width: '100%'
+    },
     scrollWrap: {
         backgroundColor: '#FF9331',
     },
@@ -552,6 +673,7 @@ const styles = StyleSheet.create({
     },
     wpiTitleWrap: {
         height: 40,
-        width: '100%',
+        justifyContent: 'space-between',
+        width: '100%'
     },
 });
