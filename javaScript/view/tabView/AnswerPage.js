@@ -337,8 +337,6 @@ function RenderList () {
                     <View style={[css.flex, css.fw, styles.aiwText]}>
                         <View style={[css.flex, css.js, { width: '100%' }]}>
                             <Text karet-lift style={styles.KLabelText } numberOfLines={1}>{label}</Text>
-                            <Text karet-lift style={styles.labelMoney} numberOfLines={1}> +{money}</Text>
-                            <ImageAuto source={answer14} width={20}/>
                         </View>
                         <Text karet-lift style={U.template([styles.KLabelMinTitle, { color: U.ifElse(R.equals(btnStatus, 5), '#999', '#53C23B') }])} numberOfLines={1}>{minTitle}</Text>
                     </View>

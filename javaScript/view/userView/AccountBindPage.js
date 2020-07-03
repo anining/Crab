@@ -9,6 +9,7 @@ import toast from '../../utils/toast';
 import { getter } from '../../utils/store';
 import { getTaskPlatform, updateAccount } from '../../utils/update';
 import { getUrl } from '../../utils/util';
+import Button from '../../components/Button';
 
 const { taskPlatform } = getter(['taskPlatform']);
 
@@ -16,12 +17,14 @@ function AccountBindPage (props) {
     const [url, setUrl] = useState('');
     const { id, label } = props.route.params;
 
-    function apiPostAccount () {
+    function apiPostAccount (callback) {
         if (!getUrl(url)) {
             toast('链接错误!');
+            callback();
             return;
         }
         postAccount(id, url).then(r => {
+            callback();
             if (!r.error) {
                 updateAccount();
                 getTaskPlatform();
@@ -62,9 +65,9 @@ function AccountBindPage (props) {
                         <Text style={styles.text}>3.请确认自己的账号已经达到最低绑定要求。分享账号给其他用户，确保自己的作品、粉丝等信息是所有人可见的状态。</Text>
                     </View>
                 </View>
-                <TouchableOpacity activeOpacity={1} onPress={apiPostAccount} style={styles.bindBtn}>
-                    <Text style={styles.bindBtnText}>绑定账号</Text>
-                </TouchableOpacity>
+                <Button name={'绑定账号'} type={2} onPress={ callback => {
+                    apiPostAccount(callback);
+                }}/>
             </View>
         </SafeAreaView>
     );
@@ -105,17 +108,6 @@ function RenderConfig ({ id }) {
 }
 
 const styles = StyleSheet.create({
-    bindBtn: {
-        backgroundColor: '#FF3E00',
-        height: 44,
-        width: '100%'
-    },
-    bindBtnText: {
-        color: '#fff',
-        fontSize: 17,
-        lineHeight: 44,
-        textAlign: 'center'
-    },
     claim: {
         backgroundColor: '#fff',
         borderRadius: 8,
