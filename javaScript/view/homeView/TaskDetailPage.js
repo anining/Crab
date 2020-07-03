@@ -30,7 +30,7 @@ import { task, updateUser } from '../../utils/update';
 import Button from '../../components/Button';
 import CountDown from '../../components/CountDown';
 
-const { user_id, today_pass_num, activityObj } = getter(['user.user_id', 'activityObj', 'user.today_pass_num']);
+const { user_id, user, today_pass_num, activityObj } = getter(['user.user_id', 'user', 'activityObj', 'user.today_pass_num']);
 const { width } = Dimensions.get('window');
 const MENU_STATUS = {
     1: {
@@ -481,7 +481,26 @@ function RenderImage ({ images, length, progress, setProgress, index, setImages,
 function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages, name, setDetail, setAccount }) {
     const { status, nickname, home_url, receive_task_id, platform_category } = detail;
 
+    function checkWindow () {
+        console.log(user.get());
+        // getTask(platform_category).then(r => {
+        //     callback();
+        //     if (!r.error) {
+        //         toast('提交任务成功!自动继续下一个任务!');
+        //         taskReceiveDetail(r.data.receive_task_id).then(response => {
+        //             if (response.error) {
+        //                 N.goBack();
+        //             } else {
+        //                 setDetail(response.data);
+        //                 setAccount(undefined);
+        //             }
+        //         });
+        //     }
+        // });
+    }
+
     function submit (callback) {
+        checkWindow();return;
         const localImages = images.map(image => image.uri);
         if ((taskImage && !localImages.length) || !(name || nickname)) {
             callback();
@@ -497,20 +516,7 @@ function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages
                 U.set(U.view(['user', 'today_pass_num'], store), Number.parseInt(today_pass_num.get()) + 1);
                 // 缓存用于新手福利判断
                 asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
-                getTask(platform_category).then(r => {
-                    callback();
-                    if (!r.error) {
-                        toast('提交任务成功!自动继续下一个任务!');
-                        taskReceiveDetail(r.data.receive_task_id).then(response => {
-                            if (response.error) {
-                                N.goBack();
-                            } else {
-                                setDetail(response.data);
-                                setAccount(undefined);
-                            }
-                        });
-                    }
-                });
+                checkWindow();
             } else {
                 callback();
             }

@@ -6,12 +6,10 @@ import { N } from '../../utils/router';
 import bind1 from '../../assets/icon/bind/bind1.png';
 import { postAccount } from '../../utils/api';
 import toast from '../../utils/toast';
-import asyncStorage from '../../utils/asyncStorage';
 import { getter } from '../../utils/store';
 import { getTaskPlatform, updateAccount } from '../../utils/update';
 import { getUrl } from '../../utils/util';
 
-const { user_id } = getter(['user.user_id']);
 const { taskPlatform } = getter(['taskPlatform']);
 
 function AccountBindPage (props) {
