@@ -45,9 +45,10 @@ export default class Button extends Component {
         try {
             if (!this.state.loading) {
                 console.log('点击了我');
-                this.setState({ loading: true });
-                this.props.onPress && this.props.onPress(() => {
-                    this.setState({ loading: false });
+                this.setState({ loading: true }, () => {
+                    this.props.onPress && this.props.onPress(() => {
+                        this.setState({ loading: false });
+                    });
                 });
             }
         } catch (e) {

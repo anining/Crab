@@ -135,10 +135,10 @@ export default class PassGamePage extends Component {
             const myGradeLevel = this.paramsInfo.myGradeLevel;
             for (let i = 0; i < this.state.gradeRange.length; i++) {
                 const item = this.state.gradeRange[i];
-                console.log(item, myNowLevel, '??======');
+                console.log(item, myNowLevel, '??======?');
                 if (item && (item === myNowLevel)) {
-                    const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
-                    const coinRate = getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting);
+                    const nextGradeConfig = getGradeConfig(myGradeLevel);
+                    const coinRate = getPath([myGradeLevel, 'incomeRate'], this.state.gradeSetting);
                     if (nextGradeConfig && coinRate) {
                         DeviceEventEmitter.emit('showPop', <GameDialog transparent={true} callback={() => {
                             DeviceEventEmitter.emit('hidePop');

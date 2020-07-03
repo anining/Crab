@@ -269,8 +269,10 @@ function AppStackNavigator () {
         setConsole();
         asyncStorage.getAllKeys()
             .then(response => {
-                asyncStorage.multiGet(response.filter(x => !new RegExp('[0-9]').test(x))) // 去除含有数字的key值
+            // .filter(x => !new RegExp('[0-9]').test(x))
+                asyncStorage.multiGet(response) // 去除含有数字的key值
                     .then(async r => {
+                        console.log(r);
                         initializationStore(r);
                         set(); // 先进入主页，后发起更新请求
                         await initNetInfo();

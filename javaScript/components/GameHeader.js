@@ -53,6 +53,7 @@ export default class GameHeader extends Component {
             user: bindData('user', this),
         };
         this.secondIncome = 0;
+        this.writeTimes = 0;
         this._start = false;
         this.imagePosition2 = [0, 0];
         this.imagePosition1 = [0, 0];
@@ -71,7 +72,12 @@ export default class GameHeader extends Component {
     async getCoin () {
         try {
             const ret = await asyncStorage.getItem(`${getPath(['phone'], this.state.user)}coin`);
-            nowBalance = JsonParse(ret).coin || getPath(['goldCoin'], this.state.user, 0);
+            if (JsonParse(ret).mastUpdate) {
+                nowBalance = JsonParse(ret).coin;
+            } else {
+                nowBalance = JsonParse(ret).coin + (+new Date() - JsonParse(ret).time) / 1000 * this.secondIncome;
+            }
+            console.log(ret, '从内存拿出的', (+new Date() - JsonParse(ret).time) / 1000, new Date(JsonParse(ret).time), JsonParse(ret).mastUpdate, getPath(['phone'], this.state.user));
         } catch (e) {
             console.log(e);
         }
@@ -96,10 +102,14 @@ export default class GameHeader extends Component {
                             this.secondText && this.secondText.setNativeProps({
                                 text: `${_toFixed(nowBalance, 4)}`
                             });
-                            asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
-                                coin: nowBalance,
-                                time: +new Date()
-                            });
+                            this.writeTimes++;
+                            if (this.writeTimes >= 5) {
+                                asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
+                                    coin: nowBalance,
+                                    time: +new Date()
+                                });
+                                this.writeTimes = 5;
+                            }
                         } else {
                             this.secondText && this.secondText.setNativeProps({
                                 text: `${_toFixed(baseNowBalance + minAddUnit * i, 4)}`
