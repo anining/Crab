@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, StyleSheet, TouchableOpacity, TextInput, Text, Image } from 'react-native';
+import { SafeAreaView, View, StyleSheet, TouchableOpacity, TextInput, Text, Image, Dimensions } from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import login1 from '../../assets/icon/login/login1.png';
 import login2 from '../../assets/icon/login/login2.png';
+import login3 from '../../assets/icon/login/login3.png';
+import login4 from '../../assets/icon/login/login4.png';
+import login5 from '../../assets/icon/login/login5.png';
 import toast from '../../utils/toast';
 import { apiLogin, verifyCode } from '../../utils/api';
 import { setter } from '../../utils/store';
@@ -11,18 +14,20 @@ import Button from '../../components/Button';
 import { initNetInfo } from '../../navigation/AppStackNavigator';
 import android from '../../components/Android';
 import { getPath } from '../../global/global';
+import ImageAuto from '../../components/ImageAuto';
+const { height, width } = Dimensions.get('window');
 function LoginPage () {
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('');
     const [codeText, setCodeText] = useState('获取验证码');
 
     useEffect(() => {
+        _fastLogin();
     }, []);
 
-    async function _fastLogin (callback) {
+    async function _fastLogin () {
         try {
             const ret = await android.verifyLogin();
-            callback();
             if (ret && ret.token && ret.opToken && ret.operator) {
                 const loginRet = await apiLogin(null, null, null, ret.token, ret.opToken, ret.operator);
                 if (loginRet && !loginRet.error) {
@@ -31,14 +36,13 @@ function LoginPage () {
                     await initNetInfo();
                     N.replace('MaterialTopTabNavigator');
                 } else {
-                    toast(`${JSON.stringify(ret)}`);
+                    toast('登录失败');
                 }
             } else {
-                toast('登录失败');
+                toast('一键登录获取失败');
             }
         } catch (e) {
             console.log(JSON.stringify(e));
-            toast(JSON.stringify(e));
         }
     }
 
@@ -114,6 +118,9 @@ function LoginPage () {
                 }}/>
                 <Text style={styles.text} numberOfLines={1}>*未注册用户将会自动注册并登录</Text>
                 <Text style={styles.text} numberOfLines={1}>*如果未收到验证码，请检查是否被手机拦截。</Text>
+                {/* <View style={[css.flex, styles.fastLogin]}> */}
+                {/*    <ImageAuto souce={login5} width={30}/> */}
+                {/* </View> */}
             </View>
         </SafeAreaView>
     );
@@ -149,6 +156,10 @@ const styles = StyleSheet.create({
         paddingLeft: 30,
         paddingRight: 30,
         paddingTop: 100,
+    },
+    fastLogin: {
+        marginTop: 100,
+        width,
     },
     inputTitle: {
         marginBottom: 5,

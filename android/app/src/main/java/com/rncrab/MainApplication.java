@@ -30,7 +30,6 @@ import com.rncrab.transmit.TransmitPackage;
 import com.rncrab.verify.SecVerifyPackage;
 
 public class MainApplication extends Application implements ReactApplication {
-    private  boolean isPreVersitDone =false;
     private final ReactNativeHost mReactNativeHost =
             new ReactNativeHost(this) {
                 @Override
@@ -91,8 +90,6 @@ public class MainApplication extends Application implements ReactApplication {
         SecVerify.preVerify(new OperationCallback() {
             @Override
             public void onComplete(Object o) {
-                System.out.println("预区号成功" + o);
-                isPreVersitDone = true;
             }
 
             @Override
