@@ -45,6 +45,7 @@ const { height, width } = Dimensions.get('window');
 let nowBalance = 0;
 const addFrequency = 10; // 动画快慢频率
 const propsTime = 60000 * 30.5; // 30.5 分钟
+const maxWriteTimes = 5;// 每5秒写一次内存
 export default class GameHeader extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
@@ -53,6 +54,7 @@ export default class GameHeader extends Component {
             user: bindData('user', this),
         };
         this.secondIncome = 0;
+        this.writeTimes = 0;
         this._start = false;
         this.imagePosition2 = [0, 0];
         this.imagePosition1 = [0, 0];
@@ -68,10 +70,18 @@ export default class GameHeader extends Component {
         this._start = true;
     }
 
-    async getCoin () {
+    async getCoin (addIncome = 0) {
         try {
             const ret = await asyncStorage.getItem(`${getPath(['phone'], this.state.user)}coin`);
-            nowBalance = JsonParse(ret).coin || getPath(['goldCoin'], this.state.user, 0);
+            if (JsonParse(ret).mastUpdate) {
+                nowBalance = JsonParse(ret).coin;
+            } else {
+                nowBalance = JsonParse(ret).coin + (+new Date() - JsonParse(ret).time) / 1000 * this.secondIncome + addIncome;
+                asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
+                    coin: nowBalance,
+                    time: +new Date()
+                });
+            }
         } catch (e) {
             console.log(e);
         }
@@ -90,16 +100,25 @@ export default class GameHeader extends Component {
                 const baseNowBalance = nowBalance;
                 nowBalance += parseFloat(addIncome);
                 for (let i = 0; i < addFrequency; i++) {
-                    setAndroidTime(() => {
+                    setAndroidTime(async () => {
                         if ((i + 1) === addFrequency) {
                             // 最后一次加的时候存入内存
                             this.secondText && this.secondText.setNativeProps({
                                 text: `${_toFixed(nowBalance, 4)}`
                             });
-                            asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
-                                coin: nowBalance,
-                                time: +new Date()
-                            });
+                            if (this.secondIncome !== addIncome) {
+                                await this.getCoin(addIncome);
+                                this.writeTimes = maxWriteTimes;
+                                // nowBalance += parseFloat(addIncome);
+                            }
+                            if (this.writeTimes >= maxWriteTimes) {
+                                asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
+                                    coin: nowBalance,
+                                    time: +new Date()
+                                });
+                                this.writeTimes = 0;
+                            }
+                            this.writeTimes++;
                         } else {
                             this.secondText && this.secondText.setNativeProps({
                                 text: `${_toFixed(baseNowBalance + minAddUnit * i, 4)}`

@@ -15,10 +15,10 @@ import {
 import { _tc, _toFixed, rangeLevel, toGoldCoin, transformMoney } from './util';
 import { getter, setter } from './store';
 import { getGlobal, getPath } from '../global/global';
+import asyncStorage from './asyncStorage';
 
 import toast from './toast';
 import { N } from './router';
-import { dyCrack } from '../crack/dy';
 export const updateUser = (callback) => {
     return new Promise((resolve, reject) => {
         user().then(res => _tc(() => {
@@ -212,7 +212,8 @@ export function updateSecondIncome () {
             if (coin) {
                 asyncStorage.setItem(`${getPath(['phone'], getGlobal('user'))}coin`, {
                     coin: toGoldCoin(coin),
-                    time: +new Date()
+                    time: +new Date(),
+                    mastUpdate: true
                 });
             }
         });

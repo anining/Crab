@@ -156,8 +156,6 @@ public class TransmitModule extends ReactContextBaseJavaModule {
 
                         @Override
                         public void onComplete(VerifyResult data) {
-                            // 获取授权码成功，将token信息传给应用服务端，再由应用服务端进行登录验证，此功能需由开发者自行实现
-//                            promise.resolve(data);
                             WritableMap wMap = new WritableNativeMap();
                             wMap.putString("operator", data.getOperator());
                             wMap.putString("opToken", data.getOpToken());

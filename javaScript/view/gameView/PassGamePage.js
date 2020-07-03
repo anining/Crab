@@ -123,7 +123,6 @@ export default class PassGamePage extends Component {
                     </View>
                 </ImageBackground>,
                 close: async () => {
-                    DeviceEventEmitter.emit('hidePop');
                     this._isUpgrade();// 这个弹窗完以后，判断是否升级
                 }
             });
@@ -132,29 +131,28 @@ export default class PassGamePage extends Component {
 
     _isUpgrade () {
         try {
-            setAndroidTime(() => {
-                const myNowLevel = this.paramsInfo.userLevel;
-                const myGradeLevel = this.paramsInfo.myGradeLevel;
-                for (let i = 0; i < this.state.gradeRange.length; i++) {
-                    const item = this.state.gradeRange[i];
-                    if (item && (item === myNowLevel)) {
-                        const nextGradeConfig = getGradeConfig(myGradeLevel + 1);
-                        const coinRate = getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting);
-                        if (nextGradeConfig && coinRate) {
-                            DeviceEventEmitter.emit('showPop', <GameDialog transparent={true} callback={() => {
-                                DeviceEventEmitter.emit('hidePop');
-                            }} btn={'知道啦'} content={
-                                <View style={[css.flex, css.fw, css.pr]}>
-                                    <Text style={[styles.lottieUpgradeText, { fontSize: 20 }]}>恭喜你的渔船升级啦!</Text>
-                                    <LottieView key={nextGradeConfig.lottie} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={nextGradeConfig.lottie} source={nextGradeConfig.upgrade} loop={false} autoPlay={true} speed={1}/>
-                                    <Text style={[css.pa, styles.lottieUpgradeText]}>当前金币产量<Text style={{ color: '#F9D200' }}>{coinRate}</Text></Text>
-                                </View>
-                            }/>);
-                        }
-                        break;
+            const myNowLevel = this.paramsInfo.userLevel;
+            const myGradeLevel = this.paramsInfo.myGradeLevel;
+            for (let i = 0; i < this.state.gradeRange.length; i++) {
+                const item = this.state.gradeRange[i];
+                console.log(item, myNowLevel, '??======?');
+                if (item && (item === myNowLevel)) {
+                    const nextGradeConfig = getGradeConfig(myGradeLevel);
+                    const coinRate = getPath([myGradeLevel, 'incomeRate'], this.state.gradeSetting);
+                    if (nextGradeConfig && coinRate) {
+                        DeviceEventEmitter.emit('showPop', <GameDialog transparent={true} callback={() => {
+                            DeviceEventEmitter.emit('hidePop');
+                        }} btn={'知道啦'} content={
+                            <View style={[css.flex, css.fw, css.pr]}>
+                                <Text style={[styles.lottieUpgradeText, { fontSize: 20 }]}>恭喜你的渔船升级啦!</Text>
+                                <LottieView key={nextGradeConfig.lottie} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={nextGradeConfig.lottie} source={nextGradeConfig.upgrade} loop={false} autoPlay={true} speed={1}/>
+                                <Text style={[css.pa, styles.lottieUpgradeText]}>当前金币产量<Text style={{ color: '#F9D200' }}>{coinRate}</Text></Text>
+                            </View>
+                        }/>);
                     }
+                    break;
                 }
-            }, 500);
+            }
         } catch (e) {
             console.log(e);
         }
@@ -207,7 +205,7 @@ export default class PassGamePage extends Component {
                         break;
                     }
                 }
-                return retNumber - now;
+                return Math.abs(retNumber - now);
             } else {
                 return 0;
             }
@@ -240,8 +238,7 @@ export default class PassGamePage extends Component {
                     {(() => {
                         const view = [];
                         [...this.state.nextRedLevel].forEach((item, index) => {
-                            const forwardNumber = (item - preLevel) / levelLength;
-                            console.log(item, preLevel, levelLength, forwardNumber, (item - preLevel) / levelLength, '===+++++====');
+                            const forwardNumber = parseInt((item - preLevel) / levelLength * 10) / 10; // 尽可能的不重复显示
                             view.push(
                                 <ImageAuto key={`${item}${forwardNumber}`} style={[css.pa, styles.redImage, {
                                     left: forwardNumber * 100 + '%',

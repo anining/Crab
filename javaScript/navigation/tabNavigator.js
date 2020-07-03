@@ -5,7 +5,7 @@ import HomePage from '../view/tabView/HomePage';
 import UserPage from '../view/tabView/UserPage';
 import AnswerPage from '../view/tabView/AnswerPage';
 import SharePage from '../view/tabView/SharePage';
-import { proxyRouter } from '../utils/router';
+import { proxyRouter, N } from '../utils/router';
 import { css } from '../assets/style/css';
 import icon1 from '../assets/icon/tab/tab1.png';
 import icon2 from '../assets/icon/tab/tab2.png';
@@ -15,11 +15,15 @@ import icon7 from '../assets/icon/tab/tab7.png';
 import icon8 from '../assets/icon/tab/tab8.png';
 import icon9 from '../assets/icon/tab/tab9.png';
 import icon10 from '../assets/icon/tab/tab10.png';
+import { getGlobal } from '../global/global';
 
 const Tab = createBottomTabNavigator();
 
 function TabNavigator ({ navigation }) {
-    proxyRouter(navigation, ['MaterialTopTabNavigator', 'LoginPage'], 'VerificationStackNavigator');
+    proxyRouter(navigation);
+    if (!getGlobal('authorization')) {
+        N.replace('VerificationStackNavigator');
+    }
     return (
         <Tab.Navigator
             allowFontScaling={false}

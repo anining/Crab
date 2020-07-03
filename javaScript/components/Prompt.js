@@ -16,8 +16,12 @@ export default class Prompt extends Component {
     }
 
     onClose () {
-        this.setState({ show: false });
-        this.close && this.close();
+        if (this.state.show) {
+            this.setState({ show: false }, () => {
+                this.close && this.close();
+                this.close = null;
+            });
+        }
     }
 
     componentDidMount () {

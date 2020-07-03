@@ -6,5 +6,13 @@
 #
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
-
+-ignorewarnings
 # Add any project specific keep options here:
+# for SecVerify
+-keep class com.mob.**{*;}
+# for CTCC
+-keep class cn.com.chinatelecom.account.**{*;}
+# for CUCC
+-keep class com.sdk.**{*;}
+# for CMCC
+-keep class com.cmic.sso.sdk.**{*;}
