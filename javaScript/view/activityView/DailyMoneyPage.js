@@ -16,6 +16,7 @@ import Shadow from '../../components/Shadow';
 import * as Animatable from 'react-native-animatable';
 import { getRedPackage, openRedPackage, withdrawLogsLatest } from '../../utils/api';
 import { N } from '../../utils/router';
+import { djangoTime } from '../../utils/util';
 const { width } = Dimensions.get('window');
 
 function DailyMoneyPage (props) {
@@ -78,7 +79,7 @@ function DailyMoneyPage (props) {
                     }}/>
                     <Lamp LampList={withdrawLogs}/>
                     <View style={[css.flex, css.fw, styles.redPackageWrap, css.afs]}>
-                        <CountDown time={+new Date(invalid_time)} style={{ color: Number(money) >= 30 ? 'rgba(225,48,32,1)' : '#999', fontSize: 13, lineHeight: 70 }} millisecond={true} tips={Number(money) >= 30 ? '后未提现现金将失效' : '后现金失效'}/>
+                        <CountDown time={+new Date(djangoTime(invalid_time))} style={{ color: Number(money) >= 30 ? 'rgba(225,48,32,1)' : '#999', fontSize: 13, lineHeight: 70 }} millisecond={true} tips={Number(money) >= 30 ? '后未提现现金将失效' : '后现金失效'}/>
                         <Text style={styles.redMaxText}> {money} <Text style={{ fontSize: 20 }}>元</Text></Text>
                         <Animatable.View useNativeDriver={true} iterationCount="infinite" animation="pulse" style={[css.auto]}>
                             <Shadow style={[styles.shareBtn]}>

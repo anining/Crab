@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { SafeAreaView, Image, Linking, Text, Dimensions, View, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, TextInput, DeviceEventEmitter } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, Image, Linking, Text, BackHandler, Dimensions, View, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, TextInput, DeviceEventEmitter } from 'react-native';
 import { css } from '../../assets/style/css';
 import task4 from '../../assets/icon/task/task4.png';
 import task5 from '../../assets/icon/task/task5.png';
@@ -15,7 +15,7 @@ import task16 from '../../assets/icon/task/task16.png';
 import Upload from '../../components/Upload';
 import { N } from '../../utils/router';
 import { activityDetail, getTask, giveUp, taskReceiveDetail, taskSubmit } from '../../utils/api';
-import { getUrl, requestPermission, transformMoney } from '../../utils/util';
+import { djangoTime, getUrl, requestPermission, saveBase64ImageToCameraRoll, transformMoney } from '../../utils/util';
 import { captureRef } from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
 import Choice from '../../components/Choice';
@@ -24,30 +24,31 @@ import Header from '../../components/Header';
 import { getter, store } from '../../utils/store';
 import * as U from 'karet.util';
 import { useFocusEffect } from '@react-navigation/native';
-import { Down } from '../../components/Down';
 import toast from '../../utils/toast';
 import asyncStorage from '../../utils/asyncStorage';
-import { task } from '../../utils/update';
+import { task, updateUser } from '../../utils/update';
 import Button from '../../components/Button';
+import CountDown from '../../components/CountDown';
 
 const { user_id, today_pass_num, activityObj } = getter(['user.user_id', 'activityObj', 'user.today_pass_num']);
 const { width } = Dimensions.get('window');
 const MENU_STATUS = {
     1: {
         text: '提交任务',
-        color: '#fff'
+        color: '#fff',
+        disabled: false
     },
     4: {
         text: '审核中',
-        disabled: false
+        disabled: true
     },
     5: {
         text: '已通过',
-        disabled: false
+        disabled: true
     },
     6: {
         text: '未通过',
-        disabled: false
+        disabled: true
     }
 };
 
@@ -59,9 +60,10 @@ function TaskDetailPage (props) {
     const [progress, setProgress] = useState('等待上传');
     const [images, setImages] = useState(detail.images || []);
     const [num, setNum] = useState(0);
+    const [taskImage, setTaskImage] = useState(0);
     const [change, setChange] = useState(1);
 
-    useFocusEffect(() => {
+    useEffect(() => {
         try {
             activityDetail(activityObj.get()[1].activity_id).then(r => {
                 if (!r.error) {
@@ -74,6 +76,17 @@ function TaskDetailPage (props) {
             console.log(e);
         }
     }, []);
+
+    useFocusEffect(() => {
+        const onBackPress = () => {
+            if (detail.status === 1) {
+                backClick();
+                return true;
+            }
+        };
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+        return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    });
 
     function format (rule, logs) {
         let level = 0;
@@ -104,6 +117,7 @@ function TaskDetailPage (props) {
                         lt: '返回首页',
                         lc: () => {
                             giveUp(detail.receive_task_id);
+                            updateUser();
                             N.goBack();
                         },
                         rt: '继续任务'
@@ -127,8 +141,8 @@ function TaskDetailPage (props) {
                     <TitleView detail={detail} account={account}/>
                     <DetailView detail={detail} account={account} change={change}/>
                     <ClaimView detail={detail}/>
-                    <CourseView name={name} detail={detail} progress={progress} setProgress={setProgress} setName={setName} setImages={setImages} images={images} />
-                    <Btn sRef={sRef} setProgress={setProgress} setName={setName} setImages={setImages} detail={detail} name={name} account={account} images={images} setChange={setChange} setDetail={setDetail} setAccount={setAccount}/>
+                    <CourseView name={name} taskImage={taskImage} setTaskImage={setTaskImage} detail={detail} progress={progress} setProgress={setProgress} setName={setName} setImages={setImages} images={images} />
+                    <Btn taskImage={taskImage} sRef={sRef} setProgress={setProgress} setName={setName} setImages={setImages} detail={detail} name={name} images={images} setDetail={setDetail} setAccount={setAccount}/>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -172,7 +186,7 @@ function EndTimeView ({ detail }) {
             <View style={styles.endTimeViewItem}>
                 <View style={{ flexDirection: 'row' }}>
                     <Text style={{ color: '#fff', fontSize: 16, fontWeight: '500' }}>剩余时间：</Text>
-                    <Down time={finish_deadline} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }}/>
+                    <CountDown time={+new Date(djangoTime(finish_deadline))} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }}/>
                 </View>
                 <TouchableOpacity activeOpacity={1} onPress={apiGiveUp} style={styles.giveUpBtn}>
                     <Text style={{ color: '#fff', fontSize: 12, lineHeight: 25, textAlign: 'center' }}>放弃任务</Text>
@@ -293,16 +307,16 @@ function ClaimView ({ detail }) {
     );
 }
 
-function CourseView ({ detail, name, setName, images, setProgress, progress, setImages }) {
+function CourseView ({ detail, name, setName, taskImage, setTaskImage, images, setProgress, progress, setImages }) {
     const { course, status } = detail;
     const { submit = [], task = [] } = course;
     const submitView = [];
     const taskView = [];
     submit.forEach((item, index) => {
-        submitView.push(<RenderView inputName={name} length={submit.length} progress={progress} setProgress={setProgress} index={index} status={status} setName={setName} images={images} setImages={setImages} name="submit" key={item.label} item={item}/>);
+        submitView.push(<RenderView inputName={name} taskImage={taskImage} setTaskImage={setTaskImage} length={submit.length} progress={progress} setProgress={setProgress} index={index} status={status} setName={setName} images={images} setImages={setImages} name="submit" key={item.label} item={item}/>);
     });
     task.forEach((item, index) => {
-        taskView.push(<RenderView inputName={name} length={task.length} progress={progress} setProgress={setProgress} index={index} status={status} images={images} setImages={setImages} setName={setName} name="task" key={item.label} item={item}/>);
+        taskView.push(<RenderView taskImage={taskImage} setTaskImage={setTaskImage} inputName={name} length={task.length} progress={progress} setProgress={setProgress} index={index} status={status} images={images} setImages={setImages} setName={setName} name="task" key={item.label} item={item}/>);
     });
     return (
         <>
@@ -342,26 +356,33 @@ function CourseView ({ detail, name, setName, images, setProgress, progress, set
     );
 }
 
-function RenderView ({ name, inputName, length, index, setImages, setProgress, progress, status, images, item, setName }) {
+function RenderView ({ name, taskImage, setTaskImage, inputName, length, index, setImages, setProgress, progress, status, images, item, setName }) {
     const { type, label, content } = item;
     const [view, setView] = useState();
 
     function save () {
-        requestPermission(() => {
+        try {
             if (view) {
-                captureRef(view, {
-                    format: 'jpg',
-                    quality: 1.0,
-                }).then(
-                    uri => {
-                        CameraRoll.saveToCameraRoll(uri)
-                            .then(() => toast('保存成功,请到相册查看'))
-                            .catch(() => toast('保存失败'));
-                    },
-                    () => () => toast('保存失败'),
-                );
+                requestPermission(() => {
+                    captureRef(view, {
+                        format: 'jpg',
+                        quality: 1.0,
+                        result: 'base64'
+                    }).then(
+                        uri => {
+                            saveBase64ImageToCameraRoll(uri, () => toast('保存成功,请到相册查看!'), () => toast('保存失败!'));
+                        },
+                        () => {
+                            toast('保存失败!');
+                        },
+                    );
+                }, () => {
+                    toast('保存失败!');
+                });
             }
-        }).then(r => console.log(r));
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     if (name === 'task') {
@@ -405,6 +426,7 @@ function RenderView ({ name, inputName, length, index, setImages, setProgress, p
                 </View>
             );
         }
+        setTaskImage(taskImage + 1);
         return (
             <>
                 <Text style={styles.taskCourseText}>{label}</Text>
@@ -456,12 +478,12 @@ function RenderImage ({ images, length, progress, setProgress, index, setImages,
     );
 }
 
-function Btn ({ images, sRef, setName, account, detail, setProgress, setImages, name, setChange, setDetail, setAccount }) {
+function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages, name, setDetail, setAccount }) {
     const { status, nickname, home_url, receive_task_id, platform_category } = detail;
 
     function submit (callback) {
         const localImages = images.map(image => image.uri);
-        if (!localImages.length || !(name || nickname)) {
+        if ((taskImage && !localImages.length) || !(name || nickname)) {
             callback();
             toast('请填写完整的名称和执行图!');
             return;
