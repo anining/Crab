@@ -124,7 +124,8 @@ export default class PassGamePage extends Component {
                 </ImageBackground>,
                 close: async () => {
                     this._isUpgrade();// 这个弹窗完以后，判断是否升级
-                }
+                },
+                canCancel: false, // 不能点击蒙城关闭
             });
         }
     }

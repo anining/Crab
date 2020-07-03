@@ -146,6 +146,7 @@ export default class GamePage extends Component {
             let str = ''; // 缓存上一个成语
             const idiomArray = GamePage._buildIdiomArray(data); // ['词', '不',...]所有单字数组
             const answerObj = {}; // 答案对象
+            const answerWord = [];// 答案字数组，用于不取到重复的字
             data.content.forEach((item, cyIndex) => {
                 const focusPoint = GamePage.repeatStr(str, item); // 返回[老一个成语的交点索引，新一个成语的交点索引]
                 const itemArray = item.split(''); // 单个成语字数组 ['词', '不',...]
@@ -161,7 +162,11 @@ export default class GamePage extends Component {
                     });
                 }
                 // 每一个成语都要挖走一个字当作答案
-                const answerIndex = Math.floor(Math.random() * item.length);
+                let answerIndex = Math.floor(Math.random() * item.length);
+                if (answerWord.includes(item.slice(answerIndex, answerIndex + 1))) {
+                    answerIndex = Math.abs(answerIndex - 1);
+                }
+                answerWord.push(item.slice(answerIndex, answerIndex + 1));// 每次都添加到answerWord 尽量不添加重复到字
                 answerObj[cyIndex * 4 + answerIndex] = {
                     cyIndex,
                     answerIndex,

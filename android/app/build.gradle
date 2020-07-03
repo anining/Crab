@@ -159,12 +159,17 @@ android {
         versionCode 100
         versionName "1.0.0"
         multiDexEnabled true
+        ndk {
+            // 选择要添加的对应 cpu 类型的 .so 库，多个abi以“,”分隔。
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+            // 可指定的值为 'armeabi-v7a', 'arm64-v8a', 'armeabi', 'x86', 'x86_64'，
+        }
     }
     splits {
         abi {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
-            universalApk false  // If true, also generate a universal APK
+            universalApk true  // If true, also generate a universal APK
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }

@@ -17,19 +17,15 @@ function LoginPage () {
     const [codeText, setCodeText] = useState('获取验证码');
 
     useEffect(() => {
-        _fastLogin();
     }, []);
 
-    async function _fastLogin () {
+    async function _fastLogin (callback) {
         try {
-            toast('开始登录');
             const ret = await android.verifyLogin();
-            console.log(ret, ret.token);
+            callback();
             if (ret && ret.token && ret.opToken && ret.operator) {
-                console.log(ret, ret.token);
                 const loginRet = await apiLogin(null, null, null, ret.token, ret.opToken, ret.operator);
                 if (loginRet && !loginRet.error) {
-                    console.log(loginRet, '???登录信息');
                     const { access_token, token_type } = loginRet.data;
                     setter([['authorization', `${token_type} ${access_token}`]], true);
                     await initNetInfo();
@@ -38,10 +34,10 @@ function LoginPage () {
                     toast(`${JSON.stringify(ret)}`);
                 }
             } else {
-                toast('登录失败111');
+                toast('登录失败');
             }
         } catch (e) {
-            console.log(e);
+            console.log(JSON.stringify(e));
             toast(JSON.stringify(e));
         }
     }

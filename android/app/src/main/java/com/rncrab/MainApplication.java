@@ -2,6 +2,8 @@ package com.rncrab;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
@@ -11,6 +13,9 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.mob.moblink.Scene;
 import com.mob.MobSDK;
+import com.mob.secverify.OperationCallback;
+import com.mob.secverify.SecVerify;
+import com.mob.secverify.exception.VerifyException;
 import com.rncrab.notice.NoticeJs;
 import com.rncrab.notice.NoticeJsPackage;
 import com.mob.MobSDK;
@@ -25,7 +30,7 @@ import com.rncrab.transmit.TransmitPackage;
 import com.rncrab.verify.SecVerifyPackage;
 
 public class MainApplication extends Application implements ReactApplication {
-
+    private  boolean isPreVersitDone =false;
     private final ReactNativeHost mReactNativeHost =
             new ReactNativeHost(this) {
                 @Override
@@ -69,8 +74,34 @@ public class MainApplication extends Application implements ReactApplication {
         new SceneListener().notFoundScene(new Scene());
         SoLoader.init(this, /* native exopackage */ false);
         initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+        isCanUseForIntnet();
     }
+    private void isCanUseForIntnet() {
+        if (SecVerify.isVerifySupport()) {
+            // 预取号
+            topreVerfy();
+        }
+    }
+    /**
+     * 预登录
+     * 预登录接口用于向运营商进行预取号操作，建议在实际调用登录接口前提前调用预登录接口
+     * （比如应用启动时或进入注册或登录页面时），这将极大地加快登录接口执行耗时，提高用户体验。
+     */
+    private void topreVerfy() {
+        SecVerify.preVerify(new OperationCallback() {
+            @Override
+            public void onComplete(Object o) {
+                System.out.println("预区号成功" + o);
+                isPreVersitDone = true;
+            }
 
+            @Override
+            public void onFailure(VerifyException e) {
+                e.getCause();
+            }
+        });
+
+    }
     /**
      * Loads Flipper in React Native templates. Call this in the onCreate method with something like
      * initializeFlipper(this, getReactNativeHost().getReactInstanceManager());

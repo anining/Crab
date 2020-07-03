@@ -12,7 +12,7 @@ import com.mob.moblink.ActionListener;
 import com.mob.moblink.MobLink;
 import com.mob.moblink.Scene;
 import com.mob.MobSDK;
-import com.mob.OperationCallback;
+import com.mob.secverify.OperationCallback;
 import com.mob.secverify.SecVerify;
 import com.mob.secverify.VerifyCallback;
 import com.mob.secverify.datatype.LoginResult;
@@ -120,65 +120,61 @@ public class TransmitModule extends ReactContextBaseJavaModule {
         promise.resolve("已接受协议");
     }
 
-//    @ReactMethod
-//    public void preVerifyLogin(final Promise promise) {
-//        SecVerify.preVerify(new OperationCallback<Void>() {
-//            @Override
-//            public void onComplete(Void data) {
-//                //TODO处理成功的结果
-//                promise.resolve(data);
-//            }
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//
-//            }
-//        });
-//    }
-
     @ReactMethod
-    public void verifyLogin(final Promise promise) {
+    public void preVerifyLogin(final Promise promise) {
         if (SecVerify.isVerifySupport()) {
-            MobSDK.submitPolicyGrantResult(true, new OperationCallback() {
+            SecVerify.preVerify(new OperationCallback() {
                 @Override
                 public void onComplete(Object o) {
-                    SecVerify.verify(new VerifyCallback() {
-                        @Override
-                        public void onOtherLogin() {
-                            // 用户点击“其他登录方式”，处理自己的逻辑
-                            promise.reject("onOtherLogin");
-                        }
-
-                        @Override
-                        public void onUserCanceled() {
-                            // 用户点击“关闭按钮”或“物理返回键”取消登录，处理自己的逻辑
-                            promise.reject("onUserCanceled");
-                        }
-
-                        @Override
-                        public void onComplete(VerifyResult data) {
-                            WritableMap wMap = new WritableNativeMap();
-                            wMap.putString("operator", data.getOperator());
-                            wMap.putString("opToken", data.getOpToken());
-                            wMap.putString("token", data.getToken());
-                            System.out.println("reactContext1112=" + wMap);
-                            promise.resolve(wMap);
-                        }
-
-                        @Override
-                        public void onFailure(VerifyException e) {
-                            //TODO处理失败的结果
-                            promise.reject("error", e + "??321");
-                        }
-                    });
+                    System.out.println("reactConte32131" + o);
+                    promise.resolve("onOtherLogin321321");
                 }
 
                 @Override
-                public void onFailure(Throwable t) {
-                    promise.reject("error", t+ "??3213211a");
+                public void onFailure(VerifyException e) {
+                    promise.resolve("onOtherLogin0000");
                 }
             });
         } else {
-            promise.reject("当前网络环境不支持");
+            promise.reject("onOtherLogin0000");
         }
+    }
+
+    @ReactMethod
+    public void verifyLogin(final Promise promise) {
+        System.out.println("===a111====");
+        SecVerify.verify(new VerifyCallback() {
+            @Override
+            public void onOtherLogin() {
+                // 用户点击“其他登录方式”，处理自己的逻辑
+                System.out.println("===a222====");
+                promise.reject("onOtherLogin");
+            }
+
+            @Override
+            public void onUserCanceled() {
+                // 用户点击“关闭按钮”或“物理返回键”取消登录，处理自己的逻辑
+                System.out.println("===a333====");
+                promise.reject("onUserCanceled");
+            }
+
+            @Override
+            public void onComplete(VerifyResult data) {
+                System.out.println("===a444====");
+                WritableMap wMap = new WritableNativeMap();
+                wMap.putString("operator", data.getOperator());
+                wMap.putString("opToken", data.getOpToken());
+                wMap.putString("token", data.getToken());
+                System.out.println("reactContext1112=" + wMap);
+                promise.resolve(wMap);
+            }
+
+            @Override
+            public void onFailure(VerifyException e) {
+                System.out.println("===a555====");
+                e.getCause();
+                promise.reject("error", e.getCause());
+            }
+        });
     }
 }
