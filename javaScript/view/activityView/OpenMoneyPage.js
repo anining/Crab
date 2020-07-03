@@ -30,7 +30,7 @@ function OpenMoneyPage (props) {
     }
 
     function _activityDetail () {
-        activityDetail(activityId).then(r => {
+        activityDetail(activityId || 2).then(r => {
             if (r && !r.error) {
                 const { data } = r;
                 const { total_num, all_history, log } = data;
@@ -45,21 +45,21 @@ function OpenMoneyPage (props) {
                 } else {
                     setReceivedStatus(1);
                     DeviceEventEmitter.emit('showPop', {
-                        dom: <TouchableOpacity activeOpacity={1} style={css.pr} onPress={_openRedPackage}>
-                            <TouchableOpacity activeOpacity={1} style={[styles.redInnerWrap, css.pa, css.flex, css.fw]}>
-                                <ImageAuto style={{
-                                    width: 48,
-                                    borderRadius: 20,
-                                }} source={activity8}/>
-                                <Text style={styles.redNameText}>运营商送你一个红包</Text>
-                                <Text style={styles.redTipsText}>现在打开</Text>
-                                <Text style={styles.redTipsText}>最低20元现金等着你</Text>
+                        dom: (
+                            <TouchableOpacity style={css.pr} onPress={_openRedPackage}>
+                                <TouchableOpacity style={[styles.redInnerWrap, css.pa, css.flex, css.fw]}>
+                                    <ImageAuto style={{
+                                        width: 48,
+                                        borderRadius: 20,
+                                    }} source={activity8}/>
+                                    <Text style={styles.redNameText}>运营商送你一个红包</Text>
+                                    <Text style={styles.redTipsText}>现在打开</Text>
+                                    <Text style={styles.redTipsText}>最低20元现金等着你</Text>
+                                </TouchableOpacity>
+                                <ImageAuto width={width * 0.8} source={activity14}/>
                             </TouchableOpacity>
-                            <ImageAuto width={width * 0.8} source={activity14}/>
-                        </TouchableOpacity>,
-                        close: () => {
-                            !money && N.goBack();
-                        }
+                        ),
+                        close: () => { !money && N.goBack(); }
                     });
                 }
             } else {
@@ -96,7 +96,7 @@ function RenderRedPackage ({ receivedStatus, activityId, money, data }) {
             </View>
             <Text style={{ fontSize: 15, color: '#FDEAB9' }}>恭喜您获得现金</Text>
             <Text style={{ fontWeight: '500', color: 'rgba(254,204,81,1)' }}>¥ <Text style={{ fontSize: 49, fontWeight: '800' }}>{money}W</Text> 金币</Text>
-            <TouchableOpacity activeOpacity={1} style={styles.withdrawBtn} onPress={() => {
+            <TouchableOpacity style={styles.withdrawBtn} onPress={() => {
                 N.navigate('DailyMoneyPage', { activityId, pageInfo: data });
             }}>
                 <Text style={{ fontSize: 16, color: '#fff' }}>立即提现</Text>

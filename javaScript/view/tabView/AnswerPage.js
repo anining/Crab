@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as React from 'karet';
-import { Dimensions, SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity, DeviceEventEmitter } from 'react-native';
+import * as R from 'kefir.ramda';
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity, DeviceEventEmitter } from 'react-native';
 import { css } from '../../assets/style/css';
 import Slider from '../../components/Slider';
 import ComTitle from '../../components/ComTitle';
@@ -31,7 +32,7 @@ import toast from '../../utils/toast';
 
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
 const { width } = Dimensions.get('window');
-const { banner, signConfig, activityObj, authorization, today_task_num, taskPlatform, user_id } = getter(['banner', 'signConfig', 'authorization', 'activityObj', 'user', 'user.today_task_num', 'user.user_id', 'taskPlatform']);
+const { banner, signConfig, activityObj, openid, authorization, today_task_num, taskPlatform, user_id } = getter(['banner', 'signConfig', 'authorization', 'activityObj', 'user.openid', 'user.today_task_num', 'user.user_id', 'taskPlatform']);
 const NEW_USER_TASK_TYPE = {
     1: {
         label: '看视频领金币',
@@ -73,9 +74,11 @@ function AnswerPage () {
 
     async function _newUserTask () {
         // asyncStorage.setItem(`NEW_USER_TASK_TYPE1${user_id.get()}`, 'true');
+        // asyncStorage.setItem(`NEW_USER_TASK_TYPE2${user_id.get()}`, 'true');
+        // asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
         const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
-        const local2 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE2${user_id.get()}`);
         const local3 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE3${user_id.get()}`);
+        const localArray = [false, local1, openid.get(), local3];
         const ret = await newUserTask();
         if (!ret.error) {
             const localData = ret.data.map(task => {
@@ -87,8 +90,8 @@ function AnswerPage () {
                     minTitle: NEW_USER_TASK_TYPE[task_type].label,
                     icon: NEW_USER_TASK_TYPE[task_type].icon,
                     path: NEW_USER_TASK_TYPE[task_type].path,
-                    btnText: is_finish ? '已完成' : `local${task_type}` ? '领取奖励' : '去完成',
-                    btnStatus: is_finish ? 3 : `local${task_type}` ? 2 : 5,
+                    btnText: is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成',
+                    btnStatus: is_finish ? 3 : localArray[task_type] ? 2 : 5,
                 };
             });
             setNewUser(localData);
@@ -203,7 +206,7 @@ function RenderSignList ({ signDay }) {
 function RenderActivity () {
     const view = [];
     view.push(
-        <TouchableOpacity activeOpacity={1}  onPress={() => {
+        <TouchableOpacity onPress={() => {
             _tc(() => N.navigate('DailyRedPackagePage', { activityId: (activityObj.get() || {})[1].activity_id }));
         }} key={'DailyRedPackagePage'}>
             <ImageAuto source={answer5} width={width * 0.9 * 0.48}/>
@@ -211,10 +214,10 @@ function RenderActivity () {
     );
     view.push(
         <View style={[css.flex, css.fw, styles.activityRight]} key={'appPage'}>
-            <TouchableOpacity activeOpacity={1}  style={styles.arItemWrap} onPress={() => N.navigate('SharePage')} key={'SharePage'}>
+            <TouchableOpacity style={styles.arItemWrap} onPress={() => N.navigate('SharePage')} key={'SharePage'}>
                 <ImageAuto source={answer6} width={width * 0.9 * 0.48}/>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={1}  style={styles.arItemWrap} onPress={() => {
+            <TouchableOpacity style={styles.arItemWrap} onPress={() => {
                 _tc(() => N.navigate('OpenMoneyPage', { activityId: (activityObj.get() || {})[2].activity_id }));
             }} key={'OpenMoneyPage'}>
                 <ImageAuto source={answer8} width={width * 0.9 * 0.48}/>
@@ -282,6 +285,21 @@ function RenderNewBtn ({ item, _newUserTask }) {
 function RenderTaskView () {
     const authorization = U.view(['authorization'], store).get();
 
+    if (!authorization) {
+        return <></>;
+    }
+    return (
+        <>
+            <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
+            <View style={[styles.answerWrap, { borderBottomWidth: 20, borderBottomColor: '#f8f8f8' }]}>
+                <ComTitle title={'领金币'}/>
+                <RenderList />
+            </View>
+        </>
+    );
+}
+
+function RenderList () {
     function searchAccount (accounts, need_bind) {
         let name = '绑定做单账号';
         let btnText = '绑定账号';
@@ -304,61 +322,37 @@ function RenderTaskView () {
         return { name, btnText, btnStatus };
     }
 
-    function formatTaskPlatform (list = taskPlatform.get()) {
-        try {
-            return list.map(item => {
-                const { accounts = [], need_bind } = item;
-                const { name, btnText, btnStatus } = searchAccount(accounts, need_bind);
-                return { minTitle: name, btnText, btnStatus, ...item };
-            });
-        } catch (e) {
-            return [];
-        }
-    }
+    const localTaskPlatform = U.mapValue(platform => platform.map(item => {
+        const { need_bind, accounts } = item;
+        const { name, btnText, btnStatus } = searchAccount(accounts, need_bind);
+        return { minTitle: name, btnText, btnStatus, ...item };
+    }), taskPlatform);
 
-    if (!authorization) {
-        return <></>;
-    }
-    return (
-        <>
-            <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
-            <View style={[styles.answerWrap, { borderBottomWidth: 20, borderBottomColor: '#f8f8f8' }]} karet-lift>
-                <ComTitle title={'领金币'}/>
-                <RenderList list={formatTaskPlatform()}/>
-            </View>
-        </>
-    );
-}
-
-function RenderList ({ list = [] }) {
-    const view = [];
-
-    list.forEach((item, index) => {
-        const { minTitle, btnStatus, money, label } = item;
-        view.push(
-            <View style={[styles.answerItemWrap, css.flex, css.sp, { borderBottomWidth: index + 1 >= list.length ? 0 : 1 }]} key={`${index}list`}>
+    const view = U.mapElems((item, index) => {
+        const { minTitle, btnStatus, money, label, icon } = U.destructure(item);
+        return (
+            <View style={[styles.answerItemWrap, css.flex, css.sp, { borderBottomWidth: index + 1 >= taskPlatform.get().length ? 0 : 1 }]} key={`${index}list`}>
                 <View style={[css.flex, styles.aiwLeft, css.js]}>
-                    <ImageAuto source={item.icon} width={40}/>
+                    <Image karet-lift source={U.template({ uri: icon })} style={{ width: 40, height: 40 }}/>
                     <View style={[css.flex, css.fw, styles.aiwText]}>
                         <View style={[css.flex, css.js, { width: '100%' }]}>
-                            <Text style={[styles.labelText, { width: 'auto' }]} numberOfLines={1}>{label}</Text>
-                            {_if(money, res => <Text style={styles.labelMoney} numberOfLines={1}> +{res}</Text>)}
-                            {_if(money, res => <ImageAuto source={answer14} width={20}/>)}
+                            <Text karet-lift style={styles.KLabelText } numberOfLines={1}>{label}</Text>
+                            <Text karet-lift style={styles.labelMoney} numberOfLines={1}> +{money}</Text>
+                            <ImageAuto source={answer14} width={20}/>
                         </View>
-                        <Text style={[styles.labelText, styles.labelMinTitle, { color: btnStatus === 5 ? '#999' : '#53C23B' }]} numberOfLines={1}>{minTitle}</Text>
+                        <Text karet-lift style={U.template([styles.KLabelMinTitle, { color: U.ifElse(R.equals(btnStatus, 5), '#999', '#53C23B') }])} numberOfLines={1}>{minTitle}</Text>
                     </View>
                 </View>
                 <RenderBtn item={item}/>
             </View>
         );
-    });
+    }, localTaskPlatform);
+
     return <>{view}</>;
 }
 
 function RenderBtn ({ item }) {
-    const { btnStatus, btnText, platform_category } = item;
-
-    function check () {
+    function check (platform_category) {
         taskReceive(1, 10, 1).then(r => {
             if (!r.error) {
                 const { data } = r;
@@ -386,15 +380,38 @@ function RenderBtn ({ item }) {
         });
     }
 
-    switch (btnStatus) {
-    case 2:
-    case 5:return <Text style={styles.todoTaskText} onPress={check}>{btnText}</Text>;
-    case 6:return <Text style={[styles.todoTaskText, { borderColor: '#53C23B', color: '#53C23B' }]} karet-lift onPress={ () => { N.navigate('AccountHomePage'); }}>{btnText}</Text>;
-    default:return <Shadow style={styles.todoBtn} color={'#d43912'}><Text style={styles.todoBtnText} karet-lift>{btnText}</Text></Shadow>;
-    }
+    const view = U.mapValue(i => {
+        const { btnStatus, btnText, platform_category } = i;
+        switch (btnStatus) {
+        case 2:
+        case 5:
+            return <Text style={styles.todoTaskText} onPress={() => {
+                check(platform_category);
+            }}>{btnText}</Text>;
+        case 6:
+            return <Text style={[styles.todoTaskText, { borderColor: '#53C23B', color: '#53C23B' }]} onPress={() => { N.navigate('AccountHomePage'); }}>{btnText}</Text>;
+        default:
+            return <Shadow style={styles.todoBtn} color={'#d43912'}><Text style={styles.todoBtnText}>{btnText}</Text></Shadow>;
+        }
+    }, item);
+    return <>{view}</>;
 }
 
 const styles = StyleSheet.create({
+    KLabelMinTitle: {
+        color: '#999',
+        fontSize: 11,
+        lineHeight: 22,
+        textAlign: 'left',
+        width: '100%',
+    },
+    KLabelText: {
+        color: '#222',
+        fontSize: 14,
+        lineHeight: 22,
+        textAlign: 'left',
+        width: 'auto'
+    },
     activityRight: {
         height: '100%',
         marginLeft: width * 0.9 * 0.05,
