@@ -28,6 +28,9 @@ import com.microsoft.codepush.react.CodePush;
 import com.rncrab.sceneListener.SceneListener;
 import com.rncrab.transmit.TransmitPackage;
 import com.rncrab.verify.SecVerifyPackage;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 public class MainApplication extends Application implements ReactApplication {
     private final ReactNativeHost mReactNativeHost =
@@ -74,6 +77,11 @@ public class MainApplication extends Application implements ReactApplication {
         SoLoader.init(this, /* native exopackage */ false);
         initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
         isCanUseForIntnet();
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
     }
     private void isCanUseForIntnet() {
         if (SecVerify.isVerifySupport()) {
