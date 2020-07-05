@@ -65,6 +65,12 @@ function TaskDetailPage (props) {
     const [change, setChange] = useState(1);
 
     useEffect(() => {
+        const { course } = detail;
+        const { submit = [] } = course;
+        setTaskImage(submit.filter(item => item.type === 'image'));
+    }, [detail]);
+
+    useEffect(() => {
         try {
             activityDetail(activityObj.get()[1].activity_id).then(r => {
                 if (!r.error) {
@@ -427,7 +433,6 @@ function RenderView ({ name, taskImage, setTaskImage, inputName, length, index, 
                 </View>
             );
         }
-        setTaskImage(taskImage + 1);
         return (
             <>
                 <Text style={styles.taskCourseText}>{label}</Text>
