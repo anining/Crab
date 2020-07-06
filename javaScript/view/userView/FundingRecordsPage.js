@@ -12,7 +12,7 @@ const itemMarginTop = 10;
 const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>来源筛选</Text>;
 const STATUS_DATA = [
     {
-        id: 999,
+        id: 0,
         label: '全部记录'
     },
     {
@@ -61,13 +61,6 @@ function FundingRecordsPage () {
     const [source, setSource] = useState(0);
     const [listRef, setListRef] = useState();
 
-    useEffect(() => {
-        source && DeviceEventEmitter.emit('showPop', {
-            dom: <RenderSelect setSource={setSource} source={source}/>,
-            close,
-        });
-    }, [source]);
-
     function close () {
         listRef._onRefresh();
     }
@@ -86,7 +79,7 @@ function FundingRecordsPage () {
                     itemHeight={itemHeight}
                     itemMarginTop={itemMarginTop}
                     getList={ (page, num, callback) => {
-                        income(page, num, source === 999 ? 0 : source).then(r => {
+                        income(page, num, source).then(r => {
                             !r.error && callback(r.data);
                         });
                     }}
@@ -117,7 +110,10 @@ function RenderSelect ({ setSource, source }) {
 
     STATUS_DATA.forEach(item => {
         view.push(
-            <TouchableOpacity activeOpacity={1} onPress={() => setSource(item.id)} style={[styles.selectBtn, { backgroundColor: source === item.id ? '#FFEBDC' : '#F5F5F5' }]} key={item.id}>
+            <TouchableOpacity onPress={() => {
+                setSource(item.id);
+                DeviceEventEmitter.emit('hidePop');
+            }} style={[styles.selectBtn, { backgroundColor: source === item.id ? '#FFEBDC' : '#F5F5F5' }]} key={item.id}>
                 <Text style={[styles.selectBtnText, { color: source === item.id ? '#FF6C00' : '#333' }]}>{item.label}</Text>
             </TouchableOpacity>
         );
