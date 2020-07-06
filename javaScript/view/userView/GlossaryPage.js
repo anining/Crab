@@ -127,6 +127,6 @@ const styles = StyleSheet.create({
         width: '30%',
     },
     lineIdiom: {
-        fontSize: 15,
+        fontSize: 14,
     },
 });

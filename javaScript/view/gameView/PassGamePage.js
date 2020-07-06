@@ -278,7 +278,7 @@ export default class PassGamePage extends Component {
                         {/* 头部显示区域 */}
                         <GameHeader ref={ref => this.gameHeader = ref} backgroundColor={'rgba(0,0,0,.3)'}/>
                         {_if(accuracyPosition, res => <ShiftView key={`ShiftView${JSON.stringify(accuracyPosition)}`} callback={() => {
-                            N.navigate('GamePage');
+                            N.replace('GamePage');
                         }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={800} startSite={[25, HEADER_HEIGHT - 28]} endSite={accuracyPosition}>
                             <ImageAuto source={game25} width={33}/>
                         </ShiftView>)}
@@ -344,12 +344,13 @@ export default class PassGamePage extends Component {
 const styles = StyleSheet.create({
     continueBtn: {
         backgroundColor: '#FF6C00',
-        borderColor: '#353535',
+        borderColor: '#594134',
         borderRadius: 21,
         borderWidth: 1,
         height: 42,
+        marginLeft: 10,
         overflow: 'hidden',
-        width: 200
+        width: 180
     },
     continueBtnText: {
         color: '#fff',
@@ -480,7 +481,7 @@ const styles = StyleSheet.create({
         width: '92%',
     },
     lineIdiom: {
-        fontSize: 15,
+        fontSize: 14,
     },
     lottieUpgradeText: {
         color: '#fff',
