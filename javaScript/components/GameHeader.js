@@ -223,7 +223,8 @@ const styles = StyleSheet.create({
     countDownView: {
         bottom: -17,
         fontSize: 10,
-        left: 50
+        height: 20,
+        left: 50,
     },
     hdnText: {
         // backgroundColor: 'red',
