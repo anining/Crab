@@ -79,7 +79,7 @@ export default class ShiftView extends Component {
             this._shiftView && this._shiftView.setNativeProps({
                 style: { left: this.props.startSite[0], top: this.props.startSite[1], opacity: 0 },
             });
-        }, this.duration - 100);
+        }, Math.abs(this.duration - 100));
         if (this.loop && this.duration && !this._stop && this.loopTime) {
             setAndroidTime(() => {
                 !this._stop && this._animationStart();

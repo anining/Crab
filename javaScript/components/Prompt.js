@@ -36,21 +36,32 @@ export default class Prompt extends Component {
         DeviceEventEmitter.addListener('showPop', (info) => {
             if (info.dom) {
                 this.close = info.close;
-                console.log(this.canCancel, '???3312321');
-                this.canCancel = getPath(['canCancel'], info, true);
+                this.canCancel = Prompt.buildCanCancel(info);
                 this.setState({ show: true, dom: info.dom });
+                console.log(this.canCancel, info, 'this.canCancelthis.canCancelthis.canCancel');
             } else {
                 this.setState({ show: true, dom: info });
             }
         });
     }
 
+    static buildCanCancel (info) {
+        try {
+            if ('canCancel' in info) {
+                return info.canCancel;
+            } else {
+                return true;
+            }
+        } catch (e) {
+            return true;
+        }
+    }
+
     render () {
         return <Modal visible={this.state.show} transparent={true} animationType='fade' onRequestClose={() => {
         }} hardwareAccelerated={true} presentationStyle='overFullScreen' style={styles.modal}>
             <TouchableOpacity activeOpacity={1} style={[styles.view, css.flex]} onPress={(e) => {
-                console.log(this.canCancel, this.props.canClose, '??????====');
-                if (this.canCancel && this.props.canClose) {
+                if (this.canCancel) {
                     e.stopPropagation();
                     this.onClose();
                 }
