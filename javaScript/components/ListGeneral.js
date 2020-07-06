@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, ScrollView, RefreshControl } from 'react-native';
-import { ChineseNormalFooter, ChineseNormalHeader } from 'react-native-spring-scrollview/Customize';
 import { LargeList } from 'react-native-largelist-v3';
+import { MyRefreshHeader } from './MyRefreshHeader';
+import { MyLoadFooter } from './MyLoadFooter';
 let page = 1;
 /**
  * 使用说明
@@ -198,8 +199,8 @@ export default class ListGeneral extends Component {
                     onRefresh={this._onRefresh.bind(this)}
                     onLoading={this._onEndReached.bind(this)}
                     allLoaded={this.state.allLoaded}
-                    refreshHeader={ChineseNormalHeader}
-                    loadingFooter={ChineseNormalFooter}
+                    refreshHeader={MyRefreshHeader}
+                    loadingFooter={MyLoadFooter}
                 />,
             );
             return listView;

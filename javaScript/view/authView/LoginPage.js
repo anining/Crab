@@ -53,7 +53,7 @@ function LoginPage () {
     async function login (callback) {
         if (!phone || !code) {
             callback();
-            toast('请填写完整的账号和密码!');
+            toast('请填写完整的账号和密码');
             return;
         }
         const r = await apiLogin(phone, code);
@@ -71,7 +71,7 @@ function LoginPage () {
             return;
         }
         if (phone.length !== 11) {
-            toast('账号错误!');
+            toast('账号错误');
             return;
         }
         let second = 60;
@@ -84,7 +84,7 @@ function LoginPage () {
             }
         }, 1000);
         const r = await verifyCode(phone);
-        !r.error && toast('发送成功!');
+        !r.error && toast('发送成功');
     }
 
     return (
@@ -122,6 +122,7 @@ function LoginPage () {
                         await login(callback);
                     } else {
                         toast('请先阅读并同意隐私协议与用户协议');
+                        callback && callback();
                     }
                 }}/>
                 <TouchableOpacity activeOpacity={1} style={[css.flex, css.js]} onPress={() => {
