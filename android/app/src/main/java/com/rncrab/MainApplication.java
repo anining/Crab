@@ -31,6 +31,10 @@ import com.rncrab.verify.SecVerifyPackage;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.commonsdk.UMConfigure;
+
+import static com.rncrab.utils.CommonUtils.getChannel;
 
 public class MainApplication extends Application implements ReactApplication {
     private final ReactNativeHost mReactNativeHost =
@@ -70,6 +74,10 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        UMConfigure.init(this, "5f0287930cafb22a8b000213", getChannel(this), UMConfigure.DEVICE_TYPE_PHONE, "28225c9cb44605afa411f8088b6c6f4b");
+        UMConfigure.setLogEnabled(true);
+        // 选用AUTO页面采集模式
+        MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
         MobSDK.init(this, "2fa09aadf5f30", "9776e7ee141c0408e353df23ff7ad19a");
         MobSDK.submitPolicyGrantResult(true, null);
         MobLink.setRestoreSceneListener(new SceneListener());

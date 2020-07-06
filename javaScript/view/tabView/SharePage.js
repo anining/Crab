@@ -457,9 +457,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     codeWrap: {
-        height: width * 0.2,
+        // backgroundColor: '#321',
+        height: width * 0.15,
         paddingHorizontal: 15,
-        width: width * 0.75,
+        paddingTop: 10,
+        width: width * 0.75
     },
     copyBtn: {
         borderColor: '#FF3B00',
@@ -478,9 +480,10 @@ const styles = StyleSheet.create({
         fontSize: 13,
     },
     inviteWrap: {
-        height: width * 0.35,
+        height: width * 0.33,
+        marginBottom: 25,
         paddingHorizontal: 15,
-        paddingTop: 10,
+        paddingTop: 18,
         width: width * 0.9,
     },
     popBtn: {
@@ -626,7 +629,7 @@ const styles = StyleSheet.create({
         paddingVertical: 3,
     },
     tipsWrap: {
-        marginTop: width * 0.09,
+        marginTop: width * 0.06,
         overflow: 'hidden',
     },
     wShareTitle: {

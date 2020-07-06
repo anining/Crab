@@ -186,7 +186,12 @@ function formatGrade (array) {
             if (!baseIncome) {
                 baseIncome = item.second_income;
             }
-            item.incomeRate = _toFixed((item.second_income / baseIncome) * 100, 0) + '%';
+            const incomeRate = item.second_income / baseIncome;
+            if (incomeRate) {
+                item.incomeRate = _toFixed((incomeRate) * 100, 0) + '%';
+            } else {
+                item.incomeRate = '100%';
+            }
             gradeObj[item.grade] = item;
         });
         return gradeObj;

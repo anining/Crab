@@ -1,5 +1,7 @@
 package com.rncrab.transmit;
 
+import android.content.Context;
+
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -19,6 +21,7 @@ import com.mob.secverify.datatype.LoginResult;
 import com.mob.secverify.datatype.VerifyResult;
 import com.mob.secverify.exception.VerifyException;
 import com.rncrab.utils.CommonUtils;
+import com.umeng.commonsdk.statistics.common.DeviceConfig;
 
 import java.util.HashMap;
 
@@ -83,7 +86,6 @@ public class TransmitModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void promiseGetMobId(Promise promise) {
-//        new CommonUtils().getMobId(promise);
         // 设置场景参数
         HashMap<String, Object> senceParams = new HashMap<String, Object>();
         senceParams.put("key1", "value1");
@@ -97,18 +99,16 @@ public class TransmitModule extends ReactContextBaseJavaModule {
         MobLink.getMobID(s, new ActionListener() {
             public void onResult(String mobID) {
                 // TODO 根据mobID进行分享等操作
-                System.out.println("onResult=" + mobID);
             }
 
             @Override
             public void onResult(Object o) {
-                System.out.println("onResult=");
                 promise.resolve(o);
             }
 
             public void onError(Throwable throwable) {
                 // TODO 处理错误结果
-                System.out.println("TODO 处理错误结果=");
+//                System.out.println("TODO 处理错误结果=");
                 promise.reject("error", throwable);
             }
         });
@@ -126,55 +126,59 @@ public class TransmitModule extends ReactContextBaseJavaModule {
             SecVerify.preVerify(new OperationCallback() {
                 @Override
                 public void onComplete(Object o) {
-                    System.out.println("reactConte32131" + o);
-                    promise.resolve("onOtherLogin321321");
+                    promise.resolve("onComplete");
                 }
 
                 @Override
                 public void onFailure(VerifyException e) {
-                    promise.resolve("onOtherLogin0000");
+                    promise.resolve("onFailure");
                 }
             });
-        } else {
-            promise.reject("onOtherLogin0000");
         }
     }
 
     @ReactMethod
     public void verifyLogin(final Promise promise) {
-        System.out.println("===a111====");
         SecVerify.verify(new VerifyCallback() {
             @Override
             public void onOtherLogin() {
                 // 用户点击“其他登录方式”，处理自己的逻辑
-                System.out.println("===a222====");
                 promise.reject("onOtherLogin");
             }
 
             @Override
             public void onUserCanceled() {
                 // 用户点击“关闭按钮”或“物理返回键”取消登录，处理自己的逻辑
-                System.out.println("===a333====");
                 promise.reject("onUserCanceled");
             }
 
             @Override
             public void onComplete(VerifyResult data) {
-                System.out.println("===a444====");
                 WritableMap wMap = new WritableNativeMap();
                 wMap.putString("operator", data.getOperator());
                 wMap.putString("opToken", data.getOpToken());
                 wMap.putString("token", data.getToken());
-                System.out.println("reactContext1112=" + wMap);
                 promise.resolve(wMap);
             }
 
             @Override
             public void onFailure(VerifyException e) {
-                System.out.println("===a555====");
                 e.getCause();
                 promise.reject("error", e.getCause());
             }
         });
+    }
+    @ReactMethod
+    public void getTestDeviceInfo(final Promise promise){
+        WritableMap wMap = new WritableNativeMap();
+        try {
+            if(myContext != null){
+                wMap.putString("getDeviceIdForGeneral", DeviceConfig.getDeviceIdForGeneral(myContext));
+                wMap.putString("getMac", DeviceConfig.getMac(myContext));
+            }
+        } catch (Exception ignored){
+            wMap.putString("error", "error");
+        }
+        promise.resolve(wMap);
     }
 }
