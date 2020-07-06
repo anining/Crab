@@ -41,8 +41,6 @@ export default class GlossaryPage extends Component {
         if (ret && !ret.error) {
             this.setState({
                 glossaryInfo: ret.data
-            }, () => {
-                console.log(this.state.glossaryInfo, 'dsa');
             });
         }
     }
