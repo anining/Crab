@@ -18,10 +18,10 @@ import { djangoTime, transformMoney } from '../../utils/util';
 import { getter } from '../../utils/store';
 
 const { width } = Dimensions.get('window');
-const { today_pass_num } = getter(['user.today_pass_num']);
+const { today_pass_num, activityObj } = getter(['user.today_pass_num', 'activityObj']);
 
 function DailyRedPackagePage (props) {
-    const { activityId } = props.route.params;
+    const { activityId = (activityObj.get() || {})[1].activity_id } = props.route.params;
     const [rule, setRule] = useState([]);
     const [endDatetime, setEndDatetime] = useState('2020/12/12');
 
