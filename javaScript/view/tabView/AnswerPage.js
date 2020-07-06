@@ -37,17 +37,17 @@ const NEW_USER_TASK_TYPE = {
     1: {
         label: '看视频领金币',
         icon: answer1,
-        path: ''
+        path: 'HelpCenterPage'
     },
     2: {
         label: '绑定账号领金币',
         icon: answer3,
-        path: 'AccountHomePage'
+        path: 'WeChatBindPage'
     },
     3: {
         label: '做任务得奖励',
         icon: answer13,
-        path: ''
+        path: 'TaskDetailPage'
     }
 };
 
@@ -73,8 +73,6 @@ function AnswerPage () {
     }
 
     async function _newUserTask () {
-        // asyncStorage.setItem(`NEW_USER_TASK_TYPE1${user_id.get()}`, 'true');
-        // asyncStorage.setItem(`NEW_USER_TASK_TYPE2${user_id.get()}`, 'true');
         // asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
         const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
         const local3 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE3${user_id.get()}`);
@@ -276,7 +274,13 @@ function RenderNewBtn ({ item, _newUserTask }) {
     // 领取奖励
     case 2:return <Text style={styles.todoTaskText} karet-lift onPress={getReward}>{btnText}</Text>;
     // 去完成
-    case 5:return <Text style={styles.todoTaskText} onPress={ () => { N.navigate(path); }}>{btnText}</Text>;
+    case 5:return <Text style={styles.todoTaskText} onPress={ () => {
+        if (path === 'TaskDetailPage') {
+            task(1);// 默认选择抖音任务
+        } else {
+            N.navigate(path);
+        }
+    }}>{btnText}</Text>;
     // 已完成
     default:return <Shadow style={styles.todoBtn} color={'#d43912'}><Text style={styles.todoBtnText}>{btnText}</Text></Shadow>;
     }
