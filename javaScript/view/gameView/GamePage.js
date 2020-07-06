@@ -36,7 +36,7 @@ import GameDialog from '../../components/GameDialog';
 import chest from '../../lottie/chest';
 import LottieView from 'lottie-react-native';
 import game22 from '../../assets/icon/game/game22.png';
-import { getter } from '../../utils/store';
+import { getter, setter } from '../../utils/store';
 import * as U from 'karet.util';
 import * as R from 'kefir.ramda';
 import toast from '../../utils/toast';
@@ -90,7 +90,7 @@ export default class GamePage extends Component {
 
     componentDidMount () {
         this._getGame();
-        updateUser();
+        // updateUser();
     }
 
     static async _gameError (str) {
@@ -586,7 +586,13 @@ export default class GamePage extends Component {
                                 }
                             }
                             toast('消耗成功');
-                            updateUser();
+                            setter([['user', {
+                                ...this.state.user,
+                                propNumsObj: {
+                                    ...getPath(['propNumsObj'], this.state.user, {}),
+                                    3: getPath(['propNumsObj', '3'], this.state.user, 1) - 1
+                                }
+                            }]], true);
                         }
                     } else {
                         toast('提示次数不足');

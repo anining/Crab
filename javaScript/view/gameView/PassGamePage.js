@@ -11,7 +11,7 @@ import {
     SafeAreaView,
     ScrollView, UIManager, NativeModules,
 } from 'react-native';
-import { getter } from '../../utils/store';
+import { getter, setter } from '../../utils/store';
 import { css } from '../../assets/style/css';
 import GameDialog from '../../components/GameDialog';
 import { N } from '../../utils/router';
@@ -135,6 +135,7 @@ export default class PassGamePage extends Component {
 
     _isUpgrade () {
         try {
+            this.updateSameInfo();
             const myNowLevel = this.paramsInfo.userLevel;
             const myGradeLevel = this.paramsInfo.myGradeLevel;
             for (let i = 0; i < this.state.gradeRange.length; i++) {
@@ -153,6 +154,7 @@ export default class PassGamePage extends Component {
                             </View>
                         }/>);
                     }
+                    updateNextRedLevel(); // updateNextRedLevel 升级的时候更新level
                     break;
                 }
             }
@@ -161,15 +163,23 @@ export default class PassGamePage extends Component {
         }
     }
 
-    static updateSameInfo () {
-        updateUser();
-        updateNextRedLevel();
+    updateSameInfo () {
+        const user = this.state.user;
+        setter([['user', {
+            ...user,
+            user_level: {
+                ...getPath(['user_level'], user, {}),
+                level_num: getPath(['user_level', 'level_num'], user, 0) + 1,
+            },
+            propNumsObj: {
+                ...getPath(['propNumsObj'], user, {}),
+                2: getPath(['propNumsObj', '2'], user, 1) - 1
+            }
+        }]], true);
     }
 
     async componentDidMount () {
         this._showPop();
-        PassGamePage.updateSameInfo();
-        // _isUpgrade 是否升级判断完成后才更新用户信息1
     }
 
     _renderIdiomList () {

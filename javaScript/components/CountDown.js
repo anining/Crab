@@ -41,8 +41,6 @@ export default class CountDown extends Component {
     }
 
     componentWillUnmount () {
-        this.timer && clearInterval(this.timer);
-        this.milliTimer && clearInterval(this.milliTimer);
     }
 
     render () {
@@ -69,10 +67,12 @@ export default class CountDown extends Component {
 CountDown.propTypes = {
     style: PropTypes.object,
     viewStyle: PropTypes.object,
-    callback: PropTypes.func
+    callback: PropTypes.func,
+    millisecond: PropTypes.bool
 };
 CountDown.defaultProps = {
     style: {},
     viewStyle: {},
     callback: () => {},
+    millisecond: false
 };
