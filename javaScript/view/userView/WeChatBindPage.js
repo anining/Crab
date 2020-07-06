@@ -1,20 +1,45 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as React from 'karet';
-import { SafeAreaView, Image, Text, TouchableOpacity, StyleSheet, Dimensions, View } from 'react-native';
+import { SafeAreaView, Text, TouchableOpacity, StyleSheet, Dimensions, View, ImageBackground } from 'react-native';
 import { css } from '../../assets/style/css';
+import answer17 from '../../assets/icon/answer/answer17.png';
 import { captureRef } from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
 import { requestPermission } from '../../utils/util';
 import toast from '../../utils/toast';
 import Crab from '../../components/Crab';
+import QRCode from 'react-native-qrcode-svg';
+import { wxToken } from '../../utils/api';
 import { getter } from '../../utils/store';
-import * as U from 'karet.util';
 
 const { width } = Dimensions.get('window');
-const { wx_bind_qrcode: uri } = getter(['app.wx_bind_qrcode']);
+const { avatar, openid } = getter(['user', 'user.avatar', 'user.openid', 'user']);
 
 function WeChatBindPage () {
     const [view, setView] = useState();
+    const [token, setToken] = useState();
+    const [value, setValue] = useState();
+
+    useEffect(() => {
+        wxToken().then(r => {
+            !r.error && setToken(r.data.token);
+        });
+    }, []);
+
+    useEffect(() => {
+        if (token) {
+            try {
+                const URI = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx660a4724f56fdba5&redirect_uri=https%3A%2F%2Fbind.libratb.com&response_type=code&scope=snsapi_userinfo&state=${token}#wechat_redirect`;
+                fetch(`http://suo.im/api.htm?url=${encodeURIComponent(URI)}&key=5f02bdbd3a005a7b763779a3@b4689fcc524fcb7f1a12d82a00045579&expireDate=2030-03-31`).then(r => {
+                    r.text().then(response => {
+                        setValue(response);
+                    });
+                });
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    }, [token]);
 
     function save () {
         requestPermission(() => {
@@ -30,8 +55,12 @@ function WeChatBindPage () {
 
     return (
         <SafeAreaView style={css.safeAreaView}>
-            <Image karet-lift source={U.template({ uri })} style={styles.image} ref={ref => setView(ref)}/>
-            <TouchableOpacity activeOpacity={1} onPress={save} style={styles.btn}>
+            <ImageBackground source={answer17} style={[styles.image, { position: 'relative' }]} ref={ref => setView(ref)}>
+                <View style={{ position: 'absolute', top: '24.5%', left: '15.5%' }}>
+                    <Render value={value}/>
+                </View>
+            </ImageBackground>
+            <TouchableOpacity onPress={save} style={styles.btn}>
                 <Text style={styles.btnText}>保存图片到本地</Text>
             </TouchableOpacity>
             <Crab text="绑定说明："/>
@@ -40,6 +69,32 @@ function WeChatBindPage () {
             <Text style={styles.text}>3.如果绑定失败，请通过“我的 - 帮助中心”加群联系管理员。</Text>
             <Text style={styles.text}>4.绑定微信后请刷新“我的”有您的微信昵称即绑定成功。</Text>
         </SafeAreaView>
+    );
+}
+
+function Render ({ value, uri = avatar.get() }) {
+    if (uri && openid.get()) {
+        return (
+            <QRCode
+                logo={{ uri }}
+                logoSize={50}
+                logoBackgroundColor='transparent'
+                value={value}
+                size={200}
+                logoMargin={2}
+                logoBorderRadius={5}
+                color={'#333'}
+                backgroundColor={'#fff'}
+            />
+        );
+    }
+    return (
+        <QRCode
+            value={value}
+            size={200}
+            color={'#333'}
+            backgroundColor={'#fff'}
+        />
     );
 }
 
