@@ -13,7 +13,7 @@ import { wxToken } from '../../utils/api';
 import { getter } from '../../utils/store';
 
 const { width } = Dimensions.get('window');
-const { avatar, openid } = getter(['user', 'user.avatar', 'user.openid', 'user']);
+const { avatar, openid } = getter(['user.avatar', 'user.openid', 'user']);
 
 function WeChatBindPage () {
     const [view, setView] = useState();

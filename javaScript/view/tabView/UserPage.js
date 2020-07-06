@@ -104,7 +104,7 @@ const TASK_MENU = [
         icon: user6
     }
 ];
-const { today_income, total_income, nickname, authorization, balance, phone, avatar, invite_code, receive_task_status } = getter(['user.red_point.receive_task_status', 'authorization', 'user.today_income', 'user.nickname', 'user.total_income', 'user.balance', 'user.phone', 'user.avatar', 'user.invite_code']);
+const { today_income, total_income, nickname, authorization, balance, openid, phone, avatar, invite_code, receive_task_status } = getter(['user.red_point.receive_task_status', 'authorization', 'user.today_income', 'user.openid', 'user.nickname', 'user.total_income', 'user.balance', 'user.phone', 'user.avatar', 'user.invite_code']);
 
 function UserPage () {
     !authorization.get() && N.replace('VerificationStackNavigator');
@@ -132,12 +132,7 @@ function UserPage () {
                             </View>
                         </View>
                     </View>
-                    <TouchableOpacity activeOpacity={1} onPress={() => {
-                        N.navigate('WeChatBindPage');
-                    }} style={styles.bindBtn}>
-                        <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
-                        <Text style={styles.bindText}>绑定微信</Text>
-                    </TouchableOpacity>
+                    <RenderBind />
                 </View>
                 <View style={styles.moneyView}>
                     <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
@@ -172,6 +167,20 @@ function UserPage () {
                 <RenderMenu />
             </ScrollView>
         </SafeAreaView>
+    );
+}
+
+function RenderBind () {
+    if (openid.get()) {
+        return <></>;
+    }
+    return (
+        <TouchableOpacity onPress={() => {
+            N.navigate('WeChatBindPage');
+        }} style={styles.bindBtn}>
+            <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
+            <Text style={styles.bindText}>绑定微信</Text>
+        </TouchableOpacity>
     );
 }
 
