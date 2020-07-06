@@ -17,6 +17,7 @@ import share12 from '../../assets/icon/share/share12.png';
 import Shadow from '../../components/Shadow';
 import ImageAuto from '../../components/ImageAuto';
 import JRBannerView from '../../components/JRBannerView';
+import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import { N } from '../../utils/router';
 import { getter } from '../../utils/store';
@@ -383,7 +384,6 @@ export default class SharePage extends PureComponent {
                             <Image source={share3} style={styles.shareInfoImage}/>
                         </View>
                     </View>
-                    {/* <JRBannerView style={styles.adStyle}/> */}
                 </ScrollView>
             </SafeAreaView>
         );
@@ -420,12 +420,6 @@ function Share () {
 }
 
 const styles = StyleSheet.create({
-    adStyle: {
-        backgroundColor: 'red',
-        height: 100,
-        marginLeft: '3%',
-        width: '94%'
-    },
     cashBackItem: {
         height: width * 0.9 * 0.25 * 294 / 273,
         overflow: 'hidden',

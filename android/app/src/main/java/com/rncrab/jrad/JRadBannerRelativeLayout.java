@@ -108,8 +108,8 @@ public class JRadBannerRelativeLayout extends RelativeLayout {
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(codeId) //广告位id
                 .setSupportDeepLink(true)
-                .setAdCount(2) //请求广告数量为1到3条
-//                .setExpressViewAcceptedSize(expressViewWidth,expressViewHeight) //期望个性化模板广告view的size,单位dp
+                .setAdCount(1) //请求广告数量为1到3条
+                .setExpressViewAcceptedSize(360,0) //期望个性化模板广告view的size,单位dp
                 .setImageAcceptedSize(600, 90)
                 .build();
         //step5:请求广告，对请求回调的广告作渲染处理
@@ -127,7 +127,7 @@ public class JRadBannerRelativeLayout extends RelativeLayout {
                     return;
                 }
                 mTTAd = ads.get(0);
-                mTTAd.setSlideIntervalTime(30 * 1000);//设置轮播间隔 ms,不调用则不进行轮播展示
+//                mTTAd.setSlideIntervalTime(30 * 1000);//设置轮播间隔 ms,不调用则不进行轮播展示
                 bindAdListener(mTTAd);
                 mTTAd.render();//调用render开始渲染广告
             }

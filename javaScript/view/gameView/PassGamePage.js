@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     DeviceEventEmitter,
     SafeAreaView,
-    ScrollView, UIManager,
+    ScrollView, UIManager, NativeModules,
 } from 'react-native';
 import { getter } from '../../utils/store';
 import { css } from '../../assets/style/css';
@@ -40,18 +40,10 @@ import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { bindData, getGlobal, getPath } from '../../global/global';
 import { avatarProLevelPosition, getGradeConfig, homeProLevelPosition } from '../../utils/levelConfig';
 import { DelayGetDomeTime } from '../../utils/animationConfig';
-import {
-    AdMobBanner,
-    AdMobInterstitial,
-    PublisherBanner,
-    AdMobRewarded,
-} from 'react-native-admob';
+import JRBannerView from '../../components/JRBannerView';
+import android from '../../components/Android';
 
 const { height, width } = Dimensions.get('window');
-// const { level_num: userLevel } = getter(['user.user_level.level_num']);
-// const trCorrectRate = U.mapValue((res) => {
-//     return _toFixed(res * 100) + '%';
-// }, correctRate);
 export default class PassGamePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
@@ -243,7 +235,7 @@ export default class PassGamePage extends Component {
                             width: progressInnerLength * 100 + '%'
                         }]}/>
                     </View>
-                    <View style={{ height: 20, width: '100%' }}/>
+                    <View style={{ height: 15, width: '100%' }}/>
                     <Text style={[styles.gamePassTips, css.gf, { fontSize: 15 }]}>再闯关<Text
                         style={{ fontSize: 17, color: 'red' }}>{PassGamePage._countNextLevel(myNowLevel, this.state.nextRedLevel)}</Text>关领红包</Text>
                     {(() => {
@@ -327,12 +319,7 @@ export default class PassGamePage extends Component {
                             </View>
                         </View>
                     </ScrollView>
-                    <AdMobBanner
-                        adSize="fullBanner"
-                        adUnitID="ca-app-pub-9894344618350179/4609065012"
-                        testDevices={[AdMobBanner.simulatorId]}
-                        onAdFailedToLoad={error => console.log(error)}
-                    />
+                    <JRBannerView style={styles.adStyle}/>
                 </SafeAreaView>;
             }
         } catch (e) {
@@ -342,6 +329,10 @@ export default class PassGamePage extends Component {
     }
 }
 const styles = StyleSheet.create({
+    adStyle: {
+        height: 90,
+        width: '100%'
+    },
     continueBtn: {
         backgroundColor: '#FF6C00',
         borderColor: '#594134',
@@ -370,9 +361,9 @@ const styles = StyleSheet.create({
     gameCanvasInner: {
         backgroundColor: '#FFF7A9',
         borderRadius: 10,
-        height: '100%',
+        height: 'auto',
         overflow: 'hidden',
-        paddingTop: width * 0.18,
+        paddingTop: width * 0.14,
         width: '100%',
     },
     gameCanvasWrap: {
@@ -474,7 +465,7 @@ const styles = StyleSheet.create({
     idiomWrap: {
         backgroundColor: '#FFE784',
         borderRadius: 10,
-        height: 120,
+        height: 'auto',
         marginTop: 30,
         paddingHorizontal: 5,
         paddingVertical: 20,
@@ -490,7 +481,7 @@ const styles = StyleSheet.create({
         bottom: 10
     },
     nextBtnWrap: {
-        height: 100,
+        height: 80,
         overflow: 'hidden',
         width: '77%',
     },
