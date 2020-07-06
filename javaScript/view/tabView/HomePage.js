@@ -129,7 +129,6 @@ export default class HomePage extends Component {
             const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
             const levelLength = nexLevel - preLevel;
             const myForwardNumber = Math.floor(avatarProLevelPosition.length * (myNowLevel - preLevel) / levelLength);
-            console.log(myGradeLevel, preLevel, nexLevel, myNowLevel, this.state.gradeRange, this.state.nextRedLevel, '===============!!!==========');
             const view = [];
             if (this.state.nextRedLevel.length) {
                 if (this.state.nextRedLevel.length >= 12) {
@@ -186,12 +185,12 @@ export default class HomePage extends Component {
                                 {/* eslint-disable-next-line no-return-assign */}
                                 {_if(position && position[1] && position[1][0], res => <ShiftView key={`ShiftView1${JSON.stringify(position)}`} callback={() => {
                                     this.gameHeader && this.gameHeader.start();
-                                }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} duration={1500} startSite={[width * 0.25, width * 0.55]} endSite={position[1]}>
+                                }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} loopTime={1000} duration={800} startSite={[width * 0.25, width * 0.55]} endSite={position[1]}>
                                     <ImageAuto source={game22} width={33}/>
                                 </ShiftView>)}
                                 {_if(position && accuracyPosition, res => <ShiftView key={`ShiftView1${JSON.stringify(position)}${JSON.stringify(accuracyPosition)}`} callback={() => {
                                     N.navigate('GamePage');
-                                }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={1000} startSite={position[0]} endSite={accuracyPosition}>
+                                }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={800} startSite={position[0]} endSite={accuracyPosition}>
                                     <ImageAuto source={game25} width={33}/>
                                 </ShiftView>)}
                                 {/* /!* 头部显示区域 *!/ */}

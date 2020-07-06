@@ -312,12 +312,12 @@ export default class SharePage extends PureComponent {
         return (
             <SafeAreaView style={css.safeAreaView}>
                 <ScrollView style={styles.scrollWrap}>
-                    {/* <AdMobBanner */}
-                    {/*    adSize="fullBanner" */}
-                    {/*    adUnitID="ca-app-pub-9894344618350179/4609065012" */}
-                    {/*    testDevices={[AdMobBanner.simulatorId]} */}
-                    {/*    onAdFailedToLoad={error => console.log(error)} */}
-                    {/* /> */}
+                    <AdMobBanner
+                        adSize="fullBanner"
+                        adUnitID="ca-app-pub-9894344618350179/4609065012"
+                        testDevices={[AdMobBanner.simulatorId]}
+                        onAdFailedToLoad={error => console.log(error)}
+                    />
                     <View source={share1} style={[styles.shareBgWrap, css.pr]}>
                         <ImageAuto source={share1} style={[css.pa, styles.shareBg]}/>
                         <View style={[css.flex, styles.codeWrap, css.auto, css.sp]}>
