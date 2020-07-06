@@ -32,7 +32,7 @@ function RenderView ({ cards, setItem, item }) {
     if (!cards.length) {
         return <Null text='你还没有道具哦～'/>;
     }
-    const { label, usage_range, function: f, usage, num } = item;
+    const { label, usage_range, desc, function: f, usage, num } = item;
     return (
         <ScrollView>
             <RenderCard cards={cards} setItem={setItem} item={item}/>
@@ -42,7 +42,8 @@ function RenderView ({ cards, setItem, item }) {
                 <Text style={styles.text} numberOfLines={1}>道具数量：{num}</Text>
                 <Text style={styles.text} numberOfLines={1}>使用方法：{usage}</Text>
                 <Text style={styles.text} numberOfLines={1}>适用范围：{usage_range}</Text>
-                <Text style={styles.text} numberOfLines={1}>道具功能：{f}</Text>
+                <Text style={styles.text}>道具功能：{f}</Text>
+                <Text style={styles.text}>道具描述：{desc}</Text>
             </View>
         </ScrollView>
     );
@@ -55,7 +56,7 @@ function RenderCard ({ cards, setItem, item }) {
         const { prop_id: id } = item;
         const value = prop_id === id;
         view.push(
-            <TouchableOpacity activeOpacity={1}  onPress={() => setItem(card)} key={prop_id} style={[styles.cardItem, { borderColor: value ? '#FFE06F' : '#F1F1F1', backgroundColor: value ? '#FFF6D7' : '#F1F1F1' }]}>
+            <TouchableOpacity activeOpacity={1} onPress={() => setItem(card)} key={prop_id} style={[styles.cardItem, { borderColor: value ? '#FFE06F' : '#F1F1F1', backgroundColor: value ? '#FFF6D7' : '#F1F1F1' }]}>
                 <Text numberOfLines={1} style={{ color: '#353535', fontWeight: '500' }}>{label}</Text>
                 <Image source={{ uri }} style={{ height: 43 / 1.3, width: 34 / 1.3 }}/>
                 <Text style={{ color: '#FF6C00' }}>x{num}</Text>
