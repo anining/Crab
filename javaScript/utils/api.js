@@ -304,6 +304,12 @@ export function useProp () {
 export function getNextRedLevel () {
     return transformFetch('GET', '/game/next_red_level', {});
 }
+
+// 获取绑定微信token
+export function wxToken () {
+    return transformFetch('GET', '/wx/token');
+}
+
 // 选择领取奖励
 export function choseGetAward (is_double = false) {
     return transformFetch('POST', '/game/level/award', { is_double });
