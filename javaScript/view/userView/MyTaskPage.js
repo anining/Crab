@@ -9,7 +9,7 @@ import task10 from '../../assets/icon/task/task10.png';
 import { N } from '../../utils/router';
 import { giveUp, taskReceive } from '../../utils/api';
 import { djangoTime, transformMoney, transformTime } from '../../utils/util';
-import { task } from '../../utils/update';
+import { task, updateUser } from '../../utils/update';
 import CountDown from '../../components/CountDown';
 
 const itemMarginTop = 10;
@@ -66,6 +66,7 @@ function L ({ type, itemHeight }) {
                 itemHeight={itemHeight}
                 itemMarginTop={itemMarginTop}
                 getList={ (page, num, callback) => {
+                    updateUser();
                     taskReceive(page, num, type).then(r => {
                         !r.error && callback(r.data);
                     });

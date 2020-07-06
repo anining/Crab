@@ -15,10 +15,9 @@ import task16 from '../../assets/icon/task/task16.png';
 import task17 from '../../assets/icon/task/task17.png';
 import Upload from '../../components/Upload';
 import { N } from '../../utils/router';
-import { activityDetail, getTask, giveUp, taskReceiveDetail, taskSubmit } from '../../utils/api';
+import { activityDetail, getTask, giveUp, taskReceive, taskReceiveDetail, taskSubmit } from '../../utils/api';
 import { djangoTime, getUrl, requestPermission, saveBase64ImageToCameraRoll, transformMoney } from '../../utils/util';
 import { captureRef } from 'react-native-view-shot';
-import CameraRoll from '@react-native-community/cameraroll';
 import Choice from '../../components/Choice';
 import pop3 from '../../assets/icon/pop/pop3.png';
 import Header from '../../components/Header';
@@ -123,13 +122,16 @@ function TaskDetailPage (props) {
                         minTips: '您确定要返回首页(自动放弃任务)吗？',
                         lt: '返回首页',
                         lc: () => {
-                            giveUp(detail.receive_task_id);
+                            giveUp(detail.receive_task_id).then(() => {
+                                taskReceive(1, 10, 1).then(() => updateUser());
+                            });
                             updateUser();
                             N.goBack();
                         },
                         rt: '继续任务'
                     }} />);
             } else {
+                taskReceive(1, 10, 1).then(() => updateUser());
                 N.goBack();
             }
         } else {

@@ -17,10 +17,15 @@ import * as Animatable from 'react-native-animatable';
 import { getRedPackage, openRedPackage, withdrawLogsLatest } from '../../utils/api';
 import { N } from '../../utils/router';
 import { djangoTime } from '../../utils/util';
+
 const { width } = Dimensions.get('window');
 
 function DailyMoneyPage (props) {
-    const { activityId, pageInfo } = props.route.params;
+    const { activityId = {}, pageInfo } = props.route.params;
+    if (activityId || pageInfo) {
+        N.goBack();
+        return <></>;
+    }
     const { log, user_history, title } = pageInfo;
     const { money, invalid_time } = log;
     const [withdrawLogs, setWithdrawLogs] = useState([]);

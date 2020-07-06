@@ -1,6 +1,7 @@
 import * as React from 'karet';
 import * as R from 'kefir.ramda';
-import { View, SafeAreaView, StyleSheet, ScrollView, ImageBackground, Image, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { useState } from 'react';
+import { View, SafeAreaView, StyleSheet, ScrollView, ImageBackground, FlatList, Image, Text, TouchableOpacity, Dimensions } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
@@ -104,74 +105,96 @@ const TASK_MENU = [
         icon: user6
     }
 ];
-const { today_income, total_income, nickname, authorization, balance, phone, avatar, invite_code, receive_task_status } = getter(['user.red_point.receive_task_status', 'authorization', 'user.today_income', 'user.nickname', 'user.total_income', 'user.balance', 'user.phone', 'user.avatar', 'user.invite_code']);
+const { today_income, total_income, nickname, authorization, balance, openid, phone, avatar, invite_code, receive_task_status } = getter(['user.red_point.receive_task_status', 'authorization', 'user.today_income', 'user.openid', 'user.nickname', 'user.total_income', 'user.balance', 'user.phone', 'user.avatar', 'user.invite_code']);
 
 function UserPage () {
+    const [refreshing, setRefreshing] = useState(false);
     !authorization.get() && N.replace('VerificationStackNavigator');
     updateUser();
 
+    function onRefresh () {
+        updateUser();
+    }
+
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8', paddingTop: 20 }]}>
-            <ScrollView>
-                <View style={styles.userDetailView}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Image karet-lift source={U.template({ uri: avatar })} style={styles.avatarIcon}/>
-                        <View>
-                            <View style={styles.userCardTop}>
-                                <Text karet-lift numberOfLines={1} style={styles.userPhone}>{nickname}</Text>
-                                <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{phone}</Text>
+            <FlatList
+                onRefresh={onRefresh}
+                refreshing={refreshing}
+                data={['']}
+                renderItem={() => (
+                    <ScrollView>
+                        <View style={styles.userDetailView}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Image karet-lift source={U.template({ uri: avatar })} style={styles.avatarIcon}/>
+                                <View>
+                                    <View style={styles.userCardTop}>
+                                        <Text karet-lift numberOfLines={1} style={styles.userPhone}>{nickname}</Text>
+                                        <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{phone}</Text>
+                                    </View>
+                                    <View style={styles.userCardBottom}>
+                                        <Text karet-lift numberOfLines={1} style={styles.inviteCode}>邀请码:{invite_code}</Text>
+                                        <TouchableOpacity activeOpacity={1} onPress={() => {
+                                            Clipboard.setString(invite_code.get());
+                                            toast('复制成功!');
+                                        }} style={styles.copyBtn}>
+                                            <Text style={styles.copyText}>复制</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
                             </View>
-                            <View style={styles.userCardBottom}>
-                                <Text karet-lift numberOfLines={1} style={styles.inviteCode}>邀请码:{invite_code}</Text>
-                                <TouchableOpacity activeOpacity={1} onPress={() => {
-                                    Clipboard.setString(invite_code.get());
-                                    toast('复制成功!');
-                                }} style={styles.copyBtn}>
-                                    <Text style={styles.copyText}>复制</Text>
-                                </TouchableOpacity>
-                            </View>
+                            <RenderBind />
                         </View>
-                    </View>
-                    <TouchableOpacity activeOpacity={1} onPress={() => {
-                        N.navigate('WeChatBindPage');
-                    }} style={styles.bindBtn}>
-                        <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
-                        <Text style={styles.bindText}>绑定微信</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.moneyView}>
-                    <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
-                        <View style={styles.moneyViewTop}>
-                            <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
-                            <TouchableOpacity activeOpacity={1} onPress={() => {
-                                N.navigate('WithdrawPage');
-                            }} style={styles.withDrawBtn}>
-                                <Text style={{ lineHeight: 30, textAlign: 'center', color: '#fff' }}>立即提现</Text>
-                            </TouchableOpacity>
+                        <View style={styles.moneyView}>
+                            <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
+                                <View style={styles.moneyViewTop}>
+                                    <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
+                                    <TouchableOpacity activeOpacity={1} onPress={() => {
+                                        N.navigate('WithdrawPage');
+                                    }} style={styles.withDrawBtn}>
+                                        <Text style={{ lineHeight: 30, textAlign: 'center', color: '#fff' }}>立即提现</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={styles.moneyViewBottom}>
+                                    <View style={styles.moneyViewItem}>
+                                        <Text karet-lift style={styles.moneyText}>{balance}</Text>
+                                        <Text style={styles.moneyTitle}>可提现(金币)</Text>
+                                    </View>
+                                    <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
+                                        <Text karet-lift style={styles.moneyText}>{today_income}</Text>
+                                        <Text style={styles.moneyTitle}>今日收益(金币)</Text>
+                                    </View>
+                                    <View style={styles.moneyViewItem}>
+                                        <Text karet-lift style={styles.moneyText}>{total_income}</Text>
+                                        <Text style={styles.moneyTitle}>总收益(金币)</Text>
+                                    </View>
+                                </View>
+                            </ImageBackground>
                         </View>
-                        <View style={styles.moneyViewBottom}>
-                            <View style={styles.moneyViewItem}>
-                                <Text karet-lift style={styles.moneyText}>{balance}</Text>
-                                <Text style={styles.moneyTitle}>可提现(金币)</Text>
-                            </View>
-                            <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
-                                <Text karet-lift style={styles.moneyText}>{today_income}</Text>
-                                <Text style={styles.moneyTitle}>今日收益(金币)</Text>
-                            </View>
-                            <View style={styles.moneyViewItem}>
-                                <Text karet-lift style={styles.moneyText}>{total_income}</Text>
-                                <Text style={styles.moneyTitle}>总收益(金币)</Text>
-                            </View>
+                        <View style={styles.myTask}>
+                            <Text style={styles.myTaskTitle}>我的任务</Text>
+                            <RenderTaskMenu />
                         </View>
-                    </ImageBackground>
-                </View>
-                <View style={styles.myTask}>
-                    <Text style={styles.myTaskTitle}>我的任务</Text>
-                    <RenderTaskMenu />
-                </View>
-                <RenderMenu />
-            </ScrollView>
+                        <RenderMenu />
+                    </ScrollView>
+                )}
+                keyExtractor={() => 'flatList'}
+            />
         </SafeAreaView>
+    );
+}
+
+function RenderBind () {
+    if (openid.get()) {
+        return <></>;
+    }
+    return (
+        <TouchableOpacity onPress={() => {
+            N.navigate('WeChatBindPage');
+        }} style={styles.bindBtn}>
+            <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
+            <Text style={styles.bindText}>绑定微信</Text>
+        </TouchableOpacity>
     );
 }
 
