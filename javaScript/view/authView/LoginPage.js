@@ -118,7 +118,11 @@ function LoginPage () {
                     </TouchableOpacity>
                 </View>
                 <Button name={'立即登录'} onPress={async (callback) => {
-                    await login(callback);
+                    if (agree) {
+                        await login(callback);
+                    } else {
+                        toast('请先阅读并同意隐私协议与用户协议');
+                    }
                 }}/>
                 <TouchableOpacity activeOpacity={1} style={[css.flex, css.js]} onPress={() => {
                     setAgree(!agree);
