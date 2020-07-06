@@ -23,7 +23,7 @@ let nextUpdateUserTime = null;
 const updateUserRate = 5;
 export const updateUser = (callback) => {
     return new Promise((resolve, reject) => {
-        if (!nextUpdateUserTime || (nextUpdateUserTime >= +new Date())) {
+        if (!nextUpdateUserTime || (nextUpdateUserTime <= +new Date())) {
             nextUpdateUserTime = +new Date() + 1000 * updateUserRate; // updateUserRate秒之内不允许更新user
             user().then(res => _tc(() => {
                 resolve();

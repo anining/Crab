@@ -128,7 +128,7 @@ export default class GameHeader extends Component {
                 }
             } else {
                 if (!this.secondIncome) {
-                    this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user, 0.00005));
+                    this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user, 0.000005));
                     nowBalance = getPath(['goldCoin'], this.state.user, 0);
                 }
             }
