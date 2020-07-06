@@ -24,18 +24,18 @@ export const AGREEMENT = `
 
 <body>
     <h1 style="text-align:center">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">钱帮用户使用协议</span>
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">趣玩赚用户使用协议</span>
     </h1>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">本协议服务条款(以下简称“服务条款”)是由用户(您)与钱帮平台(以下简称&quot;钱帮&quot;)就钱帮提供的兼职信息服务所订立的相关权利义务规范，本服务条款对您及钱帮均具有法律效力。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">本协议服务条款(以下简称“服务条款”)是由用户(您)与趣玩赚平台(以下简称&quot;趣玩赚&quot;)就趣玩赚提供的兼职信息服务所订立的相关权利义务规范，本服务条款对您及趣玩赚均具有法律效力。</span>
     </p>
     <p>
         <strong><span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">前言：</span></strong>
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">钱帮是一个网络兼职信息对接平台。钱帮提供兼职信息任务发布、承接、浏览等服务（以下称“钱帮服务”）。钱帮上的信息是由用户自行发布，由发布者对信息的真实性负责并支付赏金。用户发布任务及接单任务需遵守任务<strong>【发布规则】</strong>及<strong>【接单规则】</strong>。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">趣玩赚是一个网络兼职信息对接平台。趣玩赚提供兼职信息任务发布、承接、浏览等服务（以下称“趣玩赚服务”）。趣玩赚上的信息是由用户自行发布，由发布者对信息的真实性负责并支付赏金。用户发布任务及接单任务需遵守任务<strong>【发布规则】</strong>及<strong>【接单规则】</strong>。</span>
     </p>
     <p style="margin-left:28px;text-align:left">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">一、<span
@@ -43,7 +43,7 @@ export const AGREEMENT = `
             style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">定义</span>
     </p>
     <p style="text-indent:28px">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户：指使用钱帮手机客户端注册成为平台的用户。</span>
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户：指使用趣玩赚手机客户端注册成为平台的用户。</span>
     </p>
     <p style="margin-left:28px;text-align:left">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">二、<span
@@ -51,23 +51,23 @@ export const AGREEMENT = `
             style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户协议的接受和修改</span>
     </p>
     <p style="text-indent:28px">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">为有效利用钱帮账户资源，请您务必审慎阅读、充分理解各条款内容，<strong><span
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">为有效利用趣玩赚账户资源，请您务必审慎阅读、充分理解各条款内容，<strong><span
                     style="text-decoration:underline;">特别是免除或者限制责任的条款，以及开通或使用某项服务的单独协议，并选择接受或不接受。限制、免责条款可能以加粗形式提示您注意。</span></strong></span>
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">除非您已阅读并接受本规则所有条款，否则您无权申请或使用钱帮账户。您申请或使用钱帮账户的行为即视为您已阅读并同意受本规则的约束。无论用户以任何方式使用钱帮服务，包括但不限于发布信息，接单任务，浏览信息，发布广告，均视为用户已经阅读且接受本协议。届时用户不应以未阅读本协议内容为由，主张本协议无效，或主张撤销本协议。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">除非您已阅读并接受本规则所有条款，否则您无权申请或使用趣玩赚账户。您申请或使用趣玩赚账户的行为即视为您已阅读并同意受本规则的约束。无论用户以任何方式使用趣玩赚服务，包括但不限于发布信息，接单任务，浏览信息，发布广告，均视为用户已经阅读且接受本协议。届时用户不应以未阅读本协议内容为由，主张本协议无效，或主张撤销本协议。</span>
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如遇国家法律法规变更或钱帮产品和服务规则发生调整，钱帮有权根据需要及时地修改本协议，并以网站公示的方式进行公示，本协议改动以网站公示为准，钱帮不再单独通知用户，用户对此表示理解并接受，如用户不同意相关变更内容，请停止使用钱帮服务。如果用户继续享用服务，则视为无条件接受本协议条款的变动。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如遇国家法律法规变更或趣玩赚产品和服务规则发生调整，趣玩赚有权根据需要及时地修改本协议，并以网站公示的方式进行公示，本协议改动以网站公示为准，趣玩赚不再单独通知用户，用户对此表示理解并接受，如用户不同意相关变更内容，请停止使用趣玩赚服务。如果用户继续享用服务，则视为无条件接受本协议条款的变动。</span>
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户应当在使用钱帮服务之前认真阅读本协议全部内容。如用户对本协议有任何疑问的，应向钱帮客服咨询。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户应当在使用趣玩赚服务之前认真阅读本协议全部内容。如用户对本协议有任何疑问的，应向趣玩赚客服咨询。</span>
     </p>
     <p style="text-indent:28px">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">钱帮拥有对本协议的最终解释权。</span>
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">趣玩赚拥有对本协议的最终解释权。</span>
     </p>
     <p style="margin-left:28px;text-align:left">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">三、<span
@@ -76,9 +76,9 @@ export const AGREEMENT = `
     </p>
     <p style="text-indent:28px">
         <strong><span style="text-decoration:underline;"><span
-                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">钱帮的服务仅向18周岁以上有完全民事行为能力人提供。</span></span></strong><span
-            style="font-family: &#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户使用钱帮服务时应确认自身为具备相应民事行为能力的自然人、法人或其他组织。<strong><span
-                    style="text-decoration:underline;">若用户不具备前述主体资格，不可使用钱帮服务，且用户及用户的监护人应承担因此导致的一切不利后果，且钱帮有权注销用户的账户，并可向用户及用户监护人索偿。钱帮有权单方面无理由禁止某一用户使用钱帮服务。</span></strong></span>
+                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">趣玩赚的服务仅向18周岁以上有完全民事行为能力人提供。</span></span></strong><span
+            style="font-family: &#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户使用趣玩赚服务时应确认自身为具备相应民事行为能力的自然人、法人或其他组织。<strong><span
+                    style="text-decoration:underline;">若用户不具备前述主体资格，不可使用趣玩赚服务，且用户及用户的监护人应承担因此导致的一切不利后果，且趣玩赚有权注销用户的账户，并可向用户及用户监护人索偿。趣玩赚有权单方面无理由禁止某一用户使用趣玩赚服务。</span></strong></span>
     </p>
     <p style="margin-left:28px;text-align:left">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">四、<span
@@ -87,12 +87,12 @@ export const AGREEMENT = `
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户使用手机号码加密码完成注册。对于他人使用任何手段获取用户账户及其密码登录钱帮并实施任何的行为，钱帮都视为用户本人的行为，用户不得以该登录非其本人所为为理由，要求钱帮为任何行为负责。<strong><span
-                    style="text-decoration:underline;">钱帮账户所有权属于钱帮平台，用户仅享有账户使用权，未经钱帮许可，用户不得赠与、借用、租用、转让、继承或售卖账户或者以其他方式许可非初始申请注册人使用钱帮账户。</span></strong></span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户使用手机号码加密码完成注册。对于他人使用任何手段获取用户账户及其密码登录趣玩赚并实施任何的行为，趣玩赚都视为用户本人的行为，用户不得以该登录非其本人所为为理由，要求趣玩赚为任何行为负责。<strong><span
+                    style="text-decoration:underline;">趣玩赚账户所有权属于趣玩赚平台，用户仅享有账户使用权，未经趣玩赚许可，用户不得赠与、借用、租用、转让、继承或售卖账户或者以其他方式许可非初始申请注册人使用趣玩赚账户。</span></strong></span>
     </p>
     <p style="text-indent:28px">
         <strong><span style="text-decoration:underline;"><span
-                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在不需要账户的时，用户可以选择注销钱帮账户。用户可以通过个人中心联系客服，由客服帮助用户注销账户。用户在申请注销账户前应将账户内的余额提现。注销账户后将不会受理提现申请。</span></span></strong>
+                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在不需要账户的时，用户可以选择注销趣玩赚账户。用户可以通过个人中心联系客服，由客服帮助用户注销账户。用户在申请注销账户前应将账户内的余额提现。注销账户后将不会受理提现申请。</span></span></strong>
     </p>
     <p style="margin-left:28px;text-align:left">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">五、<span
@@ -100,9 +100,9 @@ export const AGREEMENT = `
             style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">内容</span>
     </p>
     <p style="text-indent:28px">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">使用钱帮服务前，用户应理解钱帮提供的所有信息，<strong><span
-                    style="text-decoration:underline;">其中包含的文字，图片，链接等（以下称“内容”）均由用户自行上传，并且承担全部责任，钱帮不对信息的真实性，准确性，有效性和安全性负责，用户在交易中发生的任何纠纷与钱帮无关。</span></strong>为了最大限度地保障用户的权益不被侵害，我们制定了“安全交易须知”，用户必须保证自己拥有所提供的信息的版权，或获得他人授权，并保证该信息不侵犯到任何第三人的合法权益；如用户违反本条规定造成钱帮被第三人索赔的，用户应全额承担钱帮一切损失(包括但不限于各种赔偿费、律师费及为此支出的其它合理费用)。<strong><span
-                    style="text-decoration:underline;">同时当用户向钱帮提供内容时，用户即授予钱帮永久性的、全球的、不可撤销的、免使用费的、可再次授权给他人的使用权。用户必须自行评估和承担在钱帮上提供和使用内容而产生的一切风险、损失。</span></strong>钱帮有权利单方面无理由删除任何免费信息，有权利暂停任何付费信息的发布直至用户提供相关证据证明该信息的真实性及合法性。</span>
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">使用趣玩赚服务前，用户应理解趣玩赚提供的所有信息，<strong><span
+                    style="text-decoration:underline;">其中包含的文字，图片，链接等（以下称“内容”）均由用户自行上传，并且承担全部责任，趣玩赚不对信息的真实性，准确性，有效性和安全性负责，用户在交易中发生的任何纠纷与趣玩赚无关。</span></strong>为了最大限度地保障用户的权益不被侵害，我们制定了“安全交易须知”，用户必须保证自己拥有所提供的信息的版权，或获得他人授权，并保证该信息不侵犯到任何第三人的合法权益；如用户违反本条规定造成趣玩赚被第三人索赔的，用户应全额承担趣玩赚一切损失(包括但不限于各种赔偿费、律师费及为此支出的其它合理费用)。<strong><span
+                    style="text-decoration:underline;">同时当用户向趣玩赚提供内容时，用户即授予趣玩赚永久性的、全球的、不可撤销的、免使用费的、可再次授权给他人的使用权。用户必须自行评估和承担在趣玩赚上提供和使用内容而产生的一切风险、损失。</span></strong>趣玩赚有权利单方面无理由删除任何免费信息，有权利暂停任何付费信息的发布直至用户提供相关证据证明该信息的真实性及合法性。</span>
     </p>
     <p style="margin-left:28px;text-align:left">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">六、<span
@@ -111,32 +111,32 @@ export const AGREEMENT = `
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户在发布、浏览或使用信息时，不应做出任何法律法规禁止的行为。对于违反国家规定的《互联网违禁信息》的内容，钱帮一经发现，将立即删除，并可向有关部门反映。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户在发布、浏览或使用信息时，不应做出任何法律法规禁止的行为。对于违反国家规定的《互联网违禁信息》的内容，趣玩赚一经发现，将立即删除，并可向有关部门反映。</span>
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户使用钱帮服务时，不得违背社会公共利益或公共道德，不得损害他人的合法权益，不得违反本协议及相关规则。<strong><span
-                    style="text-decoration:underline;">如果违反前述承诺，用户应自行承担所有法律后果，钱帮不负任何连带责任。</span></strong></span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户使用趣玩赚服务时，不得违背社会公共利益或公共道德，不得损害他人的合法权益，不得违反本协议及相关规则。<strong><span
+                    style="text-decoration:underline;">如果违反前述承诺，用户应自行承担所有法律后果，趣玩赚不负任何连带责任。</span></strong></span>
     </p>
     <p style="text-indent:28px">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户违反本协议及相关规则时，钱帮有权终止对用户提供的钱帮服务，<strong><span
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户违反本协议及相关规则时，趣玩赚有权终止对用户提供的趣玩赚服务，<strong><span
                     style="text-decoration:underline;">且无须征得用户同意或提前通知用户。</span></strong></span>
     </p>
     <p style="text-indent:28px">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如您违反法律法规、钱帮各服务协议或业务规则的规定，<strong><span
-                    style="text-decoration:underline;">钱帮有权进行独立判断并随时限制、冻结或终止您对钱帮账户的使用并采取其他措施，</span></strong>根据实际情况决定是否恢复使用。</span>
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如您违反法律法规、趣玩赚各服务协议或业务规则的规定，<strong><span
+                    style="text-decoration:underline;">趣玩赚有权进行独立判断并随时限制、冻结或终止您对趣玩赚账户的使用并采取其他措施，</span></strong>根据实际情况决定是否恢复使用。</span>
     </p>
     <p style="text-indent:28px">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如果钱帮发现您并非账户初始申请注册人，<strong><span
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如果趣玩赚发现您并非账户初始申请注册人，<strong><span
                     style="text-decoration:underline;">平台有权在未经通知的情况下终止您使用该账户。</span></strong></span>
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">为了充分利用钱帮账户资源，如果您存在注册账户后未及时进行初次登录使用，或长期未登陆使用账户等情形，钱帮有权终止该账户的使用。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">为了充分利用趣玩赚账户资源，如果您存在注册账户后未及时进行初次登录使用，或长期未登陆使用账户等情形，趣玩赚有权终止该账户的使用。</span>
     </p>
     <p style="text-indent:28px">
         <strong><span style="text-decoration:underline;"><span
-                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">钱帮按照本规则或相关法律法规，限制、冻结或终止您对账户的使用，而由此给您带来的损失（包括但不限于用户资料、余额及相关数据等的清空等），由您自行承担。</span></span></strong>
+                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">趣玩赚按照本规则或相关法律法规，限制、冻结或终止您对账户的使用，而由此给您带来的损失（包括但不限于用户资料、余额及相关数据等的清空等），由您自行承担。</span></span></strong>
     </p>
     <p style="margin-left:28px;text-align:left">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">七、<span
@@ -145,9 +145,9 @@ export const AGREEMENT = `
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">钱帮是个对大多数用户免费的兼职信息任务接发平台，但针对钱帮的特定服务收费。若用户所使用的服务需支付费用，用户有权决定是否使用并接受该收费服务。钱帮上的收费服务以人民币计价，定价上可能随时调整。我们将以平台公告的方式，来通知用户收费政策的变更。钱帮也可选择在促销或新服务推出时，暂时调整我们的服务收费，该调整于我们公布促销或新服务时开始生效。付费服务是在系统接收到用户的付款后才开始。请注意：<strong><span
-                    style="text-decoration:underline;">付费服务功能一旦开始，用户不得以任何理由要求取消、终止服务或退款，若因个人行为（如:自行删除）或发布信息内容违反钱帮【发布规则】而被冻结或删除，钱帮将不予退款。</span></strong>钱帮因平台自身需要进行改版的，若涉及付费产品的实质性变化，包括但不限于产品取消、服务内容发生增加或减少、登载页面变更、发布变更的，钱帮可提前终止服务并将客户已付款但未履行服务部分款项退还客户。<strong><span
-                    style="text-decoration:underline;">此类情况不视为钱帮违约。</span></strong></span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">趣玩赚是个对大多数用户免费的兼职信息任务接发平台，但针对趣玩赚的特定服务收费。若用户所使用的服务需支付费用，用户有权决定是否使用并接受该收费服务。趣玩赚上的收费服务以人民币计价，定价上可能随时调整。我们将以平台公告的方式，来通知用户收费政策的变更。趣玩赚也可选择在促销或新服务推出时，暂时调整我们的服务收费，该调整于我们公布促销或新服务时开始生效。付费服务是在系统接收到用户的付款后才开始。请注意：<strong><span
+                    style="text-decoration:underline;">付费服务功能一旦开始，用户不得以任何理由要求取消、终止服务或退款，若因个人行为（如:自行删除）或发布信息内容违反趣玩赚【发布规则】而被冻结或删除，趣玩赚将不予退款。</span></strong>趣玩赚因平台自身需要进行改版的，若涉及付费产品的实质性变化，包括但不限于产品取消、服务内容发生增加或减少、登载页面变更、发布变更的，趣玩赚可提前终止服务并将客户已付款但未履行服务部分款项退还客户。<strong><span
+                    style="text-decoration:underline;">此类情况不视为趣玩赚违约。</span></strong></span>
     </p>
     <p style="margin-left:28px;text-align:left">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">八、<span
@@ -156,7 +156,7 @@ export const AGREEMENT = `
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">钱帮任务余额指的是用户在平台赚取的赏金。充值余额指的是用户充值的金额，可以用于任务的发布。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">趣玩赚任务余额指的是用户在平台赚取的赏金。充值余额指的是用户充值的金额，可以用于任务的发布。</span>
     </p>
     <p style="text-indent:28px">
         <strong><span style="text-decoration:underline;"><span
@@ -173,7 +173,7 @@ export const AGREEMENT = `
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户发现钱帮上的任何内容不符合法律规定，不符合本用户协议规定，或不符合钱帮任务发布规则的规定时，用户有权利和义务通过点击“举报”链接向钱帮举报或申述。当用户确认自己的个人信息被盗用，或者用户的版权或者其他权利被侵害，请将此情况报告给钱帮。我们接受在线提交举报（在个人中心意见反馈按要求提交信息）：</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户发现趣玩赚上的任何内容不符合法律规定，不符合本用户协议规定，或不符合趣玩赚任务发布规则的规定时，用户有权利和义务通过点击“举报”链接向趣玩赚举报或申述。当用户确认自己的个人信息被盗用，或者用户的版权或者其他权利被侵害，请将此情况报告给趣玩赚。我们接受在线提交举报（在个人中心意见反馈按要求提交信息）：</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:84px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">1.<span
@@ -197,7 +197,7 @@ export const AGREEMENT = `
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">钱帮会在核实后，根据相应法规予以配合处理。钱帮保留在用户提供的证据不尽充分详实或难以与用户取得联系进一步核实时暂停处理侵权通知的权利。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">趣玩赚会在核实后，根据相应法规予以配合处理。趣玩赚保留在用户提供的证据不尽充分详实或难以与用户取得联系进一步核实时暂停处理侵权通知的权利。</span>
     </p>
     <p style="margin-left:28px;text-align:left">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">十、<span
@@ -206,11 +206,11 @@ export const AGREEMENT = `
     </p>
     <p style="text-indent:28px">
         <strong><span style="text-decoration:underline;"><span
-                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">鉴于钱帮仅作为用户网上发布信息的网络平台提供者，并非信息的发布者，因此钱帮无法保证其内容的真实性、准确性、有效性和安全性。</span></span></strong><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户应确认在使用钱帮所提供的服务前，用户已经知晓，理解并认可此情况。<strong><span
-                    style="text-decoration:underline;">用户在使用非钱帮，自行上传的内容时遭受的损失和其它一切后果由用户独自承担。</span></strong>用户如因为浏览和使用钱帮上的内容或第三方发布和上传的内容而因此遭受到任何损失，或与其他用户发生争议，就上述损失或争议或任何方面产生有关的索赔、要求、诉讼、损失和损害，<strong><span
-                    style="text-decoration:underline;">用户同意免除钱帮及其关联公司、钱帮的管理层、董事、代理人、关联公司、母公司、子公司和雇员的责任。
-                    由于钱帮上的大多数内容来自用户，钱帮不保证这些信息和用户联络方式的准确性和有效性、以及所提供内容质量的安全性或合法性，用户同意不就其他用户发布的内容或所作所为追究钱帮的责任。钱帮对于用户由于使用钱帮而造成的任何金钱、商誉、名誉的损失，或任何特殊的、间接的、或结果性的损失都不负任何责任。用户同意就用户自身行为之合法性单独承担责任。</span></strong></span>
+                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">鉴于趣玩赚仅作为用户网上发布信息的网络平台提供者，并非信息的发布者，因此趣玩赚无法保证其内容的真实性、准确性、有效性和安全性。</span></span></strong><span
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户应确认在使用趣玩赚所提供的服务前，用户已经知晓，理解并认可此情况。<strong><span
+                    style="text-decoration:underline;">用户在使用非趣玩赚，自行上传的内容时遭受的损失和其它一切后果由用户独自承担。</span></strong>用户如因为浏览和使用趣玩赚上的内容或第三方发布和上传的内容而因此遭受到任何损失，或与其他用户发生争议，就上述损失或争议或任何方面产生有关的索赔、要求、诉讼、损失和损害，<strong><span
+                    style="text-decoration:underline;">用户同意免除趣玩赚及其关联公司、趣玩赚的管理层、董事、代理人、关联公司、母公司、子公司和雇员的责任。
+                    由于趣玩赚上的大多数内容来自用户，趣玩赚不保证这些信息和用户联络方式的准确性和有效性、以及所提供内容质量的安全性或合法性，用户同意不就其他用户发布的内容或所作所为追究趣玩赚的责任。趣玩赚对于用户由于使用趣玩赚而造成的任何金钱、商誉、名誉的损失，或任何特殊的、间接的、或结果性的损失都不负任何责任。用户同意就用户自身行为之合法性单独承担责任。</span></strong></span>
     </p>
     <p style="margin-left:28px;text-align:left">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">十一、<span
@@ -219,19 +219,19 @@ export const AGREEMENT = `
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户使用钱帮提供的任何服务包括但不限于发布信息，浏览信息，发布广告等将导致用户的IP地址为钱帮获得并可能会在平台中显示作为用户的身份标识，同时钱帮将可能根据法律法规的规定向第三方提供该IP地址，用户应对此表示知情并认可。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户使用趣玩赚提供的任何服务包括但不限于发布信息，浏览信息，发布广告等将导致用户的IP地址为趣玩赚获得并可能会在平台中显示作为用户的身份标识，同时趣玩赚将可能根据法律法规的规定向第三方提供该IP地址，用户应对此表示知情并认可。</span>
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户使用钱帮服务、参加钱帮活动、或访问钱帮网页时，钱帮自动接收并记录的用户浏览器传递给钱帮服务器的数据。使用钱帮就意味着同意钱帮将用户使用的IP地址显示出来作为身份标识，即用户IP地址不受本隐私权政策保护；</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户使用趣玩赚服务、参加趣玩赚活动、或访问趣玩赚网页时，趣玩赚自动接收并记录的用户浏览器传递给趣玩赚服务器的数据。使用趣玩赚就意味着同意趣玩赚将用户使用的IP地址显示出来作为身份标识，即用户IP地址不受本隐私权政策保护；</span>
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">钱帮不会向任何人出售或出借用户的个人信息，除非事先得到用户的许可；钱帮亦不允许任何第三方以任何手段收集、编辑、出售、传播或披露用户的个人信息。任何用户如从事上述活动，一经发现，钱帮将采取法律手段追究责任；</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">趣玩赚不会向任何人出售或出借用户的个人信息，除非事先得到用户的许可；趣玩赚亦不允许任何第三方以任何手段收集、编辑、出售、传播或披露用户的个人信息。任何用户如从事上述活动，一经发现，趣玩赚将采取法律手段追究责任；</span>
     </p>
     <p style="text-indent:28px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">为服务用户的目的，<strong><span
-                    style="text-decoration:underline;">钱帮可能通过使用用户的个人信息，向用户提供服务，包括但不限于向用户发出产品和服务信息，或者与钱帮合作伙伴共享信息以便他们向用户发送有关其产品和服务的信息。</span></strong></span>
+                    style="text-decoration:underline;">趣玩赚可能通过使用用户的个人信息，向用户提供服务，包括但不限于向用户发出产品和服务信息，或者与趣玩赚合作伙伴共享信息以便他们向用户发送有关其产品和服务的信息。</span></strong></span>
     </p>
     <p style="text-indent:28px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">用户的个人信息将在下述情况下部分或全部被披露：</span>
@@ -264,20 +264,20 @@ export const AGREEMENT = `
     <p class="MsoListParagraph" style="margin-left:84px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">6.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">其它钱帮依据法律或者平台政策认为合适的披露；</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">其它趣玩赚依据法律或者平台政策认为合适的披露；</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:84px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">7.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在钱帮上创建的某一分类信息交易中，如交易任何一方履行或部分履行了交易义务并提出信息披露请求的，钱帮有权可以决定向该用户提供其交易对方的联络方式等必要信息，以促成交易的完成或纠纷的解决。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在趣玩赚上创建的某一分类信息交易中，如交易任何一方履行或部分履行了交易义务并提出信息披露请求的，趣玩赚有权可以决定向该用户提供其交易对方的联络方式等必要信息，以促成交易的完成或纠纷的解决。</span>
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在使用钱帮服务进行网上交易时，用户不可避免的要向交易对方或潜在的交易对方提供自己的个人信息，如联络方式或者地址等。请用户妥善保护自己的个人信息，仅在必要的情形下向他人提供；若发生用户信息被泄露或盗用的情况，钱帮也提供诸如系统举报、客服电话等服务配合用户的信息安全保护工作。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在使用趣玩赚服务进行网上交易时，用户不可避免的要向交易对方或潜在的交易对方提供自己的个人信息，如联络方式或者地址等。请用户妥善保护自己的个人信息，仅在必要的情形下向他人提供；若发生用户信息被泄露或盗用的情况，趣玩赚也提供诸如系统举报、客服电话等服务配合用户的信息安全保护工作。</span>
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">链接至其他网站，在赞助商广告或用户登录的信息中，或许会在钱帮平台中提供链接至钱帮以外的网站上。钱帮将不为其他网站的隐私权保护规定负责。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">链接至其他网站，在赞助商广告或用户登录的信息中，或许会在趣玩赚平台中提供链接至趣玩赚以外的网站上。趣玩赚将不为其他网站的隐私权保护规定负责。</span>
     </p>
     <p style="margin-left:28px;text-align:left">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">十二、<span
@@ -286,9 +286,9 @@ export const AGREEMENT = `
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">本协议所有内容和条款均受中华人民共和国法律管辖。与钱帮内容、服务相关的争议、钱帮所有用户间的争议、平台与用户间的争议等全部相关争议均不可撤销地受钱帮所有权和运营权所有者实际经营地所在地人民法院的管辖。<strong><span
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">本协议所有内容和条款均受中华人民共和国法律管辖。与趣玩赚内容、服务相关的争议、趣玩赚所有用户间的争议、平台与用户间的争议等全部相关争议均不可撤销地受趣玩赚所有权和运营权所有者实际经营地所在地人民法院的管辖。<strong><span
                     style="text-decoration:underline;">用户自愿放弃选择以网络终端、服务器所在地、侵权行为所在地等其它地点作为相关管辖地的权利。</span></strong>本协议的规定是可分割的，如本协议的任何规定被裁定为无效或不可执行，该规定可被删除而其余条款继续有效并应予以执行。<strong><span
-                    style="text-decoration:underline;">用户同意，在发生并购时，本协议和所有纳入的协议所确定的权利可由钱帮自行酌情决定向第三方转让。</span></strong>钱帮未就用户或其他方的违约行为采取行动并不等于钱帮放弃就随后或类似的违约行为采取行动的权利。</span>
+                    style="text-decoration:underline;">用户同意，在发生并购时，本协议和所有纳入的协议所确定的权利可由趣玩赚自行酌情决定向第三方转让。</span></strong>趣玩赚未就用户或其他方的违约行为采取行动并不等于趣玩赚放弃就随后或类似的违约行为采取行动的权利。</span>
     </p>
     <p style="margin-left:28px;text-align:left">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">十三、<span
@@ -297,7 +297,7 @@ export const AGREEMENT = `
     </p>
     <p style="text-indent:28px">
         <strong><span style="text-decoration:underline;"><span
-                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">钱帮提供服务有关的用户协议和服务条款的修改、服务的变更、收费政策的变更或其它重要事件的通告都会以平台公告和发布的方式通知用户。</span></span></strong>
+                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">趣玩赚提供服务有关的用户协议和服务条款的修改、服务的变更、收费政策的变更或其它重要事件的通告都会以平台公告和发布的方式通知用户。</span></span></strong>
     </p>
     <p>
         <strong><span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">【安全交易须知】</span></strong>
@@ -441,7 +441,7 @@ export const AGREEMENT = `
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">10.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp; </span></span><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">任务价格设定合理，钱帮平台用户均为自然人，非机器亦非刷手，几毛钱的任务又让注册又绑定的，就请不要再抱怨无人接单了，互利才可成交生意，抱着占便宜的目的就请不要发单了；</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">任务价格设定合理，趣玩赚平台用户均为自然人，非机器亦非刷手，几毛钱的任务又让注册又绑定的，就请不要再抱怨无人接单了，互利才可成交生意，抱着占便宜的目的就请不要发单了；</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">11.<span
@@ -540,7 +540,7 @@ export const AGREEMENT = `
     </p>
     <p>
         <strong><span
-                style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">注：本规则会根据业务发展的需要适时作出调整和修改，最终解释权归钱帮所有。</span></strong>
+                style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">注：本规则会根据业务发展的需要适时作出调整和修改，最终解释权归趣玩赚所有。</span></strong>
     </p>
     <p>
         <strong><span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">任务【接单规则】</span></strong>
@@ -608,7 +608,7 @@ export const AGREEMENT = `
     </p>
     <p>
         <strong><span
-                style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">注：本规则会根据业务发展的需要适时作出调整和修改，最终解释权归钱帮所有。</span></strong>
+                style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">注：本规则会根据业务发展的需要适时作出调整和修改，最终解释权归趣玩赚所有。</span></strong>
     </p>
     <p>
         <br />
@@ -641,22 +641,22 @@ export const PRIVACY = `
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在使用钱帮各项产品或服务前，请您务必仔细阅读并透彻理解本政策，在确认充分理解并同意后使用相关产品或服务。如果您不同意《隐私权政策》的任何内容，您应立即停止使用众钱帮平台服务。一旦您开始使用钱帮各项产品或服务，即表示您已充分理解并同意钱帮平台按照本政策合法收集、使用和保护您的个人信息。如对本政策内容有任何疑问、意见或建议，您可通过钱帮提供的各种联系方式与我们联系。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在使用趣玩赚各项产品或服务前，请您务必仔细阅读并透彻理解本政策，在确认充分理解并同意后使用相关产品或服务。如果您不同意《隐私权政策》的任何内容，您应立即停止使用众趣玩赚平台服务。一旦您开始使用趣玩赚各项产品或服务，即表示您已充分理解并同意趣玩赚平台按照本政策合法收集、使用和保护您的个人信息。如对本政策内容有任何疑问、意见或建议，您可通过趣玩赚提供的各种联系方式与我们联系。</span>
     </p>
     <p style="text-indent:28px">
         <strong><span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">适用范围：<span
-                    style="text-decoration:underline;">本政策适用于钱帮所提供的所有产品和服务。</span></span></strong>
+                    style="text-decoration:underline;">本政策适用于趣玩赚所提供的所有产品和服务。</span></span></strong>
     </p>
     <p style="text-indent:28px">
         <strong><span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">不适用范围：<span
-                    style="text-decoration:underline;">本政策不适用于其他第三方向您提供的服务，也不适用于钱帮平台中已另行独立设置法律声明及隐私权政策的产品或服务。例如钱帮上的悬赏（任务）发布者依托钱帮平台向您发出任务邀请时，您向悬赏主提供的或在完成悬赏（任务）的过程中向任何其他第三方平台提供的个人信息不适用本政策。</span></span></strong>
+                    style="text-decoration:underline;">本政策不适用于其他第三方向您提供的服务，也不适用于趣玩赚平台中已另行独立设置法律声明及隐私权政策的产品或服务。例如趣玩赚上的悬赏（任务）发布者依托趣玩赚平台向您发出任务邀请时，您向悬赏主提供的或在完成悬赏（任务）的过程中向任何其他第三方平台提供的个人信息不适用本政策。</span></span></strong>
     </p>
     <p>
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">第一部分 定义</span>
     </p>
     <p style="text-indent:28px">
-        <strong><span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">钱帮</span></strong><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">：指钱帮客户端。</span>
+        <strong><span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">趣玩赚</span></strong><span
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">：指趣玩赚客户端。</span>
     </p>
     <p style="text-indent:28px">
         <strong><span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">个人信息</span></strong><span
@@ -682,7 +682,7 @@ export const PRIVACY = `
             style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">：指在实现日常业务功能所涉及的系统中去除个人信息的行为，使其保持不可被检索、访问的状态。</span>
     </p>
     <p style="text-indent:28px">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">除另有约定外，本政策所用定义与《钱帮平台服务协议》中的定义具有相同的涵义。</span>
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">除另有约定外，本政策所用定义与《趣玩赚平台服务协议》中的定义具有相同的涵义。</span>
     </p>
     <p>
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">第二部分 隐私权政策</span>
@@ -770,23 +770,23 @@ export const PRIVACY = `
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">我们通过钱帮平台账号为您提供用户服务。为使用我们的用户服务，您需要创建钱帮平台账号，根据《移动互联网应用程序信息服务管理规定》申请注册需要提供手机号码用于认证您为一个真实用户，并提供虚拟使用的用户账号和密码。如果您仅需使用浏览、搜索服务，您不需要注册成为我们的用户及提供上述信息。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">我们通过趣玩赚平台账号为您提供用户服务。为使用我们的用户服务，您需要创建趣玩赚平台账号，根据《移动互联网应用程序信息服务管理规定》申请注册需要提供手机号码用于认证您为一个真实用户，并提供虚拟使用的用户账号和密码。如果您仅需使用浏览、搜索服务，您不需要注册成为我们的用户及提供上述信息。</span>
     </p>
     <p style="text-indent:28px">
         <strong><span style="text-decoration:underline;"><span
-                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如果您选择提供姓名、性别、出生年月日、居住地、非注册必须的个人资料，我们可以为您的钱帮平台账号提供提现大额权限。如果您不提供上述信息，不会影响您使用钱帮的浏览、搜索服务。</span></span></strong>
+                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如果您选择提供姓名、性别、出生年月日、居住地、非注册必须的个人资料，我们可以为您的趣玩赚平台账号提供提现大额权限。如果您不提供上述信息，不会影响您使用趣玩赚的浏览、搜索服务。</span></span></strong>
     </p>
     <p style="text-indent:28px">
         <strong><span style="text-decoration:underline;"><span
-                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如果您的钱帮平台账号需要开通悬赏主或服务商，除了上述信息外，我们会收集您的个人身份信息或企业基本信息等法律规定收集的信息。</span></span></strong>
+                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如果您的趣玩赚平台账号需要开通悬赏主或服务商，除了上述信息外，我们会收集您的个人身份信息或企业基本信息等法律规定收集的信息。</span></span></strong>
     </p>
     <p style="text-indent:28px">
         <strong><span style="text-decoration:underline;"><span
-                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">对于需要通过钱帮平台账号才能使用的服务，我们可能会根据您提供的上述信息校验您的身份，确保我们是在为您本人提供服务。</span></span></strong>
+                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">对于需要通过趣玩赚平台账号才能使用的服务，我们可能会根据您提供的上述信息校验您的身份，确保我们是在为您本人提供服务。</span></span></strong>
     </p>
     <p style="text-indent:28px">
         <strong><span style="text-decoration:underline;"><span
-                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如果您已拥有钱帮平台账号，我们可能会在钱帮平台服务中显示您的部分上述个人信息，以及您在钱帮平台上或与钱帮平台账号相关联的产品和服务中执行的操作，例如通过钱帮平台账号集中展示您的个人资料或做悬赏（任务）记录。我们会尊重您对钱帮平台服务和钱帮平台账号设置所做的选择。</span></span></strong>
+                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如果您已拥有趣玩赚平台账号，我们可能会在趣玩赚平台服务中显示您的部分上述个人信息，以及您在趣玩赚平台上或与趣玩赚平台账号相关联的产品和服务中执行的操作，例如通过趣玩赚平台账号集中展示您的个人资料或做悬赏（任务）记录。我们会尊重您对趣玩赚平台服务和趣玩赚平台账号设置所做的选择。</span></span></strong>
     </p>
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">2.<span
@@ -852,18 +852,18 @@ export const PRIVACY = `
     <p class="MsoListParagraph" style="margin-left:56px">
         <strong><span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">3.<span
                     style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp; </span></span></strong><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">为提高您使用我们及合作伙伴提供服务的安全性，确保操作环境安全与识别平台账号异常状态，保护您或其他用户或公众的人身财产安全免遭侵害，更好地预防钓鱼网站、欺诈、网络漏洞、计算机病毒、网络攻击、网络侵入等安全风险，更准确地识别违反法律法规或钱帮相关协议规则的情况，<strong><span
-                    style="text-decoration:underline;">我们可能使用或整合您的账号信息、做悬赏信息、设备信息、有关网络日志以及我们合作伙伴取得您授权或依适用的法律共享的信息，综合判断您钱帮平台账号及做悬赏风险、进行身份验证、检测及防范安全事件，并依法采取必要的记录、审计、分析、处置措施。</span></strong></span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">为提高您使用我们及合作伙伴提供服务的安全性，确保操作环境安全与识别平台账号异常状态，保护您或其他用户或公众的人身财产安全免遭侵害，更好地预防钓鱼网站、欺诈、网络漏洞、计算机病毒、网络攻击、网络侵入等安全风险，更准确地识别违反法律法规或趣玩赚相关协议规则的情况，<strong><span
+                    style="text-decoration:underline;">我们可能使用或整合您的账号信息、做悬赏信息、设备信息、有关网络日志以及我们合作伙伴取得您授权或依适用的法律共享的信息，综合判断您趣玩赚平台账号及做悬赏风险、进行身份验证、检测及防范安全事件，并依法采取必要的记录、审计、分析、处置措施。</span></strong></span>
     </p>
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">4.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">我们可能会对收集的信息进行去标识化地研究、统计分析和预测，用于改善钱帮的内容和布局，为商业决策提供产品或服务支撑，以及改进我们的产品和服务（例如使用匿名数据进行机器学习或模型算法训练）。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">我们可能会对收集的信息进行去标识化地研究、统计分析和预测，用于改善趣玩赚的内容和布局，为商业决策提供产品或服务支撑，以及改进我们的产品和服务（例如使用匿名数据进行机器学习或模型算法训练）。</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">5.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如我们停止运营钱帮产品或服务，我们将及时停止继续收集您个人信息的活动，并提前三十日在平台首页持续公示停止服务的信息，或将停止运营的通知以逐一送达的形式通知您，并对我们所持有的与已关停业务相关的个人信息进行删除或匿名化处理。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如我们停止运营趣玩赚产品或服务，我们将及时停止继续收集您个人信息的活动，并提前三十日在平台首页持续公示停止服务的信息，或将停止运营的通知以逐一送达的形式通知您，并对我们所持有的与已关停业务相关的个人信息进行删除或匿名化处理。</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:56px">
         <strong><span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">6.<span
@@ -915,7 +915,7 @@ export const PRIVACY = `
                 style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">共享</span></strong>
     </p>
     <p style="text-indent:28px">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">我们不会与钱帮服务提供者以外的公司、组织和个人共享您的个人信息，但以下情况除外：</span>
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">我们不会与趣玩赚服务提供者以外的公司、组织和个人共享您的个人信息，但以下情况除外：</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">1.<span
@@ -930,13 +930,13 @@ export const PRIVACY = `
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">3.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在您主动选择情况下共享：您通过钱帮平台购买商品或服务，我们会根据您的选择，将您的信息中与做悬赏有关的必要信息共享给相关商品或服务的提供者，以实现您的做悬赏服务需求。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在您主动选择情况下共享：您通过趣玩赚平台购买商品或服务，我们会根据您的选择，将您的信息中与做悬赏有关的必要信息共享给相关商品或服务的提供者，以实现您的做悬赏服务需求。</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">4.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
             style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">与间共享：<strong><span
-                    style="text-decoration:underline;">为便于我们基于钱帮平台账户向您提供产品和服务，推荐您可能感兴趣的信息，识别平台账户异常，保护钱帮用户或公众的人身财产安全免遭侵害，您的个人信息可能会与我们的和/或指定的服务提供商共享。</span></strong>我们只会共享必要的个人信息，且受本隐私政策中所声明目的的约束，如果我们共享您的个人敏感信息或改变个人信息的使用及处理目的，将再次征求您的授权同意。</span>
+                    style="text-decoration:underline;">为便于我们基于趣玩赚平台账户向您提供产品和服务，推荐您可能感兴趣的信息，识别平台账户异常，保护趣玩赚用户或公众的人身财产安全免遭侵害，您的个人信息可能会与我们的和/或指定的服务提供商共享。</span></strong>我们只会共享必要的个人信息，且受本隐私政策中所声明目的的约束，如果我们共享您的个人敏感信息或改变个人信息的使用及处理目的，将再次征求您的授权同意。</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">5.<span
@@ -976,7 +976,7 @@ export const PRIVACY = `
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">2.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在钱帮服务提供者发生合并、收购、资产转让或破产清算情形，或其他涉及合并、收购、资产转让或破产清算情形时，如涉及到个人信息转让，我们会要求新的持有您个人信息的公司、组织继续受本政策的约束，否则我们将要求该公司、组织和个人重新向您征求授权同意。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在趣玩赚服务提供者发生合并、收购、资产转让或破产清算情形，或其他涉及合并、收购、资产转让或破产清算情形时，如涉及到个人信息转让，我们会要求新的持有您个人信息的公司、组织继续受本政策的约束，否则我们将要求该公司、组织和个人重新向您征求授权同意。</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:48px">
         <strong><span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">（三） </span></strong><strong><span
@@ -1007,8 +1007,8 @@ export const PRIVACY = `
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">2.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><strong><span
                 style="text-decoration:underline;"><span
-                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如果我们确定您出现违反法律法规或严重违反钱帮平台相关协议及规则的情况，或为保护钱帮平台用户或公众的人身财产安全免遭侵害，我们可能依据法律法规或征得您同意的情况下披露关于您的个人信息，</span></span></strong><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">包括您的相关违规行为以及钱帮平台已对您采取的措施。例如，若您因诈骗行为而严重违反钱帮平台规则，我们可能会公开披露您的认证主体信息与违规情况。</span>
+                    style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如果我们确定您出现违反法律法规或严重违反趣玩赚平台相关协议及规则的情况，或为保护趣玩赚平台用户或公众的人身财产安全免遭侵害，我们可能依据法律法规或征得您同意的情况下披露关于您的个人信息，</span></span></strong><span
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">包括您的相关违规行为以及趣玩赚平台已对您采取的措施。例如，若您因诈骗行为而严重违反趣玩赚平台规则，我们可能会公开披露您的认证主体信息与违规情况。</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:48px">
         <strong><span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">（四） </span></strong><strong><span
@@ -1061,7 +1061,7 @@ export const PRIVACY = `
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">1.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
             style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">我们已采取符合业界标准、合理可行的安全防护措施保护您的信息，防止个人信息遭到未经授权访问、公开披露、使用、修改、损坏或丢失。例如，在您的浏览器与服务器之间交换数据时受
-            SSL协议加密保护；我们同时对钱帮网站提供HTTPS协议安全浏览方式；我们会使用加密技术提高个人信息的安全性；我们会使用受信赖的保护机制防止个人信息遭到恶意攻击；我们会部署访问控制机制，尽力确保只有授权人员才可访问个人信息；以及我们会定期举办安全和隐私保护培训课程，加强员工对于保护个人信息重要性的认识。</span>
+            SSL协议加密保护；我们同时对趣玩赚网站提供HTTPS协议安全浏览方式；我们会使用加密技术提高个人信息的安全性；我们会使用受信赖的保护机制防止个人信息遭到恶意攻击；我们会部署访问控制机制，尽力确保只有授权人员才可访问个人信息；以及我们会定期举办安全和隐私保护培训课程，加强员工对于保护个人信息重要性的认识。</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">2.<span
@@ -1081,11 +1081,11 @@ export const PRIVACY = `
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">5.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">互联网并非绝对安全的环境，使用钱帮平台服务时，<strong>我们强烈建议您不要使用非钱帮平台推荐的通信方式发送您的信息。</strong>您可以通过我们的服务建立联系和相互分享。当您通过我们的服务创建交流、做悬赏或分享时，您可以自主选择沟通、做悬赏或分享的对象，作为能够看到您的做悬赏内容、联络方式、交流信息或分享内容等相关信息的第三方。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">互联网并非绝对安全的环境，使用趣玩赚平台服务时，<strong>我们强烈建议您不要使用非趣玩赚平台推荐的通信方式发送您的信息。</strong>您可以通过我们的服务建立联系和相互分享。当您通过我们的服务创建交流、做悬赏或分享时，您可以自主选择沟通、做悬赏或分享的对象，作为能够看到您的做悬赏内容、联络方式、交流信息或分享内容等相关信息的第三方。</span>
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在使用钱帮服务进行网上做悬赏时，您不可避免地要向做悬赏对方或潜在的做悬赏对方披露自己的个人信息，如联络方式或联系地址。请您妥善保护自己的个人信息，仅在必要的情形下向他人提供。如您发现自己的个人信息尤其是您的账号或密码发生泄露，请您立即联络钱帮客服，以便我们根据您的申请采取相应措施。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">在使用趣玩赚服务进行网上做悬赏时，您不可避免地要向做悬赏对方或潜在的做悬赏对方披露自己的个人信息，如联络方式或联系地址。请您妥善保护自己的个人信息，仅在必要的情形下向他人提供。如您发现自己的个人信息尤其是您的账号或密码发生泄露，请您立即联络趣玩赚客服，以便我们根据您的申请采取相应措施。</span>
     </p>
     <p style="text-indent:28px">
         <span
@@ -1098,7 +1098,7 @@ export const PRIVACY = `
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">6.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">我们将不定期更新并公开安全风险、个人信息安全影响评估报告等有关内容，您可通过钱帮公告方式获得。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">我们将不定期更新并公开安全风险、个人信息安全影响评估报告等有关内容，您可通过趣玩赚公告方式获得。</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">7.<span
@@ -1129,11 +1129,11 @@ export const PRIVACY = `
             style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">账号信息——如果您希望访问或编辑您的账号中的个人基本资料信息和支付信息、更改您的密码、添加安全信息或关闭您的账号等，您可以通过登录账号通过“账号管理”执行此类操作。</span>
     </p>
     <p style="text-indent:28px">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">您可以在钱帮中查阅您的提现记录、做悬赏记录等。</span>
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">您可以在趣玩赚中查阅您的提现记录、做悬赏记录等。</span>
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如果您无法通过上述路径查询该等信息，您可以随时通过钱帮客服与我们取得联系。我们将在15天内回复您的访问请求。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如果您无法通过上述路径查询该等信息，您可以随时通过趣玩赚客服与我们取得联系。我们将在15天内回复您的访问请求。</span>
     </p>
     <p style="text-indent:28px">
         <span
@@ -1201,7 +1201,7 @@ export const PRIVACY = `
                 style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">注销您的账户</span></strong>
     </p>
     <p style="text-indent:28px">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">注销账户需要满足的具体条件请依照《钱帮注销协议》中规定的内容：</span>
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">注销账户需要满足的具体条件请依照《趣玩赚注销协议》中规定的内容：</span>
     </p>
     <p style="text-indent:28px">
         <span
@@ -1216,7 +1216,7 @@ export const PRIVACY = `
             style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">为保障安全，您可能需要提供书面请求，或以其他方式证明您的身份。我们可能会先要求您验证自己的身份，然后再处理您的请求。</span>
     </p>
     <p style="text-indent:28px">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">我们将在15天内做出答复。如您不满意，还可以通过钱帮客服发起投诉。</span>
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">我们将在15天内做出答复。如您不满意，还可以通过趣玩赚客服发起投诉。</span>
     </p>
     <p style="text-indent:28px">
         <span
@@ -1298,7 +1298,7 @@ export const PRIVACY = `
     </p>
     <p style="text-indent:28px">
         <span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">对于重大变更，我们还会提供更为显著的通知（包括我们会通过钱帮公示的方式进行通知甚至向您提供弹窗提示）。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">对于重大变更，我们还会提供更为显著的通知（包括我们会通过趣玩赚公示的方式进行通知甚至向您提供弹窗提示）。</span>
     </p>
     <p style="text-indent:28px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">本政策所指的重大变更包括但不限于：</span>
@@ -1336,7 +1336,7 @@ export const PRIVACY = `
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">7.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">我们还会将本隐私权政策的旧版本在钱帮专门页面存档，供您查阅。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">我们还会将本隐私权政策的旧版本在趣玩赚专门页面存档，供您查阅。</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:28px">
         <a></a><strong><span style="font-size:16px;font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">九、<span
@@ -1350,15 +1350,15 @@ export const PRIVACY = `
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">1.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如对本政策内容有任何疑问、意见或建议，您可通过钱帮客服及钱帮服务中心在线客服与我们联系。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如对本政策内容有任何疑问、意见或建议，您可通过趣玩赚客服及趣玩赚服务中心在线客服与我们联系。</span>
     </p>
     <p class="MsoListParagraph" style="margin-left:56px">
         <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">2.<span
                 style="font:9px &#39;Times New Roman&#39;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如发现个人信息可能被泄露，您可以通过钱帮官方电话投诉举报。</span>
+            style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">如发现个人信息可能被泄露，您可以通过趣玩赚官方电话投诉举报。</span>
     </p>
     <p style="text-indent:28px">
-        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">本《协议》最终解释权在法律允许的范围内归钱帮所有。</span>
+        <span style="font-family:&#39;苹方 常规&#39;,&#39;sans-serif&#39;">本《协议》最终解释权在法律允许的范围内归趣玩赚所有。</span>
     </p>
     <p>
         <br />
