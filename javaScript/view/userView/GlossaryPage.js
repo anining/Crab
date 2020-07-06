@@ -38,7 +38,6 @@ export default class GlossaryPage extends Component {
 
     async _getNoteBook () {
         const ret = await getNoteBook();
-        console.log(ret, '??');
         if (ret && !ret.error) {
             this.setState({
                 glossaryInfo: ret.data
@@ -58,7 +57,7 @@ export default class GlossaryPage extends Component {
 
     _renderIdiomList () {
         try {
-            if (this.state.glossaryInfo) {
+            if (this.state.glossaryInfo && this.state.glossaryInfo.length) {
                 const view = [];
                 this.state.glossaryInfo.forEach((item, index) => {
                     view.push(
@@ -88,7 +87,7 @@ export default class GlossaryPage extends Component {
                 <Header color={'#fff'} label={'生词本'} style={[{ backgroundColor: '#FED465', borderBottomWidth: 0 }, css.pa]} icon={header3}/>
                 <ImageBackground source={game65} style={[styles.glossaryWrap, css.pr]}>
                     <ScrollView style={[css.pa, styles.glossaryInnerBox]}>
-                        <View style={[css.flex, css.fw, css.js, css.afs, { flex: 1, height: 'auto' }]}>
+                        <View style={[css.flex, css.fw, css.js, css.afs, { flex: 1, height: 'auto', minHeight: 200 }]}>
                             {this._renderIdiomList()}
                         </View>
                     </ScrollView>

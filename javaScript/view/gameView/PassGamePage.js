@@ -40,6 +40,12 @@ import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { bindData, getGlobal, getPath } from '../../global/global';
 import { avatarProLevelPosition, getGradeConfig, homeProLevelPosition } from '../../utils/levelConfig';
 import { DelayGetDomeTime } from '../../utils/animationConfig';
+import {
+    AdMobBanner,
+    AdMobInterstitial,
+    PublisherBanner,
+    AdMobRewarded,
+} from 'react-native-admob';
 
 const { height, width } = Dimensions.get('window');
 // const { level_num: userLevel } = getter(['user.user_level.level_num']);
@@ -321,6 +327,12 @@ export default class PassGamePage extends Component {
                             </View>
                         </View>
                     </ScrollView>
+                    <AdMobBanner
+                        adSize="fullBanner"
+                        adUnitID="ca-app-pub-9894344618350179/4609065012"
+                        testDevices={[AdMobBanner.simulatorId]}
+                        onAdFailedToLoad={error => console.log(error)}
+                    />
                 </SafeAreaView>;
             }
         } catch (e) {

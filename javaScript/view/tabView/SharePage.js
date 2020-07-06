@@ -26,12 +26,6 @@ import { awardDetail, getChildAward, getPromoteAward } from '../../utils/api';
 import { _gv, _if } from '../../utils/util';
 import answer16 from '../../assets/icon/answer/answer16.png';
 import answer15 from '../../assets/icon/answer/answer15.png';
-import {
-    AdMobBanner,
-    AdMobInterstitial,
-    PublisherBanner,
-    AdMobRewarded,
-} from 'react-native-admob';
 
 const { width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
@@ -290,14 +284,15 @@ export default class SharePage extends PureComponent {
             const view = [];
             cashBack.forEach((item, index) => {
                 view.push(
-                    <Animatable.View useNativeDriver={true} iterationDelay={4000} delay={(index + 1) * 2000} key={item.title} iterationCount={5} animation="bounce" style={[css.pr, styles.cashBackItem]}>
+                    // useNativeDriver={true} iterationDelay={4000} delay={(index + 1) * 2000}
+                    <View key={item.title} iterationCount={5} animation="bounce" style={[css.pr, styles.cashBackItem]}>
                         <ImageAuto source={share7} style={{
                             width: width * 0.9 * 0.25,
                             ...css.pa,
                         }}/>
                         <Text style={[css.pa, styles.cashTitle]}>徒弟第{_if(this.state.detailInfo, res => res.children_withdraw_award_config[index].times, () => 0)}次提现</Text>
                         <Text style={[css.pa, styles.cashLabel]}>师傅得{_if(this.state.detailInfo, res => res.children_withdraw_award_config[index].money, () => 0)}元</Text>
-                    </Animatable.View>
+                    </View>
                 );
             });
             return <View
@@ -312,12 +307,6 @@ export default class SharePage extends PureComponent {
         return (
             <SafeAreaView style={css.safeAreaView}>
                 <ScrollView style={styles.scrollWrap}>
-                    <AdMobBanner
-                        adSize="fullBanner"
-                        adUnitID="ca-app-pub-9894344618350179/4609065012"
-                        testDevices={[AdMobBanner.simulatorId]}
-                        onAdFailedToLoad={error => console.log(error)}
-                    />
                     <View source={share1} style={[styles.shareBgWrap, css.pr]}>
                         <ImageAuto source={share1} style={[css.pa, styles.shareBg]}/>
                         <View style={[css.flex, styles.codeWrap, css.auto, css.sp]}>
@@ -329,7 +318,7 @@ export default class SharePage extends PureComponent {
                             }}>复制</Text>
                         </View>
                         <View style={[styles.inviteWrap, css.auto]}>
-                            <Animatable.View useNativeDriver={true} iterationDelay={5000} iterationCount="infinite"
+                            <Animatable.View useNativeDriver={true} iterationDelay={3000} iterationCount="infinite"
                                 animation="tada" style={[css.auto]}>
                                 <TouchableOpacity onPress={() => {
                                     DeviceEventEmitter.emit('showPop', {
