@@ -2,9 +2,6 @@ package com.rncrab;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -16,9 +13,9 @@ import com.mob.MobSDK;
 import com.mob.secverify.OperationCallback;
 import com.mob.secverify.SecVerify;
 import com.mob.secverify.exception.VerifyException;
-import com.rncrab.notice.NoticeJs;
+import com.rncrab.jrad.JradPackage;
+import com.rncrab.jrad.TTAdManagerHolder;
 import com.rncrab.notice.NoticeJsPackage;
-import com.mob.MobSDK;
 import com.mob.moblink.MobLink;
 
 import java.lang.reflect.InvocationTargetException;
@@ -57,6 +54,7 @@ public class MainApplication extends Application implements ReactApplication {
                     packages.add(new TransmitPackage());
                     packages.add(new NoticeJsPackage());
                     packages.add(new SecVerifyPackage());
+                    packages.add(new JradPackage());
                     return packages;
                 }
 
@@ -76,6 +74,8 @@ public class MainApplication extends Application implements ReactApplication {
         super.onCreate();
         UMConfigure.init(this, "5f0287930cafb22a8b000213", getChannel(this), UMConfigure.DEVICE_TYPE_PHONE, "28225c9cb44605afa411f8088b6c6f4b");
         UMConfigure.setLogEnabled(true);
+        //今日头条广告
+        TTAdManagerHolder.init(this);
         // 选用AUTO页面采集模式
         MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
         MobSDK.init(this, "2fa09aadf5f30", "9776e7ee141c0408e353df23ff7ad19a");
@@ -91,12 +91,14 @@ public class MainApplication extends Application implements ReactApplication {
             }
         });
     }
+
     private void isCanUseForIntnet() {
         if (SecVerify.isVerifySupport()) {
             // 预取号
             topreVerfy();
         }
     }
+
     /**
      * 预登录
      * 预登录接口用于向运营商进行预取号操作，建议在实际调用登录接口前提前调用预登录接口
@@ -115,6 +117,7 @@ public class MainApplication extends Application implements ReactApplication {
         });
 
     }
+
     /**
      * Loads Flipper in React Native templates. Call this in the onCreate method with something like
      * initializeFlipper(this, getReactNativeHost().getReactInstanceManager());

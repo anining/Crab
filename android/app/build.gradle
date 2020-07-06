@@ -238,6 +238,7 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation files('src/main/libs/json.jar')
+    implementation files('src/main/libs/open_ad_sdk.aar')
     // 友盟统计SDK
     implementation  'com.umeng.umsdk:common:9.1.0' // (必选)
     implementation  'com.umeng.umsdk:asms:1.1.3' // asms包依赖(必选)
