@@ -523,7 +523,7 @@ function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages
                 <Text style={styles.userPopTips}>{number}<Text style={{ fontSize: 20 }}> 金币</Text></Text>
                 <Text style={styles.userPopText}>马上就可以提现啦</Text>
                 <TouchableOpacity style={styles.userPopBtn} onPress={getApiTask}>
-                    <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>继续零钱</Text>
+                    <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>继续领钱</Text>
                 </TouchableOpacity>
             </>
         ); break;
@@ -533,7 +533,7 @@ function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages
                 <Text style={[styles.userPopText, { top: '40%' }]}>再做 <Text style={{ color: '#FF3B00', fontSize: 18 }}>{number}单</Text> 就能获得全部奖励啦</Text>
                 <Text style={[styles.userPopText, { top: '50%' }]}>再接再厉哦~</Text>
                 <TouchableOpacity style={styles.userPopBtn} onPress={getApiTask}>
-                    <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>继续零钱</Text>
+                    <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>继续领钱</Text>
                 </TouchableOpacity>
             </>
         ); break;
@@ -558,7 +558,7 @@ function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages
         const total = total_task_num.get();
         if (total === 0) {
             showPop(1, money);
-        } else if (total < 10) {
+        } else if (total === 5) {
             showPop(2, 10 - total);
         } else if (total === 10) {
             showPop(3, 0);
