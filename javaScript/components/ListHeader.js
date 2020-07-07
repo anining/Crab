@@ -18,7 +18,7 @@ export default class ListHeader extends Component {
     render () {
         try {
             if (this.props.children && Array.isArray(this.props.children)) {
-                return <ScrollableTabView style={{}} initialPage={this.props.value || 0} tabBarInactiveTextColor={'#999999'}
+                return <ScrollableTabView locked={this.props.locked} style={{}} initialPage={this.props.value || 0} tabBarInactiveTextColor={'#999999'}
                     tabBarActiveTextColor={'#3E3E3E'} tabBarUnderlineStyle={styles.tabBarUnderLine} renderTabBar={() => (
                         <ScrollableTabBar style={{ borderBottomWidth: 0 }} />
                     )}>
