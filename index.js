@@ -3,7 +3,7 @@
  */
 
 import 'react-native-gesture-handler';
-import { AppRegistry, Text, TextInput } from 'react-native';
+import { AppRegistry, Text, TextInput, TouchableOpacity } from 'react-native';
 import AppStackNavigator from './javaScript/navigation/AppStackNavigator';
 import { name as appName } from './app.json';
 import { enableScreens } from 'react-native-screens';
@@ -17,10 +17,14 @@ Text.defaultProps = Object.assign({}, Text.defaultProps, {
 });
 const sourceRenderText = Text.render;
 const sourceRenderTextInput = TextInput.render;
+const sourceRenderTouchable = TouchableOpacity.render;
 Text.render = function render (props, ref) {
     return sourceRenderText.apply(this, [{ ...props, style: [{ fontFamily: 'sy-bold' }, props.style] }, ref]);
 }; // 全局修改字体
 TextInput.render = function render (props, ref) {
     return sourceRenderTextInput.apply(this, [{ ...props, style: [{ fontFamily: 'sy-bold' }, props.style] }, ref]);
 }; // 全局修改字体
+TouchableOpacity.render = function render (props, ref) {
+    return sourceRenderTouchable.apply(this, [{ ...props, activeOpacity: 1 }, ref]);
+};
 AppRegistry.registerComponent(appName, () => AppStackNavigator);

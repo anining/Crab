@@ -90,7 +90,7 @@ export default class GamePage extends Component {
 
     componentDidMount () {
         this._getGame();
-        // updateUser();
+        updateUser();
     }
 
     static async _gameError (str) {

@@ -54,6 +54,7 @@ export default class HomePage extends Component {
             accuracyImagePosition: null // 答题按钮螃蟹视图
         };
         this.animationCanstart = false;// 用户页面已经切换走的动画是否开始判断
+        this.goingGame = false; // 是否去往goingGame
     }
 
     delayEmitter () {
@@ -190,6 +191,9 @@ export default class HomePage extends Component {
                                 </ShiftView>)}
                                 {_if(position && accuracyPosition, res => <ShiftView key={`ShiftView1${JSON.stringify(position)}${JSON.stringify(accuracyPosition)}`} callback={() => {
                                     N.navigate('GamePage');
+                                    setAndroidTime(() => {
+                                        this.goingGame = false;
+                                    }, 1000);
                                 }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={800} startSite={position[0]} endSite={accuracyPosition}>
                                     <ImageAuto source={game25} width={33}/>
                                 </ShiftView>)}
@@ -234,12 +238,15 @@ export default class HomePage extends Component {
                                     </View>
                                     {/* 主页答题按钮 */}
                                     <TouchableOpacity activeOpacity={1} onPress={() => {
-                                        if (getPath(['propNumsObj', '2'], this.state.user)) {
-                                            this.startGame && this.startGame.start();
-                                            this._homeStop();
-                                        } else {
-                                            toast('游戏道具不足');
-                                            this.gameHeader && this.gameHeader.showPop();
+                                        if (!this.goingGame) {
+                                            if (getPath(['propNumsObj', '2'], this.state.user)) {
+                                                this.goingGame = true;
+                                                this.startGame && this.startGame.start();
+                                                this._homeStop();
+                                            } else {
+                                                toast('游戏道具不足');
+                                                this.gameHeader && this.gameHeader.showPop();
+                                            }
                                         }
                                     }}>
                                         <ImageBackground source={game1} style={[css.flex, styles.homeBtnWrap]}>
