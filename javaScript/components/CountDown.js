@@ -11,7 +11,9 @@ export default class CountDown extends Component {
     }
 
     componentDidMount () {
-        const propsTime = +new Date(djangoTime(this.props.time));
+        const { time, type } = this.props;
+        const propsTime = type ? +time : +new Date(djangoTime(time));
+        console.log(propsTime, 'propsTime');
         this.setTime(propsTime && propsTime >= +new Date(), () => {
             this.secondText.setNativeProps({
                 text: `${msecsTransform(propsTime - (+new Date()))}`

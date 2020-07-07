@@ -70,7 +70,7 @@ function DailyRedPackagePage (props) {
                     <ImageBackground source={activity9} style={[css.pa, styles.arpImage, css.flex]}>
                         <View style={[styles.activeTitleWrap, css.flex, css.fw]}>
                             <Text style={styles.atwTitle}>活动倒计时</Text>
-                            <CountDown time={+new Date(djangoTime(endDatetime))} style={{ color: '#fff', fontSize: 15, letterSpacing: 4 }}/>
+                            <CountDown time={new Date(new Date().toLocaleDateString()).getTime() + 24 * 3600000 - 1} type="timestamp" style={{ color: '#fff', fontSize: 15, letterSpacing: 4 }}/>
                         </View>
                     </ImageBackground>
                     <RenderRedItem rule={rule} activityId={activityId} detail={detail}/>
