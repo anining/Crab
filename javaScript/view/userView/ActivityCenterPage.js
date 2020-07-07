@@ -24,7 +24,7 @@ function ActivityCenterPage () {
                         <Image source={{ uri }} style={styles.image} />
                         <Text numberOfLines={1} style={{ fontWeight: '500', color: '#353535', maxWidth: 150 }}>{title}</Text>
                     </View>
-                    <TouchableOpacity activeOpacity={1}  onPress={() => N.navigate(path)}>
+                    <TouchableOpacity onPress={() => N.navigate(path)}>
                         <Text numberOfLines={1} style={{ fontSize: 12, fontWeight: '500', color: '#353535' }}>查看详情 》</Text>
                     </TouchableOpacity>
                 </View>
@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
     itemView: {
         backgroundColor: '#FFF',
         borderRadius: 8,
-        height: 150,
-        marginTop: 10
+        marginTop: 10,
+        minHeight: 150
     },
     text: {
         color: '#999',

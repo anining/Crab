@@ -4,7 +4,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import toast from '../utils/toast';
 import { uploadToken } from '../utils/api';
 
-function Upload ({ children, images = [], setImages, setProgress, progress = [], editable = true, index = 0, style = {}, length }) {
+function Upload ({ children, images = [], setImages, editable = true, index = 0, style = {}, length }) {
     const [file, setFiles] = useState();
 
     useEffect(() => {
@@ -12,9 +12,9 @@ function Upload ({ children, images = [], setImages, setProgress, progress = [],
             return;
         }
         if (!length) {
-            const localProgress = [...progress];
-            localProgress[index] = '正在上传...';
-            setProgress && typeof setProgress === 'function' && setProgress(localProgress);
+            const localImages = [...images];
+            localImages[index].progress = '正在上传...';
+            setImages && setImages(localImages);
         }
         uploadToken('taskpicture', 'realman/upload/').then(r => {
             const { dir, accessid, host, policy, signature, cdn_domain } = r.data;
@@ -31,25 +31,26 @@ function Upload ({ children, images = [], setImages, setProgress, progress = [],
                 const xhr = new XMLHttpRequest();
                 xhr.upload.addEventListener('progress', e => {
                     if (!length) {
-                        if (e.lengthComputable && setProgress && typeof setProgress === 'function') {
-                            const localProgress = [...progress];
-                            localProgress[index] = Math.round((e.loaded * 100) / e.total).toString();
-                            setProgress(localProgress);
+                        if (e.lengthComputable && setImages && typeof setImages === 'function') {
+                            const localImages = [...images];
+                            localImages[index].progress = Math.round((e.loaded * 100) / e.total).toString();
+                            setImages && setImages(localImages);
                         }
                     }
                 }, false);
                 xhr.addEventListener('error', () => {
                     toast('上传失败');
                     if (!length) {
-                        const localProgress = [...progress];
-                        localProgress[index] = '上传失败';
-                        setProgress && typeof setProgress === 'function' && setProgress(localProgress);
+                        const localImages = [...images];
+                        localImages[index].progress = '上传失败';
+                        setImages && typeof setImages === 'function' && setImages(localImages);
                     }
                 }, false);
                 xhr.addEventListener('load', () => {
                     if (!length) {
+                        const { mime, data } = file;
                         const localImages = [...images];
-                        localImages[index] = Object.assign(file, { uri: `${cdn_domain}/${key}` });
+                        localImages[index] = Object.assign(localImages[index], { uri: `${cdn_domain}/${key}`, mime, data });
                         setImages(localImages);
                     } else {
                         const newImages = [...[Object.assign(file, { uri: `${cdn_domain}/${key}` })], ...images].slice(0, length);
