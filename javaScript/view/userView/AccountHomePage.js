@@ -10,7 +10,7 @@ import feed1 from '../../assets/icon/feed/feed1.png';
 import { deleteAccount, putAccount } from '../../utils/api';
 import Clipboard from '@react-native-community/clipboard';
 import toast from '../../utils/toast';
-import { updateAccount } from '../../utils/update';
+import { getTaskPlatform, updateAccount } from '../../utils/update';
 import { getter } from '../../utils/store';
 import * as U from 'karet.util';
 
@@ -174,6 +174,7 @@ function RenderChange ({ label, account_id, platform_category }) {
             if (!r.error) {
                 toast('切换账号绑定成功!');
                 updateAccount();
+                getTaskPlatform();
             }
         });
     }
