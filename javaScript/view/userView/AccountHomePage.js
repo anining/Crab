@@ -36,7 +36,8 @@ const { width } = Dimensions.get('window');
 const { accounts } = getter(['accounts']);
 const length = R.prop('length', accounts);
 
-function AccountHomePage () {
+function AccountHomePage (props) {
+    const { refresh } = props.route.params;
     const headerRight = <Text style={{ color: '#FF6C00' }}>添加绑定</Text>;
 
     useEffect(() => {
@@ -50,6 +51,9 @@ function AccountHomePage () {
                     dom: <RenderSelect style={styles.selectView}/>,
                     close: () => {},
                 });
+            }} backOnPress={() => {
+                refresh && typeof refresh === 'function' && refresh();
+                N.goBack();
             }} headerRight={U.ifElse(R.equals(length, 0), undefined, headerRight)}/>
             <RenderView/>
         </SafeAreaView>

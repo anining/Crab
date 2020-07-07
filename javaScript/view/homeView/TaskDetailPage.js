@@ -30,7 +30,7 @@ import { task, updateUser } from '../../utils/update';
 import Button from '../../components/Button';
 import CountDown from '../../components/CountDown';
 
-const { user_id, user, total_task_num, today_pass_num, activityObj } = getter(['user.user_id', 'user.total_task_num', 'user', 'activityObj', 'user.today_pass_num']);
+const { user_id, total_task_num, today_pass_num, activityObj } = getter(['user.user_id', 'user.total_task_num', 'activityObj', 'user.today_pass_num']);
 const { width } = Dimensions.get('window');
 const MENU_STATUS = {
     1: {
@@ -53,15 +53,15 @@ const MENU_STATUS = {
 };
 
 function TaskDetailPage (props) {
-    const [name, setName] = useState(props.route.params.detail.nickname || '');
     const [sRef, setSRef] = useState();
+    const [name, setName] = useState(props.route.params.detail.nickname || '');
     const [detail, setDetail] = useState(props.route.params.detail);
     const [account, setAccount] = useState(props.route.params.account);
     const [progress, setProgress] = useState('等待上传');
     const [images, setImages] = useState(detail.images || []);
     const [num, setNum] = useState(0);
     const [taskImage, setTaskImage] = useState(0);
-    const [change, setChange] = useState(1);
+    const [change] = useState(1);
 
     useEffect(() => {
         const { course } = detail;
@@ -93,6 +93,20 @@ function TaskDetailPage (props) {
         BackHandler.addEventListener('hardwareBackPress', onBackPress);
         return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     });
+
+    function refresh () {
+        const { receive_task_id } = detail;
+        taskReceiveDetail(receive_task_id).then(r => {
+            if (r.error) {
+                N.goBack();
+            } else {
+                const { data } = r;
+                const { nickname = '' } = data;
+                setName(nickname);
+                setDetail(data);
+            }
+        });
+    }
 
     function format (rule, logs) {
         let level = 0;
@@ -148,7 +162,7 @@ function TaskDetailPage (props) {
                 <EndTimeView detail={detail}/>
                 <View style={{ paddingLeft: 10, paddingRight: 10 }}>
                     <TitleView detail={detail} account={account}/>
-                    <DetailView detail={detail} account={account} change={change}/>
+                    <DetailView refresh={refresh} detail={detail} account={account} change={change}/>
                     <ClaimView detail={detail}/>
                     <CourseView name={name} taskImage={taskImage} setTaskImage={setTaskImage} detail={detail} progress={progress} setProgress={setProgress} setName={setName} setImages={setImages} images={images} />
                     <Btn taskImage={taskImage} sRef={sRef} setProgress={setProgress} setName={setName} setImages={setImages} detail={detail} name={name} images={images} setDetail={setDetail} setAccount={setAccount}/>
@@ -228,7 +242,7 @@ function TitleView ({ detail, account }) {
     );
 }
 
-function DetailView ({ detail, account, change }) {
+function DetailView ({ refresh, detail, account, change }) {
     const { task_category_label, unit_money, nickname, success_rate, status } = detail;
     const view = change === 2 ? <Text style={styles.taskDetailB}>没有检测到账号信息变化！请确认账号的健康状态！</Text> : <></>;
     if (account) {
@@ -293,7 +307,7 @@ function DetailView ({ detail, account, change }) {
                 <View style={styles.DetailBV}>
                     <Text style={{ color: '#999', fontSize: 12 }}>通过率低于20%时，建议切换账号做单。</Text>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
-                        status === 1 && N.navigate('AccountHomePage');
+                        status === 1 && N.navigate('AccountHomePage', { refresh });
                     }} style={[styles.changeNumber, { borderColor: status === 1 ? '#FF6C00' : '#ABABAB' }]}>
                         <Text style={{ color: status === 1 ? '#FF6C00' : '#4F4F4F', fontSize: 12, lineHeight: 28, textAlign: 'center' }}>切换账号</Text>
                     </TouchableOpacity>
