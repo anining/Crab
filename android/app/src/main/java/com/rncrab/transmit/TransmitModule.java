@@ -1,5 +1,7 @@
 package com.rncrab.transmit;
 
+import android.content.Context;
+
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -12,13 +14,14 @@ import com.mob.moblink.ActionListener;
 import com.mob.moblink.MobLink;
 import com.mob.moblink.Scene;
 import com.mob.MobSDK;
-import com.mob.OperationCallback;
+import com.mob.secverify.OperationCallback;
 import com.mob.secverify.SecVerify;
 import com.mob.secverify.VerifyCallback;
 import com.mob.secverify.datatype.LoginResult;
 import com.mob.secverify.datatype.VerifyResult;
 import com.mob.secverify.exception.VerifyException;
 import com.rncrab.utils.CommonUtils;
+import com.umeng.commonsdk.statistics.common.DeviceConfig;
 
 import java.util.HashMap;
 
@@ -83,7 +86,6 @@ public class TransmitModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void promiseGetMobId(Promise promise) {
-//        new CommonUtils().getMobId(promise);
         // 设置场景参数
         HashMap<String, Object> senceParams = new HashMap<String, Object>();
         senceParams.put("key1", "value1");
@@ -97,18 +99,16 @@ public class TransmitModule extends ReactContextBaseJavaModule {
         MobLink.getMobID(s, new ActionListener() {
             public void onResult(String mobID) {
                 // TODO 根据mobID进行分享等操作
-                System.out.println("onResult=" + mobID);
             }
 
             @Override
             public void onResult(Object o) {
-                System.out.println("onResult=");
                 promise.resolve(o);
             }
 
             public void onError(Throwable throwable) {
                 // TODO 处理错误结果
-                System.out.println("TODO 处理错误结果=");
+//                System.out.println("TODO 处理错误结果=");
                 promise.reject("error", throwable);
             }
         });
@@ -120,65 +120,65 @@ public class TransmitModule extends ReactContextBaseJavaModule {
         promise.resolve("已接受协议");
     }
 
-//    @ReactMethod
-//    public void preVerifyLogin(final Promise promise) {
-//        SecVerify.preVerify(new OperationCallback<Void>() {
-//            @Override
-//            public void onComplete(Void data) {
-//                //TODO处理成功的结果
-//                promise.resolve(data);
-//            }
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//
-//            }
-//        });
-//    }
+    @ReactMethod
+    public void preVerifyLogin(final Promise promise) {
+        if (SecVerify.isVerifySupport()) {
+            SecVerify.preVerify(new OperationCallback() {
+                @Override
+                public void onComplete(Object o) {
+                    promise.resolve("onComplete");
+                }
+
+                @Override
+                public void onFailure(VerifyException e) {
+                    promise.resolve("onFailure");
+                }
+            });
+        }
+    }
 
     @ReactMethod
     public void verifyLogin(final Promise promise) {
-        if (SecVerify.isVerifySupport()) {
-            MobSDK.submitPolicyGrantResult(true, new OperationCallback() {
-                @Override
-                public void onComplete(Object o) {
-                    SecVerify.verify(new VerifyCallback() {
-                        @Override
-                        public void onOtherLogin() {
-                            // 用户点击“其他登录方式”，处理自己的逻辑
-                            promise.reject("onOtherLogin");
-                        }
+        SecVerify.verify(new VerifyCallback() {
+            @Override
+            public void onOtherLogin() {
+                // 用户点击“其他登录方式”，处理自己的逻辑
+                promise.reject("onOtherLogin");
+            }
 
-                        @Override
-                        public void onUserCanceled() {
-                            // 用户点击“关闭按钮”或“物理返回键”取消登录，处理自己的逻辑
-                            promise.reject("onUserCanceled");
-                        }
+            @Override
+            public void onUserCanceled() {
+                // 用户点击“关闭按钮”或“物理返回键”取消登录，处理自己的逻辑
+                promise.reject("onUserCanceled");
+            }
 
-                        @Override
-                        public void onComplete(VerifyResult data) {
-                            WritableMap wMap = new WritableNativeMap();
-                            wMap.putString("operator", data.getOperator());
-                            wMap.putString("opToken", data.getOpToken());
-                            wMap.putString("token", data.getToken());
-                            System.out.println("reactContext1112=" + wMap);
-                            promise.resolve(wMap);
-                        }
+            @Override
+            public void onComplete(VerifyResult data) {
+                WritableMap wMap = new WritableNativeMap();
+                wMap.putString("operator", data.getOperator());
+                wMap.putString("opToken", data.getOpToken());
+                wMap.putString("token", data.getToken());
+                promise.resolve(wMap);
+            }
 
-                        @Override
-                        public void onFailure(VerifyException e) {
-                            //TODO处理失败的结果
-                            promise.reject("error", e + "??321");
-                        }
-                    });
-                }
-
-                @Override
-                public void onFailure(Throwable t) {
-                    promise.reject("error", t+ "??3213211a");
-                }
-            });
-        } else {
-            promise.reject("当前网络环境不支持");
+            @Override
+            public void onFailure(VerifyException e) {
+                e.getCause();
+                promise.reject("error", e.getCause());
+            }
+        });
+    }
+    @ReactMethod
+    public void getTestDeviceInfo(final Promise promise){
+        WritableMap wMap = new WritableNativeMap();
+        try {
+            if(myContext != null){
+                wMap.putString("getDeviceIdForGeneral", DeviceConfig.getDeviceIdForGeneral(myContext));
+                wMap.putString("getMac", DeviceConfig.getMac(myContext));
+            }
+        } catch (Exception ignored){
+            wMap.putString("error", "error");
         }
+        promise.resolve(wMap);
     }
 }

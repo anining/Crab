@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, ImageBackground } from 'react-native';
+import { Text, StyleSheet, View, ImageBackground, ScrollView, Dimensions } from 'react-native';
 import { css } from '../assets/style/css';
 import PropTypes from 'prop-types';
 import game6 from '../assets/icon/game/game6.png';
 import game30 from '../assets/icon/game/game30.png';
 import game64 from '../assets/icon/game/game64.png';
 import ImageAuto from './ImageAuto';
-
+const { height, width } = Dimensions.get('window');
 export default class IdiomCard extends Component {
     constructor (props) {
         super(props);
@@ -105,10 +105,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#FCF0DB',
         borderRadius: 8,
         height: 'auto',
+        maxHeight: height * 0.6,
         minHeight: 70,
         overflow: 'hidden',
         padding: 15,
-        width: '96%'
+        width: '96%',
     },
     idiomCardWrap: {
         // backgroundColor: 'red',
@@ -122,5 +123,10 @@ const styles = StyleSheet.create({
         ...css.gf,
         textAlign: 'left',
         width: '100%'
+    },
+    idiomScrollWrap: {
+        flex: 1,
+        maxHeight: 200,
+        width: '100%',
     }
 });

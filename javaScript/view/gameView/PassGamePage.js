@@ -9,15 +9,15 @@ import {
     TouchableOpacity,
     DeviceEventEmitter,
     SafeAreaView,
-    ScrollView,
+    ScrollView, UIManager, NativeModules,
 } from 'react-native';
-import { getter } from '../../utils/store';
+import { getter, setter } from '../../utils/store';
 import { css } from '../../assets/style/css';
 import GameDialog from '../../components/GameDialog';
 import { N } from '../../utils/router';
 import ImageAuto from '../../components/ImageAuto';
 import game25 from '../../assets/icon/game/game25.png';
-import game31 from '../../assets/icon/game/game31.png';
+import game7 from '../../assets/icon/game/game7.png';
 import EnlargeView from '../../components/EnlargeView';
 import game22 from '../../assets/icon/game/game22.png';
 import game4 from '../../assets/icon/game/game4.png';
@@ -39,12 +39,11 @@ import GameHeader from '../../components/GameHeader';
 import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { bindData, getGlobal, getPath } from '../../global/global';
 import { avatarProLevelPosition, getGradeConfig, homeProLevelPosition } from '../../utils/levelConfig';
+import { DelayGetDomeTime } from '../../utils/animationConfig';
+import JRBannerView from '../../components/JRBannerView';
+import android from '../../components/Android';
 
 const { height, width } = Dimensions.get('window');
-// const { level_num: userLevel } = getter(['user.user_level.level_num']);
-// const trCorrectRate = U.mapValue((res) => {
-//     return _toFixed(res * 100) + '%';
-// }, correctRate);
 export default class PassGamePage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
@@ -57,6 +56,7 @@ export default class PassGamePage extends Component {
             gameHeaderPosition: null, // 头部图像视图
             accuracyImagePosition: null // 答题按钮螃蟹视图
         };
+
         this.paramsInfo = this.props.route.params.info;
     }
 
@@ -85,23 +85,26 @@ export default class PassGamePage extends Component {
 
     _showPop () {
         if (this.paramsInfo && this.paramsInfo.rate <= 1) { // rate 小于等于1是普通宝箱
-            DeviceEventEmitter.emit('showPop', <View
-                style={[css.flex, css.pr, css.flex, { transform: [{ translateY: -width * 0.2 }] }]}>
-                <LottieView ref={ref => this.lottie = ref} key={'chest'} renderMode={'HARDWARE'}
-                    style={{ width: width * 0.8, height: 'auto' }} imageAssetsFolder={'chest'} source={chest}
-                    loop={false} autoPlay={true} speed={1} onAnimationFinish={() => {
-                        DeviceEventEmitter.emit('hidePop');
-                        this.gameHeader && this.gameHeader.start(toGoldCoin(this.paramsInfo.add_balance));
-                        this._isUpgrade();// 这个弹窗完以后，判断是否升级
-                    }}/>
-                <View style={[styles.passDataNumber, css.flex, css.auto, css.pa, {
-                    top: width * 0.8 - 50,
-                    left: width * 0.4 - 50,
-                }]}>
-                    <ImageAuto source={game22} width={33}/>
-                    <Text style={styles.hdnText}>+{transformMoney(this.paramsInfo.add_balance)}</Text>
-                </View>
-            </View>);
+            DeviceEventEmitter.emit('showPop', {
+                dom: <View
+                    style={[css.flex, css.pr, css.flex, { transform: [{ translateY: -width * 0.2 }] }]}>
+                    <LottieView ref={ref => this.lottie = ref} key={'chest'} renderMode={'HARDWARE'}
+                        style={{ width: width * 0.8, height: 'auto' }} imageAssetsFolder={'chest'} source={chest}
+                        loop={false} autoPlay={true} speed={1} onAnimationFinish={() => {
+                            DeviceEventEmitter.emit('hidePop');
+                            this.gameHeader && this.gameHeader.start(toGoldCoin(this.paramsInfo.add_balance));
+                            this._isUpgrade();// 这个弹窗完以后，判断是否升级
+                        }}/>
+                    <View style={[styles.passDataNumber, css.flex, css.auto, css.pa, {
+                        top: width * 0.8 - 50,
+                        left: width * 0.4 - 50,
+                    }]}>
+                        <ImageAuto source={game22} width={33}/>
+                        <Text style={styles.hdnText}>+{transformMoney(this.paramsInfo.add_balance)}</Text>
+                    </View>
+                </View>,
+                canCancel: false, // 不能点击蒙城关闭
+            });
         }
         if (this.paramsInfo && this.paramsInfo.rate > 1) {
             DeviceEventEmitter.emit('showPop', {
@@ -124,18 +127,19 @@ export default class PassGamePage extends Component {
                 </ImageBackground>,
                 close: async () => {
                     this._isUpgrade();// 这个弹窗完以后，判断是否升级
-                }
+                },
+                canCancel: false, // 不能点击蒙城关闭
             });
         }
     }
 
     _isUpgrade () {
         try {
+            this.updateSameInfo();
             const myNowLevel = this.paramsInfo.userLevel;
             const myGradeLevel = this.paramsInfo.myGradeLevel;
             for (let i = 0; i < this.state.gradeRange.length; i++) {
                 const item = this.state.gradeRange[i];
-                console.log(item, myNowLevel, '??======?');
                 if (item && (item === myNowLevel)) {
                     const nextGradeConfig = getGradeConfig(myGradeLevel);
                     const coinRate = getPath([myGradeLevel, 'incomeRate'], this.state.gradeSetting);
@@ -150,6 +154,7 @@ export default class PassGamePage extends Component {
                             </View>
                         }/>);
                     }
+                    updateNextRedLevel(); // updateNextRedLevel 升级的时候更新level
                     break;
                 }
             }
@@ -158,15 +163,23 @@ export default class PassGamePage extends Component {
         }
     }
 
-    static updateSameInfo () {
-        updateUser();
-        updateNextRedLevel();
+    updateSameInfo () {
+        const user = this.state.user;
+        setter([['user', {
+            ...user,
+            user_level: {
+                ...getPath(['user_level'], user, {}),
+                level_num: getPath(['user_level', 'level_num'], user, 0) + 1,
+            },
+            propNumsObj: {
+                ...getPath(['propNumsObj'], user, {}),
+                2: getPath(['propNumsObj', '2'], user, 1) - 1
+            }
+        }]], true);
     }
 
     async componentDidMount () {
         this._showPop();
-        PassGamePage.updateSameInfo();
-        // _isUpgrade 是否升级判断完成后才更新用户信息1
     }
 
     _renderIdiomList () {
@@ -232,7 +245,7 @@ export default class PassGamePage extends Component {
                             width: progressInnerLength * 100 + '%'
                         }]}/>
                     </View>
-                    <View style={{ height: 20, width: '100%' }}/>
+                    <View style={{ height: 15, width: '100%' }}/>
                     <Text style={[styles.gamePassTips, css.gf, { fontSize: 15 }]}>再闯关<Text
                         style={{ fontSize: 17, color: 'red' }}>{PassGamePage._countNextLevel(myNowLevel, this.state.nextRedLevel)}</Text>关领红包</Text>
                     {(() => {
@@ -261,16 +274,16 @@ export default class PassGamePage extends Component {
     render () {
         try {
             if (this.state.user && this.state.gradeSetting && this.state.nextRedLevel && this.state.gradeRange) {
+                const accuracyPosition = this.state.accuracyImagePosition;
                 return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
                     <ScrollView style={{ flex: 1 }}>
                         {/* 头部显示区域 */}
                         <GameHeader ref={ref => this.gameHeader = ref} backgroundColor={'rgba(0,0,0,.3)'}/>
-                        <ShiftView callback={() => {
+                        {_if(accuracyPosition, res => <ShiftView key={`ShiftView${JSON.stringify(accuracyPosition)}`} callback={() => {
                             N.replace('GamePage');
-                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={700} delay={0}
-                        startSite={[25, HEADER_HEIGHT - 28]} endSite={[width * 0.5 + 90, width * 1.4]}>
+                        }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={800} startSite={[25, HEADER_HEIGHT - 28]} endSite={accuracyPosition}>
                             <ImageAuto source={game25} width={33}/>
-                        </ShiftView>
+                        </ShiftView>)}
                         {/* 核心显示区域 */}
                         <View style={[styles.gameResWrap, css.pr]}>
                             <ImageBackground source={game4} style={[css.flex, css.pa, styles.gamePassHeader]}>
@@ -290,17 +303,33 @@ export default class PassGamePage extends Component {
                                         }}>
                                             <ImageAuto source={game14} style={{ width: 55 }}/>
                                         </TouchableOpacity>
-                                        <TouchableOpacity activeOpacity={1} onPress={() => {
-                                            // N.navigate('GamePage');
-                                            this.startGame && this.startGame.start();
+                                        <TouchableOpacity activeOpacity={1} style={[css.flex, styles.continueBtn]} onPress={() => {
+                                            if (getPath(['propNumsObj', '2'], this.state.user)) {
+                                                this.startGame && this.startGame.start();
+                                            } else {
+                                                toast('游戏道具不足');
+                                            }
                                         }}>
-                                            <ImageAuto source={game8} style={{ width: 200 }}/>
+                                            <Text style={styles.continueBtnText}>继续答题</Text>
+                                            <ImageAuto key={'game7'} source={game7} style={{ width: 33, marginLeft: 10 }} onLayout={(e) => {
+                                                const target = e.target;
+                                                setAndroidTime(() => {
+                                                    UIManager.measure(target, (x, y, w, h, l, t) => {
+                                                        if (l && t) {
+                                                            this.setState({
+                                                                accuracyImagePosition: [l, t]
+                                                            });
+                                                        }
+                                                    });
+                                                }, DelayGetDomeTime);
+                                            }}/>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
                             </View>
                         </View>
                     </ScrollView>
+                    <JRBannerView style={styles.adStyle}/>
                 </SafeAreaView>;
             }
         } catch (e) {
@@ -310,6 +339,24 @@ export default class PassGamePage extends Component {
     }
 }
 const styles = StyleSheet.create({
+    adStyle: {
+        height: 90,
+        width: '100%'
+    },
+    continueBtn: {
+        backgroundColor: '#FF6C00',
+        borderColor: '#594134',
+        borderRadius: 21,
+        borderWidth: 1,
+        height: 42,
+        marginLeft: 10,
+        overflow: 'hidden',
+        width: 180
+    },
+    continueBtnText: {
+        color: '#fff',
+        fontSize: 18
+    },
     dialogIcons: {
         height: width * 0.75 * 291 / 831,
         paddingBottom: width * 0.1,
@@ -324,9 +371,9 @@ const styles = StyleSheet.create({
     gameCanvasInner: {
         backgroundColor: '#FFF7A9',
         borderRadius: 10,
-        height: '100%',
+        height: 'auto',
         overflow: 'hidden',
-        paddingTop: width * 0.18,
+        paddingTop: width * 0.14,
         width: '100%',
     },
     gameCanvasWrap: {
@@ -428,14 +475,14 @@ const styles = StyleSheet.create({
     idiomWrap: {
         backgroundColor: '#FFE784',
         borderRadius: 10,
-        height: 120,
+        height: 'auto',
         marginTop: 30,
         paddingHorizontal: 5,
         paddingVertical: 20,
         width: '92%',
     },
     lineIdiom: {
-        fontSize: 15,
+        fontSize: 14,
     },
     lottieUpgradeText: {
         color: '#fff',
@@ -444,7 +491,7 @@ const styles = StyleSheet.create({
         bottom: 10
     },
     nextBtnWrap: {
-        height: 100,
+        height: 80,
         overflow: 'hidden',
         width: '77%',
     },

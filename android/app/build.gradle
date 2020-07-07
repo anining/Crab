@@ -159,12 +159,17 @@ android {
         versionCode 100
         versionName "1.0.0"
         multiDexEnabled true
+        ndk {
+            // 选择要添加的对应 cpu 类型的 .so 库，多个abi以“,”分隔。
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+            // 可指定的值为 'armeabi-v7a', 'arm64-v8a', 'armeabi', 'x86', 'x86_64'，
+        }
     }
     splits {
         abi {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
-            universalApk false  // If true, also generate a universal APK
+            universalApk true  // If true, also generate a universal APK
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
@@ -189,8 +194,14 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
+            //Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
@@ -217,15 +228,32 @@ android {
         }
     }
 }
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
 
 dependencies {
+    implementation 'com.google.android.gms:play-services-ads:19.2.0'
     implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support:support-v4:24.2.0'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation files('src/main/libs/json.jar')
+    implementation files('src/main/libs/open_ad_sdk.aar')
+    // 友盟统计SDK
+    implementation  'com.umeng.umsdk:common:9.1.0' // (必选)
+    implementation  'com.umeng.umsdk:asms:1.1.3' // asms包依赖(必选)
+    implementation 'com.umeng.umsdk:crash:0.0.4' // native crash包依赖(必选)
+    implementation  'com.umeng.umsdk:oaid_lenovo:1.0.0' // (可选)
+    implementation  'com.umeng.umsdk:oaid_mi:1.0.0' // (可选)
+    implementation  'com.umeng.umsdk:oaid_oppo:1.0.4' // (可选)
+    implementation  'com.umeng.umsdk:oaid_vivo:1.0.0.1' // (可选)
+
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group: 'com.facebook.fbjni'

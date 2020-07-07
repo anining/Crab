@@ -36,7 +36,7 @@ import GameDialog from '../../components/GameDialog';
 import chest from '../../lottie/chest';
 import LottieView from 'lottie-react-native';
 import game22 from '../../assets/icon/game/game22.png';
-import { getter } from '../../utils/store';
+import { getter, setter } from '../../utils/store';
 import * as U from 'karet.util';
 import * as R from 'kefir.ramda';
 import toast from '../../utils/toast';
@@ -90,6 +90,7 @@ export default class GamePage extends Component {
 
     componentDidMount () {
         this._getGame();
+        // updateUser();
     }
 
     static async _gameError (str) {
@@ -105,8 +106,8 @@ export default class GamePage extends Component {
                         ...ret.data,
                         ...this.state.gameInfo,
                         userLevel: userLevel.get(),
-                        myGradeLevel: getPath(['myGradeLevel'], this.state.user, 1)
-                    }
+                        myGradeLevel: getPath(['myGradeLevel'], this.state.user, 1),
+                    },
                 });
             }, 1000);
         } else {
@@ -146,6 +147,7 @@ export default class GamePage extends Component {
             let str = ''; // 缓存上一个成语
             const idiomArray = GamePage._buildIdiomArray(data); // ['词', '不',...]所有单字数组
             const answerObj = {}; // 答案对象
+            const answerWord = [];// 答案字数组，用于不取到重复的字
             data.content.forEach((item, cyIndex) => {
                 const focusPoint = GamePage.repeatStr(str, item); // 返回[老一个成语的交点索引，新一个成语的交点索引]
                 const itemArray = item.split(''); // 单个成语字数组 ['词', '不',...]
@@ -161,7 +163,11 @@ export default class GamePage extends Component {
                     });
                 }
                 // 每一个成语都要挖走一个字当作答案
-                const answerIndex = Math.floor(Math.random() * item.length);
+                let answerIndex = Math.floor(Math.random() * item.length);
+                if (answerWord.includes(item.slice(answerIndex, answerIndex + 1))) {
+                    answerIndex = Math.abs(answerIndex - 1);
+                }
+                answerWord.push(item.slice(answerIndex, answerIndex + 1));// 每次都添加到answerWord 尽量不添加重复到字
                 answerObj[cyIndex * 4 + answerIndex] = {
                     cyIndex,
                     answerIndex,
@@ -327,7 +333,8 @@ export default class GamePage extends Component {
                                         source={fillArray[masterKey] ? game61 : selectSite === masterKey ? game62 : game54}
                                         style={[css.flex, { width: '100%', height: '100%' }]}>
                                         {_if(fillArray[masterKey], res => <Animatable.View
-                                            ref={ref => this[`animationText${masterKey}`] = ref}><Text style={[styles.squareText, { color: 'red' }]}>
+                                            ref={ref => this[`animationText${masterKey}`] = ref}><Text
+                                                style={[styles.squareText, { color: 'red' }]}>
                                                 {res.word}</Text>
                                         </Animatable.View>)}
                                     </ImageBackground>
@@ -336,7 +343,7 @@ export default class GamePage extends Component {
                                 const answerItemInfo = answerObj[res.key];
                                 if ((answerItemInfo && answerItemInfo.success) || isCompleted) {
                                     return <EnlargeView ref={ref => this[`enlarge${xIndex}${yIndex}`] = ref}
-                                        style={{ width: '100%', height: '100%', padding: 1 }}
+                                        style={{ width: '100%', height: '100%', padding: 1, zIndex: 999 }}
                                         key={`GameWord${masterKey}`}>
                                         <ImageBackground source={game53}
                                             style={[css.flex, { width: '100%', height: '100%' }]}>
@@ -344,18 +351,15 @@ export default class GamePage extends Component {
                                         </ImageBackground>
                                     </EnlargeView>;
                                 } else {
-                                    // eslint-disable-next-line no-return-assign
-                                    return <EnlargeView ref={ref => this[`enlarge${xIndex}${yIndex}`] = ref}
-                                        style={{ width: '100%', height: '100%', padding: 1 }}
+                                    return <View style={{ width: '100%', height: '100%', padding: 1 }}
                                         key={`GameWord${masterKey}`}>
                                         <ImageBackground source={game55}
                                             style={[css.flex, { width: '100%', height: '100%' }]}>
-                                            {/* [styles.squareText, { color: '#353535' }] */}
                                             <Text style={[styles.squareText, {
                                                 color: answerItemInfo && answerItemInfo.isAwait ? 'red' : '#353535',
                                             }]}>{res.word}</Text>
                                         </ImageBackground>
-                                    </EnlargeView>;
+                                    </View>;
                                 }
                             }
                         }, (e) => {
@@ -522,8 +526,12 @@ export default class GamePage extends Component {
                             this.rightButAwait[item.key] = null;
                         })();
                         this[`animationText${this.state.selectSite}`] && this[`animationText${this.state.selectSite}`].tada();
-                        console.log(item, '???选错的字', this.state.coordinate, item.idiomPointArray.map((key) => { return this.state.coordinate[key].word; }).join(''));
-                        GamePage._gameError(item.idiomPointArray.map((key) => { return this.state.coordinate[key].word; }).join(''));
+                        console.log(item, '???选错的字', this.state.coordinate, item.idiomPointArray.map((key) => {
+                            return this.state.coordinate[key].word;
+                        }).join(''));
+                        GamePage._gameError(item.idiomPointArray.map((key) => {
+                            return this.state.coordinate[key].word;
+                        }).join(''));
                     }
                 }
             });
@@ -580,7 +588,13 @@ export default class GamePage extends Component {
                                 }
                             }
                             toast('消耗成功');
-                            updateUser();
+                            setter([['user', {
+                                ...this.state.user,
+                                propNumsObj: {
+                                    ...getPath(['propNumsObj'], this.state.user, {}),
+                                    3: getPath(['propNumsObj', '3'], this.state.user, 1) - 1,
+                                },
+                            }]], true);
                         }
                     } else {
                         toast('提示次数不足');
@@ -605,7 +619,7 @@ export default class GamePage extends Component {
                 }} style={[css.flex, css.fw, styles.ghRightBtn]}>
                     <Text style={{
                         ...styles.rightText,
-                        ...{ color: '#FF3154', fontSize: 10 }
+                        ...{ color: '#FF3154', fontSize: 10 },
                     }} karet-lift> {trCorrectRate} </Text>
                     <Text style={styles.rightText}> 答题正确率 </Text>
                 </TouchableOpacity>
@@ -627,7 +641,8 @@ export default class GamePage extends Component {
                             <ImageAuto source={game29} style={{ width: 22, marginRight: 5 }}/>
                             <Text style={styles.helpBtnText} numberOfLines={1}>生词本</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={1} style={{ ...css.flex, ...styles.helpBtnWrap }} karet-lift onPress={gameTipsPropFn}>
+                        <TouchableOpacity activeOpacity={1} style={{ ...css.flex, ...styles.helpBtnWrap }} karet-lift
+                            onPress={gameTipsPropFn}>
                             <ImageAuto source={game9} style={{ width: 22, marginRight: 5 }}/>
                             <Text style={styles.helpBtnText} numberOfLines={1} karet-lift>剩{gameTipsProp}次</Text>
                         </TouchableOpacity>
@@ -635,7 +650,10 @@ export default class GamePage extends Component {
                             DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
                                 this.lottieHelp && this.lottieHelp.pause();
                             }} btn={'明白了'} content={
-                                <LottieView ref={ref => this.lottieHelp = ref} key={'lottieHelp'} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={'help'} source={help} loop={true} autoPlay={true} speed={1}/>
+                                <LottieView ref={ref => this.lottieHelp = ref} key={'lottieHelp'}
+                                    renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }}
+                                    imageAssetsFolder={'help'} source={help} loop={true} autoPlay={true}
+                                    speed={1}/>
                             }/>);
                         }}>
                             <ImageAuto source={game57} style={{ width: 34, marginRight: 5, top: 8 }}/>
@@ -648,7 +666,7 @@ export default class GamePage extends Component {
                         {this._renderMatrix()}
                     </View>
                 </View>
-                <View style={[css.flex, styles.helpWrap, css.js, css.pr]} />
+                <View style={[css.flex, styles.helpWrap, css.js, css.pr]}/>
             </View>
             {/* 底部答案选择区域 */}
             <View style={[css.flex, styles.answerWrap, css.js, css.pr]}>
@@ -679,7 +697,7 @@ const styles = StyleSheet.create({
     },
     cubeItem: {
         height: CUBE_HEIGHT,
-        overflow: 'hidden',
+        // overflow: 'hidden',
         width: CUBE_WIDTH,
     },
     cubeItemAnswer: {
@@ -713,7 +731,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: '900',
-        ...css.gf
+        ...css.gf,
     },
     ghRightBtn: {
         backgroundColor: 'rgba(255,255,255, .5)',
@@ -727,7 +745,7 @@ const styles = StyleSheet.create({
     helpBtnText: {
         color: '#fff',
         fontSize: 14,
-        ...css.gf
+        ...css.gf,
     },
     helpBtnWrap: {
         backgroundColor: '#FF6C00',
@@ -756,12 +774,12 @@ const styles = StyleSheet.create({
         lineHeight: 14,
         textAlign: 'center',
         width: '100%',
-        ...css.gf
+        ...css.gf,
     },
     squareText: {
         color: '#fff',
         fontSize: FONT_SIZE,
-        ...css.gf
+        ...css.gf,
     },
     titleWrap: {
         // backgroundColor: 'red',

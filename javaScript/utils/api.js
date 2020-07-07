@@ -373,6 +373,7 @@ const transformFetch = async (method, url, data = {}) => {
         ]);
     } catch (e) {
         console.log(e);
+        resolve({ error: 999, msg: '请求失败' });
     }
 };
 const device_sys = Platform.OS === 'ios' ? 2 : 1; // 3.h5 1.android 2.ios

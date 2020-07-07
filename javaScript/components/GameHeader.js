@@ -45,7 +45,7 @@ const { height, width } = Dimensions.get('window');
 let nowBalance = 0;
 const addFrequency = 10; // 动画快慢频率
 const propsTime = 60000 * 30.5; // 30.5 分钟
-const maxWriteTimes = 5;// 每5秒写一次内存
+const maxWriteTimes = 2;// 每2秒写一次内存
 export default class GameHeader extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
@@ -128,7 +128,7 @@ export default class GameHeader extends Component {
                 }
             } else {
                 if (!this.secondIncome) {
-                    this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user, 0.00005));
+                    this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user, 0));
                     nowBalance = getPath(['goldCoin'], this.state.user, 0);
                 }
             }
@@ -223,7 +223,8 @@ const styles = StyleSheet.create({
     countDownView: {
         bottom: -17,
         fontSize: 10,
-        left: 50
+        height: 20,
+        left: 50,
     },
     hdnText: {
         // backgroundColor: 'red',

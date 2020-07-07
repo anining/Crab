@@ -74,10 +74,8 @@ function L ({ type, itemHeight }) {
                 renderItem={item => {
                     const { receive_task_id, success_rate, reason, category, updated_at, finish_deadline, account, money } = item;
                     return (
-                        <>
-                            <TouchableOpacity style={[styles.itemView, { height: itemHeight }]} key={receive_task_id} onPress={() => {
-                                task(null, receive_task_id);
-                            }}>
+                        <View>
+                            <View style={[styles.itemView, { height: itemHeight }]} key={receive_task_id}>
                                 <View style={styles.itemViewTop}>
                                     <Text style={{ color: '#353535', fontSize: 13, fontWeight: '500' }}>任务类型：{category}</Text>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -85,22 +83,26 @@ function L ({ type, itemHeight }) {
                                         <Text style={{ color: '#FF6C00', fontSize: 19, fontWeight: '600' }}>{transformMoney(money)} <Text style={{ fontSize: 12 }}>金币</Text></Text>
                                     </View>
                                 </View>
-                                <View style={styles.viewCenter}>
+                                <TouchableOpacity activeOpacity={1} style={styles.viewCenter} onPress={() => {
+                                    task(null, receive_task_id);
+                                }}>
                                     <Text style={styles.itemViewTopName} numberOfLines={1}>做单账号：{account}</Text>
                                     <Text style={{ fontSize: 12, color: '#999' }}>当前账号任务通过率：<Text style={{ color: '#FF6C00' }}>{Number.parseInt(success_rate * 100)}</Text> %</Text>
-                                </View>
-                                <View style={styles.itemViewCenter}>
+                                </TouchableOpacity>
+                                <TouchableOpacity activeOpacity={1} style={styles.itemViewCenter} onPress={() => {
+                                    task(null, receive_task_id);
+                                }}>
                                     <Text style={{ color: '#353535', fontSize: 12 }}>接任务ID：{receive_task_id}</Text>
-                                    <TouchableOpacity onPress={() => {
+                                    <TouchableOpacity activeOpacity={1} onPress={() => {
                                         Clipboard.setString(receive_task_id.toString());
                                         toast('复制成功!');
                                     }} style={styles.copyBtn}>
                                         <Text style={{ fontSize: 12, color: '#FF6C00', lineHeight: 25, textAlign: 'center' }}>复制ID值</Text>
                                     </TouchableOpacity>
-                                </View>
+                                </TouchableOpacity>
                                 <RenderItem type={type} receive_task_id={receive_task_id} reason={reason} updated_at={updated_at} finish_deadline={finish_deadline} listRef={listRef}/>
-                            </TouchableOpacity>
-                        </>
+                            </View>
+                        </View>
                     );
                 }}
             />

@@ -28,73 +28,30 @@ export default class ShiftView extends Component {
         this._stop = false;
         this.autoPlay = this.props.autoPlay;
         this.loop = this.props.loop;
+        this.loopTime = this.props.loopTime;
         this.style = this.props.style;
         this.left = this.props.startSite[0];
         this.top = this.props.startSite[1];
         this.duration = this.props.duration;
         this.delay = this.props.delay;
-        this.modelOpacity = new Animated.Value(0);
-        this.translateX = new Animated.Value(0);
-        this.translateY = new Animated.Value(0);
-        this.opacityStart = [
-            Animated.timing(this.modelOpacity, {
-                toValue: 1,
-                duration: 50,
-                delay: this.delay,
-                useNativeDriver: true,
-                easing: Easing.linear,
-            }),
-            Animated.timing(this.modelOpacity, {
-                toValue: 1,
-                duration: this.duration - 200,
-                delay: 0,
-                useNativeDriver: true,
-                easing: Easing.linear,
-            }),
-            Animated.timing(this.modelOpacity, {
-                toValue: 0,
-                duration: 100,
-                delay: 0,
-                useNativeDriver: true,
-                easing: Easing.linear,
-            }),
-        ];
-        this.transformXStart = [
-            Animated.timing(this.translateX, {
-                toValue: this.props.endSite[0] - this.props.startSite[0],
-                duration: this.duration,
-                delay: this.delay,
-                useNativeDriver: true,
-                easing: Easing.linear,
-            }),
-            Animated.timing(this.translateX, {
-                toValue: 0,
-                duration: 0,
-                delay: 100,
-                useNativeDriver: true,
-                easing: Easing.linear,
-            }),
-        ];
-        this.transformYStart = [
-            Animated.timing(this.translateY, {
-                toValue: this.props.endSite[1] - this.props.startSite[1],
-                duration: this.duration,
-                delay: this.delay,
-                useNativeDriver: true,
-                easing: Easing.linear,
-            }),
-            Animated.timing(this.translateY, {
-                toValue: 0,
-                duration: 0,
-                delay: 100,
-                useNativeDriver: true,
-                easing: Easing.linear,
-            }),
-        ];
     }
 
     componentDidMount () {
         this.autoPlay && this.start();
+        this.customLayoutAnimation = {
+            duration: this.duration,
+            create: {
+                type: LayoutAnimation.Types.linear,
+                property: LayoutAnimation.Properties.scaleXY,
+            },
+            update: {
+                type: LayoutAnimation.Types.linear,
+            },
+            delete: {
+                type: LayoutAnimation.Types.linear,
+                property: LayoutAnimation.Properties.scaleXY,
+            },
+        };
     }
 
     componentWillMount () {
@@ -107,22 +64,27 @@ export default class ShiftView extends Component {
 
     start () {
         this._stop = false;
-        this.animation && this.animation.stop();
         this._animationStart();
     }
 
     _animationStart () {
-        requestAnimationFrame(() => {
-            // Animated.sequence(this.opacityStart)
-            this.animation = Animated.parallel([Animated.sequence(this.opacityStart), Animated.sequence(this.transformXStart), Animated.sequence(this.transformYStart)]).start(() => {
-                if (this.loop && this.duration && !this._stop) {
-                    this._animationStart();
-                }
-            });
-            setAndroidTime(() => {
-                _tc(() => { this.callback && this.callback(); });
-            }, this.duration - 100);
+        this._shiftView && this._shiftView.setNativeProps({
+            style: { left: this.props.endSite[0], top: this.props.endSite[1], opacity: 1 },
         });
+        LayoutAnimation.configureNext(this.customLayoutAnimation);
+        setAndroidTime(() => {
+            _tc(() => {
+                this.callback && this.callback();
+            });
+            this._shiftView && this._shiftView.setNativeProps({
+                style: { left: this.props.startSite[0], top: this.props.startSite[1], opacity: 0 },
+            });
+        }, Math.abs(this.duration - 100));
+        if (this.loop && this.duration && !this._stop && this.loopTime) {
+            setAndroidTime(() => {
+                !this._stop && this._animationStart();
+            }, this.duration + this.loopTime);
+        }
     }
 
     stop () {
@@ -134,16 +96,15 @@ export default class ShiftView extends Component {
     }
 
     render () {
-        return <Animated.View style={[css.pa, {
+        return <View ref={ref => this._shiftView = ref} style={[css.pa, {
             ...this.style,
             left: this.left,
             top: this.top,
-            opacity: this.modelOpacity,
-            transform: [{ translateX: this.translateX }, { translateY: this.translateY }],
+            opacity: 0,
             zIndex: 999,
         }]}>
             {this.props.children}
-        </Animated.View>;
+        </View>;
     }
 }
 ShiftView.propTypes = {
@@ -164,6 +125,8 @@ ShiftView.defaultProps = {
     style: {},
     loop: false,
     autoPlay: false,
-    callback: () => {},
+    callback: () => {
+    },
+    loopTime: 1000,
 };
 const styles = StyleSheet.create({});

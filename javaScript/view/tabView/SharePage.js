@@ -16,6 +16,7 @@ import share11 from '../../assets/icon/share/share11.png';
 import share12 from '../../assets/icon/share/share12.png';
 import Shadow from '../../components/Shadow';
 import ImageAuto from '../../components/ImageAuto';
+import JRBannerView from '../../components/JRBannerView';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import { N } from '../../utils/router';
@@ -284,14 +285,15 @@ export default class SharePage extends PureComponent {
             const view = [];
             cashBack.forEach((item, index) => {
                 view.push(
-                    <Animatable.View useNativeDriver={true} iterationDelay={4000} delay={(index + 1) * 2000} key={item.title} iterationCount={5} animation="bounce" style={[css.pr, styles.cashBackItem]}>
+                    // useNativeDriver={true} iterationDelay={4000} delay={(index + 1) * 2000}
+                    <View key={item.title} iterationCount={5} animation="bounce" style={[css.pr, styles.cashBackItem]}>
                         <ImageAuto source={share7} style={{
                             width: width * 0.9 * 0.25,
                             ...css.pa,
                         }}/>
                         <Text style={[css.pa, styles.cashTitle]}>徒弟第{_if(this.state.detailInfo, res => res.children_withdraw_award_config[index].times, () => 0)}次提现</Text>
                         <Text style={[css.pa, styles.cashLabel]}>师傅得{_if(this.state.detailInfo, res => res.children_withdraw_award_config[index].money, () => 0)}元</Text>
-                    </Animatable.View>
+                    </View>
                 );
             });
             return <View
@@ -317,7 +319,7 @@ export default class SharePage extends PureComponent {
                             }}>复制</Text>
                         </View>
                         <View style={[styles.inviteWrap, css.auto]}>
-                            <Animatable.View useNativeDriver={true} iterationDelay={5000} iterationCount="infinite"
+                            <Animatable.View useNativeDriver={true} iterationDelay={3000} iterationCount="infinite"
                                 animation="tada" style={[css.auto]}>
                                 <TouchableOpacity onPress={() => {
                                     DeviceEventEmitter.emit('showPop', {
@@ -445,9 +447,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     codeWrap: {
-        height: width * 0.2,
+        // backgroundColor: '#321',
+        height: width * 0.15,
         paddingHorizontal: 15,
-        width: width * 0.75,
+        paddingTop: 10,
+        width: width * 0.75
     },
     copyBtn: {
         borderColor: '#FF3B00',
@@ -466,9 +470,10 @@ const styles = StyleSheet.create({
         fontSize: 13,
     },
     inviteWrap: {
-        height: width * 0.35,
+        height: width * 0.33,
+        marginBottom: 25,
         paddingHorizontal: 15,
-        paddingTop: 10,
+        paddingTop: 18,
         width: width * 0.9,
     },
     popBtn: {
@@ -614,7 +619,7 @@ const styles = StyleSheet.create({
         paddingVertical: 3,
     },
     tipsWrap: {
-        marginTop: width * 0.09,
+        marginTop: width * 0.06,
         overflow: 'hidden',
     },
     wShareTitle: {

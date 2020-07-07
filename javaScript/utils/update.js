@@ -19,16 +19,23 @@ import asyncStorage from './asyncStorage';
 
 import toast from './toast';
 import { N } from './router';
+let nextUpdateUserTime = null;
+const updateUserRate = 5;
 export const updateUser = (callback) => {
     return new Promise((resolve, reject) => {
-        user().then(res => _tc(() => {
+        if (!nextUpdateUserTime || (nextUpdateUserTime <= +new Date())) {
+            nextUpdateUserTime = +new Date() + 1000 * updateUserRate; // updateUserRate秒之内不允许更新user
+            user().then(res => _tc(() => {
+                resolve();
+                if (!res.error && res.data) {
+                    console.log(res, 'user');
+                    setter([['user', formatUserInfo(res.data)]], true);
+                    callback && callback();
+                }
+            }));
+        } else {
             resolve();
-            if (!res.error && res.data) {
-                console.log(res, 'user');
-                setter([['user', formatUserInfo(res.data)]], true);
-                callback && callback();
-            }
-        }));
+        }
     });
 };
 export const updateAccount = (callback) => {
@@ -186,7 +193,12 @@ function formatGrade (array) {
             if (!baseIncome) {
                 baseIncome = item.second_income;
             }
-            item.incomeRate = _toFixed((item.second_income / baseIncome) * 100, 0) + '%';
+            const incomeRate = item.second_income / baseIncome;
+            if (incomeRate) {
+                item.incomeRate = _toFixed((incomeRate) * 100, 0) + '%';
+            } else {
+                item.incomeRate = '100%';
+            }
             gradeObj[item.grade] = item;
         });
         return gradeObj;
@@ -196,7 +208,6 @@ function formatGrade (array) {
 }
 function formatGradeRange (array) {
     try {
-        console.log(array.map(item => item.level), '==========formatGradeRange');
         return array.map(item => item.level);
     } catch (e) {
         return [];
@@ -207,7 +218,6 @@ export function updateSecondIncome () {
     return new Promise((resolve, reject) => {
         getSecondIncome().then(res => {
             resolve();
-            console.log(res, '领取的金币');
             const coin = getPath(['data', 'balance'], res);
             if (coin) {
                 asyncStorage.setItem(`${getPath(['phone'], getGlobal('user'))}coin`, {
