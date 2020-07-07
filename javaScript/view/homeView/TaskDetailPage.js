@@ -349,6 +349,18 @@ function RenderView ({ status, item }) {
 
     if (type === 'text') {
         return <TransformUrlView status={status} content={content} label={label}/>;
+    } else if (type === 'content') {
+        return (
+            <Text style={styles.taskCourseText}>{label}<Text onPress={() => {
+                try {
+                    status === 1 && Linking.openURL(content).then(r => { console.log(r); });
+                } catch (e) {
+                    console.log(e);
+                    toast('打开失败');
+                }
+            }} style={{ color: '#FF6C00' }}> {content} </Text>
+            </Text>
+        );
     }
     return (
         <>
