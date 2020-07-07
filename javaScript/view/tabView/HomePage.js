@@ -206,7 +206,7 @@ export default class HomePage extends Component {
                 if (myForwardNumber === i) {
                     view.push(
                         <ImageAuto key={`avatar${getPath(['avatar'], this.state.user)}`}
-                            source={getPath(['avatar'], this.state.user)} style={[css.pa, { left: item[0], top: item[1], width: 32, borderRadius: 16 }]}/>,
+                            source={getPath(['avatar'], this.state.user)} style={[css.pa, { left: item[0], top: item[1], width: 36, borderRadius: 18, borderWidth: 1, borderColor: '#614d27' }]}/>,
                     );
                     break;
                 }

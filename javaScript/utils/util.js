@@ -9,6 +9,8 @@ import RN_FS from 'react-native-fs';
 import { API_URL, CONSOLE_LOG, PRIVATE_KEY } from './config';
 import { BALANCE_RATE } from './data';
 import { setDefaultGlobal } from '../global/global';
+import Clipboard from '@react-native-community/clipboard';
+import toast from './toast';
 
 const initializationStore = keys => {
     const localStore = store.get();
@@ -244,6 +246,17 @@ function transformTime (time, start = 10, end = 11) {
         return '00:00:00';
     }
     return `${time.slice(0, start)} ${time.slice(end, end + 8)}`;
+}
+
+export function _copyStr (str) {
+    try {
+        if (typeof str === 'string') {
+            Clipboard.setString(str);
+            toast('复制成功');
+        }
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 function requestPermission (success, denied) {

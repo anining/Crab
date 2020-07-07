@@ -61,10 +61,14 @@ function ShareQRCodePage () {
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#fff', justifyContent: 'space-around', paddingBottom: 10 }]}>
             <Slider view={view} setCapture={setCapture}/>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                <TouchableOpacity activeOpacity={1} style={styles.btn} onPress={save(2)}>
+                <TouchableOpacity activeOpacity={1} style={styles.btn} onPress={() => {
+                    save(2);
+                }}>
                     <Text style={{ fontSize: 16, fontWeight: '500', color: '#fff' }}>分享给好友</Text>
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={1} style={[styles.btn, { backgroundColor: '#FF6C00' }]} onPress={save(1)}>
+                <TouchableOpacity activeOpacity={1} style={[styles.btn, { backgroundColor: '#FF6C00' }]} onPress={() => {
+                    save(1);
+                }}>
                     <Text style={{ fontSize: 16, fontWeight: '500', color: '#fff' }}>保存图片</Text>
                 </TouchableOpacity>
             </View>
@@ -135,7 +139,7 @@ function Slider ({ view, setCapture }) {
                 itemWidth={width * 0.7}
                 loop={false}
                 lockScrollWhileSnapping={true}
-                autoplay={true}
+                autoplay={false}
                 autoplayDelay={2000}
                 autoplayInterval={5000}
                 inactiveSlideScale={0.94}

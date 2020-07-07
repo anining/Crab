@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, Share, Text, TouchableOpacity, StyleSheet, View, TextInput } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
 import { css } from '../../assets/style/css';
-import toast from '../../utils/toast';
 import { childrenLink } from '../../utils/api';
+import { _copyStr } from '../../utils/util';
 
 function ShareUrlPage () {
     const [links, setLink] = useState([]);
@@ -48,8 +47,7 @@ function ShareUrlPage () {
                     style={styles.input} />
                 <View style={[css.flexRCSB, { height: 50 }]}>
                     <TouchableOpacity activeOpacity={1} style={styles.lBtn} onPress={() => {
-                        Clipboard.setString(message.toString());
-                        toast('复制成功');
+                        _copyStr(message);
                     }}>
                         <Text style={{ color: '#fff' }}>复制文案</Text>
                     </TouchableOpacity>

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { SafeAreaView, Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { css } from '../../assets/style/css';
-import Clipboard from '@react-native-community/clipboard';
 import ListHeader from '../../components/ListHeader';
 import ListGeneral from '../../components/ListGeneral';
 import toast from '../../utils/toast';
 import task10 from '../../assets/icon/task/task10.png';
 import { N } from '../../utils/router';
 import { giveUp, taskReceive } from '../../utils/api';
-import { djangoTime, transformMoney, transformTime } from '../../utils/util';
+import {_copyStr, djangoTime, transformMoney, transformTime} from '../../utils/util';
 import { task, updateUser } from '../../utils/update';
 import CountDown from '../../components/CountDown';
 
@@ -94,8 +93,7 @@ function L ({ type, itemHeight }) {
                                 }}>
                                     <Text style={{ color: '#353535', fontSize: 12 }}>接任务ID：{receive_task_id}</Text>
                                     <TouchableOpacity activeOpacity={1} onPress={() => {
-                                        Clipboard.setString(receive_task_id.toString());
-                                        toast('复制成功!');
+                                        _copyStr(receive_task_id);
                                     }} style={styles.copyBtn}>
                                         <Text style={{ fontSize: 12, color: '#FF6C00', lineHeight: 25, textAlign: 'center' }}>复制ID值</Text>
                                     </TouchableOpacity>

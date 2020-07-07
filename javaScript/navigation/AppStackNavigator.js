@@ -58,6 +58,7 @@ import ShareUrlPage from '../view/shareView/ShareUrlPage';
 import ShareQRCodePage from '../view/shareView/ShareQRCodePage';
 import PassGamePage from '../view/gameView/PassGamePage';
 import RightProPage from '../view/gameView/RightProPage';
+import NoviceVideoPage from '../view/otherView/NoviceVideoPage';
 
 const Stack = createStackNavigator();
 
@@ -241,6 +242,11 @@ const stackScreens = [
         name: 'RightProPage',
         component: RightProPage,
         title: '答题正确率',
+    },
+    {
+        name: 'NoviceVideoPage',
+        component: NoviceVideoPage,
+        title: '新手视频',
     }
 ];
 

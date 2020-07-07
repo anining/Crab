@@ -24,7 +24,7 @@ import { getter } from '../../utils/store';
 import Clipboard from '@react-native-community/clipboard';
 import toast from '../../utils/toast';
 import { awardDetail, getChildAward, getPromoteAward } from '../../utils/api';
-import { _gv, _if } from '../../utils/util';
+import {_copyStr, _gv, _if} from '../../utils/util';
 import answer16 from '../../assets/icon/answer/answer16.png';
 import answer15 from '../../assets/icon/answer/answer15.png';
 
@@ -117,8 +117,7 @@ export default class SharePage extends PureComponent {
                     <Text style={[styles.rewardPopText, { top: '40%' }]}>还有更多的福利机会等着您哟~</Text>
                     <TouchableOpacity style={styles.rewardPopBtn} onPress={() => {
                         DeviceEventEmitter.emit('hidePop');
-                        Clipboard.setString(label.get());
-                        toast('复制成功!');
+                        _copyStr(label.get());
                     }}>
                         <Text style={{ color: '#8F5806', fontSize: 18, fontWeight: '500' }}>复制微信号</Text>
                     </TouchableOpacity>
@@ -126,7 +125,7 @@ export default class SharePage extends PureComponent {
             );
             DeviceEventEmitter.emit('showPop', {
                 dom: <RewardPop view={view} source={answer15}/>,
-                close: () => { Clipboard.setString(label.get()); }
+                close: () => { _copyStr(label.get()); }
             });
         } else {
             getPromoteAward(level).then(r => {
@@ -314,8 +313,7 @@ export default class SharePage extends PureComponent {
                             <Text style={styles.inviteCode}>我的邀请码：<Text style={styles.codeNumber}
                                 karet-lift>{invite_code}</Text> </Text>
                             <Text style={styles.copyBtn} onPress={() => {
-                                Clipboard.setString(invite_code.get().toString());
-                                toast('复制成功');
+                                _copyStr(invite_code.get());
                             }}>复制</Text>
                         </View>
                         <View style={[styles.inviteWrap, css.auto]}>
@@ -408,9 +406,8 @@ function Share () {
                 <Text style={styles.shareText}>二维码收徒</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
-                Clipboard.setString(invite_code.get().toString());
+                _copyStr(invite_code.get());
                 DeviceEventEmitter.emit('hidePop');
-                toast('复制成功');
             }} style={styles.shareView}>
                 <Image source={share12} style={styles.shareImg}/>
                 <Text style={styles.shareText}>邀请码收徒</Text>

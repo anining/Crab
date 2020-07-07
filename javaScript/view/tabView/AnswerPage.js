@@ -37,7 +37,7 @@ const NEW_USER_TASK_TYPE = {
     1: {
         label: '看视频领金币',
         icon: answer1,
-        path: 'HelpCenterPage'
+        path: 'NoviceVideoPage'
     },
     2: {
         label: '绑定账号领金币',
@@ -54,12 +54,34 @@ const NEW_USER_TASK_TYPE = {
 function AnswerPage () {
     const [signDay, setSignDay] = useState(0);
     const [newUser, setNewUser] = useState([]);
-
+    let reloadEmitter;
+    let scrollToListener;
+    let scrollViewRef;
     !authorization.get() && N.replace('VerificationStackNavigator');
 
-    useEffect(() => {
-        init();
+    useEffect(async () => {
+        await init();
+        reloadEmitter = DeviceEventEmitter.addListener('reloadAnswer', async () => {
+            await init();
+        });
+        scrollToListener = DeviceEventEmitter.addListener('answerScroll', (res) => {
+            viewScroll(res);
+        });
+        return () => {
+            reloadEmitter && reloadEmitter.remove();
+            scrollToListener && scrollToListener.remove();
+        };
     }, []);
+
+    function viewScroll (res) {
+        if (scrollViewRef && res) {
+            if (res === 'end') {
+                scrollViewRef.scrollToEnd({ animated: true, duration: 500 });
+            } else {
+                scrollViewRef.scrollTo(0, res, true);
+            }
+        }
+    }
 
     async function init () {
         await _signLogs();
@@ -97,8 +119,8 @@ function AnswerPage () {
     }
 
     return (
-        <SafeAreaView style={[{ flex: 1, paddingTop: 20, backgroundColor: '#fff' }]}>
-            <ScrollView style={{ flex: 1, paddingTop: 20 }}>
+        <SafeAreaView style={[{ flex: 1, paddingTop: 20, backgroundColor: '#fff' }]} >
+            <ScrollView style={{ flex: 1, paddingTop: 20 }} ref={ref => { ref && (scrollViewRef = ref); }}>
                 <Slider data={banner.get()} height={width * 0.29} autoplay={true} onPress={item => bannerAction(item.category, item.link, item.title)}/>
                 <View style={styles.answerWrap}>
                     <ComTitle title={'每日签到'} minTitle={<Text style={css.minTitle}>连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text></Text>}/>
