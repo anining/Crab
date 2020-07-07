@@ -14,24 +14,6 @@ import { getTaskPlatform, updateAccount } from '../../utils/update';
 import { getter } from '../../utils/store';
 import * as U from 'karet.util';
 
-const TYPE = [
-    {
-        id: 1,
-        label: '绑定音符账号'
-    },
-    {
-        id: 2,
-        label: '绑定快摄账号'
-    },
-    {
-        id: 3,
-        label: '绑定红酥账号'
-    },
-    {
-        id: 5,
-        label: '绑定头条账号'
-    }
-];
 const { width } = Dimensions.get('window');
 const { accounts, taskPlatform } = getter(['accounts', 'taskPlatform']);
 const length = R.prop('length', accounts);
