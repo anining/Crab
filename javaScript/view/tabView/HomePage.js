@@ -26,15 +26,22 @@ import ShiftView from '../../components/ShiftView';
 import { N, proxyRouter } from '../../utils/router';
 import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
-import { _if, setAndroidTime } from '../../utils/util';
+import { _debounce, _if, setAndroidTime } from '../../utils/util';
 import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { getter } from '../../utils/store';
 import GameHeader from '../../components/GameHeader';
 import { bindData, getPath } from '../../global/global';
 import toast from '../../utils/toast';
 import { getGradeConfig, homeProLevelPosition, avatarProLevelPosition } from '../../utils/levelConfig';
-import { DelayGetDomeTime, HomeDelayMonitorTime, HomeStartAnimationTime } from '../../utils/animationConfig';
+import {
+    DelayGetDomeTime,
+    HomeDelayMonitorTime,
+    HomeLottieStartTime,
+    HomeStartAnimationTime,
+} from '../../utils/animationConfig';
 import Button from '../../components/Button';
+import { notice } from '../../utils/api';
+import { otherwise } from 'kefir.ramda';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
@@ -51,16 +58,18 @@ export default class HomePage extends Component {
             nextRedLevel: bindData('nextRedLevel', this),
             user: bindData('user', this),
             gameHeaderPosition: null, // 头部图像视图
-            accuracyImagePosition: null // 答题按钮螃蟹视图
+            accuracyImagePosition: null, // 答题按钮螃蟹视图
+            unreadNumber: 0,
         };
         this.animationCanstart = false;// 用户页面已经切换走的动画是否开始判断
+        this.goingGame = false; // 是否去往goingGame
     }
 
     delayEmitter () {
         this.animationCanstart = true;
         setAndroidTime(() => {
             this.startLottie = DeviceEventEmitter.addListener('startLottie', () => {
-                this._homeStart();
+                this._debounceStart();
             });
             this.stopLottie = DeviceEventEmitter.addListener('stopLottie', () => {
                 this._homeStop();
@@ -68,18 +77,34 @@ export default class HomePage extends Component {
         }, HomeDelayMonitorTime);
     }
 
-    componentDidMount () {
+    async componentDidMount () {
         proxyRouter(this.props.navigation);
+        this._setDebounce();
         this.delayEmitter();
-        this._homeStart();
+        this._debounceStart();
+        await this._getNoticeNumber();
+    }
+
+    _debounceStart () {
+        this.debounceHomeStart();
+        this.debounceLottieStart();
+    }
+
+    _setDebounce () {
+        this.debounceHomeStart = _debounce(() => {
+            this._homeStart();
+        }, HomeStartAnimationTime); // 动画开始时间分离
+        this.debounceLottieStart = _debounce(() => {
+            this._lottieStart();
+        }, HomeLottieStartTime);// _lottieStart动画开始时间分离
     }
 
     _getPosition (callback) {
         try {
-            this._homeStop();
+            this._startBeforeStop();
             this.gameHeader && (() => {
                 this.setState({
-                    gameHeaderPosition: this.gameHeader.getPosition()
+                    gameHeaderPosition: this.gameHeader.getPosition(),
                 }, () => {
                     this._animationStart();
                     callback && callback();
@@ -91,27 +116,34 @@ export default class HomePage extends Component {
     }
 
     _homeStart () {
-        setAndroidTime(() => {
+        requestAnimationFrame(() => {
             if (this.animationCanstart) {
                 this._getPosition();
                 updateUser();
                 updateNextRedLevel();
             }
-        }, HomeStartAnimationTime);
+        });
+    }
+
+    _lottieStart () {
+        this.animationCanstart && this.lottie && this.lottie.play();
     }
 
     _animationStart () {
-        this.lottie && this.lottie.play();
         this.shiftView && this.shiftView.start();
         this.lamp && this.lamp.start();
         this.gameHeader && this.gameHeader.getCoin();
     }
 
-    _homeStop () {
-        this.lottie && this.lottie.pause();
+    _startBeforeStop () {
         this.shiftView && this.shiftView.stop();
         this.lamp && this.lamp.stop();
         this.gameHeader && this.gameHeader.stop();
+    }
+
+    _homeStop () {
+        this.lottie && this.lottie.pause();
+        this._startBeforeStop();
     }
 
     componentWillUnmount () {
@@ -119,6 +151,19 @@ export default class HomePage extends Component {
         this.startLottie && this.startLottie.remove();
         this.stopLottie && this.stopLottie.remove();
         this.animationCanstart = false;
+    }
+
+    async _getNoticeNumber () {
+        try {
+            const ret = await notice(1, 1);
+            if (ret && !ret.error && ret.data) {
+                this.setState({
+                    unreadNumber: getPath(['unread_num'], ret.data)
+                });
+            }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     _renderHomeProcess () {
@@ -132,7 +177,10 @@ export default class HomePage extends Component {
             const view = [];
             if (this.state.nextRedLevel.length) {
                 if (this.state.nextRedLevel.length >= 12) {
-                    homeProLevelPosition.forEach((item, index) => { view.push(<ImageAuto key={`red${index}`} source={game16} style={[css.pa, { left: item[0], top: item[1], width: 33, }]}/>); });
+                    homeProLevelPosition.forEach((item, index) => {
+                        view.push(<ImageAuto key={`red${index}`} source={game16}
+                            style={[css.pa, { left: item[0], top: item[1], width: 33 }]}/>);
+                    });
                 } else {
                     const forwardNumberArray = [];
                     this.state.nextRedLevel.forEach((item, index) => {
@@ -145,7 +193,8 @@ export default class HomePage extends Component {
                     });
                     homeProLevelPosition.forEach((item, index) => {
                         if (forwardNumberArray.includes(index + 1)) {
-                            view.push(<ImageAuto key={`red${index}`} source={game16} style={[css.pa, { left: item[0], top: item[1], width: 33, }]}/>);
+                            view.push(<ImageAuto key={`red${index}`} source={game16}
+                                style={[css.pa, { left: item[0], top: item[1], width: 33 }]}/>);
                         }
                     });
                 }
@@ -153,11 +202,12 @@ export default class HomePage extends Component {
             avatarProLevelPosition.forEach((item, index) => {
                 if (myForwardNumber === index) {
                     view.push(
-                        <ImageAuto key={`avatar${getPath(['avatar'], this.state.user)}`} source={getPath(['avatar'], this.state.user)} style={[css.pa, {
-                            left: item[0],
-                            top: item[1],
-                            width: 33,
-                        }]}/>
+                        <ImageAuto key={`avatar${getPath(['avatar'], this.state.user)}`}
+                            source={getPath(['avatar'], this.state.user)} style={[css.pa, {
+                                left: item[0],
+                                top: item[1],
+                                width: 33,
+                            }]}/>,
                     );
                 }
             });
@@ -178,19 +228,30 @@ export default class HomePage extends Component {
                 return (
                     <SafeAreaProvider>
                         <ImageBackground source={game41} style={[css.flex, css.pr, css.cover, css.afs]}>
-                            <LottieView ref={ref => this.lottie = ref} key={`lottie${myGradeConfig.wholeLottie}${getPath(['phone'], this.state.user, 0)}`} renderMode={'HARDWARE'}
-                                style={{ width: width, height: 'auto' }} imageAssetsFolder={myGradeConfig.wholeLottie} source={myGradeConfig.whole}
+                            <LottieView ref={ref => this.lottie = ref}
+                                key={`lottie${myGradeConfig.wholeLottie}${getPath(['phone'], this.state.user, 0)}`}
+                                renderMode={'HARDWARE'}
+                                style={{ width: width, height: 'auto' }}
+                                imageAssetsFolder={myGradeConfig.wholeLottie} source={myGradeConfig.whole}
                                 loop={true} autoPlay={false} speed={1}/>
                             <View style={[css.pa, css.cover]}>
                                 {/* eslint-disable-next-line no-return-assign */}
-                                {_if(position && position[1] && position[1][0], res => <ShiftView key={`ShiftView1${JSON.stringify(position)}`} callback={() => {
-                                    this.gameHeader && this.gameHeader.start();
-                                }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} loopTime={1000} duration={800} startSite={[width * 0.25, width * 0.55]} endSite={position[1]}>
+                                {_if(position && position[1] && position[1][0], res => <ShiftView
+                                    key={`ShiftView1${JSON.stringify(position)}`} callback={() => {
+                                        this.gameHeader && this.gameHeader.start();
+                                    }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} loopTime={1500}
+                                    duration={700} startSite={[width * 0.25, width * 0.55]} endSite={position[1]}>
                                     <ImageAuto source={game22} width={33}/>
                                 </ShiftView>)}
-                                {_if(position && accuracyPosition, res => <ShiftView key={`ShiftView1${JSON.stringify(position)}${JSON.stringify(accuracyPosition)}`} callback={() => {
-                                    N.navigate('GamePage');
-                                }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={800} startSite={position[0]} endSite={accuracyPosition}>
+                                {_if(position && accuracyPosition, res => <ShiftView
+                                    key={`ShiftViewGamePage2${JSON.stringify(position)}${JSON.stringify(accuracyPosition)}`}
+                                    callback={() => {
+                                        N.navigate('GamePage');
+                                        setAndroidTime(() => {
+                                            this.goingGame = false;
+                                        }, 1000);
+                                    }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={800}
+                                    startSite={position[0]} endSite={accuracyPosition}>
                                     <ImageAuto source={game25} width={33}/>
                                 </ShiftView>)}
                                 {/* /!* 头部显示区域 *!/ */}
@@ -198,26 +259,36 @@ export default class HomePage extends Component {
                                 {/* 中部显示区域 */}
                                 <View style={[css.flex, css.pa, styles.homeMidWrap, css.afs]}>
                                     {_if(getPath([myGradeLevel, 'incomeRate'], this.state.gradeSetting), res =>
-                                        <TouchableOpacity style={[css.pa, styles.outputWrap]} activeOpacity={1} onPress={() => {
-                                            DeviceEventEmitter.emit('showPop', <GameDialog btn={'我知道了'} tips={<Text>
-                                                渔船等级越高，产金币越多</Text>}/>);
-                                        }}>
-                                            <ImageBackground source={game5} style={[css.flex, css.fw, styles.outputWrapImg]}>
+                                        <TouchableOpacity style={[css.pa, styles.outputWrap]} activeOpacity={1}
+                                            onPress={() => {
+                                                DeviceEventEmitter.emit('showPop', <GameDialog
+                                                    btn={'我知道了'} tips={<Text>
+                                                                  渔船等级越高，产金币越多</Text>}/>);
+                                            }}>
+                                            <ImageBackground source={game5}
+                                                style={[css.flex, css.fw, styles.outputWrapImg]}>
                                                 <Text style={[styles.outputText]}>金币产量</Text>
                                                 <Text style={styles.outputText}>{res}</Text>
                                             </ImageBackground>
                                         </TouchableOpacity>)}
                                     {/* NoticePage */}
-                                    <TouchableOpacity activeOpacity={1} style={[css.pa, styles.noticeIcon]} onPress={() => {
-                                        N.navigate('NoticePage');
-                                    }}>
+                                    <TouchableOpacity activeOpacity={1} style={[css.pa, styles.noticeIcon]}
+                                        onPress={() => {
+                                            N.navigate('NoticePage');
+                                            this.setState({ unreadNumber: 0 });
+                                        }}>
                                         <ImageBackground source={game35} style={[{ width: '100%', height: '100%' }]}>
-                                            {_if(false, res => <Text style={[css.pa, styles.noticeNumber]}>10</Text>)}
+                                            {_if(this.state.unreadNumber, res => <Text style={[css.pa, styles.noticeNumber]}>{res}</Text>)}
                                         </ImageBackground>
                                     </TouchableOpacity>
                                     {/* eslint-disable-next-line no-return-assign */}
-                                    {_if(this.state.withdrawLogsLatest, res => <Lamp LampList={res} ref={ref => this.lamp = ref} width={'100%'} backgroundColor={'rgba(0,179,216,.5)'}
-                                        color={'#005262'} color1={'#FF6C00'} autoPlay={false}/>)}
+                                    {_if(this.state.withdrawLogsLatest, res => <Lamp LampList={res}
+                                        ref={ref => this.lamp = ref}
+                                        width={'100%'}
+                                        backgroundColor={'rgba(0,179,216,.5)'}
+                                        color={'#005262'}
+                                        color1={'#FF6C00'}
+                                        autoPlay={false}/>)}
                                 </View>
                                 {/* 底部显示区域 */}
                                 <ImageBackground source={game12}
@@ -225,40 +296,47 @@ export default class HomePage extends Component {
                                     {/* 主页进度显示 */}
                                     <View style={[styles.progressWrap, css.pr]}>
                                         {this._renderHomeProcess()}
-                                        <ImageAuto key={`ship${JSON.stringify(nextGradeConfig.ship)}`} source={nextGradeConfig.ship} style={[css.pa, {
-                                            width: 80,
-                                            right: 0,
-                                            bottom: 0,
-                                        }]}/>
-                                        {_if(getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting), res => <Text style={styles.incomeRateText}>产量{res}</Text>)}
+                                        <ImageAuto key={`ship${JSON.stringify(nextGradeConfig.ship)}`}
+                                            source={nextGradeConfig.ship} style={[css.pa, {
+                                                width: 80,
+                                                right: 0,
+                                                bottom: 0,
+                                            }]}/>
+                                        {_if(getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting), res =>
+                                            <Text style={styles.incomeRateText}>产量{res}</Text>)}
                                     </View>
                                     {/* 主页答题按钮 */}
                                     <TouchableOpacity activeOpacity={1} onPress={() => {
-                                        if (getPath(['propNumsObj', '2'], this.state.user)) {
-                                            this.startGame && this.startGame.start();
-                                            this._homeStop();
-                                        } else {
-                                            toast('游戏道具不足');
-                                            this.gameHeader && this.gameHeader.showPop();
+                                        if (!this.goingGame) {
+                                            if (getPath(['propNumsObj', '2'], this.state.user)) {
+                                                this.goingGame = true;
+                                                this.startGame && this.startGame.start();
+                                                this._homeStop();
+                                            } else {
+                                                toast('游戏道具不足');
+                                                this.gameHeader && this.gameHeader.showPop();
+                                            }
                                         }
                                     }}>
                                         <ImageBackground source={game1} style={[css.flex, styles.homeBtnWrap]}>
                                             <Text style={styles.homeBtnText}>升渔船</Text>
-                                            <ImageAuto source={game7} style={{ width: 33, marginLeft: 10 }} onLayout={(e) => {
-                                                const target = e.target;
-                                                setAndroidTime(() => {
-                                                    UIManager.measure(target, (x, y, w, h, l, t) => {
-                                                        if (l && t) {
-                                                            this.setState({
-                                                                accuracyImagePosition: [l, t]
-                                                            });
-                                                        }
-                                                    });
-                                                }, DelayGetDomeTime);
-                                            }}/>
+                                            <ImageAuto source={game7} style={{ width: 33, marginLeft: 10 }}
+                                                onLayout={(e) => {
+                                                    const target = e.target;
+                                                    setAndroidTime(() => {
+                                                        UIManager.measure(target, (x, y, w, h, l, t) => {
+                                                            if (l && t) {
+                                                                this.setState({
+                                                                    accuracyImagePosition: [l, t],
+                                                                });
+                                                            }
+                                                        });
+                                                    }, DelayGetDomeTime);
+                                                }}/>
                                         </ImageBackground>
                                     </TouchableOpacity>
-                                    <Text style={styles.accuracyText}>正确率: <Text style={{ color: '#FF6C00' }} karet-lift>{trCorrectRate}</Text></Text>
+                                    <Text style={styles.accuracyText}>正确率: <Text style={{ color: '#FF6C00' }}
+                                        karet-lift>{trCorrectRate}</Text></Text>
                                 </ImageBackground>
                             </View>
                         </ImageBackground>
@@ -287,7 +365,7 @@ const styles = StyleSheet.create({
         lineHeight: 30,
         textAlign: 'center',
         width,
-        ...css.gf
+        ...css.gf,
     },
     hdnText: {
         color: '#ffffff',
@@ -376,7 +454,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         transform: [{ scale: 0.9 }],
         width: '100%',
-        ...css.gf
+        ...css.gf,
     },
     outputWrap: {
         right: 15,

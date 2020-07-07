@@ -21,13 +21,13 @@ function NoticePage () {
                     itemMarginTop={itemMarginTop}
                     getList={async (page, num, callback) => {
                         notice(page, num).then(r => {
-                            if (!r.error) {
-                                callback(r.data);
+                            if (r && !r.error) {
+                                callback(r.data.notices);
                             }
                         });
                     }}
                     renderItem={item => {
-                        const { updated_at, notice_id, title, content, avatar = 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png' } = item;
+                        const { updated_at, notice_id, title, content, avatar = 'https://ali.taskpic.libragx.com/AA_QWZ/6768.png' } = item;
                         return (
                             <>
                                 <View style={styles.itemView} key={notice_id}>

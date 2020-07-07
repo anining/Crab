@@ -26,6 +26,7 @@ import * as U from 'karet.util';
 import * as R from 'kefir.ramda';
 import { bindData, getPath } from '../global/global';
 import {
+    _debounce,
     _if,
     _toFixed,
     djangoTime,
@@ -38,11 +39,10 @@ import {
 import asyncStorage from '../utils/asyncStorage';
 import CountDown from './CountDown';
 import { updateUser } from '../utils/update';
-import { DelayGetDomeTime } from '../utils/animationConfig';
+import { DelayGetDomeTime, HomeStartAnimationTime } from '../utils/animationConfig';
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
-let nowBalance = 0;
 const addFrequency = 10; // 动画快慢频率
 const propsTime = 60000 * 30.5; // 30.5 分钟
 const maxWriteTimes = 2;// 每2秒写一次内存
@@ -58,14 +58,18 @@ export default class GameHeader extends Component {
         this._start = false;
         this.imagePosition2 = [0, 0];
         this.imagePosition1 = [0, 0];
+        this.nowBalance = 0;
     }
 
     async componentDidMount () {
+        this.debounceGetCoin = _debounce(async (addIncome) => {
+            await this.getCoin(addIncome);
+        }, 500);// 内存读取保护
         this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user));
-        nowBalance = getPath(['goldCoin'], this.state.user, 0);
-        await this.getCoin();
+        this.nowBalance = getPath(['goldCoin'], this.state.user, 0);
+        this.debounceGetCoin();
         this.secondText && this.secondText.setNativeProps({
-            text: `${_toFixed(nowBalance, 4)}`
+            text: `${_toFixed(this.nowBalance, 4)}`
         });
         this._start = true;
     }
@@ -74,11 +78,11 @@ export default class GameHeader extends Component {
         try {
             const ret = await asyncStorage.getItem(`${getPath(['phone'], this.state.user)}coin`);
             if (JsonParse(ret).mastUpdate) {
-                nowBalance = JsonParse(ret).coin;
+                this.nowBalance = JsonParse(ret).coin;
             } else {
-                nowBalance = JsonParse(ret).coin + (+new Date() - JsonParse(ret).time) / 1000 * this.secondIncome + addIncome;
+                this.nowBalance = JsonParse(ret).coin + (+new Date() - JsonParse(ret).time) / 1000 * this.secondIncome + addIncome;
                 asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
-                    coin: nowBalance,
+                    coin: this.nowBalance,
                     time: +new Date()
                 });
             }
@@ -90,30 +94,34 @@ export default class GameHeader extends Component {
     componentWillUnmount () {
         this._start = false;
         this.enlarge && this.enlarge.stop();
+        this.nowBalance = 0;
     }
 
     start (addIncome = this.secondIncome) {
         try {
             if (this._start && addIncome) {
+                this._start = false;
                 this.enlarge && this.enlarge.start();
                 const minAddUnit = parseFloat(addIncome / addFrequency);
-                const baseNowBalance = nowBalance;
-                nowBalance += parseFloat(addIncome);
+                const baseNowBalance = this.nowBalance;
+                this.nowBalance += parseFloat(addIncome);
                 for (let i = 0; i < addFrequency; i++) {
                     setAndroidTime(async () => {
                         if ((i + 1) === addFrequency) {
                             // 最后一次加的时候存入内存
+                            this._start = true;
                             this.secondText && this.secondText.setNativeProps({
-                                text: `${_toFixed(nowBalance, 4)}`
+                                text: `${_toFixed(this.nowBalance, 4)}`
                             });
                             if (this.secondIncome !== addIncome) {
-                                await this.getCoin(addIncome);
+                                // await this.getCoin(addIncome);
+                                this.debounceGetCoin(addIncome);
                                 this.writeTimes = maxWriteTimes;
                                 // nowBalance += parseFloat(addIncome);
                             }
                             if (this.writeTimes >= maxWriteTimes) {
                                 asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
-                                    coin: nowBalance,
+                                    coin: this.nowBalance,
                                     time: +new Date()
                                 });
                                 this.writeTimes = 0;
@@ -127,10 +135,10 @@ export default class GameHeader extends Component {
                     }, 50 * i);
                 }
             } else {
-                if (!this.secondIncome) {
-                    this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user, 0));
-                    nowBalance = getPath(['goldCoin'], this.state.user, 0);
-                }
+                // if (!this.secondIncome) {
+                //     this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user, 0));
+                //     this.nowBalance = getPath(['goldCoin'], this.state.user, 0);
+                // }
             }
         } catch (e) {
             console.log(e);

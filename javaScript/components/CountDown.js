@@ -11,17 +11,15 @@ export default class CountDown extends Component {
     }
 
     componentDidMount () {
-        const { time, type } = this.props;
-        const propsTime = type ? +time : +new Date(djangoTime(time));
-        console.log(propsTime, 'propsTime');
-        this.setTime(propsTime && propsTime >= +new Date(), () => {
-            this.secondText.setNativeProps({
+        const propsTime = +new Date(djangoTime(this.props.time));
+        this.setTime(this.secondText && propsTime && propsTime >= +new Date(), () => {
+            this.secondText && this.secondText.setNativeProps({
                 text: `${msecsTransform(propsTime - (+new Date()))}`
             });
         }, this.props.callback, 1000);
-        this.props.millisecond && this.setTime(propsTime && propsTime >= +new Date(), () => {
+        this.props.millisecond && this.setTime(this.millisecondText && propsTime && propsTime >= +new Date(), () => {
             if (millisecond > 0) { millisecond--; } else { millisecond = 9; }
-            this.millisecondText.setNativeProps({
+            this.millisecondText && this.millisecondText.setNativeProps({
                 text: `.${millisecond}`
             });
         }, null, 100);

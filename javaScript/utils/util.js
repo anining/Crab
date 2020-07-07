@@ -255,10 +255,26 @@ function requestPermission (success, denied) {
                 PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
                 PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
             ]).then(granted => {
-                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                    success && success();
+                if (typeof granted === 'string') {
+                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                        success && success();
+                    } else {
+                        console.log(granted, PermissionsAndroid.RESULTS.GRANTED);
+                        denied && denied();
+                    }
                 } else {
-                    denied && denied();
+                    let toDoSuccess = true;
+                    for (const i in granted) {
+                        if (granted[i] !== PermissionsAndroid.RESULTS.GRANTED) {
+                            toDoSuccess = false;
+                            break;
+                        }
+                    }
+                    if (toDoSuccess) {
+                        success && success();
+                    } else {
+                        denied && denied();
+                    }
                 }
             });
         }
@@ -278,7 +294,7 @@ export function _debounce (func, wait) {
             timeout = clearTimeout(timeout);
         }
         timeout = setTimeout(() => {
-            timeout = null;
+            timeout = clearTimeout(timeout);
             func.apply(context, args);
         }, wait);
     };
@@ -394,7 +410,6 @@ export function _toFixed (number, num = 2) {
 
 export function rangeLevel (level, rangeArray) {
     try {
-        console.log(level, rangeArray, '========计算等级');
         let grade = 1;
         for (let i = 0; i < rangeArray.length; i++) {
             const item = rangeArray[i];
@@ -406,7 +421,6 @@ export function rangeLevel (level, rangeArray) {
                 grade = i;
             }
         }
-        console.log(grade, '=======计算结果');
         return grade;
     } catch (e) {
         return 1;

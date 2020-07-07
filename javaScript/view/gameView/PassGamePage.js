@@ -56,7 +56,7 @@ export default class PassGamePage extends Component {
             gameHeaderPosition: null, // 头部图像视图
             accuracyImagePosition: null // 答题按钮螃蟹视图
         };
-
+        this.goingGame = false; // 是否去往goingGame
         this.paramsInfo = this.props.route.params.info;
     }
 
@@ -304,10 +304,13 @@ export default class PassGamePage extends Component {
                                             <ImageAuto source={game14} style={{ width: 55 }}/>
                                         </TouchableOpacity>
                                         <TouchableOpacity activeOpacity={1} style={[css.flex, styles.continueBtn]} onPress={() => {
-                                            if (getPath(['propNumsObj', '2'], this.state.user)) {
-                                                this.startGame && this.startGame.start();
-                                            } else {
-                                                toast('游戏道具不足');
+                                            if (!this.goingGame) {
+                                                if (getPath(['propNumsObj', '2'], this.state.user)) {
+                                                    this.startGame && this.startGame.start();
+                                                    this.goingGame = true;
+                                                } else {
+                                                    toast('游戏道具不足');
+                                                }
                                             }
                                         }}>
                                             <Text style={styles.continueBtnText}>继续答题</Text>

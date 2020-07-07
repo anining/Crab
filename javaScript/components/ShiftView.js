@@ -63,8 +63,10 @@ export default class ShiftView extends Component {
     }
 
     start () {
-        this._stop = false;
-        this._animationStart();
+        if (this._stop) {
+            this._stop = false;
+            this._animationStart();
+        }
     }
 
     _animationStart () {
