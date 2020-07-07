@@ -15,7 +15,7 @@ import * as U from 'karet.util';
 import RNShare from 'react-native-share';
 const { invite_code } = getter(['user.invite_code']);
 const { width } = Dimensions.get('window');
-const URL = 'https://www.baidu.com/';
+const URL = 'https://usershare.libratb.com/#/';
 
 function ShareQRCodePage () {
     const view = U.atom([]);
