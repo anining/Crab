@@ -100,6 +100,7 @@ export default class GameHeader extends Component {
     start (addIncome = this.secondIncome) {
         try {
             if (this._start && addIncome) {
+                this._start = false;
                 this.enlarge && this.enlarge.start();
                 const minAddUnit = parseFloat(addIncome / addFrequency);
                 const baseNowBalance = this.nowBalance;
@@ -108,6 +109,7 @@ export default class GameHeader extends Component {
                     setAndroidTime(async () => {
                         if ((i + 1) === addFrequency) {
                             // 最后一次加的时候存入内存
+                            this._start = true;
                             this.secondText && this.secondText.setNativeProps({
                                 text: `${_toFixed(this.nowBalance, 4)}`
                             });
