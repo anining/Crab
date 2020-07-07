@@ -4,7 +4,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import toast from '../utils/toast';
 import { uploadToken } from '../utils/api';
 
-function Upload ({ children, images = [], setImages, setProgress, progress, editable = true, index, style = {} }) {
+function Upload ({ children, images = [], setImages, setProgress, progress, editable = true, index = 0, style = {}, length }) {
     const [file, setFiles] = useState();
 
     useEffect(() => {
@@ -41,9 +41,14 @@ function Upload ({ children, images = [], setImages, setProgress, progress, edit
                     setProgress && typeof setProgress === 'function' && setProgress(localProgress);
                 }, false);
                 xhr.addEventListener('load', () => {
-                    const localImages = [...images];
-                    localImages[index] = Object.assign(file, { uri: `${cdn_domain}/${key}` });
-                    setImages(localImages);
+                    if (length) {
+                        const newImages = [...[Object.assign(file, { uri: `${cdn_domain}/${key}` })], ...images].slice(0, length);
+                        setImages(newImages);
+                    } else {
+                        const localImages = [...images];
+                        localImages[index] = Object.assign(file, { uri: `${cdn_domain}/${key}` });
+                        setImages(localImages);
+                    }
                 }, false);
                 xhr.open('POST', host, true);
                 xhr.send(FD);
