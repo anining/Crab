@@ -50,19 +50,14 @@ const MENU_STATUS = {
 
 function TaskDetailPage (props) {
     const [sRef, setSRef] = useState();
-    const [name, setName] = useState([]);
     const [detail, setDetail] = useState(props.route.params.detail);
-    const [progress, setProgress] = useState([]);
-    const [images, setImages] = useState(detail.images || []);
     const [num, setNum] = useState(0);
-    const [taskImage, setTaskImage] = useState([]);
-    const [inputs, setInputs] = useState([]);
+    const [submits, setSubmits] = useState([]);
 
     useEffect(() => {
         const { course } = detail;
         const { submit = [] } = course;
-        setTaskImage(submit.filter(item => item.type === 'image'));
-        setInputs(submit.filter(item => item.type === 'text'));
+        setSubmits(submit.map(item => Object.assign({ progress: undefined, uri: '', data: '', mime: '' }, item)));
     }, [detail]);
 
     useEffect(() => {
@@ -96,10 +91,7 @@ function TaskDetailPage (props) {
             if (r.error) {
                 N.goBack();
             } else {
-                const { data } = r;
-                const { nickname = '' } = data;
-                setName(nickname);
-                setDetail(data);
+                setDetail(r.data);
             }
         });
     }
@@ -159,8 +151,8 @@ function TaskDetailPage (props) {
                 <View style={{ paddingLeft: 10, paddingRight: 10 }}>
                     <DetailView refresh={refresh} detail={detail}/>
                     <ClaimView detail={detail}/>
-                    <CourseView inputs={inputs} taskImage={taskImage} name={name} detail={detail} progress={progress} setProgress={setProgress} setName={setName} setImages={setImages} images={images} />
-                    <Btn taskImage={taskImage} sRef={sRef} setName={setName} setImages={setImages} detail={detail} name={name} images={images} setDetail={setDetail}/>
+                    <CourseView setSubmits={setSubmits} submits={submits} detail={detail}/>
+                    <Btn setSubmits={setSubmits} submits={submits} sRef={sRef} detail={detail} setDetail={setDetail}/>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -263,18 +255,19 @@ function ClaimView ({ detail }) {
     );
 }
 
-function CourseView ({ detail, name = [], setName, inputs = [], taskImage = [], images, setProgress, progress = [], setImages }) {
+function CourseView ({ setSubmits, submits = [], detail }) {
     const { course, status } = detail;
     const { task = [] } = course;
     const submitView = [];
     const taskView = [];
 
-    inputs.forEach((item, index) => {
-        submitView.push(<RenderInput name={name} index={index} status={status} setName={setName} item={item} key={item.label}/>);
-    });
-
-    taskImage.forEach((item, index) => {
-        submitView.push(<RenderImg progress={progress} setProgress={setProgress} index={index} status={status} images={images} setImages={setImages} key={item.label} item={item}/>);
+    submits.forEach((submit, index) => {
+        const { type, label } = submit;
+        if (type === 'image') {
+            submitView.push(<RenderImg index={index} status={status} key={label} item={submit} setSubmits={setSubmits} submits={submits}/>);
+        } else if (type === 'text') {
+            submitView.push(<RenderInput submits={submits} index={index} status={status} setSubmits={setSubmits} item={submit} key={label}/>);
+        }
     });
 
     task.forEach(item => {
@@ -385,9 +378,9 @@ function RenderView ({ status, item }) {
     );
 }
 
-function RenderInput ({ name, index, status, item, setName }) {
+function RenderInput ({ index, status, item, setSubmits, submits = [] }) {
     const { label, content } = item;
-    const localName = [...name];
+    const localSubmits = [...submits];
 
     return (
         <View style={{ marginTop: 20 }}>
@@ -395,25 +388,25 @@ function RenderInput ({ name, index, status, item, setName }) {
             <TextInput
                 editable={status === 1}
                 style={styles.input}
-                value={name[index]}
+                value={localSubmits[index].uri}
                 maxLength={50}
                 placeholder={content}
-                onChangeText={name => {
-                    localName[index] = name;
-                    setName(localName);
+                onChangeText={text => {
+                    localSubmits[index].uri = text;
+                    setSubmits(localSubmits);
                 }}
                 placeholderTextColor={'#FF7008'}/>
         </View>
     );
 }
 
-function RenderImg ({ index, setImages, setProgress, progress = [], status, images, item }) {
+function RenderImg ({ index, status, item, setSubmits, submits = [] }) {
     const { label, content } = item;
 
     return (
         <>
             <Text style={styles.taskCourseText}>{label}</Text>
-            <RenderImage setProgress={setProgress} index={index} images={images} setImages={setImages} progress={progress} status={status} content={content}/>
+            <RenderImage index={index} setSubmits={setSubmits} submits={submits} status={status} content={content}/>
             <Text style={{ color: '#222', lineHeight: 30 }}>（请按照示例上传截图）</Text>
         </>
     );
@@ -438,9 +431,12 @@ function TransformUrlView ({ content, status, label }) {
     }
 }
 
-function RenderImage ({ images, progress = [], setProgress, index, setImages, status, content }) {
-    const view = <Image source={status === 1 ? images[index] ? { uri: `data:${images[index].mime};base64,${images[index].data}` } : task8 : { uri: images[index] }} style={ styles.uploadImage}/>;
-    const progressText = progress[index] ? isNaN(progress[index]) ? progress[index] : `${progress[index]} %` : '等待上传';
+function RenderImage ({ index, status, content, setSubmits, submits = [] }) {
+    const { uri, mime, data } = submits[index];
+    const view = <Image source={status === 1 ? (mime && data) ? { uri: `data:${mime};base64,${data}` } : task8 : { uri }} style={ styles.uploadImage}/>;
+
+    const { progress } = submits[index];
+    const progressText = status === 1 ? progress ? isNaN(progress) ? progress : `${progress} %` : '等待上传' : '';
     return (
         <View style={[css.flexRCSB, { alignItems: 'flex-start' }]}>
             <TouchableOpacity onPress={() => {
@@ -454,7 +450,7 @@ function RenderImage ({ images, progress = [], setProgress, index, setImages, st
                 <Image source={{ uri: content }} style={[styles.uploadImage, { marginTop: 0 }]}/>
             </TouchableOpacity>
             <View>
-                <Upload children={view} setProgress={setProgress} progress={progress} editable={status === 1} images={images} setImages={setImages} index={index}/>
+                <Upload children={view} editable={status === 1} images={submits} setImages={setSubmits} index={index}/>
                 <Text style={styles.progress}>{progressText}</Text>
             </View>
         </View>
@@ -469,8 +465,8 @@ function UserPop ({ view }) {
     );
 }
 
-function Btn ({ images, taskImage = [], sRef, setName, detail, setImages, name = [], setDetail }) {
-    const { status, nickname, receive_task_id, platform_category } = detail;
+function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
+    const { status, receive_task_id, platform_category } = detail;
 
     function getApiTask () {
         DeviceEventEmitter.emit('hidePop');
@@ -557,17 +553,16 @@ function Btn ({ images, taskImage = [], sRef, setName, detail, setImages, name =
     }
 
     function submit (callback) {
-        const localImages = images.map(image => image.uri);
-        if ((taskImage.length !== localImages.length) || !name.length) {
+        const localContent = submits.filter(item => item.uri);
+        if (localContent.length !== submits.length) {
             callback();
             toast('请填写完整的名称和执行图!');
             return;
         }
-        taskSubmit(receive_task_id, localImages, name).then(r => {
+        taskSubmit(receive_task_id, localContent).then(r => {
             if (!r.error) {
                 const { add_balance } = r.data;
-                setName([]);
-                setImages([]);
+                setSubmits(submits.map(item => Object.assign({ progress: undefined, uri: '', data: '', mime: '' }, item)));
                 U.set(U.view(['user', 'today_pass_num'], store), Number.parseInt(today_pass_num.get()) + 1);
                 // 缓存用于新手福利判断
                 asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
