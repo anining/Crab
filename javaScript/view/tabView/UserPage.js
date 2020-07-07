@@ -24,8 +24,8 @@ import user17 from '../../assets/icon/user/user17.png';
 import { getter, clear } from '../../utils/store';
 import toast from '../../utils/toast';
 import * as U from 'karet.util';
-import { updateUser } from '../../utils/update';
-import {_copyStr} from '../../utils/util';
+import { updateSecondIncome, updateUser } from '../../utils/update';
+import { _copyStr } from '../../utils/util';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -115,6 +115,7 @@ function UserPage () {
 
     function onRefresh () {
         updateUser();
+        updateSecondIncome();
     }
 
     return (

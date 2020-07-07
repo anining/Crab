@@ -15,9 +15,6 @@ import { css } from '../../assets/style/css';
 import game14 from '../../assets/icon/game/game14.png';
 import game9 from '../../assets/icon/game/game9.png';
 import game29 from '../../assets/icon/game/game29.png';
-import game30 from '../../assets/icon/game/game30.png';
-import game51 from '../../assets/icon/game/game51.png';
-import game52 from '../../assets/icon/game/game52.png';
 import game53 from '../../assets/icon/game/game53.png';
 import game54 from '../../assets/icon/game/game54.png';
 import game55 from '../../assets/icon/game/game55.png';
@@ -42,7 +39,7 @@ import * as R from 'kefir.ramda';
 import toast from '../../utils/toast';
 import game20 from '../../assets/icon/game/game20.png';
 import help from '../../lottie/help';
-import { updateUser } from '../../utils/update';
+import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { bindData, getPath } from '../../global/global';
 
 const { height, width } = Dimensions.get('window');
@@ -273,7 +270,6 @@ export default class GamePage extends Component {
                                                 console.log(this.state.selectSite);
                                             });
                                         }
-                                        console.log(fillArray, masterKey);
                                         if (fillArray[masterKey]) {
                                             this[`answerOpacity${fillArray[masterKey].key}`] && this[`answerOpacity${fillArray[masterKey].key}`].show();
                                             this.setState({
@@ -351,7 +347,7 @@ export default class GamePage extends Component {
                                         </ImageBackground>
                                     </EnlargeView>;
                                 } else {
-                                    return <View style={{ width: '100%', height: '100%', padding: 1 }}
+                                    return <EnlargeView ref={ref => this[`enlarge${xIndex}${yIndex}`] = ref} style={{ width: '100%', height: '100%', padding: 1 }}
                                         key={`GameWord${masterKey}`}>
                                         <ImageBackground source={game55}
                                             style={[css.flex, { width: '100%', height: '100%' }]}>
@@ -359,7 +355,7 @@ export default class GamePage extends Component {
                                                 color: answerItemInfo && answerItemInfo.isAwait ? 'red' : '#353535',
                                             }]}>{res.word}</Text>
                                         </ImageBackground>
-                                    </View>;
+                                    </EnlargeView>;
                                 }
                             }
                         }, (e) => {

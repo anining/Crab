@@ -21,6 +21,7 @@ function NoticePage () {
                     itemMarginTop={itemMarginTop}
                     getList={async (page, num, callback) => {
                         notice(page, num).then(r => {
+                            console.log(r, '??');
                             if (r && !r.error) {
                                 callback(r.data.notices);
                             }

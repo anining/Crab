@@ -400,16 +400,33 @@ export async function bannerAction (action, link, label) {
 }
 
 export function setAndroidTime (callback, duration = 1000) {
-    if (duration > 0) {
-        let timer = Animated.timing(new Animated.Value(0), {
-            toValue: 1,
-            duration: duration,
-            useNativeDriver: true,
-        }).start(() => {
-            callback();
-            timer && timer.stop();
-            timer = null;
-        });
+    let timer;
+    try {
+        if (duration > 0) {
+            timer = Animated.timing(new Animated.Value(0), {
+                toValue: 1,
+                duration: duration,
+                useNativeDriver: true,
+            }).start(() => {
+                if (callback && typeof callback === 'function') {
+                    callback();
+                }
+                if (timer && timer.stop && typeof timer.stop === 'function') {
+                    timer.stop();
+                }
+                timer = null;
+            });
+        }
+        return {
+            stop: () => {
+                if (timer && timer.stop && typeof timer.stop === 'function') {
+                    timer.stop();
+                }
+                callback && (callback = null);
+            }
+        };
+    } catch (e) {
+        console.log(e);
     }
 }
 

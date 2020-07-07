@@ -26,13 +26,16 @@ export default class CountDown extends Component {
     }
 
     setTime (ifSentence, ifSentenceDo, callback, time = 1000) {
-        setAndroidTime(() => {
+        const timer = setAndroidTime(() => {
             try {
                 if (ifSentence) {
                     ifSentenceDo && ifSentenceDo();
                     this.setTime(...arguments);
                 } else {
                     callback && callback();
+                    if (timer && timer.stop && typeof timer.stop === 'function') {
+                        timer.stop();
+                    }
                 }
             } catch (e) {
                 console.log(e);
