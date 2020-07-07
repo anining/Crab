@@ -10,34 +10,17 @@ import feed1 from '../../assets/icon/feed/feed1.png';
 import { deleteAccount, putAccount } from '../../utils/api';
 import Clipboard from '@react-native-community/clipboard';
 import toast from '../../utils/toast';
-import { updateAccount } from '../../utils/update';
+import { getTaskPlatform, updateAccount } from '../../utils/update';
 import { getter } from '../../utils/store';
 import * as U from 'karet.util';
 import {_copyStr} from '../../utils/util';
 
-const TYPE = [
-    {
-        id: 1,
-        label: '绑定音符账号'
-    },
-    {
-        id: 2,
-        label: '绑定快摄账号'
-    },
-    {
-        id: 3,
-        label: '绑定红酥账号'
-    },
-    {
-        id: 5,
-        label: '绑定头条账号'
-    }
-];
 const { width } = Dimensions.get('window');
-const { accounts } = getter(['accounts']);
+const { accounts, taskPlatform } = getter(['accounts', 'taskPlatform']);
 const length = R.prop('length', accounts);
 
-function AccountHomePage () {
+function AccountHomePage (props) {
+    const { refresh } = props.route.params;
     const headerRight = <Text style={{ color: '#FF6C00' }}>添加绑定</Text>;
 
     useEffect(() => {
@@ -51,6 +34,9 @@ function AccountHomePage () {
                     dom: <RenderSelect style={styles.selectView}/>,
                     close: () => {},
                 });
+            }} backOnPress={() => {
+                refresh && typeof refresh === 'function' && refresh();
+                N.goBack();
             }} headerRight={U.ifElse(R.equals(length, 0), undefined, headerRight)}/>
             <RenderView/>
         </SafeAreaView>
@@ -59,15 +45,16 @@ function AccountHomePage () {
 
 function RenderSelect () {
     const view = [];
+    const localArray = taskPlatform.get() || [];
 
-    TYPE.forEach(item => {
-        const { id, label } = item;
+    localArray.forEach(item => {
+        const { platform_category: id, label } = item;
         view.push(
-            <TouchableOpacity activeOpacity={1} key={id} onPress={() => {
+            <TouchableOpacity key={id} onPress={() => {
                 DeviceEventEmitter.emit('hidePop');
                 N.navigate('AccountBindPage', { id, label });
             }} style={[styles.selectViewBtn, css.flexRCSB]}>
-                <Text>{label}</Text>
+                <Text>{label}绑定</Text>
                 <Text>{'>'}</Text>
             </TouchableOpacity>
         );
@@ -170,6 +157,7 @@ function RenderChange ({ label, account_id, platform_category }) {
             if (!r.error) {
                 toast('切换账号绑定成功!');
                 updateAccount();
+                getTaskPlatform();
             }
         });
     }

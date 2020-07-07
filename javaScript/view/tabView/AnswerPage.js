@@ -191,7 +191,7 @@ function RenderDaySign ({ signDay, setSignDay }) {
     view.push(
         <View style={[css.flex, css.sp, styles.signAllWrap]} key="RenderDaySign-2">
             <View style={[css.flex, css.fw, styles.signTipsWrap]}>
-                <Text style={[styles.signTipsText, styles.maxSTT]}>完成进度: <Text style={{ color: '#FF6C00' }}>{today_task_num.get() || 0}</Text>/10</Text>
+                <Text style={[styles.signTipsText, styles.maxSTT]}>完成进度: <Text style={{ color: '#FF6C00' }} karet-lift>{U.ifElse(R.equals(today_task_num, undefined), 0, today_task_num)}</Text>/10</Text>
                 <Text style={[styles.signTipsText]}>提交并通过10单任务即可签到</Text>
             </View>
             <Button key={`${signBtnText}${signDay}`} width={120} name={signBtnText} disable={hadSign} shadow={'#ff0008'} onPress={async (callback) => {
