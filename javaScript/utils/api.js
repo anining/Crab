@@ -5,6 +5,7 @@ import toast from './toast';
 import { AesDecrypt, buildStr, JsonParse, parameterTransform, setAndroidTime } from './util';
 import { getGlobal } from '../global/global';
 import android from '../components/Android';
+import { N } from './router';
 
 // login
 export function apiLogin (phone, code, invite_code, token, op_token, operator) {
@@ -217,6 +218,11 @@ export function notice (page, size) {
     return transformFetch('GET', '/notice', { page, size });
 }
 
+// 读取公告
+export function putNotice (notice_id) {
+    return transformFetch('PUT', '/notice', { notice_id });
+}
+
 // 接任务
 export function getTask (task_platform_id) {
     return transformFetch('POST', '/task/receive', { task_platform_id });
@@ -324,7 +330,8 @@ export function income (page, size, source) {
     }
     return transformFetch('GET', '/income', data);
 }
-
+const Forbidden = 17;// 无权访问，sign无效
+const TokenInvalid = 16;// token无效，过期
 const transformFetch = async (method, url, data = {}) => {
     try {
         const formatDataRet = await formatData(data);
@@ -356,10 +363,13 @@ const transformFetch = async (method, url, data = {}) => {
                     const FETCH_DATA = await fetch(parameterTransform(method, url, formatDataRet), request);
                     const DATA_TEXT = await FETCH_DATA.text();
                     const localDate = DEVELOPER === 'Production' ? JsonParse(AesDecrypt(DATA_TEXT)) : JsonParse(DATA_TEXT);
-                    if (localDate.error && localDate.error !== 17) {
+                    if (localDate.error && localDate.error !== Forbidden) {
                         toast(localDate.msg);
                     }
                     if ('error' in localDate) {
+                        if (localDate.error === TokenInvalid) {
+                            N.replace('VerificationStackNavigator');
+                        }
                         resolve(localDate);
                     } else {
                         resolve({ error: 999, msg: '请求失败' });

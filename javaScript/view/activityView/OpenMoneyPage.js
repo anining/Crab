@@ -59,7 +59,7 @@ function OpenMoneyPage (props) {
                                 <ImageAuto width={width * 0.8} source={activity14}/>
                             </TouchableOpacity>
                         ),
-                        close: () => { !money && N.goBack(); }
+                        canCancel: false
                     });
                 }
             } else {

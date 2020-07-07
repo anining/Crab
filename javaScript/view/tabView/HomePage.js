@@ -119,8 +119,10 @@ export default class HomePage extends Component {
         requestAnimationFrame(() => {
             if (this.animationCanstart) {
                 this._getPosition();
-                updateUser();
-                updateNextRedLevel();
+                updateUser(() => {
+                    this._animationStart();
+                });
+                // updateNextRedLevel();
             }
         });
     }
@@ -151,6 +153,7 @@ export default class HomePage extends Component {
         this.startLottie && this.startLottie.remove();
         this.stopLottie && this.stopLottie.remove();
         this.animationCanstart = false;
+        this.goingGame = false;
     }
 
     async _getNoticeNumber () {
@@ -199,20 +202,19 @@ export default class HomePage extends Component {
                     });
                 }
             }
-            avatarProLevelPosition.forEach((item, index) => {
-                if (myForwardNumber === index) {
+            for (let i = 0; i < avatarProLevelPosition.length; i++) {
+                const item = avatarProLevelPosition[i];
+                if (myForwardNumber === i) {
                     view.push(
                         <ImageAuto key={`avatar${getPath(['avatar'], this.state.user)}`}
-                            source={getPath(['avatar'], this.state.user)} style={[css.pa, {
-                                left: item[0],
-                                top: item[1],
-                                width: 33,
-                            }]}/>,
+                            source={getPath(['avatar'], this.state.user)} style={[css.pa, { left: item[0], top: item[1], width: 36, borderRadius: 18, borderWidth: 1, borderColor: '#ee581f' }]}/>,
                     );
+                    break;
                 }
-            });
+            }
             return view;
         } catch (e) {
+            console.log(e);
             return null;
         }
     }
@@ -247,9 +249,6 @@ export default class HomePage extends Component {
                                     key={`ShiftViewGamePage2${JSON.stringify(position)}${JSON.stringify(accuracyPosition)}`}
                                     callback={() => {
                                         N.navigate('GamePage');
-                                        setAndroidTime(() => {
-                                            this.goingGame = false;
-                                        }, 1000);
                                     }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={800}
                                     startSite={position[0]} endSite={accuracyPosition}>
                                     <ImageAuto source={game25} width={33}/>
@@ -310,12 +309,18 @@ export default class HomePage extends Component {
                                         if (!this.goingGame) {
                                             if (getPath(['propNumsObj', '2'], this.state.user)) {
                                                 this.goingGame = true;
+                                                setAndroidTime(() => {
+                                                    this.goingGame = false;
+                                                }, 1500);
                                                 this.startGame && this.startGame.start();
+                                                !this.startGame && toast('游戏正在准备中，请稍后');
                                                 this._homeStop();
                                             } else {
                                                 toast('游戏道具不足');
                                                 this.gameHeader && this.gameHeader.showPop();
                                             }
+                                        } else {
+                                            toast('请勿频繁点击');
                                         }
                                     }}>
                                         <ImageBackground source={game1} style={[css.flex, styles.homeBtnWrap]}>
@@ -421,9 +426,10 @@ const styles = StyleSheet.create({
     incomeRateText: {
         ...css.pa,
         ...css.gf,
-        bottom: -10,
-        color: '#ddab4e',
+        bottom: -20,
+        color: '#dd741b',
         fontSize: 10,
+        lineHeight: 20,
         right: 10,
     },
     noticeIcon: {

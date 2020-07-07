@@ -68,24 +68,26 @@ export default class GameHeader extends Component {
         this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user));
         this.nowBalance = getPath(['goldCoin'], this.state.user, 0);
         this.debounceGetCoin();
-        this.secondText && this.secondText.setNativeProps({
-            text: `${_toFixed(this.nowBalance, 4)}`
-        });
         this._start = true;
     }
 
     async getCoin (addIncome = 0) {
         try {
             const ret = await asyncStorage.getItem(`${getPath(['phone'], this.state.user)}coin`);
-            if (JsonParse(ret).mastUpdate) {
+            if (JsonParse(ret) && JsonParse(ret).mastUpdate) {
                 this.nowBalance = JsonParse(ret).coin;
             } else {
-                this.nowBalance = JsonParse(ret).coin + (+new Date() - JsonParse(ret).time) / 1000 * this.secondIncome + addIncome;
-                asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
-                    coin: this.nowBalance,
-                    time: +new Date()
-                });
+                if (JsonParse(ret) && JsonParse(ret).coin) {
+                    this.nowBalance = JsonParse(ret).coin + (+new Date() - JsonParse(ret).time) / 1000 * this.secondIncome + addIncome;
+                    asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
+                        coin: this.nowBalance,
+                        time: +new Date()
+                    });
+                }
             }
+            this.secondText && this.secondText.setNativeProps({
+                text: `${_toFixed(this.nowBalance, 4)}`
+            });
         } catch (e) {
             console.log(e);
         }
@@ -114,10 +116,8 @@ export default class GameHeader extends Component {
                                 text: `${_toFixed(this.nowBalance, 4)}`
                             });
                             if (this.secondIncome !== addIncome) {
-                                // await this.getCoin(addIncome);
                                 this.debounceGetCoin(addIncome);
                                 this.writeTimes = maxWriteTimes;
-                                // nowBalance += parseFloat(addIncome);
                             }
                             if (this.writeTimes >= maxWriteTimes) {
                                 asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
@@ -134,11 +134,6 @@ export default class GameHeader extends Component {
                         }
                     }, 50 * i);
                 }
-            } else {
-                // if (!this.secondIncome) {
-                //     this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user, 0));
-                //     this.nowBalance = getPath(['goldCoin'], this.state.user, 0);
-                // }
             }
         } catch (e) {
             console.log(e);
@@ -152,6 +147,9 @@ export default class GameHeader extends Component {
     showPop () {
         DeviceEventEmitter.emit('showPop', <GameDialog callback={() => {
             N.navigate('AnswerPage');
+            setAndroidTime(() => {
+                DeviceEventEmitter.emit('answerScroll', 'end');
+            }, 1000);
         }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text>系统赠送1个最多同时持有<Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>} icon={game20}/>);
     }
 

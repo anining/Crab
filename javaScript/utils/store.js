@@ -40,7 +40,6 @@ function clear () {
     asyncStorage.clear();
     setter([
         ['user', DEFAULT_USER],
-        ['app', null],
         ['authorization', null],
     ]);
 }

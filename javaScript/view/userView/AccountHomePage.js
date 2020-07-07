@@ -13,6 +13,7 @@ import toast from '../../utils/toast';
 import { getTaskPlatform, updateAccount } from '../../utils/update';
 import { getter } from '../../utils/store';
 import * as U from 'karet.util';
+import {_copyStr} from '../../utils/util';
 
 const { width } = Dimensions.get('window');
 const { accounts, taskPlatform } = getter(['accounts', 'taskPlatform']);
@@ -99,8 +100,7 @@ function RenderBindView () {
         const status3 = R.equals(status, 3);
         const delClick = U.combine([status, account_id], (...args) => (must) => apiDeleteAccount(...args, must));
         const clipboard = U.mapValue(e => () => {
-            Clipboard.setString(e.toString());
-            toast('复制成功!');
+            _copyStr(e);
         }, home_url);
         const ifView = (
             <View style={styles.numberView} key={id}>

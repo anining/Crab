@@ -171,7 +171,7 @@ export default class ListGeneral extends Component {
                 <RefreshControl
                     refreshing={this.state.refreshing}
                     onRefresh={this._onRefresh.bind(this)}
-                    colors={['#c88883', '#ffa11b']}
+                    colors={['#c8b799', '#ffa11b']}
                     tintColor={'#ffa11b'}
                     size={10}
                 />

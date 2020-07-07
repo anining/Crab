@@ -9,6 +9,9 @@ import RN_FS from 'react-native-fs';
 import { API_URL, CONSOLE_LOG, PRIVATE_KEY } from './config';
 import { BALANCE_RATE } from './data';
 import { setDefaultGlobal } from '../global/global';
+import Clipboard from '@react-native-community/clipboard';
+import toast from './toast';
+import moment from 'moment';
 
 const initializationStore = keys => {
     const localStore = store.get();
@@ -239,11 +242,24 @@ export function unitConversion (gold, digits = 2) {
         return 0;
     }
 }
-function transformTime (time, start = 10, end = 11) {
-    if (!time) {
+function transformTime (time) {
+    try {
+        return moment(djangoTime(time)).format('MM-DD HH:mm');
+        // YYYY-MM-DD HH:mm:ss
+    } catch (e) {
         return '00:00:00';
     }
-    return `${time.slice(0, start)} ${time.slice(end, end + 8)}`;
+}
+
+export function _copyStr (str) {
+    try {
+        if (typeof str === 'string') {
+            Clipboard.setString(str);
+            toast('复制成功');
+        }
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 function requestPermission (success, denied) {
@@ -286,7 +302,6 @@ function requestPermission (success, denied) {
 // 防抖函数
 export function _debounce (func, wait) {
     let timeout;
-    // let first = true;
     return function () {
         const context = this;
         const args = arguments;
@@ -387,16 +402,33 @@ export async function bannerAction (action, link, label) {
 }
 
 export function setAndroidTime (callback, duration = 1000) {
-    if (duration > 0) {
-        let timer = Animated.timing(new Animated.Value(0), {
-            toValue: 1,
-            duration: duration,
-            useNativeDriver: true,
-        }).start(() => {
-            callback();
-            timer && timer.stop();
-            timer = null;
-        });
+    let timer;
+    try {
+        if (duration > 0) {
+            timer = Animated.timing(new Animated.Value(0), {
+                toValue: 1,
+                duration: duration,
+                useNativeDriver: true,
+            }).start(() => {
+                if (callback && typeof callback === 'function') {
+                    callback();
+                }
+                if (timer && timer.stop && typeof timer.stop === 'function') {
+                    timer.stop();
+                }
+                timer = null;
+            });
+        }
+        return {
+            stop: () => {
+                if (timer && timer.stop && typeof timer.stop === 'function') {
+                    timer.stop();
+                }
+                callback && (callback = null);
+            }
+        };
+    } catch (e) {
+        console.log(e);
     }
 }
 

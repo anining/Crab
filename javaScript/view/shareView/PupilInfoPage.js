@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, ImageBackground, Dimensions, TouchableOpacity, ScrollView, Image, TextInput, DeviceEventEmitter } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
 import { css } from '../../assets/style/css';
 import Header from '../../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,7 +15,7 @@ import pupil10 from '../../assets/icon/pupil/pupil10.png';
 import pupil12 from '../../assets/icon/pupil/pupil12.png';
 import ImageAuto from '../../components/ImageAuto';
 import { bindParent, childDetail } from '../../utils/api';
-import { transformTime } from '../../utils/util';
+import { _copyStr, transformTime } from '../../utils/util';
 import Choice from '../../components/Choice';
 import { getter } from '../../utils/store';
 import toast from '../../utils/toast';
@@ -34,14 +33,20 @@ function PupilInfoPage () {
     const [setting, setSetting] = useState({});
     const [yesterday, setYesterday] = useState({});
     const [total, setTotal] = useState({});
-
+    let reloadEmitter;
     useEffect(() => {
         _childDetail();
+        reloadEmitter = DeviceEventEmitter.addListener('reloadChildDetail', async () => {
+            _childDetail();
+        });
+        return () => {
+            reloadEmitter && reloadEmitter.remove();
+        };
     }, []);
 
     function _childDetail () {
         childDetail().then(r => {
-            if (!r.error) {
+            if (r && !r.error) {
                 const { children_list, parent, today, children_settings, yesterday, total } = r.data;
                 setChildren(children_list);
                 parent && setParent(parent);
@@ -198,7 +203,7 @@ function ParentView ({ parent, _childDetail }) {
     }
 
     if (parent.invite_code) {
-        const { invite_code, avatar, nickname, qq_group = '', wx = '' } = parent;
+        const { invite_code, avatar, nickname, qq_group, wx } = parent;
         return (
             <ImageBackground source={pupil8} style={[styles.infoHeader, css.pa]}>
                 <RenderShareTitle title="我的师父" icon={pupil5}/>
@@ -211,14 +216,20 @@ function ParentView ({ parent, _childDetail }) {
                 </View>
                 <View style={[css.flex, styles.pupBtnWrap, css.auto, css.sp]}>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
-                        Clipboard.setString(wx.toString());
-                        toast('复制成功');
+                        if (wx) {
+                            _copyStr(wx);
+                        } else {
+                            toast('你的师傅还没有设置微信');
+                        }
                     }}>
                         <ImageAuto source={pupil7} width={width * 0.35}/>
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
-                        Clipboard.setString(qq_group.toString());
-                        toast('复制成功');
+                        if (qq_group) {
+                            _copyStr(qq_group);
+                        } else {
+                            toast('你的师傅还没有设置QQ群');
+                        }
                     }}>
                         <ImageAuto source={pupil10} width={width * 0.35}/>
                     </TouchableOpacity>

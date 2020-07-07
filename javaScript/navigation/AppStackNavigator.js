@@ -58,6 +58,7 @@ import ShareUrlPage from '../view/shareView/ShareUrlPage';
 import ShareQRCodePage from '../view/shareView/ShareQRCodePage';
 import PassGamePage from '../view/gameView/PassGamePage';
 import RightProPage from '../view/gameView/RightProPage';
+import NoviceVideoPage from '../view/otherView/NoviceVideoPage';
 
 const Stack = createStackNavigator();
 
@@ -241,6 +242,11 @@ const stackScreens = [
         name: 'RightProPage',
         component: RightProPage,
         title: '答题正确率',
+    },
+    {
+        name: 'NoviceVideoPage',
+        component: NoviceVideoPage,
+        title: '新手视频',
     }
 ];
 
@@ -269,10 +275,8 @@ function AppStackNavigator () {
         setConsole();
         asyncStorage.getAllKeys()
             .then(response => {
-            // .filter(x => !new RegExp('[0-9]').test(x))
-                asyncStorage.multiGet(response) // 去除含有数字的key值
+                asyncStorage.multiGet(response.filter(x => !new RegExp('[0-9]').test(x))) // 去除含有数字的key值
                     .then(async r => {
-                        console.log(r);
                         initializationStore(r);
                         set(); // 先进入主页，后发起更新请求
                         await initNetInfo();
@@ -289,7 +293,6 @@ function AppStackNavigator () {
         return (
             <NavigationContainer onStateChange={(e) => {
                 // 优化动画开启关闭
-                console.log(e);
                 _tc(() => {
                     if ([...e.routes].pop().state && [...e.routes].pop().state.index === 0) {
                         DeviceEventEmitter.emit('startLottie');

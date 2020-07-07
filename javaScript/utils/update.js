@@ -19,8 +19,10 @@ import asyncStorage from './asyncStorage';
 
 import toast from './toast';
 import { N } from './router';
-let nextUpdateUserTime = null;
+let nextUpdateUserTime = null; // 下一次更新用户的时间
+let nextUpdateSecondIncomeTime = null; // 下一次获取每秒奖励的时间
 const updateUserRate = 5;
+const updateSecondIncomeRate = 20;
 export const updateUser = (callback) => {
     return new Promise((resolve, reject) => {
         if (!nextUpdateUserTime || (nextUpdateUserTime <= +new Date())) {
@@ -38,6 +40,26 @@ export const updateUser = (callback) => {
         }
     });
 };
+export function updateSecondIncome () {
+    return new Promise((resolve, reject) => {
+        if (!nextUpdateSecondIncomeTime || (nextUpdateSecondIncomeTime <= +new Date())) {
+            nextUpdateSecondIncomeTime = +new Date() + 1000 * updateSecondIncomeRate; // updateSecondIncomeRate秒之内不允许获取每秒奖励
+            getSecondIncome().then(res => {
+                resolve();
+                const coin = getPath(['data', 'balance'], res);
+                if (coin) {
+                    asyncStorage.setItem(`${getPath(['phone'], getGlobal('user'))}coin`, {
+                        coin: toGoldCoin(coin),
+                        time: +new Date(),
+                        mastUpdate: true
+                    });
+                }
+            });
+        } else {
+            resolve();
+        }
+    });
+}
 export const updateAccount = (callback) => {
     return new Promise((resolve, reject) => {
         account().then(r => {
@@ -212,22 +234,6 @@ function formatGradeRange (array) {
     } catch (e) {
         return [];
     }
-}
-
-export function updateSecondIncome () {
-    return new Promise((resolve, reject) => {
-        getSecondIncome().then(res => {
-            resolve();
-            const coin = getPath(['data', 'balance'], res);
-            if (coin) {
-                asyncStorage.setItem(`${getPath(['phone'], getGlobal('user'))}coin`, {
-                    coin: toGoldCoin(coin),
-                    time: +new Date(),
-                    mastUpdate: true
-                });
-            }
-        });
-    });
 }
 
 export function updateNextRedLevel () {

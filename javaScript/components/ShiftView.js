@@ -12,7 +12,8 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { css } from '../assets/style/css';
-import { _tc, setAndroidTime } from '../utils/util';
+import { _debounce, _tc, setAndroidTime } from '../utils/util';
+import toast from '../utils/toast';
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -34,10 +35,8 @@ export default class ShiftView extends Component {
         this.top = this.props.startSite[1];
         this.duration = this.props.duration;
         this.delay = this.props.delay;
-    }
-
-    componentDidMount () {
-        this.autoPlay && this.start();
+        this.nowTimer1 = null;
+        this.nowTimer2 = null;
         this.customLayoutAnimation = {
             duration: this.duration,
             create: {
@@ -54,6 +53,13 @@ export default class ShiftView extends Component {
         };
     }
 
+    componentDidMount () {
+        this.autoPlay && this.start();
+        this.debounceAnimationStart = _debounce(() => {
+            this._animationStart();
+        }, 500);
+    }
+
     componentWillMount () {
         this._stop = true;
         this.animation && (() => {
@@ -63,38 +69,47 @@ export default class ShiftView extends Component {
     }
 
     start () {
-        if (this._stop) {
-            this._stop = false;
-            this._animationStart();
-        }
+        console.log('开始动画， =====？？');
+        this._stop = false;
+        this.debounceAnimationStart();
     }
 
     _animationStart () {
-        this._shiftView && this._shiftView.setNativeProps({
-            style: { left: this.props.endSite[0], top: this.props.endSite[1], opacity: 1 },
-        });
-        LayoutAnimation.configureNext(this.customLayoutAnimation);
-        setAndroidTime(() => {
-            _tc(() => {
-                this.callback && this.callback();
-            });
+        if (!this._stop) {
+            this.nowTimer1 && this.nowTimer1.stop();
+            this.nowTimer2 && this.nowTimer2.stop();
             this._shiftView && this._shiftView.setNativeProps({
-                style: { left: this.props.startSite[0], top: this.props.startSite[1], opacity: 0 },
+                style: { left: this.props.endSite[0], top: this.props.endSite[1], opacity: 1 },
             });
-        }, Math.abs(this.duration - 100));
-        if (this.loop && this.duration && !this._stop && this.loopTime) {
-            setAndroidTime(() => {
-                !this._stop && this._animationStart();
-            }, this.duration + this.loopTime);
+            LayoutAnimation.configureNext(this.customLayoutAnimation);
+            this.nowTimer1 = setAndroidTime(() => {
+                _tc(() => {
+                    this.callback && this.callback();
+                });
+                this._shiftView && this._shiftView.setNativeProps({
+                    style: { left: this.props.startSite[0], top: this.props.startSite[1], opacity: 0 },
+                });
+            }, Math.abs(this.duration - 100));
+            if (this.loop && this.duration && !this._stop && this.loopTime) {
+                this.nowTimer2 = setAndroidTime(() => {
+                    !this._stop && this._animationStart();
+                }, this.duration + this.loopTime);
+            }
         }
     }
 
     stop () {
-        this._stop = true;
-        this.animation && (() => {
-            this.animation.stop();
-            this.animation = null;
-        })();
+        try {
+            this._stop = true;
+            this.nowTimer1 && this.nowTimer1.stop();
+            this.nowTimer2 && this.nowTimer2.stop();
+            this.animation && (() => {
+                this.animation.stop();
+                this.animation = null;
+            })();
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     render () {

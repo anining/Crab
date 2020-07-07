@@ -38,7 +38,6 @@ export default class Prompt extends Component {
                 this.close = info.close;
                 this.canCancel = Prompt.buildCanCancel(info);
                 this.setState({ show: true, dom: info.dom });
-                console.log(this.canCancel, info, 'this.canCancelthis.canCancelthis.canCancel');
             } else {
                 this.setState({ show: true, dom: info });
             }

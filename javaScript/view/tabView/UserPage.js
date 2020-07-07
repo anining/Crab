@@ -24,7 +24,8 @@ import user17 from '../../assets/icon/user/user17.png';
 import { getter, clear } from '../../utils/store';
 import toast from '../../utils/toast';
 import * as U from 'karet.util';
-import { updateUser } from '../../utils/update';
+import { updateSecondIncome, updateUser } from '../../utils/update';
+import { _copyStr } from '../../utils/util';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -114,6 +115,7 @@ function UserPage () {
 
     function onRefresh () {
         updateUser();
+        updateSecondIncome();
     }
 
     return (
@@ -133,8 +135,7 @@ function UserPage () {
                                         <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{phone}</Text>
                                     </View>
                                     <TouchableOpacity style={styles.userCardBottom} onPress={() => {
-                                        Clipboard.setString((invite_code.get() || '').toString());
-                                        toast('复制成功!');
+                                        _copyStr(invite_code.get());
                                     }}>
                                         <Text karet-lift numberOfLines={1} style={styles.inviteCode}>邀请码:{invite_code}</Text>
                                         <View style={styles.copyBtn}>
