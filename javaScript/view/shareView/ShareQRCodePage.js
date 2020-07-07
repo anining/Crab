@@ -12,7 +12,7 @@ import toast from '../../utils/toast';
 import QRCode from 'react-native-qrcode-svg';
 import { getter } from '../../utils/store';
 import * as U from 'karet.util';
-
+import RNShare from 'react-native-share';
 const { invite_code } = getter(['user.invite_code']);
 const { width } = Dimensions.get('window');
 const URL = 'https://www.baidu.com/';
@@ -21,21 +21,7 @@ function ShareQRCodePage () {
     const view = U.atom([]);
     const [capture, setCapture] = useState();
 
-    async function onShare () {
-        try {
-            Share.share({ message: `${URL}${invite_code.get()}` }).then(result => {
-                if (result.action === Share.sharedAction) {
-
-                } else if (result.action === Share.dismissedAction) {
-
-                }
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    function save () {
+    function save (type = 1) {
         const localView = view.get();
         try {
             if (capture) {
@@ -46,18 +32,28 @@ function ShareQRCodePage () {
                         result: 'base64'
                     }).then(
                         uri => {
-                            saveBase64ImageToCameraRoll(uri, () => toast('保存成功,请到相册查看!'), () => toast('保存失败!'));
+                            if (type === 1) {
+                                saveBase64ImageToCameraRoll(uri, () => toast('保存成功,请到相册查看'), () => toast('保存失败'));
+                            } else {
+                                RNShare.open({
+                                    title: '趣玩赚',
+                                    message: '趣玩赚',
+                                    url: `data:image/png;base64,${uri}`,
+                                }).catch(err => {
+                                    console.log(err);
+                                });
+                            }
                         },
                         () => {
-                            toast('保存失败!');
+                            toast('失败,captureRef错误');
                         },
                     );
                 }, () => {
-                    toast('保存失败!');
+                    toast('失败,权限不足');
                 });
             }
         } catch (e) {
-            toast('保存失败!');
+            toast('失败,error');
         }
     }
 
@@ -65,10 +61,10 @@ function ShareQRCodePage () {
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#fff', justifyContent: 'space-around', paddingBottom: 10 }]}>
             <Slider view={view} setCapture={setCapture}/>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
-                <TouchableOpacity activeOpacity={1} style={styles.btn} onPress={onShare}>
+                <TouchableOpacity activeOpacity={1} style={styles.btn} onPress={save(2)}>
                     <Text style={{ fontSize: 16, fontWeight: '500', color: '#fff' }}>分享给好友</Text>
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={1} style={[styles.btn, { backgroundColor: '#FF6C00' }]} onPress={save}>
+                <TouchableOpacity activeOpacity={1} style={[styles.btn, { backgroundColor: '#FF6C00' }]} onPress={save(1)}>
                     <Text style={{ fontSize: 16, fontWeight: '500', color: '#fff' }}>保存图片</Text>
                 </TouchableOpacity>
             </View>

@@ -255,10 +255,26 @@ function requestPermission (success, denied) {
                 PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
                 PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
             ]).then(granted => {
-                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                    success && success();
+                if (typeof granted === 'string') {
+                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                        success && success();
+                    } else {
+                        console.log(granted, PermissionsAndroid.RESULTS.GRANTED);
+                        denied && denied();
+                    }
                 } else {
-                    denied && denied();
+                    let toDoSuccess = true;
+                    for (const i in granted) {
+                        if (granted[i] !== PermissionsAndroid.RESULTS.GRANTED) {
+                            toDoSuccess = false;
+                            break;
+                        }
+                    }
+                    if (toDoSuccess) {
+                        success && success();
+                    } else {
+                        denied && denied();
+                    }
                 }
             });
         }
