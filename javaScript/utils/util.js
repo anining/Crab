@@ -278,7 +278,7 @@ export function _debounce (func, wait) {
             timeout = clearTimeout(timeout);
         }
         timeout = setTimeout(() => {
-            timeout = null;
+            timeout = clearTimeout(timeout);
             func.apply(context, args);
         }, wait);
     };
@@ -394,7 +394,6 @@ export function _toFixed (number, num = 2) {
 
 export function rangeLevel (level, rangeArray) {
     try {
-        console.log(level, rangeArray, '========计算等级');
         let grade = 1;
         for (let i = 0; i < rangeArray.length; i++) {
             const item = rangeArray[i];
@@ -406,7 +405,6 @@ export function rangeLevel (level, rangeArray) {
                 grade = i;
             }
         }
-        console.log(grade, '=======计算结果');
         return grade;
     } catch (e) {
         return 1;
