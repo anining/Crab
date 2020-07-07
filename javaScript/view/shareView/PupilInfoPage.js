@@ -15,7 +15,7 @@ import pupil10 from '../../assets/icon/pupil/pupil10.png';
 import pupil12 from '../../assets/icon/pupil/pupil12.png';
 import ImageAuto from '../../components/ImageAuto';
 import { bindParent, childDetail } from '../../utils/api';
-import { _copyStr, transformTime } from '../../utils/util';
+import { _copyStr, _toFixed, transformTime } from '../../utils/util';
 import Choice from '../../components/Choice';
 import { getter } from '../../utils/store';
 import toast from '../../utils/toast';
@@ -89,8 +89,8 @@ function RenderChild ({ children }) {
                         <Text style={{ color: 'rgba(153,153,153,1)', fontSize: 11 }}>收徒时间：{transformTime(created_at)}</Text>
                     </View>
                     <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
-                        <Text style={{ color: 'rgba(85,85,85,1)' }}>今日贡献：<Text style={{ color: 'rgba(51,51,51,1)' }}>{today_income}</Text></Text>
-                        <Text style={{ color: 'rgba(85,85,85,1)' }}>累计贡献金币：<Text style={{ color: 'rgba(51,51,51,1)' }}>{total_income}</Text></Text>
+                        <Text style={{ color: 'rgba(85,85,85,1)' }}>今日贡献：<Text style={{ color: 'rgba(51,51,51,1)' }}>{_toFixed(today_income, 2)}</Text></Text>
+                        <Text style={{ color: 'rgba(85,85,85,1)' }}>累计贡献金币：<Text style={{ color: 'rgba(51,51,51,1)' }}>{_toFixed(total_income, 2)}</Text></Text>
                     </View>
                     <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
                         <Text style={{ color: 'rgba(85,85,85,1)' }}>他的徒弟总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{children_num}</Text></Text>
@@ -164,8 +164,8 @@ function RenderForm ({ children_income = 0, children_num = 0, disciple_income = 
             <View style={[styles.formLineWrap, css.flex]}>
                 <Text style={styles.fhwLineText}>{children_num}</Text>
                 <Text style={styles.fhwLineText}>{disciple_num}</Text>
-                <Text style={styles.fhwLineText}>{children_income}</Text>
-                <Text style={[styles.fhwLineText, { borderRightWidth: 0 }]}>{disciple_income}</Text>
+                <Text style={styles.fhwLineText}>{_toFixed(children_income, 2)}</Text>
+                <Text style={[styles.fhwLineText, { borderRightWidth: 0 }]}>{_toFixed(disciple_income, 2)}</Text>
             </View>
         </View>
     );

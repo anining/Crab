@@ -214,7 +214,7 @@ function RenderSignList ({ signDay }) {
             const item = signConfigObj[day];
             view.push(
                 <View key={`sign${day}`} style={[css.flex, css.fw, styles.signItemWrap, { backgroundColor: day <= signDay ? '#FF9C00' : '#F0F0F0' }]}>
-                    <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', }]}>{_if(item.add_balance, res => transformMoney(res))}</Text>
+                    <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', }]}>{_if(item.add_balance, res => transformMoney(res, 0))}</Text>
                     <ImageAuto source={item.prop ? item.prop.icon : day <= signDay ? answer11 : answer9} width={item.prop ? width * 0.055 : width * 0.07}/>
                     <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', lineHeight: 18 }]}>{day}天</Text>
                 </View>
