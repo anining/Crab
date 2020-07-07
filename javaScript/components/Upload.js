@@ -4,14 +4,16 @@ import ImagePicker from 'react-native-image-crop-picker';
 import toast from '../utils/toast';
 import { uploadToken } from '../utils/api';
 
-function Upload ({ children, images = [], setImages, setProgress, editable = true, style = {}, length }) {
+function Upload ({ children, images = [], setImages, setProgress, progress, editable = true, index, style = {} }) {
     const [file, setFiles] = useState();
 
     useEffect(() => {
         if (!file) {
             return;
         }
-        setProgress && setProgress('正在上传...');
+        const localProgress = [...progress];
+        localProgress[index] = '正在上传...';
+        setProgress && typeof setProgress === 'function' && setProgress(localProgress);
         uploadToken('taskpicture', 'realman/upload/').then(r => {
             const { dir, accessid, host, policy, signature, cdn_domain } = r.data;
             const { mime } = file;
@@ -26,15 +28,22 @@ function Upload ({ children, images = [], setImages, setProgress, editable = tru
                 FD.append('file', file);
                 const xhr = new XMLHttpRequest();
                 xhr.upload.addEventListener('progress', e => {
-                    e.lengthComputable && setProgress && setProgress(Math.round((e.loaded * 100) / e.total).toString());
+                    if (e.lengthComputable && setProgress && typeof setProgress === 'function') {
+                        const localProgress = [...progress];
+                        localProgress[index] = Math.round((e.loaded * 100) / e.total).toString();
+                        setProgress(localProgress);
+                    }
                 }, false);
                 xhr.addEventListener('error', () => {
                     toast('上传失败');
-                    setProgress && setProgress('上传失败');
+                    const localProgress = [...progress];
+                    localProgress[index] = '上传失败';
+                    setProgress && typeof setProgress === 'function' && setProgress(localProgress);
                 }, false);
                 xhr.addEventListener('load', () => {
-                    const newImages = [...[Object.assign(file, { uri: `${cdn_domain}/${key}` })], ...images].slice(0, length);
-                    setImages(newImages);
+                    const localImages = [...images];
+                    localImages[index] = Object.assign(file, { uri: `${cdn_domain}/${key}` });
+                    setImages(localImages);
                 }, false);
                 xhr.open('POST', host, true);
                 xhr.send(FD);

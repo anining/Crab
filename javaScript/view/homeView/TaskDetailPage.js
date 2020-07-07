@@ -22,7 +22,7 @@ import * as U from 'karet.util';
 import { useFocusEffect } from '@react-navigation/native';
 import toast from '../../utils/toast';
 import asyncStorage from '../../utils/asyncStorage';
-import { task, updateUser } from '../../utils/update';
+import { updateUser } from '../../utils/update';
 import Button from '../../components/Button';
 import CountDown from '../../components/CountDown';
 
@@ -50,17 +50,19 @@ const MENU_STATUS = {
 
 function TaskDetailPage (props) {
     const [sRef, setSRef] = useState();
-    const [name, setName] = useState(props.route.params.detail.nickname || '');
+    const [name, setName] = useState([]);
     const [detail, setDetail] = useState(props.route.params.detail);
-    const [progress, setProgress] = useState('等待上传');
+    const [progress, setProgress] = useState([]);
     const [images, setImages] = useState(detail.images || []);
     const [num, setNum] = useState(0);
-    const [taskImage, setTaskImage] = useState(0);
+    const [taskImage, setTaskImage] = useState([]);
+    const [inputs, setInputs] = useState([]);
 
     useEffect(() => {
         const { course } = detail;
         const { submit = [] } = course;
         setTaskImage(submit.filter(item => item.type === 'image'));
+        setInputs(submit.filter(item => item.type === 'text'));
     }, [detail]);
 
     useEffect(() => {
@@ -157,8 +159,8 @@ function TaskDetailPage (props) {
                 <View style={{ paddingLeft: 10, paddingRight: 10 }}>
                     <DetailView refresh={refresh} detail={detail}/>
                     <ClaimView detail={detail}/>
-                    <CourseView name={name} detail={detail} progress={progress} setProgress={setProgress} setName={setName} setImages={setImages} images={images} />
-                    <Btn taskImage={taskImage} sRef={sRef} setProgress={setProgress} setName={setName} setImages={setImages} detail={detail} name={name} images={images} setDetail={setDetail}/>
+                    <CourseView inputs={inputs} taskImage={taskImage} name={name} detail={detail} progress={progress} setProgress={setProgress} setName={setName} setImages={setImages} images={images} />
+                    <Btn taskImage={taskImage} sRef={sRef} setName={setName} setImages={setImages} detail={detail} name={name} images={images} setDetail={setDetail}/>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -204,7 +206,7 @@ function EndTimeView ({ detail }) {
                     <Text style={{ color: '#fff', fontSize: 16, fontWeight: '500' }}>剩余时间：</Text>
                     <CountDown time={+new Date(djangoTime(finish_deadline))} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }}/>
                 </View>
-                <TouchableOpacity activeOpacity={1} onPress={apiGiveUp} style={styles.giveUpBtn}>
+                <TouchableOpacity onPress={apiGiveUp} style={styles.giveUpBtn}>
                     <Text style={{ color: '#fff', fontSize: 12, lineHeight: 25, textAlign: 'center' }}>放弃任务</Text>
                 </TouchableOpacity>
             </View>
@@ -237,7 +239,7 @@ function DetailView ({ refresh, detail }) {
                 </View>
                 <View style={styles.DetailBV}>
                     <Text style={{ color: '#999', fontSize: 12 }}>通过率低于20%时，建议切换账号做单。</Text>
-                    <TouchableOpacity activeOpacity={1} onPress={() => {
+                    <TouchableOpacity onPress={() => {
                         status === 1 && N.navigate('AccountHomePage', { refresh });
                     }} style={[styles.changeNumber, { borderColor: status === 1 ? '#FF6C00' : '#ABABAB' }]}>
                         <Text style={{ color: status === 1 ? '#FF6C00' : '#4F4F4F', fontSize: 12, lineHeight: 28, textAlign: 'center' }}>切换账号</Text>
@@ -261,16 +263,22 @@ function ClaimView ({ detail }) {
     );
 }
 
-function CourseView ({ detail, name, setName, images, setProgress, progress, setImages }) {
+function CourseView ({ detail, name = [], setName, inputs = [], taskImage = [], images, setProgress, progress = [], setImages }) {
     const { course, status } = detail;
-    const { submit = [], task = [] } = course;
+    const { task = [] } = course;
     const submitView = [];
     const taskView = [];
-    submit.forEach((item, index) => {
-        submitView.push(<RenderView inputName={name} length={submit.length} progress={progress} setProgress={setProgress} index={index} status={status} setName={setName} images={images} setImages={setImages} name="submit" key={item.label} item={item}/>);
+
+    inputs.forEach((item, index) => {
+        submitView.push(<RenderInput name={name} index={index} status={status} setName={setName} item={item} key={item.label}/>);
     });
-    task.forEach((item, index) => {
-        taskView.push(<RenderView inputName={name} length={task.length} progress={progress} setProgress={setProgress} index={index} status={status} images={images} setImages={setImages} setName={setName} name="task" key={item.label} item={item}/>);
+
+    taskImage.forEach((item, index) => {
+        submitView.push(<RenderImg progress={progress} setProgress={setProgress} index={index} status={status} images={images} setImages={setImages} key={item.label} item={item}/>);
+    });
+
+    task.forEach(item => {
+        taskView.push(<RenderView status={status} key={item.label} item={item}/>);
     });
     return (
         <>
@@ -280,7 +288,7 @@ function CourseView ({ detail, name, setName, images, setProgress, progress, set
                         <Image source={task6} style={{ height: 14, width: 14, marginRight: 5 }}/>
                         <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>做单教程</Text>
                     </View>
-                    <TouchableOpacity activeOpacity={1} onPress={() => {
+                    <TouchableOpacity onPress={() => {
                         status === 1 && N.navigate('HelpCenterPage');
                     }}>
                         <Text style={{ color: status === 1 ? '#FF6C00' : '#4F4F4F', fontSize: 12 }}>帮助中心</Text>
@@ -296,7 +304,7 @@ function CourseView ({ detail, name, setName, images, setProgress, progress, set
                         <Image source={task5} style={{ height: 14, width: 14, marginRight: 5 }}/>
                         <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>提交审核</Text>
                     </View>
-                    <TouchableOpacity activeOpacity={1} onPress={() => {
+                    <TouchableOpacity onPress={() => {
                         status === 1 && N.navigate('HelpCenterPage');
                     }}>
                         <Text style={{ color: status === 1 ? '#FF6C00' : '#4F4F4F', fontSize: 12 }}>帮助中心</Text>
@@ -310,7 +318,7 @@ function CourseView ({ detail, name, setName, images, setProgress, progress, set
     );
 }
 
-function RenderView ({ name, inputName, length, index, setImages, setProgress, progress, status, images, item, setName }) {
+function RenderView ({ status, item }) {
     const { type, label, content } = item;
     const [view, setView] = useState();
 
@@ -339,55 +347,64 @@ function RenderView ({ name, inputName, length, index, setImages, setProgress, p
         }
     }
 
-    if (name === 'task') {
-        if (type === 'text') {
-            return <TransformUrlView status={status} content={content} label={label}/>;
-        }
-        return (
-            <>
-                <Text style={styles.taskCourseText}>{label}</Text>
-                <TouchableOpacity activeOpacity={1} onPress={() => {
-                    if (status === 1) {
-                        DeviceEventEmitter.emit('showPop', {
-                            dom: <Image source={{ uri: content }} style={[styles.saveBtn, { width: 312, height: 398, backgroundColor: '#fff' }]}/>,
-                            close: () => {}
-                        });
-                    }
-                }} style={{ marginTop: 10 }}>
-                    <ImageBackground source={{ uri: content }} style={styles.saveBtn} ref={ref => setView(ref)}>
-                        <TouchableOpacity activeOpacity={1} onPress={() => {
-                            status === 1 && save();
-                        }} style={{ marginBottom: '10%' }}>
-                            <Text style={styles.saveBtnText}>保存图片</Text>
-                        </TouchableOpacity>
-                    </ImageBackground>
-                </TouchableOpacity>
-            </>
-        );
-    } else {
-        if (type === 'text') {
-            return (
-                <View style={{ marginTop: 20 }}>
-                    <Text style={{ color: '#222', fontSize: 14 }}>{label}</Text>
-                    <TextInput
-                        editable={status === 1}
-                        style={styles.input}
-                        maxLength={20}
-                        value={inputName}
-                        placeholder={content}
-                        placeholderTextColor={'#FF7008'}
-                        onChangeText={name => setName(name)}/>
-                </View>
-            );
-        }
-        return (
-            <>
-                <Text style={styles.taskCourseText}>{label}</Text>
-                <RenderImage length={length} images={images} setProgress={setProgress} progress={progress} index={index} setImages={setImages} status={status} sourceImage={content}/>
-                <Text style={{ color: '#222', fontSize: 14, lineHeight: 30 }}>（请按照示例上传截图）</Text>
-            </>
-        );
+    if (type === 'text') {
+        return <TransformUrlView status={status} content={content} label={label}/>;
     }
+    return (
+        <>
+            <Text style={styles.taskCourseText}>{label}</Text>
+            <TouchableOpacity onPress={() => {
+                if (status === 1) {
+                    DeviceEventEmitter.emit('showPop', {
+                        dom: <Image source={{ uri: content }} style={[styles.saveBtn, { width: 312, height: 398, backgroundColor: '#fff' }]}/>,
+                        close: () => {}
+                    });
+                }
+            }} style={{ marginTop: 10 }}>
+                <ImageBackground source={{ uri: content }} style={styles.saveBtn} ref={ref => setView(ref)}>
+                    <TouchableOpacity onPress={() => {
+                        status === 1 && save();
+                    }} style={{ marginBottom: '10%' }}>
+                        <Text style={styles.saveBtnText}>保存图片</Text>
+                    </TouchableOpacity>
+                </ImageBackground>
+            </TouchableOpacity>
+        </>
+    );
+}
+
+function RenderInput ({ name, index, status, item, setName }) {
+    const { label, content } = item;
+    const localName = [...name];
+
+    return (
+        <View style={{ marginTop: 20 }}>
+            <Text style={{ color: '#222' }}>{label}</Text>
+            <TextInput
+                editable={status === 1}
+                style={styles.input}
+                value={name[index]}
+                maxLength={50}
+                placeholder={content}
+                onChangeText={name => {
+                    localName[index] = name;
+                    setName(localName);
+                }}
+                placeholderTextColor={'#FF7008'}/>
+        </View>
+    );
+}
+
+function RenderImg ({ index, setImages, setProgress, progress = [], status, images, item }) {
+    const { label, content } = item;
+
+    return (
+        <>
+            <Text style={styles.taskCourseText}>{label}</Text>
+            <RenderImage setProgress={setProgress} index={index} images={images} setImages={setImages} progress={progress} status={status} content={content}/>
+            <Text style={{ color: '#222', lineHeight: 30 }}>（请按照示例上传截图）</Text>
+        </>
+    );
 }
 
 function TransformUrlView ({ content, status, label }) {
@@ -409,23 +426,24 @@ function TransformUrlView ({ content, status, label }) {
     }
 }
 
-function RenderImage ({ images, length, progress, setProgress, index, setImages, status, sourceImage }) {
+function RenderImage ({ images, progress = [], setProgress, index, setImages, status, content }) {
     const view = <Image source={status === 1 ? images[index] ? { uri: `data:${images[index].mime};base64,${images[index].data}` } : task8 : { uri: images[index] }} style={ styles.uploadImage}/>;
+    const progressText = progress[index] ? isNaN(progress[index]) ? progress[index] : `${progress[index]} %` : '等待上传';
     return (
         <View style={[css.flexRCSB, { alignItems: 'flex-start' }]}>
-            <TouchableOpacity activeOpacity={1} onPress={() => {
+            <TouchableOpacity onPress={() => {
                 if (status === 1) {
                     DeviceEventEmitter.emit('showPop', {
-                        dom: <Image source={{ uri: sourceImage }} style={[styles.saveBtn, { width: 312, height: 398, backgroundColor: '#fff' }]}/>,
+                        dom: <Image source={{ uri: content }} style={[styles.saveBtn, { width: 312, height: 398, backgroundColor: '#fff' }]}/>,
                         close: () => {}
                     });
                 }
             }} style={{ marginTop: 10 }}>
-                <Image source={{ uri: sourceImage }} style={[styles.uploadImage, { marginTop: 0 }]}/>
+                <Image source={{ uri: content }} style={[styles.uploadImage, { marginTop: 0 }]}/>
             </TouchableOpacity>
             <View>
-                <Upload children={view} setProgress={setProgress} editable={status === 1} images={images} setImages={setImages} length={length}/>
-                <Text style={styles.progress}>{progress}{isNaN(progress) ? '' : '%'}</Text>
+                <Upload children={view} setProgress={setProgress} progress={progress} editable={status === 1} images={images} setImages={setImages} index={index}/>
+                <Text style={styles.progress}>{progressText}</Text>
             </View>
         </View>
     );
@@ -439,7 +457,7 @@ function UserPop ({ view }) {
     );
 }
 
-function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages, name, setDetail }) {
+function Btn ({ images, taskImage = [], sRef, setName, detail, setImages, name = [], setDetail }) {
     const { status, nickname, receive_task_id, platform_category } = detail;
 
     function getApiTask () {
@@ -528,16 +546,15 @@ function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages
 
     function submit (callback) {
         const localImages = images.map(image => image.uri);
-        if ((taskImage && !localImages.length) || !(name || nickname)) {
+        if ((taskImage.length !== localImages.length) || !name.length) {
             callback();
             toast('请填写完整的名称和执行图!');
             return;
         }
-        taskSubmit(receive_task_id, localImages, name || nickname).then(r => {
+        taskSubmit(receive_task_id, localImages, name).then(r => {
             if (!r.error) {
                 const { add_balance } = r.data;
-                setName('');
-                setProgress('等待上传');
+                setName([]);
                 setImages([]);
                 U.set(U.view(['user', 'today_pass_num'], store), Number.parseInt(today_pass_num.get()) + 1);
                 // 缓存用于新手福利判断
