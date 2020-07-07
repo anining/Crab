@@ -132,15 +132,15 @@ function UserPage () {
                                         <Text karet-lift numberOfLines={1} style={styles.userPhone}>{nickname}</Text>
                                         <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{phone}</Text>
                                     </View>
-                                    <View style={styles.userCardBottom}>
+                                    <TouchableOpacity style={styles.userCardBottom} onPress={() => {
+                                        Clipboard.setString((invite_code.get() || '').toString());
+                                        toast('复制成功!');
+                                    }}>
                                         <Text karet-lift numberOfLines={1} style={styles.inviteCode}>邀请码:{invite_code}</Text>
-                                        <TouchableOpacity activeOpacity={1} onPress={() => {
-                                            Clipboard.setString(invite_code.get());
-                                            toast('复制成功!');
-                                        }} style={styles.copyBtn}>
+                                        <View style={styles.copyBtn}>
                                             <Text style={styles.copyText}>复制</Text>
-                                        </TouchableOpacity>
-                                    </View>
+                                        </View>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                             <RenderBind />
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     copyText: {
         color: '#FF6C00',
         fontSize: 11,
-        lineHeight: 16,
+        lineHeight: 19,
         textAlign: 'center'
     },
     inviteCode: {

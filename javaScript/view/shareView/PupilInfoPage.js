@@ -198,7 +198,7 @@ function ParentView ({ parent, _childDetail }) {
     }
 
     if (parent.invite_code) {
-        const { invite_code, avatar, nickname, qq_group, wx } = parent;
+        const { invite_code, avatar, nickname, qq_group = '', wx = '' } = parent;
         return (
             <ImageBackground source={pupil8} style={[styles.infoHeader, css.pa]}>
                 <RenderShareTitle title="我的师父" icon={pupil5}/>
