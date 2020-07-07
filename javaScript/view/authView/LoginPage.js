@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
         height: 200,
         paddingLeft: 30,
         paddingRight: 30,
-        paddingTop: width * 0.1
+        paddingTop: width * 0.15
     },
     fastLogin: {
         height: 'auto',

@@ -133,10 +133,10 @@ export default class GameHeader extends Component {
                     }, 50 * i);
                 }
             } else {
-                if (!this.secondIncome) {
-                    this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user, 0));
-                    this.nowBalance = getPath(['goldCoin'], this.state.user, 0);
-                }
+                // if (!this.secondIncome) {
+                //     this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user, 0));
+                //     this.nowBalance = getPath(['goldCoin'], this.state.user, 0);
+                // }
             }
         } catch (e) {
             console.log(e);
