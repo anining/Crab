@@ -269,10 +269,8 @@ function AppStackNavigator () {
         setConsole();
         asyncStorage.getAllKeys()
             .then(response => {
-            // .filter(x => !new RegExp('[0-9]').test(x))
-                asyncStorage.multiGet(response) // 去除含有数字的key值
+                asyncStorage.multiGet(response.filter(x => !new RegExp('[0-9]').test(x))) // 去除含有数字的key值
                     .then(async r => {
-                        console.log(r);
                         initializationStore(r);
                         set(); // 先进入主页，后发起更新请求
                         await initNetInfo();
@@ -289,7 +287,6 @@ function AppStackNavigator () {
         return (
             <NavigationContainer onStateChange={(e) => {
                 // 优化动画开启关闭
-                console.log(e);
                 _tc(() => {
                     if ([...e.routes].pop().state && [...e.routes].pop().state.index === 0) {
                         DeviceEventEmitter.emit('startLottie');

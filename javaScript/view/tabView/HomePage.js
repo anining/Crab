@@ -119,7 +119,9 @@ export default class HomePage extends Component {
         requestAnimationFrame(() => {
             if (this.animationCanstart) {
                 this._getPosition();
-                updateUser();
+                updateUser(() => {
+                    this._animationStart();
+                });
                 updateNextRedLevel();
             }
         });
@@ -199,20 +201,19 @@ export default class HomePage extends Component {
                     });
                 }
             }
-            avatarProLevelPosition.forEach((item, index) => {
-                if (myForwardNumber === index) {
+            for (let i = 0; i < avatarProLevelPosition.length; i++) {
+                const item = avatarProLevelPosition[i];
+                if (myForwardNumber === i) {
                     view.push(
                         <ImageAuto key={`avatar${getPath(['avatar'], this.state.user)}`}
-                            source={getPath(['avatar'], this.state.user)} style={[css.pa, {
-                                left: item[0],
-                                top: item[1],
-                                width: 33,
-                            }]}/>,
+                            source={getPath(['avatar'], this.state.user)} style={[css.pa, { left: item[0], top: item[1], width: 32, borderRadius: 16 }]}/>,
                     );
+                    break;
                 }
-            });
+            }
             return view;
         } catch (e) {
+            console.log(e);
             return null;
         }
     }
