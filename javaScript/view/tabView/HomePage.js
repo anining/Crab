@@ -40,6 +40,8 @@ import {
     HomeStartAnimationTime,
 } from '../../utils/animationConfig';
 import Button from '../../components/Button';
+import { notice } from '../../utils/api';
+import { otherwise } from 'kefir.ramda';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
@@ -57,6 +59,7 @@ export default class HomePage extends Component {
             user: bindData('user', this),
             gameHeaderPosition: null, // 头部图像视图
             accuracyImagePosition: null, // 答题按钮螃蟹视图
+            unreadNumber: 0,
         };
         this.animationCanstart = false;// 用户页面已经切换走的动画是否开始判断
         this.goingGame = false; // 是否去往goingGame
@@ -66,8 +69,7 @@ export default class HomePage extends Component {
         this.animationCanstart = true;
         setAndroidTime(() => {
             this.startLottie = DeviceEventEmitter.addListener('startLottie', () => {
-                this.debounceHomeStart();
-                this.debounceLottieStart();
+                this._debounceStart();
             });
             this.stopLottie = DeviceEventEmitter.addListener('stopLottie', () => {
                 this._homeStop();
@@ -75,17 +77,26 @@ export default class HomePage extends Component {
         }, HomeDelayMonitorTime);
     }
 
-    componentDidMount () {
+    async componentDidMount () {
+        proxyRouter(this.props.navigation);
+        this._setDebounce();
+        this.delayEmitter();
+        this._debounceStart();
+        await this._getNoticeNumber();
+    }
+
+    _debounceStart () {
+        this.debounceHomeStart();
+        this.debounceLottieStart();
+    }
+
+    _setDebounce () {
         this.debounceHomeStart = _debounce(() => {
             this._homeStart();
         }, HomeStartAnimationTime); // 动画开始时间分离
         this.debounceLottieStart = _debounce(() => {
             this._lottieStart();
         }, HomeLottieStartTime);// _lottieStart动画开始时间分离
-        proxyRouter(this.props.navigation);
-        this.delayEmitter();
-        this.debounceHomeStart();
-        this.debounceLottieStart();
     }
 
     _getPosition (callback) {
@@ -140,6 +151,19 @@ export default class HomePage extends Component {
         this.startLottie && this.startLottie.remove();
         this.stopLottie && this.stopLottie.remove();
         this.animationCanstart = false;
+    }
+
+    async _getNoticeNumber () {
+        try {
+            const ret = await notice(1, 1);
+            if (ret && !ret.error && ret.data) {
+                this.setState({
+                    unreadNumber: getPath(['unread_num'], ret.data)
+                });
+            }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     _renderHomeProcess () {
@@ -215,12 +239,12 @@ export default class HomePage extends Component {
                                 {_if(position && position[1] && position[1][0], res => <ShiftView
                                     key={`ShiftView1${JSON.stringify(position)}`} callback={() => {
                                         this.gameHeader && this.gameHeader.start();
-                                    }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} loopTime={1000}
-                                    duration={800} startSite={[width * 0.25, width * 0.55]} endSite={position[1]}>
+                                    }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} loopTime={1500}
+                                    duration={700} startSite={[width * 0.25, width * 0.55]} endSite={position[1]}>
                                     <ImageAuto source={game22} width={33}/>
                                 </ShiftView>)}
                                 {_if(position && accuracyPosition, res => <ShiftView
-                                    key={`ShiftView1${JSON.stringify(position)}${JSON.stringify(accuracyPosition)}`}
+                                    key={`ShiftViewGamePage2${JSON.stringify(position)}${JSON.stringify(accuracyPosition)}`}
                                     callback={() => {
                                         N.navigate('GamePage');
                                         setAndroidTime(() => {
@@ -251,9 +275,10 @@ export default class HomePage extends Component {
                                     <TouchableOpacity activeOpacity={1} style={[css.pa, styles.noticeIcon]}
                                         onPress={() => {
                                             N.navigate('NoticePage');
+                                            this.setState({ unreadNumber: 0 });
                                         }}>
                                         <ImageBackground source={game35} style={[{ width: '100%', height: '100%' }]}>
-                                            {_if(false, res => <Text style={[css.pa, styles.noticeNumber]}>10</Text>)}
+                                            {_if(this.state.unreadNumber, res => <Text style={[css.pa, styles.noticeNumber]}>{res}</Text>)}
                                         </ImageBackground>
                                     </TouchableOpacity>
                                     {/* eslint-disable-next-line no-return-assign */}
