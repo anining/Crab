@@ -13,7 +13,7 @@ import toast from '../../utils/toast';
 import { getTaskPlatform, updateAccount } from '../../utils/update';
 import { getter } from '../../utils/store';
 import * as U from 'karet.util';
-import {_copyStr} from '../../utils/util';
+import { _copyStr } from '../../utils/util';
 
 const { width } = Dimensions.get('window');
 const { accounts, taskPlatform } = getter(['accounts', 'taskPlatform']);
@@ -25,6 +25,7 @@ function AccountHomePage (props) {
 
     useEffect(() => {
         updateAccount();
+        getTaskPlatform();
     }, []);
 
     return (

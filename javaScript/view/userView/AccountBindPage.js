@@ -27,7 +27,6 @@ function AccountBindPage (props) {
             callback();
             if (!r.error) {
                 updateAccount();
-                getTaskPlatform();
                 toast('绑定操作成功!');
                 N.goBack();
             } else {
