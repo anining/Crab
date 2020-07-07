@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { Dimensions, SafeAreaView, StyleSheet, ScrollView, Text, Image, TextInput, View } from 'react-native';
+import {
+    Dimensions,
+    SafeAreaView,
+    StyleSheet,
+    ScrollView,
+    Text,
+    Image,
+    TextInput,
+    View,
+    DeviceEventEmitter,
+} from 'react-native';
 import { css } from '../../assets/style/css';
 import pupil5 from '../../assets/icon/pupil/pupil5.png';
 import Crab from '../../components/Crab';
@@ -21,7 +31,8 @@ function PupilSetPage (props) {
         childrenSetting(qq, wx, num, totalMoney).then(r => {
             callback();
             if (!r.error) {
-                toast('保存成功!');
+                toast('保存成功');
+                DeviceEventEmitter.emit('reloadChildDetail');
                 N.goBack();
             }
         });

@@ -15,7 +15,7 @@ import pupil10 from '../../assets/icon/pupil/pupil10.png';
 import pupil12 from '../../assets/icon/pupil/pupil12.png';
 import ImageAuto from '../../components/ImageAuto';
 import { bindParent, childDetail } from '../../utils/api';
-import {_copyStr, transformTime} from '../../utils/util';
+import { _copyStr, transformTime } from '../../utils/util';
 import Choice from '../../components/Choice';
 import { getter } from '../../utils/store';
 import toast from '../../utils/toast';
@@ -33,14 +33,19 @@ function PupilInfoPage () {
     const [setting, setSetting] = useState({});
     const [yesterday, setYesterday] = useState({});
     const [total, setTotal] = useState({});
-
+    let reloadEmitter;
     useEffect(() => {
         _childDetail();
+        reloadEmitter = DeviceEventEmitter.addListener('reloadChildDetail', async () => {
+            _childDetail();
+        });
+        return () => {
+            reloadEmitter && reloadEmitter.remove();
+        };
     }, []);
 
     function _childDetail () {
         childDetail().then(r => {
-            console.log('==', r);
             if (r && !r.error) {
                 const { children_list, parent, today, children_settings, yesterday, total } = r.data;
                 setChildren(children_list);
@@ -211,12 +216,20 @@ function ParentView ({ parent, _childDetail }) {
                 </View>
                 <View style={[css.flex, styles.pupBtnWrap, css.auto, css.sp]}>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
-                        _copyStr(wx);
+                        if (wx) {
+                            _copyStr(wx);
+                        } else {
+                            toast('你的师傅还没有设置微信');
+                        }
                     }}>
                         <ImageAuto source={pupil7} width={width * 0.35}/>
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={1} onPress={() => {
-                        _copyStr(qq_group);
+                        if (qq_group) {
+                            _copyStr(qq_group);
+                        } else {
+                            toast('你的师傅还没有设置QQ群');
+                        }
                     }}>
                         <ImageAuto source={pupil10} width={width * 0.35}/>
                     </TouchableOpacity>
