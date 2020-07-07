@@ -529,6 +529,7 @@ function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages
     }
 
     function showPop (type, number) {
+        const [isGet, setIsGet] = useState(true);
         let view;
         switch (type) {
         case 1:view = (
@@ -536,7 +537,10 @@ function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages
                 <Text style={styles.userPopTitle}>恭喜您，额外获得</Text>
                 <Text style={styles.userPopTips}>{number}<Text style={{ fontSize: 20 }}> 金币</Text></Text>
                 <Text style={styles.userPopText}>马上就可以提现啦</Text>
-                <TouchableOpacity style={styles.userPopBtn} onPress={getApiTask}>
+                <TouchableOpacity style={styles.userPopBtn} onPress={() => {
+                    isGet && getApiTask();
+                    setIsGet(false);
+                }}>
                     <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>继续领钱</Text>
                 </TouchableOpacity>
             </>
@@ -546,7 +550,10 @@ function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages
                 <Text style={styles.userPopTitle}>你太棒了！</Text>
                 <Text style={[styles.userPopText, { top: '40%' }]}>再做 <Text style={{ color: '#FF3B00', fontSize: 18 }}>{number}单</Text> 就能获得全部奖励啦</Text>
                 <Text style={[styles.userPopText, { top: '50%' }]}>再接再厉哦~</Text>
-                <TouchableOpacity style={styles.userPopBtn} onPress={getApiTask}>
+                <TouchableOpacity style={styles.userPopBtn} onPress={() => {
+                    isGet && getApiTask();
+                    setIsGet(false);
+                }}>
                     <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>继续领钱</Text>
                 </TouchableOpacity>
             </>
@@ -557,6 +564,7 @@ function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages
                 <Text style={[styles.userPopText, { top: '40%' }]}>你已经获得全部奖励了</Text>
                 <Text style={[styles.userPopText, { top: '50%' }]}>快去提现试试吧~</Text>
                 <TouchableOpacity style={styles.userPopBtn} onPress={() => {
+                    setIsGet(false);
                     DeviceEventEmitter.emit('hidePop');
                     N.navigate('WithdrawPage');
                 }}>
@@ -565,7 +573,13 @@ function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages
             </>
         );
         }
-        DeviceEventEmitter.emit('showPop', { dom: <UserPop view={view}/>, close: () => { console.log('关闭'); } });
+        DeviceEventEmitter.emit('showPop', {
+            dom: <UserPop view={view}/>,
+            close: () => {
+                isGet && getApiTask();
+                setIsGet(false);
+            }
+        });
     }
 
     function checkWindow (money) {
@@ -595,11 +609,11 @@ function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages
                 setName('');
                 setProgress('等待上传');
                 setImages([]);
-                checkWindow(add_balance || 0);
                 U.set(U.view(['user', 'today_pass_num'], store), Number.parseInt(today_pass_num.get()) + 1);
                 // 缓存用于新手福利判断
                 asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
                 sRef && sRef.scrollTo({ x: 0, y: 0, animated: true });
+                checkWindow(add_balance || 0);
                 callback();
             } else {
                 callback();
