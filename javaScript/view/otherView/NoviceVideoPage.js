@@ -17,6 +17,7 @@ import { css } from '../../assets/style/css';
 import { _if } from '../../utils/util';
 import { bindData, getPath } from '../../global/global';
 import { N } from '../../utils/router';
+import asyncStorage from '../../utils/asyncStorage';
 export default class NoviceVideoPage extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
@@ -28,9 +29,13 @@ export default class NoviceVideoPage extends Component {
     }
 
     async _end () {
-        asyncStorage.setItem(`NEW_USER_TASK_TYPE3${getPath(['user_id'], this.state.user, 0)}`, 'true');
-        DeviceEventEmitter.emit('reloadAnswer');
-        N.goBack();
+        try {
+            asyncStorage.setItem(`NEW_USER_TASK_TYPE1${getPath(['user_id'], this.state.user, 0)}`, 'true');
+            DeviceEventEmitter.emit('reloadAnswer');
+            N.goBack();
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     _onload () {
@@ -53,7 +58,7 @@ export default class NoviceVideoPage extends Component {
             </View>)}
             <Video source={{ uri: NOVICE_VIDEO }}
                 ref={(ref) => { this.player = ref; }}
-                controls = {false}
+                controls = {true}
                 disableFocus = {true}
                 posterResizeMode={'center'}
                 resizeMode={'contain'}

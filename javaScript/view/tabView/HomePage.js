@@ -122,7 +122,6 @@ export default class HomePage extends Component {
                 updateUser(() => {
                     this._animationStart();
                 });
-                // updateNextRedLevel();
             }
         });
     }
