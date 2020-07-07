@@ -8,10 +8,6 @@ import task7 from '../../assets/icon/task/task7.png';
 import task8 from '../../assets/icon/task/task8.png';
 import task9 from '../../assets/icon/task/task9.png';
 import task12 from '../../assets/icon/task/task12.png';
-import task13 from '../../assets/icon/task/task13.png';
-import task14 from '../../assets/icon/task/task14.png';
-import task15 from '../../assets/icon/task/task15.png';
-import task16 from '../../assets/icon/task/task16.png';
 import task17 from '../../assets/icon/task/task17.png';
 import Upload from '../../components/Upload';
 import { N } from '../../utils/router';
@@ -56,12 +52,10 @@ function TaskDetailPage (props) {
     const [sRef, setSRef] = useState();
     const [name, setName] = useState(props.route.params.detail.nickname || '');
     const [detail, setDetail] = useState(props.route.params.detail);
-    const [account, setAccount] = useState(props.route.params.account);
     const [progress, setProgress] = useState('等待上传');
     const [images, setImages] = useState(detail.images || []);
     const [num, setNum] = useState(0);
     const [taskImage, setTaskImage] = useState(0);
-    const [change] = useState(1);
 
     useEffect(() => {
         const { course } = detail;
@@ -161,11 +155,10 @@ function TaskDetailPage (props) {
             }}>
                 <EndTimeView detail={detail}/>
                 <View style={{ paddingLeft: 10, paddingRight: 10 }}>
-                    <TitleView detail={detail} account={account}/>
-                    <DetailView refresh={refresh} detail={detail} account={account} change={change}/>
+                    <DetailView refresh={refresh} detail={detail}/>
                     <ClaimView detail={detail}/>
-                    <CourseView name={name} taskImage={taskImage} setTaskImage={setTaskImage} detail={detail} progress={progress} setProgress={setProgress} setName={setName} setImages={setImages} images={images} />
-                    <Btn taskImage={taskImage} sRef={sRef} setProgress={setProgress} setName={setName} setImages={setImages} detail={detail} name={name} images={images} setDetail={setDetail} setAccount={setAccount}/>
+                    <CourseView name={name} detail={detail} progress={progress} setProgress={setProgress} setName={setName} setImages={setImages} images={images} />
+                    <Btn taskImage={taskImage} sRef={sRef} setProgress={setProgress} setName={setName} setImages={setImages} detail={detail} name={name} images={images} setDetail={setDetail}/>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -223,72 +216,10 @@ function EndTimeView ({ detail }) {
     );
 }
 
-function TitleView ({ detail, account }) {
-    const { task_category_label, unit_money } = detail;
-    if (!account) {
-        return <></>;
-    }
-    return (
-        <View style={[styles.taskDetail, styles.titleView]}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image source={task4} style={{ height: 14, width: 14, marginRight: 5 }}/>
-                <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>{task_category_label}</Text>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image source={task7} style={{ height: 20, width: 19, marginRight: 5 }}/>
-                <Text style={{ color: '#FF6C00', fontSize: 24 }}>{transformMoney(unit_money, 0)}<Text style={{ fontSize: 14 }}> 金币</Text></Text>
-            </View>
-        </View>
-    );
-}
-
-function DetailView ({ refresh, detail, account, change }) {
+function DetailView ({ refresh, detail }) {
     const { task_category_label, unit_money, nickname, success_rate, status } = detail;
-    const view = change === 2 ? <Text style={styles.taskDetailB}>没有检测到账号信息变化！请确认账号的健康状态！</Text> : <></>;
-    if (account) {
-        const { focus, follower, liked, userTab, likeTab } = account;
-        return (
-            <View style={styles.taskDetail}>
-                <View style={styles.taskDetailT}>
-                    <Text style={{ color: '#222', fontSize: 14 }}>做单账号：<Text style={{ color: '#262626', fontSize: 14, fontWeight: '500' }}>{nickname}</Text></Text>
-                    <Text style={{ color: '#999', fontSize: 12 }}>账号任务通过率：<Text style={{ color: '#FF6C00', fontSize: 14, fontWeight: '500' }}>{Number.parseInt(success_rate * 100) || 0}%</Text></Text>
-                </View>
-                <View style={styles.taskDetailBottom}>
-                    <View style={[styles.taskDetailBottomView, { height: change === 2 ? 137.5 : 187.5 }]}>
-                        <View style={{ height: '65%', flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <View style={styles.accountItem}>
-                                <Image source={task13} style={styles.accountView}/>
-                                <Text style={{ color: '#555' }}>关注：<Text style={{ color: '#333' }}>{focus}</Text></Text>
-                            </View>
-                            <View style={styles.accountItem}>
-                                <Image source={task14} style={styles.accountView}/>
-                                <Text style={{ color: '#555' }}>喜欢：<Text style={{ color: '#333' }}>{liked}</Text></Text>
-                            </View>
-                            <View style={styles.accountItem}>
-                                <Image source={task15} style={styles.accountView}/>
-                                <Text style={{ color: '#555' }}>粉丝：<Text style={{ color: '#333' }}>{follower}</Text></Text>
-                            </View>
-                            <View style={styles.accountItem}>
-                                <Image source={task16} style={styles.accountView}/>
-                                <Text style={{ color: '#555' }}>作品：<Text style={{ color: '#333' }}>{userTab}</Text></Text>
-                            </View>
-                        </View>
-                        <View style={styles.taskDetailVB}>
-                            <Text style={{ fontSize: 12, color: '#999' }}>通过率低于20%时，建议切换账号做单。</Text>
-                            <TouchableOpacity activeOpacity={1} onPress={() => {
-                                N.navigate('AccountHomePage');
-                            }} style={styles.taskDetailVBBtn}>
-                                <Text style={{ color: '#fff' }}>切换账号</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    {view}
-                </View>
-            </View>
-        );
-    }
     return (
-        <View style={[styles.taskDetail, { height: 150 }]}>
+        <View style={styles.taskDetail}>
             <View style={styles.taskDetailTop}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image source={task4} style={{ height: 14, width: 14, marginRight: 5 }}/>
@@ -299,7 +230,7 @@ function DetailView ({ refresh, detail, account, change }) {
                     <Text style={{ color: '#FF6C00', fontSize: 24 }}>{transformMoney(unit_money, 0)}<Text style={{ fontSize: 14 }}> 金币</Text></Text>
                 </View>
             </View>
-            <View style={[styles.taskDetailBottom, { height: '60%', justifyContent: 'center' }]}>
+            <View style={styles.taskDetailBottom}>
                 <View style={styles.DetailBV}>
                     <Text style={{ color: '#222' }}>做单账号：<Text style={{ color: '#262626', fontSize: 14, fontWeight: '500' }}>{nickname}</Text></Text>
                     <Text style={{ color: '#999', fontSize: 12 }}>账号任务通过率：<Text style={{ color: '#FF6C00', fontSize: 14, fontWeight: '500' }}>{Number.parseInt(success_rate * 100) || 0}%</Text></Text>
@@ -330,16 +261,16 @@ function ClaimView ({ detail }) {
     );
 }
 
-function CourseView ({ detail, name, setName, taskImage, setTaskImage, images, setProgress, progress, setImages }) {
+function CourseView ({ detail, name, setName, images, setProgress, progress, setImages }) {
     const { course, status } = detail;
     const { submit = [], task = [] } = course;
     const submitView = [];
     const taskView = [];
     submit.forEach((item, index) => {
-        submitView.push(<RenderView inputName={name} taskImage={taskImage} setTaskImage={setTaskImage} length={submit.length} progress={progress} setProgress={setProgress} index={index} status={status} setName={setName} images={images} setImages={setImages} name="submit" key={item.label} item={item}/>);
+        submitView.push(<RenderView inputName={name} length={submit.length} progress={progress} setProgress={setProgress} index={index} status={status} setName={setName} images={images} setImages={setImages} name="submit" key={item.label} item={item}/>);
     });
     task.forEach((item, index) => {
-        taskView.push(<RenderView taskImage={taskImage} setTaskImage={setTaskImage} inputName={name} length={task.length} progress={progress} setProgress={setProgress} index={index} status={status} images={images} setImages={setImages} setName={setName} name="task" key={item.label} item={item}/>);
+        taskView.push(<RenderView inputName={name} length={task.length} progress={progress} setProgress={setProgress} index={index} status={status} images={images} setImages={setImages} setName={setName} name="task" key={item.label} item={item}/>);
     });
     return (
         <>
@@ -379,7 +310,7 @@ function CourseView ({ detail, name, setName, taskImage, setTaskImage, images, s
     );
 }
 
-function RenderView ({ name, taskImage, setTaskImage, inputName, length, index, setImages, setProgress, progress, status, images, item, setName }) {
+function RenderView ({ name, inputName, length, index, setImages, setProgress, progress, status, images, item, setName }) {
     const { type, label, content } = item;
     const [view, setView] = useState();
 
@@ -508,7 +439,7 @@ function UserPop ({ view }) {
     );
 }
 
-function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages, name, setDetail, setAccount }) {
+function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages, name, setDetail }) {
     const { status, nickname, receive_task_id, platform_category } = detail;
 
     function getApiTask () {
@@ -521,7 +452,6 @@ function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages
                         N.goBack();
                     } else {
                         setDetail(response.data);
-                        setAccount(undefined);
                     }
                 });
             }
@@ -640,18 +570,6 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         width: '100%'
     },
-    accountItem: {
-        alignItems: 'center',
-        flexDirection: 'row',
-        height: '50%',
-        justifyContent: 'center',
-        width: '50%'
-    },
-    accountView: {
-        height: 20,
-        marginRight: 5,
-        width: 20
-    },
     changeNumber: {
         borderRadius: 14,
         borderWidth: 1,
@@ -757,40 +675,14 @@ const styles = StyleSheet.create({
     taskDetail: {
         backgroundColor: '#fff',
         borderRadius: 8,
-        height: 250,
+        height: 150,
         marginTop: 15,
-        width: '100%'
-    },
-    taskDetailB: {
-        borderTopColor: '#F2F2F2',
-        borderTopWidth: 1,
-        color: '#FF3154',
-        fontWeight: '500',
-        lineHeight: 50,
-        textAlign: 'center',
         width: '100%'
     },
     taskDetailBottom: {
         alignItems: 'center',
-        height: '75%',
-        justifyContent: 'space-between',
-        width: '100%'
-    },
-    taskDetailBottomView: {
-        height: 137.5,
-        paddingLeft: 10,
-        paddingRight: 10,
-        width: '100%'
-    },
-    taskDetailT: {
-        alignItems: 'center',
-        borderBottomColor: '#EDEDED',
-        borderBottomWidth: 1,
-        flexDirection: 'row',
-        height: '25%',
-        justifyContent: 'space-between',
-        paddingLeft: 10,
-        paddingRight: 10,
+        height: '60%',
+        justifyContent: 'center',
         width: '100%'
     },
     taskDetailTop: {
@@ -804,33 +696,10 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         width: '100%'
     },
-    taskDetailVB: {
-        alignItems: 'center',
-        flexDirection: 'row',
-        height: '35%',
-        justifyContent: 'space-between'
-    },
-    taskDetailVBBtn: {
-        alignItems: 'center',
-        backgroundColor: '#ff6c00',
-        borderRadius: 14,
-        height: 28,
-        justifyContent: 'center',
-        width: 72
-    },
     taskUpload: {
         backgroundColor: '#fff',
         borderRadius: 8,
         marginTop: 15,
-        width: '100%'
-    },
-    titleView: {
-        alignItems: 'center',
-        flexDirection: 'row',
-        height: 60,
-        justifyContent: 'space-between',
-        paddingLeft: 10,
-        paddingRight: 10,
         width: '100%'
     },
     uploadImage: {
