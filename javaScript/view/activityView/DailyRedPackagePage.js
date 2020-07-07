@@ -14,7 +14,7 @@ import ImageAuto from '../../components/ImageAuto';
 import CountDown from '../../components/CountDown';
 import { N } from '../../utils/router';
 import { activityDetail, getReceiveTaskAward } from '../../utils/api';
-import { djangoTime, transformMoney } from '../../utils/util';
+import { transformMoney } from '../../utils/util';
 import { getter } from '../../utils/store';
 
 const { width } = Dimensions.get('window');
@@ -23,7 +23,6 @@ const { today_pass_num, activityObj } = getter(['user.today_pass_num', 'activity
 function DailyRedPackagePage (props) {
     const { activityId = (activityObj.get() || {})[1].activity_id } = props.route.params;
     const [rule, setRule] = useState([]);
-    const [endDatetime, setEndDatetime] = useState('2020/12/12');
 
     useEffect(() => {
         detail();
@@ -50,8 +49,7 @@ function DailyRedPackagePage (props) {
                 if (error) {
                     N.goBack();
                 } else {
-                    const { logs, setting, end_datetime } = data;
-                    setEndDatetime(end_datetime);
+                    const { logs, setting } = data;
                     const { rule } = setting;
                     setRule(format(rule, logs));
                 }

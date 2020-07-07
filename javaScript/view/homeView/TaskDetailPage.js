@@ -495,7 +495,7 @@ function UserPop ({ view }) {
 }
 
 function Btn ({ images, taskImage, sRef, setName, detail, setProgress, setImages, name, setDetail, setAccount }) {
-    const { status, nickname, home_url, receive_task_id, platform_category } = detail;
+    const { status, nickname, receive_task_id, platform_category } = detail;
 
     function getApiTask () {
         DeviceEventEmitter.emit('hidePop');
