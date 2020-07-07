@@ -106,7 +106,7 @@ export default class GamePage extends Component {
                         myGradeLevel: getPath(['myGradeLevel'], this.state.user, 1),
                     },
                 });
-            }, 1000);
+            }, 1500);
         } else {
             // N.goBack();
         }

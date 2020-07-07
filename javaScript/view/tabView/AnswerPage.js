@@ -59,8 +59,8 @@ function AnswerPage () {
     let scrollViewRef;
     !authorization.get() && N.replace('VerificationStackNavigator');
 
-    useEffect(async () => {
-        await init();
+    useEffect(() => {
+        init();
         reloadEmitter = DeviceEventEmitter.addListener('reloadAnswer', async () => {
             await init();
         });
@@ -95,26 +95,29 @@ function AnswerPage () {
     }
 
     async function _newUserTask () {
-        // asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
-        const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
-        const local3 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE3${user_id.get()}`);
-        const localArray = [false, local1, openid.get(), local3];
-        const ret = await newUserTask();
-        if (!ret.error) {
-            const localData = ret.data.map(task => {
-                const { add_balance, is_finish, new_user_task_id, task_type } = task;
-                return {
-                    balance: add_balance,
-                    id: new_user_task_id,
-                    label: NEW_USER_TASK_TYPE[task_type].label,
-                    minTitle: NEW_USER_TASK_TYPE[task_type].label,
-                    icon: NEW_USER_TASK_TYPE[task_type].icon,
-                    path: NEW_USER_TASK_TYPE[task_type].path,
-                    btnText: is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成',
-                    btnStatus: is_finish ? 3 : localArray[task_type] ? 2 : 5,
-                };
-            });
-            setNewUser(localData);
+        try {
+            const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
+            const local3 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE3${user_id.get()}`);
+            const localArray = [false, local1, openid.get(), local3];
+            const ret = await newUserTask();
+            if (!ret.error) {
+                const localData = ret.data.map(task => {
+                    const { add_balance, is_finish, new_user_task_id, task_type } = task;
+                    return {
+                        balance: add_balance,
+                        id: new_user_task_id,
+                        label: NEW_USER_TASK_TYPE[task_type].label,
+                        minTitle: NEW_USER_TASK_TYPE[task_type].label,
+                        icon: NEW_USER_TASK_TYPE[task_type].icon,
+                        path: NEW_USER_TASK_TYPE[task_type].path,
+                        btnText: is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成',
+                        btnStatus: is_finish ? 3 : localArray[task_type] ? 2 : 5,
+                    };
+                });
+                setNewUser(localData);
+            }
+        } catch (e) {
+            console.log(e);
         }
     }
 
@@ -204,23 +207,27 @@ function RenderDaySign ({ signDay, setSignDay }) {
 }
 
 function RenderSignList ({ signDay }) {
-    const view = [];
-    const signConfigObj = signConfig.get();
-    for (const day in signConfigObj) {
-        const item = signConfigObj[day];
-        view.push(
-            <View key={`sign${day}`} style={[css.flex, css.fw, styles.signItemWrap, { backgroundColor: day <= signDay ? '#FF9C00' : '#F0F0F0' }]}>
-                <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', }]}>{_if(item.add_balance, res => transformMoney(res))}</Text>
-                <ImageAuto source={item.prop ? item.prop.icon : day <= signDay ? answer11 : answer9} width={item.prop ? width * 0.055 : width * 0.07}/>
-                <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', lineHeight: 18 }]}>{day}天</Text>
+    try {
+        const view = [];
+        const signConfigObj = signConfig.get();
+        for (const day in signConfigObj) {
+            const item = signConfigObj[day];
+            view.push(
+                <View key={`sign${day}`} style={[css.flex, css.fw, styles.signItemWrap, { backgroundColor: day <= signDay ? '#FF9C00' : '#F0F0F0' }]}>
+                    <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', }]}>{_if(item.add_balance, res => transformMoney(res))}</Text>
+                    <ImageAuto source={item.prop ? item.prop.icon : day <= signDay ? answer11 : answer9} width={item.prop ? width * 0.055 : width * 0.07}/>
+                    <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', lineHeight: 18 }]}>{day}天</Text>
+                </View>
+            );
+        }
+        return (
+            <View key={'dayList'} style={[styles.signAllTopWrap, css.flex]}>
+                {view}
             </View>
         );
+    } catch (e) {
+        return <View/>;
     }
-    return (
-        <View key={'dayList'} style={[styles.signAllTopWrap, css.flex]}>
-            {view}
-        </View>
-    );
 }
 
 function RenderActivity () {

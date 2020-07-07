@@ -208,6 +208,7 @@ export default class PassGamePage extends Component {
 
     static _countNextLevel (now, array) {
         try {
+            // console.log(now, array, '???===??');
             if (array && array.length) {
                 let retNumber = 0;
                 for (let i = 0; i < array.length; i++) {
@@ -218,7 +219,11 @@ export default class PassGamePage extends Component {
                         break;
                     }
                 }
-                return Math.abs(retNumber - now);
+                if (retNumber) {
+                    return Math.abs(retNumber - now);
+                } else {
+                    return retNumber;
+                }
             } else {
                 return 0;
             }
@@ -246,8 +251,10 @@ export default class PassGamePage extends Component {
                         }]}/>
                     </View>
                     <View style={{ height: 15, width: '100%' }}/>
-                    <Text style={[styles.gamePassTips, css.gf, { fontSize: 15 }]}>再闯关<Text
-                        style={{ fontSize: 17, color: 'red' }}>{PassGamePage._countNextLevel(myNowLevel, this.state.nextRedLevel)}</Text>关领红包</Text>
+                    {_if(PassGamePage._countNextLevel(myNowLevel, this.state.nextRedLevel), res => <Text style={[styles.gamePassTips, css.gf, { fontSize: 15 }]}>再闯关<Text
+                        style={{ fontSize: 17, color: 'red' }}>{PassGamePage._countNextLevel(myNowLevel, this.state.nextRedLevel)}</Text>{res}</Text>, () => {
+                        return <Text style={styles.noRedText}>更多红包在后面关卡等你拿～</Text>;
+                    })}
                     {(() => {
                         const view = [];
                         [...this.state.nextRedLevel].forEach((item, index) => {
