@@ -223,8 +223,8 @@ export function getTask (task_platform_id) {
 }
 
 // 提交任务
-export function taskSubmit (receive_task_id, images, nickname) {
-    return transformFetch('POST', '/task/submit', { receive_task_id, images, nickname });
+export function taskSubmit (receive_task_id, course) {
+    return transformFetch('POST', '/task/submit', { receive_task_id, course });
 }
 
 // 收徒设置

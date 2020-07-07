@@ -48,8 +48,9 @@ function Upload ({ children, images = [], setImages, editable = true, index = 0,
                 }, false);
                 xhr.addEventListener('load', () => {
                     if (!length) {
+                        const { mime, data } = file;
                         const localImages = [...images];
-                        localImages[index] = Object.assign({ uri: `${cdn_domain}/${key}` }, file, localImages[index]);
+                        localImages[index] = Object.assign(localImages[index], { uri: `${cdn_domain}/${key}`, mime, data });
                         setImages(localImages);
                     } else {
                         const newImages = [...[Object.assign(file, { uri: `${cdn_domain}/${key}` })], ...images].slice(0, length);

@@ -559,14 +559,14 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
             toast('请填写完整的名称和执行图!');
             return;
         }
-        taskSubmit(receive_task_id, localContent).then(r => {
+        taskSubmit(receive_task_id, { course: localContent.map(item => Object.assign(item, { data: '', mime: '', content: '', label: '', progress: '', type: '' })) }).then(r => {
             if (!r.error) {
+                sRef && sRef.scrollTo({ x: 0, y: 0, animated: true });
                 const { add_balance } = r.data;
                 setSubmits(submits.map(item => Object.assign({ progress: undefined, uri: '', data: '', mime: '' }, item)));
                 U.set(U.view(['user', 'today_pass_num'], store), Number.parseInt(today_pass_num.get()) + 1);
                 // 缓存用于新手福利判断
                 asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
-                sRef && sRef.scrollTo({ x: 0, y: 0, animated: true });
                 checkWindow(add_balance || 0);
                 callback();
             } else {

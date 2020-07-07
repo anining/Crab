@@ -8,6 +8,7 @@ import Header from '../../components/Header';
 import { N } from '../../utils/router';
 import { feedback } from '../../utils/api';
 import toast from '../../utils/toast';
+import Button from '../../components/Button';
 
 const { width } = Dimensions.get('window');
 
@@ -19,12 +20,14 @@ function FeedBackPage () {
     const view = <Image source={feed2} style={{ height: 50, width: 50 }}/>;
     const headerRight = <Text style={{ color: '#FF6C00' }}>反馈记录</Text>;
 
-    function apiFeedback () {
+    function apiFeedback (callback) {
         if (!text || !phone || !images.length) {
             toast('请填写完整的问题描述!');
+            callback();
             return;
         }
-        feedback(selectId, text, images, phone).then(r => {
+        feedback(selectId, text, images.map(image => image.uri), phone).then(r => {
+            callback();
             if (!r.error) {
                 toast('成功提交问题!');
                 N.goBack();
@@ -73,9 +76,11 @@ function FeedBackPage () {
                     placeholderTextColor={'#999'}
                     onChangeText={phone => setPhone(phone)}/>
             </View>
-            <TouchableOpacity activeOpacity={1} onPress={apiFeedback} style={[styles.btn, css.pa, { bottom: 0 }]}>
-                <Text style={{ fontSize: 17, color: '#fff', lineHeight: 44, textAlign: 'center' }}>提交反馈</Text>
-            </TouchableOpacity>
+            <View style={[styles.btn, css.pa, { bottom: 0 }]}>
+                <Button name="提交反馈" onPress={callback => {
+                    apiFeedback(callback);
+                }}/>
+            </View>
         </SafeAreaView>
     );
 }
@@ -115,8 +120,7 @@ const styles = StyleSheet.create({
         paddingRight: 15
     },
     btn: {
-        backgroundColor: '#FF3E00',
-        height: 44,
+        alignItems: 'center',
         width
     },
     centerInputView: {
