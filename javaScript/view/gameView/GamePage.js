@@ -23,7 +23,7 @@ import game57 from '../../assets/icon/game/game57.png';
 import game61 from '../../assets/icon/game/game61.png';
 import game62 from '../../assets/icon/game/game62.png';
 import ImageAuto from '../../components/ImageAuto';
-import { _gv, _if, _tc, _toFixed, setAndroidTime } from '../../utils/util';
+import { _debounce, _gv, _if, _tc, _toFixed, setAndroidTime } from '../../utils/util';
 import { gameError, getGame, upgradeGameLevel, useProp } from '../../utils/api';
 import ShiftView from '../../components/ShiftView';
 import EnlargeView from '../../components/EnlargeView';
@@ -436,12 +436,10 @@ export default class GamePage extends Component {
     _checkAnswer (item) {
         try {
             if (item.filled) {
-                console.log(item, '已经被选中');
                 return false;
             }
             this[`answerOpacity${item.key}`] && this[`answerOpacity${item.key}`].hide();
             const newAnswerObj = this._buildAnswerObj(item);
-            console.log(newAnswerObj, '提前假设这样选的答案对象');
             const surplusAnswer = Object.entries(newAnswerObj).map(x => {
                 if (x && x[0] && !x[1].filled) {
                     return x[0];
@@ -451,8 +449,6 @@ export default class GamePage extends Component {
             }); // 未被填充答案的key数组
             const rightChoice = item.key === this.state.selectSite;
             const isSuccess = rightChoice && GamePage.comparisonArray(surplusAnswer, item.idiomPointArray);
-            console.log(surplusAnswer, '下一个数组第一项');
-            console.log(this.state.fillArray, item.key, '======', this.state.selectSite);
             const nextAnswerObj = this._buildAnswerObj(item, isSuccess, rightChoice && !isSuccess, (preItemKey) => {
                 this[`answerOpacity${preItemKey}`] && this[`answerOpacity${preItemKey}`].show();
             });
@@ -522,9 +518,6 @@ export default class GamePage extends Component {
                             this.rightButAwait[item.key] = null;
                         })();
                         this[`animationText${this.state.selectSite}`] && this[`animationText${this.state.selectSite}`].tada();
-                        console.log(item, '???选错的字', this.state.coordinate, item.idiomPointArray.map((key) => {
-                            return this.state.coordinate[key].word;
-                        }).join(''));
                         GamePage._gameError(item.idiomPointArray.map((key) => {
                             return this.state.coordinate[key].word;
                         }).join(''));
@@ -570,7 +563,7 @@ export default class GamePage extends Component {
 
     render () {
         const gameTipsPropFn = U.mapValue((res) => {
-            return async () => {
+            return _debounce(async () => {
                 try {
                     if (res) {
                         const ret = await useProp();
@@ -598,7 +591,7 @@ export default class GamePage extends Component {
                 } catch (e) {
                     toast('系统出错');
                 }
-            };
+            }, 200);
         }, R.path(['3'], propNumsObj));
         return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
             <View style={[styles.gameHeader, css.flex, css.sp]}>

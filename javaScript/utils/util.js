@@ -11,6 +11,7 @@ import { BALANCE_RATE } from './data';
 import { setDefaultGlobal } from '../global/global';
 import Clipboard from '@react-native-community/clipboard';
 import toast from './toast';
+import moment from 'moment';
 
 const initializationStore = keys => {
     const localStore = store.get();
@@ -241,11 +242,13 @@ export function unitConversion (gold, digits = 2) {
         return 0;
     }
 }
-function transformTime (time, start = 10, end = 11) {
-    if (!time) {
+function transformTime (time) {
+    try {
+        return moment(djangoTime(time)).format('MM-DD HH:mm');
+        // YYYY-MM-DD HH:mm:ss
+    } catch (e) {
         return '00:00:00';
     }
-    return `${time.slice(0, start)} ${time.slice(end, end + 8)}`;
 }
 
 export function _copyStr (str) {
@@ -299,7 +302,6 @@ function requestPermission (success, denied) {
 // 防抖函数
 export function _debounce (func, wait) {
     let timeout;
-    // let first = true;
     return function () {
         const context = this;
         const args = arguments;

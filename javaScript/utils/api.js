@@ -218,6 +218,11 @@ export function notice (page, size) {
     return transformFetch('GET', '/notice', { page, size });
 }
 
+// 读取公告
+export function putNotice (notice_id) {
+    return transformFetch('PUT', '/notice', { notice_id });
+}
+
 // 接任务
 export function getTask (task_platform_id) {
     return transformFetch('POST', '/task/receive', { task_platform_id });

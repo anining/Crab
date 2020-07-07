@@ -84,7 +84,6 @@ export default class ShiftView extends Component {
             LayoutAnimation.configureNext(this.customLayoutAnimation);
             this.nowTimer1 = setAndroidTime(() => {
                 _tc(() => {
-                    console.log('执行回掉函数===');
                     this.callback && this.callback();
                 });
                 this._shiftView && this._shiftView.setNativeProps({
@@ -100,13 +99,17 @@ export default class ShiftView extends Component {
     }
 
     stop () {
-        this._stop = true;
-        this.nowTimer1 && this.nowTimer1.stop();
-        this.nowTimer2 && this.nowTimer2.stop();
-        this.animation && (() => {
-            this.animation.stop();
-            this.animation = null;
-        })();
+        try {
+            this._stop = true;
+            this.nowTimer1 && this.nowTimer1.stop();
+            this.nowTimer2 && this.nowTimer2.stop();
+            this.animation && (() => {
+                this.animation.stop();
+                this.animation = null;
+            })();
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     render () {
