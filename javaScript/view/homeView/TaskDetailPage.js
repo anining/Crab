@@ -79,6 +79,8 @@ function TaskDetailPage (props) {
             if (detail.status === 1) {
                 backClick();
                 return true;
+            } else {
+                updateUser();
             }
         };
         BackHandler.addEventListener('hardwareBackPress', onBackPress);
