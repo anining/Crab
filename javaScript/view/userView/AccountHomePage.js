@@ -8,7 +8,6 @@ import Header from '../../components/Header';
 import Null from '../../components/Null';
 import feed1 from '../../assets/icon/feed/feed1.png';
 import { deleteAccount, putAccount } from '../../utils/api';
-import Clipboard from '@react-native-community/clipboard';
 import toast from '../../utils/toast';
 import { getTaskPlatform, updateAccount } from '../../utils/update';
 import { getter } from '../../utils/store';
