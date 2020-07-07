@@ -18,7 +18,7 @@ import answer14 from '../../assets/icon/answer/answer14.png';
 import pop5 from '../../assets/icon/pop/pop5.png';
 import pop8 from '../../assets/icon/pop/pop8.png';
 import Shadow from '../../components/Shadow';
-import { _if, _tc, bannerAction, transformMoney } from '../../utils/util';
+import { _if, _tc, _toFixed, bannerAction, toGoldCoin, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
 import { N } from '../../utils/router';
 import { getter, store } from '../../utils/store';
@@ -266,7 +266,7 @@ function RenderNewList ({ list = [], _newUserTask }) {
                     <View style={[css.flex, css.fw, styles.aiwText]}>
                         <View style={[css.flex, css.js, { width: '100%' }]}>
                             <Text style={[styles.labelText, { width: 'auto' }]} numberOfLines={1}>{label}</Text>
-                            <Text style={styles.labelMoney} numberOfLines={1}> +{balance}</Text>
+                            <Text style={styles.labelMoney} numberOfLines={1}> +{_toFixed(toGoldCoin(balance), 0)}</Text>
                             <ImageAuto source={answer14} width={20}/>
                         </View>
                         <Text style={[styles.labelText, styles.labelMinTitle, { color: btnStatus === 5 ? '#999' : '#53C23B' }]} numberOfLines={1}>{minTitle}</Text>
