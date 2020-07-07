@@ -33,7 +33,7 @@ const TYPE = [
     }
 ];
 const { width } = Dimensions.get('window');
-const { accounts } = getter(['accounts']);
+const { accounts, taskPlatform } = getter(['accounts', 'taskPlatform']);
 const length = R.prop('length', accounts);
 
 function AccountHomePage (props) {
@@ -62,15 +62,16 @@ function AccountHomePage (props) {
 
 function RenderSelect () {
     const view = [];
+    const localArray = taskPlatform.get() || [];
 
-    TYPE.forEach(item => {
-        const { id, label } = item;
+    localArray.forEach(item => {
+        const { platform_category: id, label } = item;
         view.push(
-            <TouchableOpacity activeOpacity={1} key={id} onPress={() => {
+            <TouchableOpacity key={id} onPress={() => {
                 DeviceEventEmitter.emit('hidePop');
                 N.navigate('AccountBindPage', { id, label });
             }} style={[styles.selectViewBtn, css.flexRCSB]}>
-                <Text>{label}</Text>
+                <Text>{label}绑定</Text>
                 <Text>{'>'}</Text>
             </TouchableOpacity>
         );

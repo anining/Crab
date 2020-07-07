@@ -41,10 +41,7 @@ function AccountBindPage (props) {
             <Header scene={{ descriptor: { options: {} }, route: { name: label } }} navigation={N}/>
             <View style={{ flex: 1, justifyContent: 'space-between' }}>
                 <View style={styles.container}>
-                    <View style={styles.claim}>
-                        <Text style={styles.claimText}>绑定要求：</Text>
-                        <RenderConfig id={id}/>
-                    </View>
+                    <Render id={id}/>
                     <View style={styles.claim}>
                         <Text style={styles.homeText}>主页链接：</Text>
                         <TextInput
@@ -70,6 +67,20 @@ function AccountBindPage (props) {
                 }}/>
             </View>
         </SafeAreaView>
+    );
+}
+
+function Render ({ id }) {
+    const platforms = taskPlatform.get();
+    const localConfigs = platforms.filter(config => config.platform_category === id);
+    if (!localConfigs.length) {
+        return <></>;
+    }
+    return (
+        <View style={styles.claim}>
+            <Text style={styles.claimText}>绑定要求：</Text>
+            <RenderConfig id={id}/>
+        </View>
     );
 }
 
