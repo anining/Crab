@@ -166,7 +166,7 @@ function RenderDaySign ({ signDay, setSignDay }) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: pop5,
                     tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{ret.prop.label}</Text> </Text>,
-                    minTips: '请在"我的-我的背包"查看收益详情',
+                    minTips: '请在"我的-立即提现-资金记录"查看收益详情',
                     type: 'oneBtn',
                     rt: '我知道了',
                 }}/>);
@@ -174,7 +174,7 @@ function RenderDaySign ({ signDay, setSignDay }) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: pop5,
                     tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{transformMoney(ret.data.add_balance)}金币</Text> </Text>,
-                    minTips: '请在"我的-我的背包"查看收益详情',
+                    minTips: '请在"我的-立即提现-资金记录"查看收益详情',
                     type: 'oneBtn',
                     rt: '我知道了',
                 }}/>);
@@ -290,7 +290,7 @@ function RenderNewBtn ({ item, _newUserTask }) {
                     <Choice info={{
                         icon: pop3,
                         tips: '太棒了～',
-                        minTips: `你成功获得${balance}奖励`,
+                        minTips: `你成功获得${transformMoney(balance, 0)}金币`,
                         type: 1,
                         rt: '我知道了',
                         fontSize: 15
