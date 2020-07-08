@@ -61,6 +61,7 @@ import RightProPage from '../view/gameView/RightProPage';
 import NoviceVideoPage from '../view/otherView/NoviceVideoPage';
 import MustUpdate from '../components/MustUpdate';
 import WebViewPage from '../view/userView/WebViewPage';
+import MyMedal from '../view/userView/MyMedal';
 
 const Stack = createStackNavigator();
 
@@ -254,6 +255,11 @@ const stackScreens = [
         name: 'WebViewPage',
         component: WebViewPage,
         title: '详情',
+    },
+    {
+        name: 'MyMedal',
+        component: MyMedal,
+        title: '我的勋章',
     }
 ];
 
