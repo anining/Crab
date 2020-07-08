@@ -301,10 +301,11 @@ export function _debounce (func, wait) {
         const context = this;
         const args = arguments;
         if (timeout) {
-            timeout = clearTimeout(timeout);
+            timeout && timeout.stop();
+            timeout = null;
         }
-        timeout = setTimeout(() => {
-            timeout = clearTimeout(timeout);
+        timeout = setAndroidTime(() => {
+            timeout && timeout.stop();
             func.apply(context, args);
         }, wait);
     };
@@ -315,7 +316,7 @@ export function djangoTime (timeString) {
         if (typeof timeString === 'number') {
             return timeString;
         }
-        timeString = timeString.toString();
+        timeString = timeString + '';
         if (timeString.indexOf('.') < 0) {
             timeString += '.000';
         }

@@ -13,7 +13,6 @@ import {
 import PropTypes from 'prop-types';
 import { css } from '../assets/style/css';
 import { _debounce, _tc, setAndroidTime } from '../utils/util';
-import toast from '../utils/toast';
 
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -69,6 +68,7 @@ export default class ShiftView extends Component {
     }
 
     start () {
+        console.log('==============ka开始ka开始ka开始ka开始ka开始=========');
         this._stop = false;
         this.debounceAnimationStart();
     }
@@ -119,6 +119,9 @@ export default class ShiftView extends Component {
             opacity: 0,
             zIndex: 999,
         }]}>
+            {/*    onLayout={(e) => { */}
+            {/*    this.props.onLoad && this.props.onLoad(); */}
+            {/* }} */}
             {this.props.children}
         </View>;
     }
@@ -132,6 +135,7 @@ ShiftView.propTypes = {
     duration: PropTypes.number,
     autoPlay: PropTypes.bool,
     callback: PropTypes.func,
+    onLoad: PropTypes.func,
 };
 ShiftView.defaultProps = {
     startSite: [100, 100],
@@ -144,5 +148,6 @@ ShiftView.defaultProps = {
     callback: () => {
     },
     loopTime: 1000,
+    onLoad: () => {},
 };
 const styles = StyleSheet.create({});

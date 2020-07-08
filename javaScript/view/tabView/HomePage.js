@@ -26,7 +26,7 @@ import ShiftView from '../../components/ShiftView';
 import { N, proxyRouter } from '../../utils/router';
 import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
-import { _debounce, _if, AppAllPermissionsAndroid, requestPermission, setAndroidTime } from '../../utils/util';
+import { _debounce, _if, setAndroidTime } from '../../utils/util';
 import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { getter } from '../../utils/store';
 import GameHeader from '../../components/GameHeader';
@@ -41,7 +41,6 @@ import {
 } from '../../utils/animationConfig';
 import Button from '../../components/Button';
 import { notice } from '../../utils/api';
-import { otherwise } from 'kefir.ramda';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
@@ -81,7 +80,7 @@ export default class HomePage extends Component {
         proxyRouter(this.props.navigation);
         this._setDebounce();
         this.delayEmitter();
-        this._debounceStart();
+        this.debounceLottieStart();
         await this._getNoticeNumber();
     }
 
@@ -118,9 +117,8 @@ export default class HomePage extends Component {
     _homeStart () {
         requestAnimationFrame(() => {
             if (this.animationCanstart) {
-                this._getPosition();
                 updateUser(() => {
-                    this._animationStart();
+                    this._getPosition();
                 });
             }
         });
@@ -237,23 +235,27 @@ export default class HomePage extends Component {
                                 loop={true} autoPlay={false} speed={1}/>
                             <View style={[css.pa, css.cover]}>
                                 {/* eslint-disable-next-line no-return-assign */}
-                                {_if(position && position[1] && position[1][0], res => <ShiftView
-                                    key={`ShiftView1${JSON.stringify(position)}`} callback={() => {
-                                        this.gameHeader && this.gameHeader.start();
-                                    }} ref={ref => this.shiftView = ref} autoPlay={false} loop={true} loopTime={1500}
-                                    duration={700} startSite={[width * 0.25, width * 0.55]} endSite={position[1]}>
-                                    <ImageAuto source={game22} width={33}/>
-                                </ShiftView>)}
+                                {_if(position && position[1] && position[1][0], res => {
+                                    return <ShiftView
+                                        key={`ShiftView1${JSON.stringify(position)}`} callback={() => {
+                                            this.gameHeader && this.gameHeader.start();
+                                        }} ref={ref => ref && (this.shiftView = ref)} autoPlay={false} loop={true} loopTime={1500}
+                                        duration={700} startSite={[width * 0.25, width * 0.55]} endSite={position[1]}>
+                                        <ImageAuto source={game22} width={33}/>
+                                    </ShiftView>;
+                                })}
                                 {_if(position && accuracyPosition, res => <ShiftView
                                     key={`ShiftViewGamePage2${JSON.stringify(position)}${JSON.stringify(accuracyPosition)}`}
                                     callback={() => {
                                         N.navigate('GamePage');
-                                    }} ref={ref => this.startGame = ref} autoPlay={false} loop={false} duration={800}
+                                    }} ref={ref => ref && (this.startGame = ref)} autoPlay={false} loop={false} duration={800}
                                     startSite={position[0]} endSite={accuracyPosition}>
                                     <ImageAuto source={game25} width={33}/>
                                 </ShiftView>)}
                                 {/* /!* 头部显示区域 *!/ */}
-                                <GameHeader ref={ref => this.gameHeader = ref}/>
+                                <GameHeader ref={ref => this.gameHeader = ref} callback={() => {
+                                    this._getPosition();
+                                }}/>
                                 {/* 中部显示区域 */}
                                 <View style={[css.flex, css.pa, styles.homeMidWrap, css.afs]}>
                                     {_if(getPath([myGradeLevel, 'incomeRate'], this.state.gradeSetting), res =>
@@ -326,16 +328,18 @@ export default class HomePage extends Component {
                                             <Text style={styles.homeBtnText}>升渔船</Text>
                                             <ImageAuto source={game7} style={{ width: 33, marginLeft: 10 }}
                                                 onLayout={(e) => {
-                                                    const target = e.target;
-                                                    setAndroidTime(() => {
-                                                        UIManager.measure(target, (x, y, w, h, l, t) => {
-                                                            if (l && t) {
-                                                                this.setState({
-                                                                    accuracyImagePosition: [l, t],
-                                                                });
-                                                            }
-                                                        });
-                                                    }, DelayGetDomeTime);
+                                                    if (!this.state.accuracyImagePosition) {
+                                                        const target = e.target;
+                                                        setAndroidTime(() => {
+                                                            UIManager.measure(target, (x, y, w, h, l, t) => {
+                                                                if (l && t) {
+                                                                    this.setState({
+                                                                        accuracyImagePosition: [l, t],
+                                                                    });
+                                                                }
+                                                            });
+                                                        }, DelayGetDomeTime);
+                                                    }
                                                 }}/>
                                         </ImageBackground>
                                     </TouchableOpacity>
