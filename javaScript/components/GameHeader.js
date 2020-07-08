@@ -4,10 +4,6 @@ import {
     Dimensions,
     StyleSheet,
     View,
-    LayoutAnimation,
-    NativeModules,
-    Animated,
-    Easing,
     UIManager,
     Platform, TouchableOpacity, DeviceEventEmitter, Text, TextInput,
 } from 'react-native';
@@ -21,9 +17,6 @@ import game25 from '../assets/icon/game/game25.png';
 import game31 from '../assets/icon/game/game31.png';
 import EnlargeView from './EnlargeView';
 import game22 from '../assets/icon/game/game22.png';
-import { getter } from '../utils/store';
-import * as U from 'karet.util';
-import * as R from 'kefir.ramda';
 import { bindData, getPath } from '../global/global';
 import {
     _debounce,
@@ -33,8 +26,6 @@ import {
     JsonParse,
     setAndroidTime,
     toGoldCoin,
-    transformMoney,
-    unitConversion,
 } from '../utils/util';
 import asyncStorage from '../utils/asyncStorage';
 import CountDown from './CountDown';
@@ -54,7 +45,7 @@ export default class GameHeader extends Component {
             user: bindData('user', this),
         };
         this.secondIncome = 0;
-        this.writeTimes = 0;
+        this.writeTimes = maxWriteTimes;
         this._start = false;
         this.imagePosition2 = [0, 0];
         this.imagePosition1 = [0, 0];

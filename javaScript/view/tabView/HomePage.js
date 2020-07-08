@@ -175,12 +175,12 @@ export default class HomePage extends Component {
             const nexLevel = getPath([myGradeLevel], this.state.gradeRange, 0);
             const myNowLevel = getPath(['user_level', 'level_num'], this.state.user);
             const levelLength = nexLevel - preLevel;
-            const myForwardNumber = Math.floor(avatarProLevelPosition.length * (myNowLevel - preLevel) / levelLength);
+            const myForwardNumber = Math.floor(avatarProLevelPosition.length * Math.abs(myNowLevel - preLevel - 1) / levelLength);
             const view = [];
             if (this.state.nextRedLevel.length) {
                 if (this.state.nextRedLevel.length >= 12) {
                     homeProLevelPosition.forEach((item, index) => {
-                        view.push(<ImageAuto key={`red${index}`} source={game16}
+                        view.push(<ImageAuto key={`red${index}${myGradeLevel}`} source={game16}
                             style={[css.pa, { left: item[0], top: item[1], width: 33 }]}/>);
                     });
                 } else {
@@ -195,7 +195,7 @@ export default class HomePage extends Component {
                     });
                     homeProLevelPosition.forEach((item, index) => {
                         if (forwardNumberArray.includes(index + 1)) {
-                            view.push(<ImageAuto key={`red${index}`} source={game16}
+                            view.push(<ImageAuto key={`red${index}${myGradeLevel}`} source={game16}
                                 style={[css.pa, { left: item[0], top: item[1], width: 33 }]}/>);
                         }
                     });
@@ -203,9 +203,9 @@ export default class HomePage extends Component {
             }
             for (let i = 0; i < avatarProLevelPosition.length; i++) {
                 const item = avatarProLevelPosition[i];
-                if (myForwardNumber === i) {
+                if ((myForwardNumber === i + 1) || myForwardNumber === 0) {
                     view.push(
-                        <ImageAuto key={`avatar${getPath(['avatar'], this.state.user)}${myNowLevel}`}
+                        <ImageAuto key={`avatar${getPath(['avatar'], this.state.user)}${myNowLevel}${myGradeLevel}`}
                             source={getPath(['avatar'], this.state.user)} style={[css.pa, { left: item[0], top: item[1], width: 36, borderRadius: 18, borderWidth: 1, borderColor: '#ee581f' }]}/>,
                     );
                     break;

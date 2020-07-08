@@ -440,7 +440,8 @@ export function rangeLevel (level, rangeArray) {
         let grade = 1;
         for (let i = 0; i < rangeArray.length; i++) {
             const item = rangeArray[i];
-            if (level < item) {
+            console.log(level, item, '==321');
+            if (level <= item) {
                 grade = i;
                 break;
             }
@@ -448,7 +449,7 @@ export function rangeLevel (level, rangeArray) {
                 grade = i;
             }
         }
-        return grade;
+        return grade || 1;
     } catch (e) {
         return 1;
     }

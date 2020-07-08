@@ -25,7 +25,7 @@ import { getter, clear } from '../../utils/store';
 import toast from '../../utils/toast';
 import * as U from 'karet.util';
 import { updateSecondIncome, updateUser } from '../../utils/update';
-import { _copyStr } from '../../utils/util';
+import { _copyStr, _toFixed } from '../../utils/util';
 import ImageAuto from '../../components/ImageAuto';
 
 const { width } = Dimensions.get('window');
@@ -108,7 +108,15 @@ const TASK_MENU = [
     }
 ];
 const { today_income, total_income, nickname, authorization, balance, openid, phone, avatar, invite_code, receive_task_status } = getter(['user.red_point.receive_task_status', 'authorization', 'user.today_income', 'user.openid', 'user.nickname', 'user.total_income', 'user.balance', 'user.phone', 'user.avatar', 'user.invite_code']);
-
+const fixedBalance = U.mapValue((res) => {
+    return _toFixed(res, 0);
+}, balance);
+const fixedTodayIncome = U.mapValue((res) => {
+    return _toFixed(res, 0);
+}, today_income);
+const fixedTotalIncome = U.mapValue((res) => {
+    return _toFixed(res, 0);
+}, total_income);
 function UserPage () {
     const [refreshing, setRefreshing] = useState(false);
     !authorization.get() && N.replace('VerificationStackNavigator');
@@ -165,15 +173,15 @@ function UserPage () {
                                 </View>
                                 <View style={styles.moneyViewBottom}>
                                     <View style={styles.moneyViewItem}>
-                                        <Text karet-lift style={styles.moneyText}>{balance}</Text>
+                                        <Text karet-lift style={styles.moneyText}>{fixedBalance}</Text>
                                         <Text style={styles.moneyTitle}>可提现(金币)</Text>
                                     </View>
                                     <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
-                                        <Text karet-lift style={styles.moneyText}>{today_income}</Text>
+                                        <Text karet-lift style={styles.moneyText}>{fixedTodayIncome}</Text>
                                         <Text style={styles.moneyTitle}>今日收益(金币)</Text>
                                     </View>
                                     <View style={styles.moneyViewItem}>
-                                        <Text karet-lift style={styles.moneyText}>{total_income}</Text>
+                                        <Text karet-lift style={styles.moneyText}>{fixedTotalIncome}</Text>
                                         <Text style={styles.moneyTitle}>总收益(金币)</Text>
                                     </View>
                                 </View>
