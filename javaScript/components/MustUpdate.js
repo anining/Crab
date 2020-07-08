@@ -9,11 +9,11 @@ import { requestPermission } from '../utils/util';
 const STATUS_TYPE = ['立即更新', '正在下载,请耐心等待', '请安装新版本', '权限错误，请手动安装', '更新失败'];
 const { width } = Dimensions.get('window');
 const { app_version } = getter(['app.app_version']);
-const appVersion = app_version.get() || { version_code: 100, is_update: false, describe: '有小更新哦', download_url: '' };
 
 function MustUpdate () {
     const [status, setStatus] = useState(-1);
     const [localPath, setLocalPath] = useState();
+    const appVersion = app_version.get() || { version_code: 100, is_update: false, describe: '有小更新哦', download_url: '' };
     const { version_code, is_update, describe } = appVersion;
 
     useEffect(() => {
