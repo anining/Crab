@@ -261,7 +261,7 @@ export function _copyStr (str) {
         console.log(e);
     }
 }
-export const AppAllPermissionsAndroid = [PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, PermissionsAndroid.PERMISSIONS.CALL_PHONE];
+export const AppAllPermissionsAndroid = [PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE, PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, PermissionsAndroid.PERMISSIONS.CALL_PHONE];
 function requestPermission (success, denied, PermissionsList = [PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE]) {
     try {

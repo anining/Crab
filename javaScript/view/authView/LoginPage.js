@@ -23,8 +23,11 @@ function LoginPage () {
     const [codeText, setCodeText] = useState('获取验证码');
     const [agree, setAgree] = useState(true);
     useEffect(() => {
-        requestPermission(null, null, AppAllPermissionsAndroid); // 请求必要权限
-        _fastLogin();
+        requestPermission(() => {
+            _fastLogin();
+        }, () => {
+            _fastLogin();
+        }, AppAllPermissionsAndroid); // 请求必要权限
     }, []);
 
     async function _fastLogin (showError) {
