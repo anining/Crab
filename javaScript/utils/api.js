@@ -229,8 +229,8 @@ export function putNotice (notice_id) {
 }
 
 // 接任务
-export function getTask (task_platform_id) {
-    return transformFetch('POST', '/task/receive', { task_platform_id });
+export function getTask (platform_category) {
+    return transformFetch('POST', '/task/receive', { platform_category });
 }
 
 // 提交任务
@@ -367,6 +367,8 @@ const transformFetch = async (method, url, data = {}) => {
                 try {
                     const FETCH_DATA = await fetch(parameterTransform(method, url, formatDataRet), request);
                     const DATA_TEXT = await FETCH_DATA.text();
+                    console.log(FETCH_DATA);
+                    console.log(DATA_TEXT);
                     const localDate = DEVELOPER === 'Production' ? JsonParse(AesDecrypt(DATA_TEXT)) : JsonParse(DATA_TEXT);
                     if (localDate.error && localDate.error !== Forbidden) {
                         toast(localDate.msg);
