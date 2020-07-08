@@ -75,6 +75,10 @@ function PupilInfoPage () {
                             <ParentView parent={parent} _childDetail={_childDetail}/>
                         </View>
                         <RenderData today={today} yesterday={yesterday} total={total}/>
+                        <View style={[styles.pupListWrap, css.flex, css.sp]}>
+                            <RenderShareTitle title="徒弟列表" icon={pupil4} width={200}/>
+                            <Text style={styles.pupListTips}>总贡献排序</Text>
+                        </View>
                         <RenderChild children={children}/>
                     </View>;
                 }}
