@@ -135,7 +135,10 @@ function RenderBindView () {
                     </TouchableOpacity>
                 </View>
                 <View style={[css.flexRCSB, styles.item, styles.btnView]}>
-                    <TouchableOpacity activeOpacity={1} karet-lift onPress={updateAccount} style={styles.giveUpBtn}>
+                    <TouchableOpacity activeOpacity={1} karet-lift onPress={() => {
+                        getTaskPlatform();
+                        updateAccount();
+                    }} style={styles.giveUpBtn}>
                         <Text karet-lift numberOfLines={1} style={styles.bindBtnText }>{U.ifElse(status3, '换号重绑', '刷新状态')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={1} karet-lift onPress={delClick} style={styles.delBtn}>

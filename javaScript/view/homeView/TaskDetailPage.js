@@ -344,17 +344,19 @@ function RenderView ({ status, item }) {
 
     if (type === 'text') {
         return <TransformUrlView status={status} content={content} label={label}/>;
-    } else if (type === 'content') {
+    } else if (type === 'schema') {
         return (
-            <Text style={styles.taskCourseText}>{label}<Text onPress={() => {
-                try {
-                    status === 1 && Linking.openURL(content).then(r => { console.log(r); });
-                } catch (e) {
-                    console.log(e);
-                    toast('打开失败');
-                }
-            }} style={{ color: '#FF6C00' }}> {content} </Text>
-            </Text>
+            <>
+                <Text style={styles.taskCourseText}>{label}</Text>
+                <Text style={[styles.saveBtnText, { width: 120, textAlign: 'center' }]} onPress={() => {
+                    try {
+                        status === 1 && Linking.openURL(content).then(r => { console.log(r); }).catch(e => { console.log(e); toast('打开失败'); });
+                    } catch (e) {
+                        console.log(e);
+                        toast('打开失败');
+                    }
+                }}>打开该应用</Text>
+            </>
         );
     }
     return (
@@ -367,7 +369,7 @@ function RenderView ({ status, item }) {
                         close: () => {}
                     });
                 }
-            }} style={{ marginTop: 10 }}>
+            }} style={{ marginTop: 10, marginBottom: 10 }}>
                 <ImageBackground source={{ uri: content }} style={styles.saveBtn} ref={ref => setView(ref)}>
                     <TouchableOpacity onPress={() => {
                         status === 1 && save();
