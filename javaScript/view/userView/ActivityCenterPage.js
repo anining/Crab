@@ -4,6 +4,7 @@ import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import { activity } from '../../utils/api';
 import { transformTime } from '../../utils/util';
+import { getActivityDetail } from '../../utils/update';
 
 function ActivityCenterPage () {
     const [data, setData] = useState([]);
@@ -24,7 +25,13 @@ function ActivityCenterPage () {
                         <Image source={{ uri }} style={styles.image} />
                         <Text numberOfLines={1} style={{ fontWeight: '500', color: '#353535', maxWidth: 150 }}>{title}</Text>
                     </View>
-                    <TouchableOpacity onPress={() => N.navigate(path)}>
+                    <TouchableOpacity onPress={() => {
+                        if (path === 'OpenMoneyPage') {
+                            getActivityDetail();
+                        } else {
+                            N.navigate(path);
+                        }
+                    }}>
                         <Text numberOfLines={1} style={{ fontSize: 12, fontWeight: '500', color: '#353535' }}>查看详情 》</Text>
                     </TouchableOpacity>
                 </View>

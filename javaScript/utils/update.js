@@ -10,7 +10,7 @@ import {
     taskPlatform,
     user,
     getNextRedLevel,
-    account, withdrawLogsLatest,
+    account, withdrawLogsLatest, activityDetail,
 } from './api';
 import { _tc, _toFixed, rangeLevel, toGoldCoin, transformMoney } from './util';
 import { getter, setter } from './store';
@@ -257,5 +257,20 @@ export function getWithdrawLatest () {
                 setter([['withdrawLogsLatest', getPath(['data'], res)]], true);
             }
         });
+    });
+}
+
+export function getActivityDetail () {
+    const { activityObj } = getter(['activityObj']);
+    const activityId = (activityObj.get() || {})[2].activity_id;
+    activityDetail(activityId).then(r => {
+        if (r && !r.error) {
+            const { data } = r;
+            if (data.log.money) {
+                N.navigate('DailyMoneyPage', { activityId, pageInfo: data });
+            } else {
+                _tc(() => N.navigate('OpenMoneyPage', { activityId }));
+            }
+        }
     });
 }

@@ -27,7 +27,7 @@ import Choice from '../../components/Choice';
 import * as U from 'karet.util';
 import asyncStorage from '../../utils/asyncStorage';
 import pop3 from '../../assets/icon/pop/pop3.png';
-import { getTaskPlatform, task, updateSecondIncome, updateUser } from '../../utils/update';
+import { getActivityDetail, getTaskPlatform, task, updateSecondIncome, updateUser } from '../../utils/update';
 import toast from '../../utils/toast';
 
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
@@ -253,9 +253,7 @@ function RenderActivity () {
             <TouchableOpacity style={styles.arItemWrap} onPress={() => N.navigate('SharePage')} key={'SharePage'}>
                 <ImageAuto source={answer6} width={width * 0.9 * 0.48}/>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.arItemWrap} onPress={() => {
-                _tc(() => N.navigate('OpenMoneyPage', { activityId: (activityObj.get() || {})[2].activity_id }));
-            }} key={'OpenMoneyPage'}>
+            <TouchableOpacity style={styles.arItemWrap} onPress={getActivityDetail} key={'OpenMoneyPage'}>
                 <ImageAuto source={answer8} width={width * 0.9 * 0.48}/>
             </TouchableOpacity>
         </View>,
