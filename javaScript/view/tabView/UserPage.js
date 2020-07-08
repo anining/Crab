@@ -109,12 +109,21 @@ const TASK_MENU = [
 ];
 const { today_income, total_income, nickname, authorization, balance, openid, phone, avatar, invite_code, receive_task_status } = getter(['user.red_point.receive_task_status', 'authorization', 'user.today_income', 'user.openid', 'user.nickname', 'user.total_income', 'user.balance', 'user.phone', 'user.avatar', 'user.invite_code']);
 const fixedBalance = U.mapValue((res) => {
+    if (isNaN(res)) {
+        return res;
+    }
     return _toFixed(res, 0);
 }, balance);
 const fixedTodayIncome = U.mapValue((res) => {
+    if (isNaN(res)) {
+        return res;
+    }
     return _toFixed(res, 0);
 }, today_income);
 const fixedTotalIncome = U.mapValue((res) => {
+    if (isNaN(res)) {
+        return res;
+    }
     return _toFixed(res, 0);
 }, total_income);
 function UserPage () {
