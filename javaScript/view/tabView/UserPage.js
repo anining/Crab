@@ -210,17 +210,13 @@ function UserPage () {
 }
 
 function RenderBind () {
-    if (openid.get()) {
-        return <></>;
-    }
-    return (
-        <TouchableOpacity onPress={() => {
-            N.navigate('WeChatBindPage');
-        }} style={[css.pa, styles.bindBtn]}>
-            <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
-            <Text style={styles.bindText}>绑定微信</Text>
-        </TouchableOpacity>
-    );
+    const view = U.ifElse(R.equals(openid, undefined), undefined, <TouchableOpacity onPress={() => {
+        N.navigate('WeChatBindPage');
+    }} style={[css.pa, styles.bindBtn]}>
+        <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
+        <Text style={styles.bindText}>绑定微信</Text>
+    </TouchableOpacity>);
+    return <>{view}</>;
 }
 
 function RenderTaskMenu () {
