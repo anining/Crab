@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as React from 'karet';
 import * as R from 'kefir.ramda';
-import { Dimensions, Image, SafeAreaView, StyleSheet, Text, View, ScrollView, TouchableOpacity, DeviceEventEmitter } from 'react-native';
+import { Dimensions, Image, SafeAreaView, FlatList, StyleSheet, Text, View, ScrollView, TouchableOpacity, DeviceEventEmitter } from 'react-native';
 import { css } from '../../assets/style/css';
 import Slider from '../../components/Slider';
 import ComTitle from '../../components/ComTitle';
@@ -27,7 +27,7 @@ import Choice from '../../components/Choice';
 import * as U from 'karet.util';
 import asyncStorage from '../../utils/asyncStorage';
 import pop3 from '../../assets/icon/pop/pop3.png';
-import { getTaskPlatform, task } from '../../utils/update';
+import { getTaskPlatform, task, updateSecondIncome, updateUser } from '../../utils/update';
 import toast from '../../utils/toast';
 
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
@@ -54,6 +54,7 @@ const NEW_USER_TASK_TYPE = {
 function AnswerPage () {
     const [signDay, setSignDay] = useState(0);
     const [newUser, setNewUser] = useState([]);
+    const [refreshing] = useState(false);
     let reloadEmitter;
     let scrollToListener;
     let scrollViewRef;
@@ -122,19 +123,28 @@ function AnswerPage () {
 
     return (
         <SafeAreaView style={[{ flex: 1, paddingTop: 20, backgroundColor: '#fff' }]} >
-            <ScrollView style={{ flex: 1, paddingTop: 20 }} ref={ref => { ref && (scrollViewRef = ref); }}>
-                <Slider data={banner.get()} height={width * 0.29} autoplay={true} onPress={item => bannerAction(item.category, item.link, item.title)}/>
-                <View style={styles.answerWrap}>
-                    <ComTitle title={'每日签到'} minTitle={<Text style={css.minTitle}>连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text></Text>}/>
-                    <RenderDaySign signDay={signDay} setSignDay={setSignDay}/>
-                </View>
-                <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
-                    <ComTitle title={'火爆活动'}/>
-                    <RenderActivity />
-                </View>
-                <Reward newUser={newUser} _newUserTask={_newUserTask}/>
-                <RenderTaskView />
-            </ScrollView>
+            <FlatList
+                onRefresh={init}
+                refreshing={refreshing}
+                data={['']}
+                renderItem={() => (
+                    <ScrollView style={{ flex: 1, paddingTop: 20 }} ref={ref => { ref && (scrollViewRef = ref); }}>
+                        <Slider data={banner.get()} height={width * 0.29} autoplay={true} onPress={item => bannerAction(item.category, item.link, item.title)}/>
+                        <View style={styles.answerWrap}>
+                            <ComTitle title={'每日签到'} minTitle={<Text style={css.minTitle}>连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text></Text>}/>
+                            <RenderDaySign signDay={signDay} setSignDay={setSignDay}/>
+                        </View>
+                        <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
+                            <ComTitle title={'火爆活动'}/>
+                            <RenderActivity />
+                        </View>
+                        <Reward newUser={newUser} _newUserTask={_newUserTask}/>
+                        <RenderTaskView />
+                    </ScrollView>
+                )}
+                keyExtractor={() => 'flatListAnswer'}
+            >
+            </FlatList>
         </SafeAreaView>
     );
 }
@@ -304,7 +314,13 @@ function RenderNewBtn ({ item, _newUserTask }) {
     // 去完成
     case 5:return <Text style={styles.todoTaskText} onPress={ () => {
         if (path === 'TaskDetailPage') {
-            task(1);// 默认选择抖音任务
+            const localTaskPlatform = taskPlatform.get() || [];
+            const local = localTaskPlatform.filter(platform => platform.accounts.length || !platform.need_bind);
+            if (local.length) {
+                task(local[0].platform_category);
+            } else {
+                N.navigate('AccountHomePage');
+            }
         } else {
             N.navigate(path);
         }

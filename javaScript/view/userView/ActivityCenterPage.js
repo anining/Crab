@@ -31,7 +31,7 @@ function ActivityCenterPage () {
                 <Text numberOfLines={2} style={styles.text}>{des}</Text>
                 <View style={[styles.item, css.flexRCSB, { borderTopWidth: 1, borderTopColor: '#EDEDED', marginTop: 20 }]}>
                     <Text numberOfLines={1} style={{ maxWidth: 250, color: '#353535' }}>活动时间：{transformTime(start_datetime)}</Text>
-                    <Text numberOfLines={1} style={{ maxWidth: 180, color: '#FA6400', fontWeight: '500' }}>即将结束</Text>
+                    <Text numberOfLines={1} style={{ maxWidth: 180, color: '#FA6400', fontWeight: '500' }}/>
                 </View>
             </View>
         );
