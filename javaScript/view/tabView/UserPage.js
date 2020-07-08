@@ -203,11 +203,13 @@ function RenderTaskMenu () {
     const view = [];
     authorization.get() && TASK_MENU.forEach((menu, index) => {
         const { id, icon, label } = menu;
-        const number = U.mapValue(num => U.ifElse(R.equals(num, undefined), 0, num[id]), receive_task_status);
+        // const number = U.mapValue(num => U.ifElse(R.equals(num, undefined), 0, num[id]), receive_task_status);
         view.push(
             <TouchableOpacity activeOpacity={1} onPress={() => N.navigate('MyTaskPage', { id: index })} style={styles.myTaskBtn} key={id}>
                 <Image source={icon} style={styles.myTaskBtnIcon}/>
-                <Text style={styles.myTaskBtnText}>{label}<Text karet-lift style={{ color: '#FF7751' }}> {number}</Text></Text>
+                <Text style={styles.myTaskBtnText}>{label}
+                    {/* <Text karet-lift style={{ color: '#FF7751' }}> {number}</Text> */}
+                </Text>
             </TouchableOpacity>
         );
     });

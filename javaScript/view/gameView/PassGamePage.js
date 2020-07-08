@@ -252,7 +252,7 @@ export default class PassGamePage extends Component {
                     </View>
                     <View style={{ height: 15, width: '100%' }}/>
                     {_if(PassGamePage._countNextLevel(myNowLevel, this.state.nextRedLevel), res => <Text style={[styles.gamePassTips, css.gf, { fontSize: 15 }]}>再闯关<Text
-                        style={{ fontSize: 17, color: 'red' }}>{PassGamePage._countNextLevel(myNowLevel, this.state.nextRedLevel)}</Text>{res}</Text>, () => {
+                        style={{ fontSize: 17, color: 'red' }}>{res}</Text>拿红包</Text>, () => {
                         return <Text style={styles.noRedText}>更多红包在后面关卡等你拿～</Text>;
                     })}
                     {(() => {

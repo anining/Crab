@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, Text, View, StyleSheet, Image, TouchableOpacity, Dimensions, TextInput, DeviceEventEmitter } from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
@@ -9,6 +9,9 @@ import { postWithdraw } from '../../utils/api';
 import toast from '../../utils/toast';
 import Choice from '../../components/Choice';
 import with10 from '../../assets/icon/withdraw/withdraw10.png';
+import asyncStorage from '../../utils/asyncStorage';
+import { updateUser } from '../../utils/update';
+import Button from '../../components/Button';
 
 const { width } = Dimensions.get('window');
 
@@ -17,31 +20,55 @@ function WithdrawAliPayPage (props) {
     const [money] = useState(props.route.params.money);
     const [number, setNumber] = useState();
     const [name, setName] = useState();
-
-    function withdraw () {
+    let aliNameRef;
+    let aliNumberRef;
+    useEffect(() => {
+        asyncStorage.getItem('aliName').then((res) => {
+            res && (() => {
+                setName(res);
+                aliNameRef && aliNameRef.setNativeProps({
+                    text: res
+                });
+            })();
+        });
+        asyncStorage.getItem('aliNumber').then((res) => {
+            res && (() => {
+                setNumber(res);
+                aliNumberRef && aliNumberRef.setNativeProps({
+                    text: res
+                });
+            })();
+        });
+    }, []);
+    function withdraw (callback) {
         if (!goodId || !money || !number || !name) {
-            toast('请填写完整的账号和姓名!');
+            toast('请填写完整的账号和姓名');
+            callback && callback();
             return;
         }
         postWithdraw(goodId, money, 'ali', number, name).then(r => {
-            if (!r.error) {
+            if (r && !r.error) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: with10,
                     tips: '提现申请成功，请耐心等待审核。一般1个工作日内审核完成。',
                     type: 1,
-                    rc: () => {
-                        N.navigate('UserPage');
-                    },
+                    rc: () => {},
                     rt: '我知道了',
                     fontSize: 15
                 }}/>);
+                N.navigate('UserPage');
+                updateUser();
             }
+            asyncStorage.setItem('aliName', name);
+            asyncStorage.setItem('aliNumber', number);
+            callback && callback();
         });
     }
 
     return (
         <SafeAreaView style={[css.safeAreaView, css.flexCSB]}>
             <View style={styles.container}>
+                <Text style={styles.moneyTitleText}>你选择提现的金额:<Text style={{ color: '#FF3E00' }}>{money}元</Text></Text>
                 <View style={styles.inputView}>
                     <Image source={with8} style={{ height: 20, width: 20, marginRight: 5, }} />
                     <Text style={{ fontWeight: '500', fontSize: 14, color: '#353535' }}>支付宝账号：</Text>
@@ -50,7 +77,7 @@ function WithdrawAliPayPage (props) {
                         maxLength={11}
                         placeholder={'请输入支付宝账号'}
                         placeholderTextColor={'#BCBCBC'}
-                        onChangeText={number => setNumber(number)}/>
+                        onChangeText={number => setNumber(number)} ref={ref => ref && (aliNumberRef = ref)}/>
                 </View>
                 <View style={[styles.inputView, { marginBottom: 20 }]}>
                     <Image source={with7} style={{ height: 20, width: 20, marginRight: 5, }} />
@@ -59,14 +86,17 @@ function WithdrawAliPayPage (props) {
                         maxLength={11}
                         placeholder={'请输入支付宝对应姓名'}
                         placeholderTextColor={'#BCBCBC'}
-                        onChangeText={name => setName(name)}/>
+                        onChangeText={name => setName(name)} ref={ref => ref && (aliNameRef = ref)}/>
                 </View>
                 <Crab text="提现说明：" paddingLeft={0}/>
                 <Text style={{ fontSize: 12, color: '#999' }}>1.支付宝账号姓名必须匹配，否则提现不会到账。</Text>
             </View>
-            <TouchableOpacity activeOpacity={1} onPress={withdraw} style={styles.btn}>
-                <Text style={styles.btnText}>提现到支付宝</Text>
-            </TouchableOpacity>
+            {/* <TouchableOpacity activeOpacity={1} onPress={withdraw} style={styles.btn}> */}
+            {/*    <Text style={styles.btnText}>提现到支付宝</Text> */}
+            {/* </TouchableOpacity> */}
+            <Button type={2} name={'提现到支付宝'} onPress={(callback) => {
+                withdraw(callback);
+            }}/>
         </SafeAreaView>
     );
 }
@@ -97,6 +127,11 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
         width: '100%'
+    },
+    moneyTitleText: {
+        color: '#666',
+        fontSize: 15,
+        height: 40
     }
 });
 
