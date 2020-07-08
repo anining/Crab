@@ -60,6 +60,7 @@ import PassGamePage from '../view/gameView/PassGamePage';
 import RightProPage from '../view/gameView/RightProPage';
 import NoviceVideoPage from '../view/otherView/NoviceVideoPage';
 import MustUpdate from '../components/MustUpdate';
+import WebViewPage from '../view/userView/WebViewPage';
 
 const Stack = createStackNavigator();
 
@@ -248,6 +249,11 @@ const stackScreens = [
         name: 'NoviceVideoPage',
         component: NoviceVideoPage,
         title: '新手视频',
+    },
+    {
+        name: 'WebViewPage',
+        component: WebViewPage,
+        title: '详情',
     }
 ];
 
