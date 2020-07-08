@@ -16,7 +16,7 @@ import Shadow from '../../components/Shadow';
 import * as Animatable from 'react-native-animatable';
 import { getRedPackage, openRedPackage, withdrawLogsLatest } from '../../utils/api';
 import { N } from '../../utils/router';
-import { djangoTime } from '../../utils/util';
+import { _toFixed, djangoTime, setAndroidTime } from '../../utils/util';
 
 const { width } = Dimensions.get('window');
 
@@ -119,11 +119,14 @@ function PopupView ({ money }) {
             <View style={styles.progress} />
             <View style={[styles.progressT, { width: localWidth }]} />
             <ImageBackground source={activity18} style={[styles.popupBg, { left: localLeft }]}>
-                <Text numberOfLines={1} style={styles.popText}>仅差{(30 - Number(money).toFixed(4))}W金币</Text>
+                <Text numberOfLines={1} style={styles.popText}>仅差{_toFixed(30 - money)}W金币</Text>
             </ImageBackground>
             <TouchableOpacity activeOpacity={1} onPress={() => {
                 DeviceEventEmitter.emit('hidePop');
                 N.navigate('AnswerPage');
+                setAndroidTime(() => {
+                    DeviceEventEmitter.emit('answerScroll', 'end');
+                }, 1000);
             }} style={styles.popupViewBtn}/>
         </ImageBackground>
     );

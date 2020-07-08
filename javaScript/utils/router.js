@@ -69,7 +69,7 @@ class router {
 
 let N = null;
 const proxyRouter = (() => {
-    return (navigation, filterRouters = ['MaterialTopTabNavigator', 'LoginPage', 'UserAgreementPage', 'PrivacyPolicyPage', 'HelpCenterPage'], authRouterName = 'VerificationStackNavigator') => {
+    return (navigation, filterRouters = ['WebViewPage', 'MaterialTopTabNavigator', 'LoginPage', 'UserAgreementPage', 'PrivacyPolicyPage', 'HelpCenterPage'], authRouterName = 'VerificationStackNavigator') => {
         if (navigation && filterRouters && authRouterName) {
             // eslint-disable-next-line new-cap
             N = new router(navigation, filterRouters, authRouterName);
