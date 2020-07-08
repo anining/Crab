@@ -96,29 +96,32 @@ function AnswerPage () {
     }
 
     async function _newUserTask () {
-        try {
-            const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
-            const localArray = [false, local1, openid.get(), false];
-            const ret = await newUserTask();
-            if (!ret.error) {
-                const localData = ret.data.map(task => {
-                    const { add_balance, is_finish, new_user_task_id, task_type } = task;
-                    return {
-                        balance: add_balance,
-                        id: new_user_task_id,
-                        label: NEW_USER_TASK_TYPE[task_type].label,
-                        minTitle: NEW_USER_TASK_TYPE[task_type].label,
-                        icon: NEW_USER_TASK_TYPE[task_type].icon,
-                        path: NEW_USER_TASK_TYPE[task_type].path,
-                        btnText: is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成',
-                        btnStatus: is_finish ? 3 : localArray[task_type] ? 2 : 5,
-                    };
+        const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
+        U.mapValue(r => {
+            try {
+                const localArray = [false, local1, r, false];
+                newUserTask().then(ret => {
+                    if (!ret.error) {
+                        const localData = ret.data.map(task => {
+                            const { add_balance, is_finish, new_user_task_id, task_type } = task;
+                            return {
+                                balance: add_balance,
+                                id: new_user_task_id,
+                                label: NEW_USER_TASK_TYPE[task_type].label,
+                                minTitle: NEW_USER_TASK_TYPE[task_type].label,
+                                icon: NEW_USER_TASK_TYPE[task_type].icon,
+                                path: NEW_USER_TASK_TYPE[task_type].path,
+                                btnText: is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成',
+                                btnStatus: is_finish ? 3 : localArray[task_type] ? 2 : 5,
+                            };
+                        });
+                        setNewUser(localData);
+                    }
                 });
-                setNewUser(localData);
+            } catch (e) {
+                console.log(e);
             }
-        } catch (e) {
-            console.log(e);
-        }
+        }, U.ifElse(R.equals(openid, undefined), false, true));
     }
 
     return (
