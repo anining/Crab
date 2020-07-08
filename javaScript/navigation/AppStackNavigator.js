@@ -59,6 +59,7 @@ import ShareQRCodePage from '../view/shareView/ShareQRCodePage';
 import PassGamePage from '../view/gameView/PassGamePage';
 import RightProPage from '../view/gameView/RightProPage';
 import NoviceVideoPage from '../view/otherView/NoviceVideoPage';
+import MustUpdate from '../components/MustUpdate';
 
 const Stack = createStackNavigator();
 
@@ -304,6 +305,7 @@ function AppStackNavigator () {
                 });
             }}>
                 <Prompt/>
+                <MustUpdate/>
                 <Stack.Navigator screenOptions={{ cardStyle: {}, gestureEnabled: true, ...TransitionPresets.SlideFromRightIOS, header: ({ scene, previous, navigation }) => <Header scene={scene} previous={previous} navigation={navigation}/> }}>
                     <Stack.Screen name="MaterialTopTabNavigator" options={{ headerShown: false }} component={TabNavigator}/>
                     <Stack.Screen name="VerificationStackNavigator" component={StackNavigator} options={{ headerShown: false }}/>
