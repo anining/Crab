@@ -22,7 +22,7 @@ import Button from '../../components/Button';
 const { width } = Dimensions.get('window');
 const { today_income, total_income, balance } = getter(['user.today_income', 'user.total_income', 'user.balance']);
 
-function WithdrawPage () {
+function WithdrawPage (props) {
     const [goodId, setGoodId] = useState();
     const [money, setMoney] = useState();
     const [goods, setGoods] = useState([]);
@@ -83,6 +83,10 @@ function WithdrawPage () {
         <SafeAreaView style={css.safeAreaView}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '我的收益' } }} navigation={N} onPress={() => {
                 N.navigate('FundingRecordsPage');
+            }} backOnPress={() => {
+                const { callbackGetTask } = props.route.params;
+                callbackGetTask && typeof callbackGetTask === 'function' && callbackGetTask();
+                N.goBack();
             }} headerRight={headerRight}/>
             <ScrollView style={styles.scrollView}>
                 <ImageBackground source={with1} style={styles.moneyView}>

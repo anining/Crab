@@ -195,7 +195,12 @@ export function childrenLink () {
 
 // 徒弟详情
 export function childDetail () {
-    return transformFetch('POST', '/children/detail');
+    return transformFetch('GET', '/children/detail');
+}
+
+// 徒弟列表
+export function childList (page, size) {
+    return transformFetch('GET', '/children/children_list', { page, size });
 }
 
 // 阿里云oss上传token

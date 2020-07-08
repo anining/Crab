@@ -1,4 +1,4 @@
-export const userDataHtml = `<h1 style="text-align: center; text-indent: 2em; line-height: 1.75em;">
+export const userDataHtml = `<h1 style="text-align: center; text-indent: 2em; line-height: 3.5em;">
     <strong><strong><span style="font-family: 宋体, SimSun;"><span style="font-size: 36px;">用户协议</span><span
             style="font-size: 14px;"><br /></span></span></strong>
 </h1>
@@ -245,4 +245,4 @@ export const userDataHtml = `<h1 style="text-align: center; text-indent: 2em; li
 <p style="text-indent: 2em; text-align: left; line-height: 1.75em;">
     <span style="text-decoration: underline;"><strong><span
                 style="text-decoration: underline; font-size: 14px; font-family: 宋体, SimSun;">注：本规则会根据业务发展的需要适时作出调整和修改，最终解释权归趣玩赚所有。</span></strong></span>
-</p>`
+</p>`;

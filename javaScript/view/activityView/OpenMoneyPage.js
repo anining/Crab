@@ -28,14 +28,14 @@ const { width } = Dimensions.get('window');
 
 function OpenMoneyPage (props) {
     const { activityId } = props.route.params;
-    const [receivedStatus, setReceivedStatus] = useState(0);// 0 网络请求中，1没有领取过，2 已经领取过了
+    const [receivedStatus, setReceivedStatus] = useState(1);// 0 网络请求中，1没有领取过，2 已经领取过了
     const [pageInfo, setPageInfo] = useState([]);
     const [money, setMoney] = useState(0);
     const [data, setData] = useState({});
     const [totalNum, setTotalNum] = useState(0);
 
     useEffect(() => {
-        _activityDetail();
+        _showPop();
     }, []);
 
     async function _openRedPackage () {

@@ -198,7 +198,7 @@ function EndTimeView ({ detail }) {
             <View style={styles.endTimeViewItem}>
                 <View style={{ flexDirection: 'row' }}>
                     <Text style={{ color: '#fff', fontSize: 16, fontWeight: '500' }}>剩余时间：</Text>
-                    <CountDown time={+new Date(djangoTime(finish_deadline))} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }}/>
+                    <CountDown time={+new Date(djangoTime(finish_deadline))} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }} key={receive_task_id}/>
                 </View>
                 <TouchableOpacity onPress={apiGiveUp} style={styles.giveUpBtn}>
                     <Text style={{ color: '#fff', fontSize: 12, lineHeight: 25, textAlign: 'center' }}>放弃任务</Text>
@@ -496,6 +496,11 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
     function showPop (type, number, callback) {
         const state = U.atom(true);
         let view;
+
+        function callbackGetTask () {
+            getApiTask(callback);
+        }
+
         switch (type) {
         case 1:view = (
             <>
@@ -531,7 +536,7 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
                 <TouchableOpacity style={styles.userPopBtn} onPress={() => {
                     U.set(state, false);
                     DeviceEventEmitter.emit('hidePop');
-                    N.navigate('WithdrawPage');
+                    N.navigate('WithdrawPage', { callbackGetTask });
                 }}>
                     <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>去提现</Text>
                 </TouchableOpacity>

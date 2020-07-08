@@ -1,4 +1,4 @@
-export const privacyDataHtml = `<h1 style="text-align: center; text-indent: 2em; line-height: 1.75em;">
+export const privacyDataHtml = `<h1 style="text-align: center; text-indent: 2em; line-height: 3.5em;">
     <strong><strong><span style="font-family: 宋体, SimSun;"><span style="font-size: 36px;">隐私政策</span><span
             style="font-size: 14px;"><br /></span></span></strong>
 </h1>

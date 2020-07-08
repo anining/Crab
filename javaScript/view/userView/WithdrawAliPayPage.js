@@ -74,7 +74,7 @@ function WithdrawAliPayPage (props) {
                     <Text style={{ fontWeight: '500', fontSize: 14, color: '#353535' }}>支付宝账号：</Text>
                     <TextInput
                         keyboardType='numeric'
-                        maxLength={11}
+                        maxLength={50}
                         placeholder={'请输入支付宝账号'}
                         placeholderTextColor={'#BCBCBC'}
                         onChangeText={number => setNumber(number)} ref={ref => ref && (aliNumberRef = ref)}/>
@@ -83,7 +83,7 @@ function WithdrawAliPayPage (props) {
                     <Image source={with7} style={{ height: 20, width: 20, marginRight: 5, }} />
                     <Text style={{ fontWeight: '500', fontSize: 14, color: '#353535' }}>支付宝姓名：</Text>
                     <TextInput
-                        maxLength={11}
+                        maxLength={50}
                         placeholder={'请输入支付宝对应姓名'}
                         placeholderTextColor={'#BCBCBC'}
                         onChangeText={name => setName(name)} ref={ref => ref && (aliNameRef = ref)}/>
