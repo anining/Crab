@@ -64,8 +64,8 @@ function FeedBackPage () {
                         <Upload children={view} images={images} setImages={setImages} length={3}/>
                         <RenderImage images={images}/>
                     </View>
-                    <Text style={{ color: '#999', fontSize: 11, lineHeight: 20 }}>添加图片或者视频</Text>
-                    <Text style={{ color: '#999', fontSize: 11, lineHeight: 20 }}>最多支持3张图片，1个10M以内的视频</Text>
+                    <Text style={{ color: '#999', fontSize: 11, lineHeight: 20 }}>添加图片</Text>
+                    <Text style={{ color: '#999', fontSize: 11, lineHeight: 20 }}>最多支持3张图片</Text>
                 </View>
             </View>
             <View style={styles.bottomView}>
