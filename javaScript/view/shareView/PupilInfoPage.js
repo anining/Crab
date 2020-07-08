@@ -103,7 +103,7 @@ function RenderChild ({ children }) {
             <>
                 <View style={[styles.pupListWrap, css.flex, css.sp]}>
                     <RenderShareTitle title="徒弟列表" icon={pupil4} width={200}/>
-                    <Text style={styles.pupListTips}>总贡献排序</Text>
+                    <Text style={styles.pupListTips}></Text>
                 </View>
                 <View style={{ marginBottom: 15 }}>{view}</View>
             </>
