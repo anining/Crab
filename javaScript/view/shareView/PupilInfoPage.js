@@ -14,12 +14,16 @@ import pupil8 from '../../assets/icon/pupil/pupil8.png';
 import pupil10 from '../../assets/icon/pupil/pupil10.png';
 import pupil12 from '../../assets/icon/pupil/pupil12.png';
 import ImageAuto from '../../components/ImageAuto';
-import { bindParent, childDetail } from '../../utils/api';
-import { _copyStr, _toFixed, transformTime } from '../../utils/util';
+import { bindParent, childDetail, childList, taskReceive } from '../../utils/api';
+import { _copyStr, _toFixed, transformMoney, transformTime } from '../../utils/util';
 import Choice from '../../components/Choice';
 import { getter } from '../../utils/store';
 import toast from '../../utils/toast';
 import Button from '../../components/Button';
+import { task, updateUser } from '../../utils/update';
+import task10 from '../../assets/icon/task/task10.png';
+import ListGeneral from '../../components/ListGeneral';
+import { getPath } from '../../global/global';
 
 const { width } = Dimensions.get('window');
 const itemHeight = 135;
@@ -61,55 +65,66 @@ function PupilInfoPage () {
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
             <Header label={'师徒信息'} onPress={() => { N.navigate('PupilSetPage', { setting }); }} headerRight={<Text style={{ color: '#FF5C22' }}>收徒设置</Text>}/>
-            <ScrollView>
-                <View style={[styles.infoHeaderWrap, css.pr]}>
-                    <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.infoHeaderBg]} />
-                    <ParentView parent={parent} _childDetail={_childDetail}/>
-                </View>
-                <RenderData today={today} yesterday={yesterday} total={total}/>
-                <RenderChild children={children}/>
-            </ScrollView>
+            <ListGeneral
+                itemHeight={itemHeight}
+                itemMarginTop={itemMarginTop}
+                renderHeader={() => {
+                    return <View>
+                        <View style={[styles.infoHeaderWrap, css.pr]}>
+                            <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[styles.infoHeaderBg]} />
+                            <ParentView parent={parent} _childDetail={_childDetail}/>
+                        </View>
+                        <RenderData today={today} yesterday={yesterday} total={total}/>
+                        <RenderChild children={children}/>
+                    </View>;
+                }}
+                getList={ async (page, num, callback) => {
+                    const ret = await childList(page, num);
+                    if (ret && !ret.error) {
+                        console.log(ret, '??==');
+                        callback(getPath(['data', 'children_list'], ret));
+                    } else {
+                        // eslint-disable-next-line standard/no-callback-literal
+                        callback([]);
+                    }
+                }}
+                renderItem={item => {
+                    return <View>
+                        <RenderChild children={item}/>
+                    </View>;
+                }}
+            />
         </SafeAreaView>
     );
 }
 
 function RenderChild ({ children }) {
-    const view = [];
-
-    if (children.length) {
-        children.forEach(item => {
-            const { today_income, total_income, children_num, avatar, total_task_num, created_at, nickname, user_id } = item;
-            view.push(
-                <View style={styles.itemContainer} key={user_id}>
-                    <View style={[styles.containerT]}>
-                        <View style={{ alignItems: 'center', flexDirection: 'row', height: 55 }}>
-                            <Image source={{ uri: avatar }} style={{ width: 30, height: 30, borderRadius: 15 }}/>
-                            <Text style={{ color: 'rgba(53,53,53,1)', fontWeight: '600', fontSize: 15 }}>{nickname}</Text>
-                        </View>
-                        <Text style={{ color: 'rgba(153,153,153,1)', fontSize: 11 }}>收徒时间：{transformTime(created_at)}</Text>
+    try {
+        const view = [];
+        const { today_income, total_income, children_num, avatar, total_task_num, created_at, nickname, user_id } = children;
+        view.push(
+            <View style={styles.itemContainer} key={user_id}>
+                <View style={[styles.containerT]}>
+                    <View style={{ alignItems: 'center', flexDirection: 'row', height: 55 }}>
+                        <Image source={{ uri: avatar }} style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}/>
+                        <Text style={{ color: 'rgba(53,53,53,1)', fontWeight: '600', fontSize: 15 }}>{nickname}</Text>
                     </View>
-                    <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
-                        <Text style={{ color: 'rgba(85,85,85,1)' }}>今日贡献：<Text style={{ color: 'rgba(51,51,51,1)' }}>{_toFixed(today_income, 2)}</Text></Text>
-                        <Text style={{ color: 'rgba(85,85,85,1)' }}>累计贡献金币：<Text style={{ color: 'rgba(51,51,51,1)' }}>{_toFixed(total_income, 2)}</Text></Text>
-                    </View>
-                    <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
-                        <Text style={{ color: 'rgba(85,85,85,1)' }}>他的徒弟总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{children_num}</Text></Text>
-                        <Text style={{ color: 'rgba(85,85,85,1)' }}>他的做单总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{total_task_num}</Text></Text>
-                    </View>
+                    <Text style={{ color: 'rgba(153,153,153,1)', fontSize: 11 }}>收徒时间：{transformTime(created_at)}</Text>
                 </View>
-            );
-        });
-        return (
-            <>
-                <View style={[styles.pupListWrap, css.flex, css.sp]}>
-                    <RenderShareTitle title="徒弟列表" icon={pupil4} width={200}/>
-                    <Text style={styles.pupListTips}>总贡献排序</Text>
+                <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
+                    <Text style={{ color: 'rgba(85,85,85,1)' }}>今日贡献：<Text style={{ color: 'rgba(51,51,51,1)' }}>{_toFixed(today_income, 2)}</Text></Text>
+                    <Text style={{ color: 'rgba(85,85,85,1)' }}>累计贡献金币：<Text style={{ color: 'rgba(51,51,51,1)' }}>{_toFixed(total_income, 2)}</Text></Text>
                 </View>
-                <View style={{ marginBottom: 15 }}>{view}</View>
-            </>
+                <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
+                    <Text style={{ color: 'rgba(85,85,85,1)' }}>他的徒弟总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{children_num}</Text></Text>
+                    <Text style={{ color: 'rgba(85,85,85,1)' }}>他的做单总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{total_task_num}</Text></Text>
+                </View>
+            </View>
         );
+        return view;
+    } catch (e) {
+        return <View/>;
     }
-    return <></>;
 }
 
 function RenderData ({ today, yesterday, total }) {

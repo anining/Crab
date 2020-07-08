@@ -165,7 +165,7 @@ export default class GameHeader extends Component {
                 onPress={() => {
                     this.showPop();
                 }}>
-                    <ImageAuto key={`li${getPath(['phone'], this.state.user, 0)}`} source={game25} width={33} onLayout={(e) => {
+                    <ImageAuto key={'game25'} source={game25} width={33} onLayout={(e) => {
                         const target = e.target;
                         setAndroidTime(() => {
                             UIManager.measure(target, (x, y, w, h, l, t) => {
@@ -188,15 +188,16 @@ export default class GameHeader extends Component {
                         <TouchableOpacity activeOpacity={1} style={[css.pa, styles.topHDN]} onPress={() => {
                             N.navigate('WithdrawPage');
                         }}/>
-                        <ImageAuto key={`ri${getPath(['phone'], this.state.user, 0)}`} source={game22} width={33} onLayout={(e) => {
+                        <ImageAuto key={'game22'} source={game22} width={33} onLayout={(e) => {
                             const target = e.target;
                             setAndroidTime(() => {
                                 UIManager.measure(target, (x, y, w, h, l, t) => {
                                     if (l && t) {
                                         this.imagePosition2 = [l, t];
+                                        this.props.callback && this.props.callback();
                                     }
                                 });
-                            }, DelayGetDomeTime);
+                            }, DelayGetDomeTime + 100);
                         }}/>
                         <TextInput multiline={false} style={[styles.hdnText]} ref={ref => this.secondText = ref} onFocus={() => {
                             this.secondText.blur();
@@ -210,9 +211,11 @@ export default class GameHeader extends Component {
 }
 GameHeader.propTypes = {
     backgroundColor: PropTypes.string,
+    callback: PropTypes.func,
 };
 GameHeader.defaultProps = {
-    backgroundColor: 'rgba(0,179,216,.5)'
+    backgroundColor: 'rgba(0,179,216,.5)',
+    callback: () => {},
 };
 const styles = StyleSheet.create({
     countDownText: {
