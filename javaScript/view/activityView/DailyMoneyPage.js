@@ -22,7 +22,7 @@ const { width } = Dimensions.get('window');
 
 function DailyMoneyPage (props) {
     const { activityId = {}, pageInfo } = props.route.params;
-    if (activityId || pageInfo) {
+    if (!activityId || !pageInfo) {
         N.goBack();
         return <></>;
     }
@@ -72,7 +72,7 @@ function DailyMoneyPage (props) {
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
             <ScrollView style={{ flex: 1, backgroundColor: '#EA251E' }}>
-                <ImageBackground source={activity5} style={[styles.dmWrap]}>
+                <ImageBackground source={activity5} style={[styles.dmWrap, css.pr]}>
                     <Header color={'#fff'} label={'天天领现金'} style={{ backgroundColor: 'rgba(0,0,0,0)', borderBottomWidth: 0 }} icon={header3} headerRight={
                         <Text style={{ color: '#fff' }}>活动规则</Text>
                     } onPress={() => {
@@ -83,7 +83,7 @@ function DailyMoneyPage (props) {
                         );
                     }}/>
                     <Lamp LampList={withdrawLogs}/>
-                    <View style={[css.flex, css.fw, styles.redPackageWrap, css.afs]}>
+                    <View style={[css.flex, css.fw, css.pa, styles.redPackageWrap, css.afs]}>
                         <CountDown time={+new Date(djangoTime(invalid_time))} style={{ color: Number(money) >= 30 ? 'rgba(225,48,32,1)' : '#999', fontSize: 13, lineHeight: 30 }} millisecond={true} tips={Number(money) >= 30 ? '后未提现现金将失效' : '后现金失效'}/>
                         <Text style={styles.redMaxText}> {money} <Text style={{ fontSize: 20 }}>元</Text></Text>
                         <Animatable.View useNativeDriver={true} iterationCount="infinite" animation="pulse" style={[css.auto]}>
@@ -251,16 +251,21 @@ const styles = StyleSheet.create({
         color: '#E13020',
         fontSize: 50,
         fontWeight: '900',
-        lineHeight: width * 0.17,
-        marginBottom: width * 0.17,
+        lineHeight: width * 0.12,
+        marginBottom: width * 0.15,
+        marginTop: width * 0.1,
         textAlign: 'center',
         width: '100%'
     },
     redPackageWrap: {
-        height: width * 0.72,
-        width: '80%',
+        height: width * 0.74,
+        width: width * 0.8,
         ...css.auto,
-        paddingHorizontal: 10
+        // backgroundColor: 'rgba(0,0,0,.1)',
+        left: '50%',
+        paddingHorizontal: 10,
+        top: '28%',
+        transform: [{ translateX: -width * 0.4 }]
     },
     riwInfoWrap: {
         flex: 1,

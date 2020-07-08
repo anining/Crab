@@ -104,7 +104,6 @@ function OpenMoneyPage (props) {
                 <Text style={{ fontWeight: '500', color: 'rgba(254,204,81,1)' }}>¥ <Text
                     style={{ fontSize: 49, fontWeight: '800' }}>{money}W</Text> 金币</Text>
                 <TouchableOpacity style={styles.withdrawBtn} onPress={() => {
-                    console.log('????======立即提现立即提现');
                     N.navigate('DailyMoneyPage', { activityId, pageInfo: data });
                 }}>
                     <Text style={{ fontSize: 16, color: '#fff' }}>立即提现</Text>
