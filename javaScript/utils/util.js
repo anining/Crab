@@ -261,41 +261,36 @@ export function _copyStr (str) {
         console.log(e);
     }
 }
-
-function requestPermission (success, denied) {
+export const AppAllPermissionsAndroid = [PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, PermissionsAndroid.PERMISSIONS.CALL_PHONE];
+function requestPermission (success, denied, PermissionsList = [PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE]) {
     try {
         if (Platform.OS === 'ios') {
             success && success();
         } else {
-            PermissionsAndroid.requestMultiple([
-                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-            ]).then(granted => {
-                if (typeof granted === 'string') {
-                    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                        success && success();
-                    } else {
-                        console.log(granted, PermissionsAndroid.RESULTS.GRANTED);
-                        denied && denied();
-                    }
+            const grantedStr = PermissionsAndroid.RESULTS.GRANTED;
+            PermissionsAndroid.requestMultiple(PermissionsList).then(granted => {
+                if (granted === grantedStr) {
+                    success && success();
                 } else {
                     let toDoSuccess = true;
                     for (const i in granted) {
-                        if (granted[i] !== PermissionsAndroid.RESULTS.GRANTED) {
+                        if (granted[i] !== grantedStr) {
                             toDoSuccess = false;
                             break;
                         }
                     }
                     if (toDoSuccess) {
                         success && success();
-                    } else {
-                        denied && denied();
+                        return false;
                     }
+                    denied && denied();
                 }
             });
         }
     } catch (err) {
         console.warn(err);
+        denied && denied();
     }
 }
 

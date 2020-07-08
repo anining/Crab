@@ -41,6 +41,7 @@ import game20 from '../../assets/icon/game/game20.png';
 import help from '../../lottie/help';
 import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { bindData, getPath } from '../../global/global';
+import { HomeStartAnimationTime } from '../../utils/animationConfig';
 
 const { height, width } = Dimensions.get('window');
 const CANVAS_WIDTH = width - 20;
@@ -88,10 +89,10 @@ export default class GamePage extends Component {
     componentDidMount () {
         this._getGame();
         updateUser();
-    }
-
-    static async _gameError (str) {
-        await gameError(str);// 打错题目
+        updateNextRedLevel();
+        this.debounceGameError = _debounce(async (str) => {
+            await gameError(str);// 打错题目
+        }, 300); // 防止频繁请求
     }
 
     async _upgradeGameLevel () {
@@ -122,9 +123,8 @@ export default class GamePage extends Component {
                     coordinate: this._countMaxPoint(ret.data),
                 });
             } else {
-                if (ret.error === 10) {
-                    N.goBack();
-                }
+                N.goBack();
+                ret.msg && toast(ret.msg);
             }
         });
     }
@@ -214,7 +214,7 @@ export default class GamePage extends Component {
             this.setState({ answerObj: answerObjOfKey, selectSite });
             return keyCoordinate;
         } catch (e) {
-            console.log(e);
+            console.log(e, 'ddd');
             return {};
         }
     }
@@ -381,8 +381,9 @@ export default class GamePage extends Component {
         }
     }
 
-    successAnimation (array, callback) { // 每次答对都有动特效
+    successAnimation (array, callback, key) { // 每次答对都有动特效
         try {
+            console.log(key, '触发了成功');
             array.forEach((moveKey, moveIndex) => {
                 setAndroidTime(() => {
                     this[`cube${moveKey}`] && this[`cube${moveKey}`].start();
@@ -398,7 +399,7 @@ export default class GamePage extends Component {
                 }, 64 * moveIndex);
             });
         } catch (e) {
-            console.log(e);
+            console.log(e, 'successAnimation');
         }
     }
 
@@ -429,7 +430,51 @@ export default class GamePage extends Component {
             })();
             return answerObj;
         } catch (e) {
-            console.log(e);
+            console.log(e, '_buildAnswerObj');
+        }
+    }
+
+    _triggerRightButAwait (item, surplusAnswer) {
+        try {
+            console.log(this.rightButAwait, '???========遍历rightButAwait， 触发应该触发的动画=');
+            // 遍历rightButAwait， 触发应该触发的动画
+            Object.entries(this.rightButAwait).forEach((rbaItem, rbaIndex) => {
+                const rbaItemObj = rbaItem[1];
+                const idiomPointArray = getPath(['idiomPointArray'], rbaItemObj, []);
+                if (idiomPointArray.includes(item.key) && GamePage.comparisonArray(surplusAnswer, idiomPointArray)) {
+                    const rbaNewAnswerObj = {
+                        ...this.state.answerObj,
+                        [rbaItemObj.key]: {
+                            ...rbaItemObj,
+                            filled: true,
+                        },
+                    };
+                    const rbaSurplusAnswer = Object.entries(rbaNewAnswerObj).map(x => {
+                        if (x && x[0] && !x[1].filled) {
+                            return x[0];
+                        }
+                    }).filter(function (s) {
+                        return s && s.trim();
+                    }); // 未被填充答案的key数组
+                    this.setState({
+                        answerObj: {
+                            ...this.state.answerObj,
+                            [rbaItemObj.key]: {
+                                ...rbaItemObj,
+                                filled: true,
+                                success: true,
+                                isAwait: false,
+                            },
+                        },
+                        completedCharacterArray: [...this.state.completedCharacterArray, ...rbaItemObj.idiomPointArray],
+                        selectSite: rbaSurplusAnswer[0],
+                    }, () => {
+                        this.successAnimation(rbaItemObj.idiomPointArray, null, '_triggerRightButAwait');
+                    });
+                }
+            });
+        } catch (e) {
+            console.log(e, '_triggerRightButAwait');
         }
     }
 
@@ -448,6 +493,7 @@ export default class GamePage extends Component {
                 return s && s.trim();
             }); // 未被填充答案的key数组
             const rightChoice = item.key === this.state.selectSite;
+            console.log(surplusAnswer, item.idiomPointArray, '????????====');
             const isSuccess = rightChoice && GamePage.comparisonArray(surplusAnswer, item.idiomPointArray);
             const nextAnswerObj = this._buildAnswerObj(item, isSuccess, rightChoice && !isSuccess, (preItemKey) => {
                 this[`answerOpacity${preItemKey}`] && this[`answerOpacity${preItemKey}`].show();
@@ -459,7 +505,7 @@ export default class GamePage extends Component {
                 },
                 answerObj: nextAnswerObj,
                 completedCharacterArray: [...this.state.completedCharacterArray, ...(isSuccess ? item.idiomPointArray : [])],
-                selectSite: !rightChoice ? this.state.selectSite : surplusAnswer[0],
+                selectSite: !isSuccess ? this.state.selectSite : surplusAnswer[0],
             }, () => {
                 console.log(this.state.selectSite);
                 if (isSuccess) {
@@ -467,65 +513,34 @@ export default class GamePage extends Component {
                         setAndroidTime(() => {
                             this._chest && this._chest.start();
                         }, 800);
-                    });
+                    }, '_checkAnswer');
                     // 已经触发了，应该从rightButAwait剔除
                     this.rightButAwait[item.key] && (() => {
                         delete this.rightButAwait[item.key];
                     })();
                     // 遍历rightButAwait， 触发应该触发的动画
-                    Object.entries(this.rightButAwait).forEach((rbaItem, rbaIndex) => {
-                        const rbaItemObj = rbaItem[1];
-                        if (rbaItemObj && rbaItemObj.idiomPointArray && rbaItemObj.idiomPointArray.includes(item.key)) {
-                            const rbaNewAnswerObj = {
-                                ...this.state.answerObj,
-                                [rbaItemObj.key]: {
-                                    ...rbaItemObj,
-                                    filled: true,
-                                },
-                            };
-                            const rbaSurplusAnswer = Object.entries(rbaNewAnswerObj).map(x => {
-                                if (x && x[0] && !x[1].filled) {
-                                    return x[0];
-                                }
-                            }).filter(function (s) {
-                                return s && s.trim();
-                            }); // 未被填充答案的key数组
-                            this.setState({
-                                answerObj: {
-                                    ...this.state.answerObj,
-                                    [rbaItemObj.key]: {
-                                        ...rbaItemObj,
-                                        filled: true,
-                                        success: true,
-                                        isAwait: false,
-                                    },
-                                },
-                                completedCharacterArray: [...this.state.completedCharacterArray, ...rbaItemObj.idiomPointArray],
-                                selectSite: rbaSurplusAnswer[0],
-                            }, () => {
-                                this.successAnimation(rbaItemObj.idiomPointArray);
-                            });
-                        }
-                    });
+                    this._triggerRightButAwait(item, surplusAnswer);
                     // // 全部答对逻辑
                 } else {
                     if (rightChoice && !isSuccess) { // 选对了，但是尚未触发动画的
+                        // 选对了，但是要触发之前的动画 // 选对了，不触发任何动画
                         !this.rightButAwait[item.key] && (() => {
                             this.rightButAwait[item.key] = item;
                         })();
+                        this._triggerRightButAwait(item, surplusAnswer);
                     } else { // 没选对，从rightButAwait剔除
                         this.rightButAwait[item.key] && (() => {
                             this.rightButAwait[item.key] = null;
                         })();
                         this[`animationText${this.state.selectSite}`] && this[`animationText${this.state.selectSite}`].tada();
-                        GamePage._gameError(item.idiomPointArray.map((key) => {
+                        this.debounceGameError(item.idiomPointArray.map((key) => {
                             return this.state.coordinate[key].word;
                         }).join(''));
                     }
                 }
             });
         } catch (e) {
-            console.log(e);
+            console.log(e, '_checkAnswer');
         }
     }
 
