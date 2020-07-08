@@ -198,7 +198,7 @@ function EndTimeView ({ detail }) {
             <View style={styles.endTimeViewItem}>
                 <View style={{ flexDirection: 'row' }}>
                     <Text style={{ color: '#fff', fontSize: 16, fontWeight: '500' }}>剩余时间：</Text>
-                    <CountDown time={+new Date(djangoTime(finish_deadline))} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }}/>
+                    <CountDown time={+new Date(djangoTime(finish_deadline))} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }} key={receive_task_id}/>
                 </View>
                 <TouchableOpacity onPress={apiGiveUp} style={styles.giveUpBtn}>
                     <Text style={{ color: '#fff', fontSize: 12, lineHeight: 25, textAlign: 'center' }}>放弃任务</Text>
