@@ -496,6 +496,11 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
     function showPop (type, number, callback) {
         const state = U.atom(true);
         let view;
+
+        function callbackGetTask () {
+            getApiTask(callback);
+        }
+
         switch (type) {
         case 1:view = (
             <>
@@ -531,7 +536,7 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
                 <TouchableOpacity style={styles.userPopBtn} onPress={() => {
                     U.set(state, false);
                     DeviceEventEmitter.emit('hidePop');
-                    N.navigate('WithdrawPage');
+                    N.navigate('WithdrawPage', { callbackGetTask });
                 }}>
                     <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>去提现</Text>
                 </TouchableOpacity>
