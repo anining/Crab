@@ -97,8 +97,7 @@ function AnswerPage () {
     async function _newUserTask () {
         try {
             const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
-            const local3 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE3${user_id.get()}`);
-            const localArray = [false, local1, openid.get(), local3];
+            const localArray = [false, local1, openid.get(), false];
             const ret = await newUserTask();
             if (!ret.error) {
                 const localData = ret.data.map(task => {
