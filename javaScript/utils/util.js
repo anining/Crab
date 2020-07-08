@@ -253,8 +253,8 @@ function transformTime (time) {
 
 export function _copyStr (str) {
     try {
-        if (typeof str === 'string') {
-            Clipboard.setString(str);
+        if (typeof str === 'string' || typeof str === 'number') {
+            Clipboard.setString(str.toString());
             toast('复制成功');
         }
     } catch (e) {

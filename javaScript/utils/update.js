@@ -37,6 +37,7 @@ export const updateUser = (callback) => {
             }));
         } else {
             resolve();
+            callback && callback();
         }
     });
 };
@@ -47,7 +48,8 @@ export function updateSecondIncome () {
             getSecondIncome().then(res => {
                 resolve();
                 const coin = getPath(['data', 'balance'], res);
-                if (coin) {
+                const addCoin = getPath(['data', 'add_balance'], res);
+                if (coin && addCoin) {
                     asyncStorage.setItem(`${getPath(['phone'], getGlobal('user'))}coin`, {
                         coin: toGoldCoin(coin),
                         time: +new Date(),
@@ -174,7 +176,7 @@ export const getTaskPlatform = () => {
 function taskDetail (receive_task_id) {
     taskReceiveDetail(receive_task_id).then(r => {
         if (r.error) {
-            toast(r.msg || '当前做任务人数过多！稍后再试！');
+            toast(r.msg || '当前做任务人数过多,稍后再试');
         } else {
             const { data: detail } = r;
             N.navigate('TaskDetailPage', { detail, account: undefined });
@@ -185,7 +187,7 @@ export function task (category, receive_task_id) {
     if (category) {
         getTask(category).then(r => {
             if (r.error) {
-                toast(r.msg || '当前做任务人数过多！稍后再试！');
+                toast(r.msg || '当前做任务人数过多,稍后再试');
                 error === 9 && N.navigate('AccountHomePage');
             } else {
                 taskDetail(r.data.receive_task_id);
