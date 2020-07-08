@@ -135,7 +135,7 @@ function RenderBindView () {
                     </TouchableOpacity>
                 </View>
                 <View style={[css.flexRCSB, styles.item, styles.btnView]}>
-                    <TouchableOpacity activeOpacity={1} karet-lift onPress={delClick} style={styles.giveUpBtn}>
+                    <TouchableOpacity activeOpacity={1} karet-lift onPress={updateAccount} style={styles.giveUpBtn}>
                         <Text karet-lift numberOfLines={1} style={styles.bindBtnText }>{U.ifElse(status3, '换号重绑', '刷新状态')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={1} karet-lift onPress={delClick} style={styles.delBtn}>
@@ -144,7 +144,7 @@ function RenderBindView () {
                 </View>
             </View>
         );
-        return <>{U.ifElse(R.equals(is_current, true), U.ifElse(R.equals(status, 1), ifView, elView), undefined)}</>;
+        return <>{U.ifElse(R.equals(status, 1), U.ifElse(R.equals(is_current, true), ifView, undefined), elView)}</>;
     }, accounts);
     return <>{view}</>;
 }
