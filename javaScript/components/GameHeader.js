@@ -55,7 +55,7 @@ export default class GameHeader extends Component {
     async componentDidMount () {
         this.debounceGetCoin = _debounce(async (addIncome) => {
             await this.getCoin(addIncome);
-        }, 500);// 内存读取保护
+        }, 200);// 内存读取保护
         this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user));
         this.nowBalance = getPath(['goldCoin'], this.state.user, 0);
         this.debounceGetCoin();

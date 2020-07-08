@@ -19,6 +19,14 @@ export default class NoticePage extends Component {
         };
     }
 
+    static _getStr (content) {
+        try {
+            return content.replace(/<[^>]*>|/g, '');
+        } catch (e) {
+            return content;
+        }
+    }
+
     render () {
         return (
             <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
@@ -46,7 +54,7 @@ export default class NoticePage extends Component {
                                             </View>
                                             <Text numberOfLines={1} style={{ fontSize: 12, color: '#999' }}>{transformTime(updated_at)}</Text>
                                         </View>
-                                        <Text numberOfLines={2} style={styles.content}>{content}</Text>
+                                        <Text numberOfLines={2} style={styles.content}>{NoticePage._getStr(content)}</Text>
                                         <TouchableOpacity activeOpacity={1} onPress={() => {
                                             N.navigate('NoticeDetailPage', { content, notice_id });
                                             this.setState({

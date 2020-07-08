@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { SafeAreaView, Text } from 'react-native';
+import { Dimensions, SafeAreaView, ScrollView, Text } from 'react-native';
 import { css } from '../../assets/style/css';
 import { putNotice } from '../../utils/api';
+import HTML from 'react-native-render-html';
+const { width } = Dimensions.get('window');
 export default class NoticeDetailPage extends Component {
     constructor (props) {
         super(props);
@@ -23,7 +25,9 @@ export default class NoticeDetailPage extends Component {
         try {
             return (
                 <SafeAreaView style={[css.safeAreaView, { padding: 15 }]}>
-                    <Text style={{ lineHeight: 25 }}>{this.props.route.params.content || ''}</Text>
+                    <ScrollView>
+                        <HTML html={this.props.route.params.content || ''} imagesMaxWidth={width} tagsStyles={{ p: { lineHeight: 24 } }}/>
+                    </ScrollView>
                 </SafeAreaView>
             );
         } catch (e) {
