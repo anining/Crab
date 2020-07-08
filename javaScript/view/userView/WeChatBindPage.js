@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     image: {
+        backgroundColor: '#fff',
         height: 894 / 786 * width * 0.7,
         marginLeft: width * 0.15,
         marginTop: 20,

@@ -118,7 +118,7 @@ function Slider ({ view, setCapture }) {
                     const { source, id, size, left, top } = item;
                     return (
                         <TouchableOpacity activeOpacity={1} key={id} style={{ borderRadius: 8, overflow: 'hidden' }}>
-                            <ImageBackground source={source} style={{ width: width * 0.7, height, position: 'relative' }} ref={ref => {
+                            <ImageBackground source={source} style={{ width: width * 0.7, height, backgroundColor: '#fff', position: 'relative' }} ref={ref => {
                                 let localView = view.get();
                                 localView = [...localView, ...[ref]].slice(0, 4);
                                 U.set(view, localView);
