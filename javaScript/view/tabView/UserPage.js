@@ -26,6 +26,7 @@ import toast from '../../utils/toast';
 import * as U from 'karet.util';
 import { updateSecondIncome, updateUser } from '../../utils/update';
 import { _copyStr } from '../../utils/util';
+import ImageAuto from '../../components/ImageAuto';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -126,9 +127,15 @@ function UserPage () {
                 data={['']}
                 renderItem={() => (
                     <ScrollView>
-                        <View style={styles.userDetailView}>
+                        <View style={[styles.userDetailView, css.pr]}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Image karet-lift source={U.template({ uri: avatar })} style={styles.avatarIcon}/>
+                                <TouchableOpacity style={styles.avatarIconWrap} onPress={() => {
+                                    if (!openid.get()) {
+                                        N.navigate('WeChatBindPage');
+                                    }
+                                }}>
+                                    <Image karet-lift source={U.template({ uri: avatar })} style={styles.avatarIcon}/>
+                                </TouchableOpacity>
                                 <View>
                                     <View style={styles.userCardTop}>
                                         <Text karet-lift numberOfLines={1} style={styles.userPhone}>{nickname}</Text>
@@ -192,7 +199,7 @@ function RenderBind () {
     return (
         <TouchableOpacity onPress={() => {
             N.navigate('WeChatBindPage');
-        }} style={styles.bindBtn}>
+        }} style={[css.pa, styles.bindBtn]}>
             <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
             <Text style={styles.bindText}>绑定微信</Text>
         </TouchableOpacity>
@@ -203,11 +210,13 @@ function RenderTaskMenu () {
     const view = [];
     authorization.get() && TASK_MENU.forEach((menu, index) => {
         const { id, icon, label } = menu;
-        const number = U.mapValue(num => U.ifElse(R.equals(num, undefined), 0, num[id]), receive_task_status);
+        // const number = U.mapValue(num => U.ifElse(R.equals(num, undefined), 0, num[id]), receive_task_status);
         view.push(
             <TouchableOpacity activeOpacity={1} onPress={() => N.navigate('MyTaskPage', { id: index })} style={styles.myTaskBtn} key={id}>
                 <Image source={icon} style={styles.myTaskBtnIcon}/>
-                <Text style={styles.myTaskBtnText}>{label}<Text karet-lift style={{ color: '#FF7751' }}> {number}</Text></Text>
+                <Text style={styles.myTaskBtnText}>{label}
+                    {/* <Text karet-lift style={{ color: '#FF7751' }}> {number}</Text> */}
+                </Text>
             </TouchableOpacity>
         );
     });
@@ -251,11 +260,14 @@ function RenderMenu () {
 
 const styles = StyleSheet.create({
     avatarIcon: {
-        borderRadius: 27,
-        height: 54,
-        marginLeft: 10,
-        marginRight: 10,
-        width: 54
+        borderColor: '#ffc7a1',
+        borderRadius: 29,
+        borderWidth: 1,
+        height: 58,
+        width: 58
+    },
+    avatarIconWrap: {
+        marginHorizontal: 15
     },
     bindBtn: {
         alignItems: 'center',
@@ -265,7 +277,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 24,
         justifyContent: 'center',
-        width: 80
+        right: 0,
+        width: 80,
+        zIndex: 9
     },
     bindText: {
         color: '#fff',
@@ -287,13 +301,13 @@ const styles = StyleSheet.create({
     },
     copyBtn: {
         backgroundColor: '#FFF4E8',
-        height: 16,
+        height: 22,
         width: 35
     },
     copyText: {
         color: '#FF6C00',
-        fontSize: 11,
-        lineHeight: 19,
+        fontSize: 10,
+        lineHeight: 22,
         textAlign: 'center'
     },
     inviteCode: {
@@ -391,8 +405,8 @@ const styles = StyleSheet.create({
     userCardBottom: {
         alignItems: 'flex-end',
         flexDirection: 'row',
+        height: 22,
         justifyContent: 'flex-start',
-        marginTop: 2
     },
     userCardTop: {
         alignItems: 'flex-end',

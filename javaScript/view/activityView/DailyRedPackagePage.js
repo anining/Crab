@@ -123,7 +123,7 @@ function RenderBg ({ isOpen, last, today_pass_num, need_task_num, min_add_balanc
     }
     return (
         <ImageBackground source={source} style={[styles.redItemBg, css.flex, css.afs, css.fw]}>
-            <Text style={[styles.redItemText, { color: 'rgba(255,255,255,.7)' }]} numberOfLines={1}>最低{transformMoney(min_add_balance)}金币</Text>
+            <Text style={[styles.redItemText, { color: 'rgba(255,255,255,.7)' }]} numberOfLines={1}>最低{transformMoney(min_add_balance, 0)}金币</Text>
             <Text style={[styles.redItemText]} numberOfLines={1}>完成进度<Text style={{ color: last ? '#FE2E43' : '#fff' }}>{today_pass_num.get()}</Text>/{need_task_num}</Text>
         </ImageBackground>
     );
@@ -216,10 +216,10 @@ const styles = StyleSheet.create({
     },
     redItemText: {
         color: '#fff',
-        fontSize: 11,
+        fontSize: 10,
         lineHeight: 30,
         textAlign: 'center',
-        width: '90%',
+        width: '96%',
         ...css.auto
     }
 });

@@ -99,7 +99,7 @@ export default class GameHeader extends Component {
         this.nowBalance = 0;
     }
 
-    start (addIncome = this.secondIncome) {
+    start (addIncome = this.secondIncome, calibration = true) {
         try {
             if (this._start && addIncome) {
                 this._start = false;
@@ -115,8 +115,10 @@ export default class GameHeader extends Component {
                             this.secondText && this.secondText.setNativeProps({
                                 text: `${_toFixed(this.nowBalance, 4)}`
                             });
-                            if (this.secondIncome !== addIncome) {
+                            if ((this.secondIncome !== addIncome) && calibration) {
                                 this.debounceGetCoin(addIncome);
+                            }
+                            if ((this.secondIncome !== addIncome)) {
                                 this.writeTimes = maxWriteTimes;
                             }
                             if (this.writeTimes >= maxWriteTimes) {

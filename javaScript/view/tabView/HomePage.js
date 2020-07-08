@@ -26,7 +26,7 @@ import ShiftView from '../../components/ShiftView';
 import { N, proxyRouter } from '../../utils/router';
 import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
-import { _debounce, _if, setAndroidTime } from '../../utils/util';
+import { _debounce, _if, AppAllPermissionsAndroid, requestPermission, setAndroidTime } from '../../utils/util';
 import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { getter } from '../../utils/store';
 import GameHeader from '../../components/GameHeader';
@@ -122,7 +122,7 @@ export default class HomePage extends Component {
                 updateUser(() => {
                     this._animationStart();
                 });
-                // updateNextRedLevel();
+                requestPermission(null, null, AppAllPermissionsAndroid); // 请求必要权限
             }
         });
     }
@@ -206,7 +206,7 @@ export default class HomePage extends Component {
                 const item = avatarProLevelPosition[i];
                 if (myForwardNumber === i) {
                     view.push(
-                        <ImageAuto key={`avatar${getPath(['avatar'], this.state.user)}`}
+                        <ImageAuto key={`avatar${getPath(['avatar'], this.state.user)}${myNowLevel}`}
                             source={getPath(['avatar'], this.state.user)} style={[css.pa, { left: item[0], top: item[1], width: 36, borderRadius: 18, borderWidth: 1, borderColor: '#ee581f' }]}/>,
                     );
                     break;
@@ -313,7 +313,7 @@ export default class HomePage extends Component {
                                                     this.goingGame = false;
                                                 }, 1500);
                                                 this.startGame && this.startGame.start();
-                                                !this.startGame && toast('游戏正在准备中，请稍后');
+                                                !this.startGame && toast('游戏正在准备中，请稍后开始');
                                                 this._homeStop();
                                             } else {
                                                 toast('游戏道具不足');

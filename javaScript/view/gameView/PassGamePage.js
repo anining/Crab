@@ -62,7 +62,6 @@ export default class PassGamePage extends Component {
 
     static async _addNoteBook (str) {
         const ret = await addNoteBook(str);
-        console.log(ret);
         if (ret && !ret.error) {
             toast('加入成功');
         }
@@ -75,11 +74,11 @@ export default class PassGamePage extends Component {
             DeviceEventEmitter.emit('hidePop');
             if (ret && !ret.error) {
                 const addBalance = getPath(['data', 'add_balance'], ret);
-                this.gameHeader && this.gameHeader.start(toGoldCoin(addBalance));
+                this.gameHeader && this.gameHeader.start(toGoldCoin(addBalance), false);// 不教准每秒金币
                 toast('领取成功');
             }
         } catch (e) {
-            console.log(e);
+            console.log(e, 'getAward');
         }
     }
 
@@ -92,7 +91,7 @@ export default class PassGamePage extends Component {
                         style={{ width: width * 0.8, height: 'auto' }} imageAssetsFolder={'chest'} source={chest}
                         loop={false} autoPlay={true} speed={1} onAnimationFinish={() => {
                             DeviceEventEmitter.emit('hidePop');
-                            this.gameHeader && this.gameHeader.start(toGoldCoin(this.paramsInfo.add_balance));
+                            this.gameHeader && this.gameHeader.start(toGoldCoin(this.paramsInfo.add_balance), false);// 不教准每秒金币
                             this._isUpgrade();// 这个弹窗完以后，判断是否升级
                         }}/>
                     <View style={[styles.passDataNumber, css.flex, css.auto, css.pa, {
@@ -100,7 +99,7 @@ export default class PassGamePage extends Component {
                         left: width * 0.4 - 50,
                     }]}>
                         <ImageAuto source={game22} width={33}/>
-                        <Text style={styles.hdnText}>+{transformMoney(this.paramsInfo.add_balance)}</Text>
+                        <Text style={styles.hdnText}>+{transformMoney(this.paramsInfo.add_balance, 0)}</Text>
                     </View>
                 </View>,
                 canCancel: false, // 不能点击蒙城关闭
@@ -109,7 +108,7 @@ export default class PassGamePage extends Component {
         if (this.paramsInfo && this.paramsInfo.rate > 1) {
             DeviceEventEmitter.emit('showPop', {
                 dom: <ImageBackground source={game17} style={[styles.gameRedPackage, css.flex, css.pr]}>
-                    <Text style={styles.hdnRedPackageText}>+{transformMoney(this.paramsInfo.add_balance)}<Text style={{ fontSize: 15 }}>金币</Text></Text>
+                    <Text style={styles.hdnRedPackageText}>+{transformMoney(this.paramsInfo.add_balance, 0)}<Text style={{ fontSize: 15 }}>金币</Text></Text>
                     <View style={styles.hdnRedBtnWrap}>
                         <Text style={styles.hdnRedBtnText} onPress={async () => {
                             // 双倍领取
@@ -117,7 +116,10 @@ export default class PassGamePage extends Component {
                             DeviceEventEmitter.emit('hidePop');
                             if (ret && !ret.error) {
                                 N.navigate('AnswerPage');
-                                toast('完成任务后即可领取双倍奖励');
+                                setAndroidTime(() => {
+                                    DeviceEventEmitter.emit('answerScroll', 'end');
+                                }, 1000);
+                                toast('任意完成一个任务后即可领取双倍奖励');
                             }
                         }}/>
                         <Text style={styles.hdnRedBtnText} onPress={async () => {
@@ -214,16 +216,19 @@ export default class PassGamePage extends Component {
                     const item = array[i];
                     if (item > now) {
                         retNumber = item;
-                        console.log(retNumber);
                         break;
                     }
                 }
-                return Math.abs(retNumber - now);
+                if (retNumber) {
+                    return Math.abs(retNumber - now);
+                } else {
+                    return retNumber;
+                }
             } else {
                 return 0;
             }
         } catch (e) {
-            console.log(e);
+            console.log(e, '_countNextLevel');
         }
     }
 
@@ -246,8 +251,10 @@ export default class PassGamePage extends Component {
                         }]}/>
                     </View>
                     <View style={{ height: 15, width: '100%' }}/>
-                    <Text style={[styles.gamePassTips, css.gf, { fontSize: 15 }]}>再闯关<Text
-                        style={{ fontSize: 17, color: 'red' }}>{PassGamePage._countNextLevel(myNowLevel, this.state.nextRedLevel)}</Text>关领红包</Text>
+                    {_if(PassGamePage._countNextLevel(myNowLevel, this.state.nextRedLevel), res => <Text style={[styles.gamePassTips, css.gf, { fontSize: 15 }]}>再闯关<Text
+                        style={{ fontSize: 17, color: 'red' }}>{res}</Text>拿红包</Text>, () => {
+                        return <Text style={styles.noRedText}>更多红包在后面关卡等你拿～</Text>;
+                    })}
                     {(() => {
                         const view = [];
                         [...this.state.nextRedLevel].forEach((item, index) => {

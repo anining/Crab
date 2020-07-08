@@ -6,6 +6,7 @@ import Header from '../../components/Header';
 import { N } from '../../utils/router';
 import { income } from '../../utils/api';
 import { transformMoney, transformTime } from '../../utils/util';
+import { getPath } from '../../global/global';
 
 const itemHeight = 110;
 const itemMarginTop = 10;
@@ -79,21 +80,23 @@ function FundingRecordsPage () {
                     itemHeight={itemHeight}
                     itemMarginTop={itemMarginTop}
                     getList={ (page, num, callback) => {
+                        console.log(page, num, source);
                         income(page, num, source).then(r => {
-                            !r.error && callback(r.data);
+                            console.log(r);
+                            r && !r.error && callback(r.data);
                         });
                     }}
                     renderItem={item => {
-                        const { income_log_id, created_at, source, change_balance } = item;
+                        const { income_log_id, created_at, source, change_balance, label } = item;
                         return (
                             <>
                                 <View style={styles.itemView} key={income_log_id}>
                                     <View style={[css.flexRCSB, styles.item, { borderBottomWidth: 1, borderBottomColor: '#EDEDED' }]}>
                                         <Text numberOfLines={1} style={{ fontSize: 12, color: '#999' }}>变动时间：{transformTime(created_at)}</Text>
-                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>{transformMoney(change_balance)}<Text style={{ fontSize: 14, fontWeight: '600' }}> 金币</Text></Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 18, color: '#FF6C00', fontWeight: '600' }}>{transformMoney(change_balance)}<Text style={{ fontSize: 14, fontWeight: '600' }}> 金币</Text></Text>
                                     </View>
                                     <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-                                        <Text numberOfLines={1} style={ { color: '#353535', fontWeight: '500' }}>变动来源：{(STATUS_DATA[source - 1] && STATUS_DATA[source - 1].label) || '基本来源'}</Text>
+                                        <Text numberOfLines={1} style={ { color: '#353535', fontWeight: '500' }}>变动来源：{(label || getPath(['label'], STATUS_DATA[source]))}</Text>
                                     </View>
                                 </View>
                             </>

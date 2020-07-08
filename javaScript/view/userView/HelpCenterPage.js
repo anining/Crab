@@ -69,8 +69,8 @@ function RenderAnswerItem ({ children = [] }) {
     children.forEach(child => {
         const { content, help_center_id, title, video_url } = child;
         answersView.push(
-            <TouchableOpacity activeOpacity={1}  onPress={() => {
-                N.navigate('HelpCenterDetailPage', { content, video_url });
+            <TouchableOpacity activeOpacity={1} onPress={() => {
+                N.navigate('HelpCenterDetailPage', { content, video_url, help_center_id });
             }} style={styles.item} key={help_center_id}>
                 <Text style={{ color: '#666' }}>{title}</Text>
                 <Image source={help1} style={{ height: 13, width: 6 }}/>

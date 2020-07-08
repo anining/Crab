@@ -18,7 +18,7 @@ import answer14 from '../../assets/icon/answer/answer14.png';
 import pop5 from '../../assets/icon/pop/pop5.png';
 import pop8 from '../../assets/icon/pop/pop8.png';
 import Shadow from '../../components/Shadow';
-import { _if, _tc, bannerAction, transformMoney } from '../../utils/util';
+import { _if, _tc, _toFixed, bannerAction, toGoldCoin, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
 import { N } from '../../utils/router';
 import { getter, store } from '../../utils/store';
@@ -59,8 +59,8 @@ function AnswerPage () {
     let scrollViewRef;
     !authorization.get() && N.replace('VerificationStackNavigator');
 
-    useEffect(async () => {
-        await init();
+    useEffect(() => {
+        init();
         reloadEmitter = DeviceEventEmitter.addListener('reloadAnswer', async () => {
             await init();
         });
@@ -95,26 +95,29 @@ function AnswerPage () {
     }
 
     async function _newUserTask () {
-        // asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
-        const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
-        const local3 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE3${user_id.get()}`);
-        const localArray = [false, local1, openid.get(), local3];
-        const ret = await newUserTask();
-        if (!ret.error) {
-            const localData = ret.data.map(task => {
-                const { add_balance, is_finish, new_user_task_id, task_type } = task;
-                return {
-                    balance: add_balance,
-                    id: new_user_task_id,
-                    label: NEW_USER_TASK_TYPE[task_type].label,
-                    minTitle: NEW_USER_TASK_TYPE[task_type].label,
-                    icon: NEW_USER_TASK_TYPE[task_type].icon,
-                    path: NEW_USER_TASK_TYPE[task_type].path,
-                    btnText: is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成',
-                    btnStatus: is_finish ? 3 : localArray[task_type] ? 2 : 5,
-                };
-            });
-            setNewUser(localData);
+        try {
+            const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
+            const local3 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE3${user_id.get()}`);
+            const localArray = [false, local1, openid.get(), local3];
+            const ret = await newUserTask();
+            if (!ret.error) {
+                const localData = ret.data.map(task => {
+                    const { add_balance, is_finish, new_user_task_id, task_type } = task;
+                    return {
+                        balance: add_balance,
+                        id: new_user_task_id,
+                        label: NEW_USER_TASK_TYPE[task_type].label,
+                        minTitle: NEW_USER_TASK_TYPE[task_type].label,
+                        icon: NEW_USER_TASK_TYPE[task_type].icon,
+                        path: NEW_USER_TASK_TYPE[task_type].path,
+                        btnText: is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成',
+                        btnStatus: is_finish ? 3 : localArray[task_type] ? 2 : 5,
+                    };
+                });
+                setNewUser(localData);
+            }
+        } catch (e) {
+            console.log(e);
         }
     }
 
@@ -163,7 +166,7 @@ function RenderDaySign ({ signDay, setSignDay }) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: pop5,
                     tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{ret.prop.label}</Text> </Text>,
-                    minTips: '请在"我的-我的背包"查看收益详情',
+                    minTips: '请在"我的-立即提现-资金记录"查看收益详情',
                     type: 'oneBtn',
                     rt: '我知道了',
                 }}/>);
@@ -171,7 +174,7 @@ function RenderDaySign ({ signDay, setSignDay }) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: pop5,
                     tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{transformMoney(ret.data.add_balance)}金币</Text> </Text>,
-                    minTips: '请在"我的-我的背包"查看收益详情',
+                    minTips: '请在"我的-立即提现-资金记录"查看收益详情',
                     type: 'oneBtn',
                     rt: '我知道了',
                 }}/>);
@@ -204,23 +207,27 @@ function RenderDaySign ({ signDay, setSignDay }) {
 }
 
 function RenderSignList ({ signDay }) {
-    const view = [];
-    const signConfigObj = signConfig.get();
-    for (const day in signConfigObj) {
-        const item = signConfigObj[day];
-        view.push(
-            <View key={`sign${day}`} style={[css.flex, css.fw, styles.signItemWrap, { backgroundColor: day <= signDay ? '#FF9C00' : '#F0F0F0' }]}>
-                <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', }]}>{_if(item.add_balance, res => transformMoney(res))}</Text>
-                <ImageAuto source={item.prop ? item.prop.icon : day <= signDay ? answer11 : answer9} width={item.prop ? width * 0.055 : width * 0.07}/>
-                <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', lineHeight: 18 }]}>{day}天</Text>
+    try {
+        const view = [];
+        const signConfigObj = signConfig.get();
+        for (const day in signConfigObj) {
+            const item = signConfigObj[day];
+            view.push(
+                <View key={`sign${day}`} style={[css.flex, css.fw, styles.signItemWrap, { backgroundColor: day <= signDay ? '#FF9C00' : '#F0F0F0' }]}>
+                    <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', }]}>{_if(item.add_balance, res => transformMoney(res, 0))}</Text>
+                    <ImageAuto source={item.prop ? item.prop.icon : day <= signDay ? answer11 : answer9} width={item.prop ? width * 0.055 : width * 0.07}/>
+                    <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', lineHeight: 18 }]}>{day}天</Text>
+                </View>
+            );
+        }
+        return (
+            <View key={'dayList'} style={[styles.signAllTopWrap, css.flex]}>
+                {view}
             </View>
         );
+    } catch (e) {
+        return <View/>;
     }
-    return (
-        <View key={'dayList'} style={[styles.signAllTopWrap, css.flex]}>
-            {view}
-        </View>
-    );
 }
 
 function RenderActivity () {
@@ -259,7 +266,7 @@ function RenderNewList ({ list = [], _newUserTask }) {
                     <View style={[css.flex, css.fw, styles.aiwText]}>
                         <View style={[css.flex, css.js, { width: '100%' }]}>
                             <Text style={[styles.labelText, { width: 'auto' }]} numberOfLines={1}>{label}</Text>
-                            <Text style={styles.labelMoney} numberOfLines={1}> +{balance}</Text>
+                            <Text style={styles.labelMoney} numberOfLines={1}> +{_toFixed(toGoldCoin(balance), 0)}</Text>
                             <ImageAuto source={answer14} width={20}/>
                         </View>
                         <Text style={[styles.labelText, styles.labelMinTitle, { color: btnStatus === 5 ? '#999' : '#53C23B' }]} numberOfLines={1}>{minTitle}</Text>
@@ -283,7 +290,7 @@ function RenderNewBtn ({ item, _newUserTask }) {
                     <Choice info={{
                         icon: pop3,
                         tips: '太棒了～',
-                        minTips: `你成功获得${balance}奖励`,
+                        minTips: `你成功获得${transformMoney(balance, 0)}金币`,
                         type: 1,
                         rt: '我知道了',
                         fontSize: 15

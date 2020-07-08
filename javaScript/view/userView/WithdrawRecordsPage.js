@@ -6,7 +6,7 @@ import Header from '../../components/Header';
 import { N } from '../../utils/router';
 import { withdrawLogs } from '../../utils/api';
 import with9 from '../../assets/icon/withdraw/withdraw9.png';
-import { transformMoney, transformTime } from '../../utils/util';
+import { _toFixed, transformMoney, transformTime } from '../../utils/util';
 
 const itemHeight = 110;
 const itemMarginTop = 10;
@@ -26,17 +26,19 @@ function WithdrawRecordsPage () {
                     itemMarginTop={itemMarginTop}
                     getList={ (page, num, callback) => {
                         withdrawLogs(page, num).then(r => {
-                            !r.error && callback(r.data);
+                            console.log(r);
+                            r && !r.error && callback(r.data);
                         });
                     }}
                     renderItem={item => {
-                        const { withdraw_log_id, status, created_at, balance } = item;
+                        const { withdraw_log_id, status, created_at, balance, money } = item;
                         return (
                             <>
                                 <View style={styles.itemView} key={withdraw_log_id}>
                                     <View style={[css.flexRCSB, styles.item, { borderBottomWidth: 1, borderBottomColor: '#EDEDED' }]}>
                                         <Text numberOfLines={1} style={{ fontSize: 12, color: '#999', maxWidth: 200 }}>申请时间：{transformTime(created_at)}</Text>
-                                        <Text numberOfLines={1} style={{ fontSize: 24, color: '#FF6C00', fontWeight: '600' }}>-{transformMoney(balance)}<Text style={{ fontSize: 14, fontWeight: '600' }}> 金币({balance}元)</Text></Text>
+                                        {/* <Text style={{ fontSize: 14, fontWeight: '600' }}>({balance}元)</Text> */}
+                                        <Text numberOfLines={1} style={{ fontSize: 18, color: '#FF6C00', fontWeight: '600' }}>{_toFixed(money, 0)}元</Text>
                                     </View>
                                     <RenderView status={status}/>
                                 </View>
@@ -61,11 +63,11 @@ function RenderView ({ status }) {
     case 2:
         return (
             <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-                <Text numberOfLines={1} style={ { color: '#999', fontSize: 12, maxWidth: 200 }}>提现失败(提现账户异常)，金币已退回</Text>
+                <Text numberOfLines={1} style={ { color: '#999', fontSize: 11 }}>提现失败(提现账户异常)，金币已退回</Text>
                 <TouchableOpacity activeOpacity={1} onPress={() => {
-                    N.navigate('FeedBackPage');
+                    N.navigate('HelpCenterPage');
                 }}>
-                    <Text numberOfLines={1} style={{ color: '#FA0000', fontSize: 15 }}>我有疑问</Text>
+                    <Text numberOfLines={1} style={{ color: '#FA0000', fontSize: 13, padding: 5 }}>我有疑问</Text>
                 </TouchableOpacity>
             </View>
         );

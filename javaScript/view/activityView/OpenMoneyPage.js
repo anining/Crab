@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { DeviceEventEmitter, Dimensions, Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+    DeviceEventEmitter,
+    Dimensions,
+    Image,
+    ImageBackground,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import { css } from '../../assets/style/css';
 import activity7 from '../../assets/icon/activity/activity7.png';
 import activity8 from '../../assets/icon/activity/activity8.png';
@@ -10,6 +21,9 @@ import activity14 from '../../assets/icon/activity/activity14.png';
 import { activityDetail, openRedPackage } from '../../utils/api';
 import { N } from '../../utils/router';
 import { transformTime } from '../../utils/util';
+import { getPath } from '../../global/global';
+import { DEFAULT_USER } from '../../utils/data';
+
 const { width } = Dimensions.get('window');
 
 function OpenMoneyPage (props) {
@@ -29,6 +43,25 @@ function OpenMoneyPage (props) {
         !ret.error && _activityDetail();
     }
 
+    function _showPop () {
+        DeviceEventEmitter.emit('showPop', {
+            dom: (
+                <TouchableOpacity style={css.pr} onPress={_openRedPackage}>
+                    <TouchableOpacity style={[styles.redInnerWrap, css.pa, css.flex, css.fw]}>
+                        <ImageAuto style={{
+                            width: 64,
+                            borderRadius: 37,
+                        }} source={getPath(['avatar'], DEFAULT_USER)}/>
+                        <Text style={styles.redNameText}>运营商送你一个红包</Text>
+                        <Text style={styles.redTipsText}>现在打开</Text>
+                        <Text style={styles.redTipsText}>最低20元现金等着你</Text>
+                    </TouchableOpacity>
+                    <ImageAuto width={width * 0.8} source={activity14}/>
+                </TouchableOpacity>
+            ),
+        });
+    }
+
     function _activityDetail () {
         activityDetail(activityId || 2).then(r => {
             if (r && !r.error) {
@@ -44,23 +77,7 @@ function OpenMoneyPage (props) {
                     DeviceEventEmitter.emit('hidePop');
                 } else {
                     setReceivedStatus(1);
-                    DeviceEventEmitter.emit('showPop', {
-                        dom: (
-                            <TouchableOpacity style={css.pr} onPress={_openRedPackage}>
-                                <TouchableOpacity style={[styles.redInnerWrap, css.pa, css.flex, css.fw]}>
-                                    <ImageAuto style={{
-                                        width: 48,
-                                        borderRadius: 20,
-                                    }} source={activity8}/>
-                                    <Text style={styles.redNameText}>运营商送你一个红包</Text>
-                                    <Text style={styles.redTipsText}>现在打开</Text>
-                                    <Text style={styles.redTipsText}>最低20元现金等着你</Text>
-                                </TouchableOpacity>
-                                <ImageAuto width={width * 0.8} source={activity14}/>
-                            </TouchableOpacity>
-                        ),
-                        canCancel: false
-                    });
+                    _showPop();
                 }
             } else {
                 N.goBack();
@@ -68,40 +85,45 @@ function OpenMoneyPage (props) {
         });
     }
 
+    function RenderRedPackage ({ receivedStatus, activityId, money, data }) {
+        if (receivedStatus !== 2) {
+            return <Text style={[css.pa, styles.openMainBtn]} onPress={() => {
+                _showPop();
+            }}>打开红包</Text>;
+        }
+
+        const { title, icon: uri } = data;
+
+        return (
+            <View style={styles.redPackageView}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image style={styles.redPackageAvatar} source={{ uri }}/>
+                    <Text style={styles.redPackageText}>{title}</Text>
+                </View>
+                <Text style={{ fontSize: 15, color: '#FDEAB9' }}>恭喜您获得现金</Text>
+                <Text style={{ fontWeight: '500', color: 'rgba(254,204,81,1)' }}>¥ <Text
+                    style={{ fontSize: 49, fontWeight: '800' }}>{money}W</Text> 金币</Text>
+                <TouchableOpacity style={styles.withdrawBtn} onPress={() => {
+                    N.navigate('DailyMoneyPage', { activityId, pageInfo: data });
+                }}>
+                    <Text style={{ fontSize: 16, color: '#fff' }}>立即提现</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
             <ScrollView style={[{ flex: 1, backgroundColor: '#f8f8f8' }]}>
                 <ImageBackground source={activity7} style={styles.dmWrap}>
-                    <Header color={'#fff'} label={'天天领现金'} style={{ backgroundColor: 'rgba(0,0,0,0)', borderBottomWidth: 0 }} icon={header3}/>
-                    <RenderRedPackage money={money} receivedStatus={receivedStatus} activityId={activityId} data={data}/>
+                    <Header color={'#fff'} label={'天天领现金'}
+                        style={{ backgroundColor: 'rgba(0,0,0,0)', borderBottomWidth: 0 }} icon={header3}/>
+                    <RenderRedPackage money={money} receivedStatus={receivedStatus} activityId={activityId}
+                        data={data}/>
                 </ImageBackground>
                 <RenderView receivedStatus={receivedStatus} pageInfo={pageInfo} totalNum={totalNum}/>
             </ScrollView>
         </SafeAreaView>
-    );
-}
-
-function RenderRedPackage ({ receivedStatus, activityId, money, data }) {
-    if (receivedStatus !== 2) {
-        return <></>;
-    }
-
-    const { title, icon: uri } = data;
-
-    return (
-        <View style={styles.redPackageView}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Image style={styles.redPackageAvatar} source={{ uri }}/>
-                <Text style={styles.redPackageText}>{title}</Text>
-            </View>
-            <Text style={{ fontSize: 15, color: '#FDEAB9' }}>恭喜您获得现金</Text>
-            <Text style={{ fontWeight: '500', color: 'rgba(254,204,81,1)' }}>¥ <Text style={{ fontSize: 49, fontWeight: '800' }}>{money}W</Text> 金币</Text>
-            <TouchableOpacity style={styles.withdrawBtn} onPress={() => {
-                N.navigate('DailyMoneyPage', { activityId, pageInfo: data });
-            }}>
-                <Text style={{ fontSize: 16, color: '#fff' }}>立即提现</Text>
-            </TouchableOpacity>
-        </View>
     );
 }
 
@@ -117,12 +139,14 @@ function RenderView ({ receivedStatus, pageInfo, totalNum }) {
                 <Image style={styles.listAvatar} source={{ uri }}/>
                 <View style={styles.listRight}>
                     <View>
-                        <Text numberOfLines={1} style={{ color: 'rgba(53,53,53,1)', fontSize: 16, maxWidth: 250 }}>{user_nickname}</Text>
-                        <Text numberOfLines={1} style={{ color: 'rgba(53,53,53,1)', fontSize: 13 }}>{transformTime(created_at)}</Text>
+                        <Text numberOfLines={1}
+                            style={{ color: 'rgba(53,53,53,1)', fontSize: 16, maxWidth: 250 }}>{user_nickname}</Text>
+                        <Text numberOfLines={1}
+                            style={{ color: 'rgba(53,53,53,1)', fontSize: 13 }}>{transformTime(created_at)}</Text>
                     </View>
                     <Text numberOfLines={1} style={{ color: 'rgba(53,53,53,1)', fontSize: 16 }}>{money}元</Text>
                 </View>
-            </View>
+            </View>,
         );
     });
     return (
@@ -136,19 +160,19 @@ function RenderView ({ receivedStatus, pageInfo, totalNum }) {
 const styles = StyleSheet.create({
     dmWrap: {
         height: 1056 / 1128 * width,
-        width: width
+        width: width,
     },
     listAvatar: {
         borderRadius: 45,
         height: 45,
         marginRight: 10,
-        width: 45
+        width: 45,
     },
     listContainer: {
         paddingLeft: 15,
         paddingRight: 15,
         paddingTop: 40,
-        width
+        width,
     },
     listRight: {
         alignItems: 'center',
@@ -157,31 +181,45 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         height: 65,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     listTitle: {
         color: 'rgba(153,153,153,1)',
         fontSize: 12,
-        lineHeight: 50
+        lineHeight: 50,
     },
     listView: {
         alignItems: 'center',
         flexDirection: 'row',
-        height: 65
+        height: 65,
     },
     loadingText: {
         color: '#fff',
         fontSize: 15,
         marginTop: width * 0.3,
         textAlign: 'center',
-        width: '100%'
+        width: '100%',
+    },
+    openMainBtn: {
+        backgroundColor: '#FECD5B',
+        borderRadius: 25,
+        color: '#834D00',
+        fontSize: 18,
+        height: 50,
+        left: '50%',
+        lineHeight: 50,
+        overflow: 'hidden',
+        textAlign: 'center',
+        top: '50%',
+        transform: [{ translateX: -width * 0.4 }],
+        width: width * 0.8,
     },
     redInnerWrap: {
         flex: 1,
         overflow: 'hidden',
         padding: 20,
         paddingLeft: '13%',
-        width: '100%'
+        width: '100%',
     },
     redNameText: {
         color: '#FDFAB1',
@@ -189,25 +227,25 @@ const styles = StyleSheet.create({
         lineHeight: 40,
         marginTop: 10,
         textAlign: 'center',
-        width: '100%'
+        width: '100%',
     },
     redPackageAvatar: {
         borderRadius: 16,
         height: 32,
         marginRight: 10,
-        width: 32
+        width: 32,
     },
     redPackageText: {
         color: '#FDEAB9',
         fontSize: 17,
-        fontWeight: '500'
+        fontWeight: '500',
     },
     redPackageView: {
         alignItems: 'center',
         flex: 1,
         justifyContent: 'space-around',
         paddingBottom: '10%',
-        paddingTop: '10%'
+        paddingTop: '10%',
     },
     redTipsText: {
         color: '#FDFAB1',
@@ -215,7 +253,7 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         lineHeight: 40,
         textAlign: 'center',
-        width: '100%'
+        width: '100%',
     },
     withdrawBtn: {
         alignItems: 'center',
@@ -223,8 +261,8 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         height: 40,
         justifyContent: 'center',
-        width: width * 0.6
-    }
+        width: width * 0.6,
+    },
 });
 
 export default OpenMoneyPage;

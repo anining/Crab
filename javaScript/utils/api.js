@@ -62,6 +62,11 @@ export function helpCenter () {
     return transformFetch('GET', '/help_center');
 }
 
+// 帮助中心详情
+export function helpCenterDetail (help_center_id) {
+    return transformFetch('GET', '/help_center/detail', { help_center_id });
+}
+
 // banner
 export function banner () {
     return transformFetch('GET', '/banner');

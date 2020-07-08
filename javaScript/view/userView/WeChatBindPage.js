@@ -80,7 +80,7 @@ function Render ({ value, uri = avatar.get() }) {
                 logoSize={50}
                 logoBackgroundColor='transparent'
                 value={value}
-                size={200}
+                size={width * 0.48}
                 logoMargin={2}
                 logoBorderRadius={5}
                 color={'#333'}
@@ -91,7 +91,7 @@ function Render ({ value, uri = avatar.get() }) {
     return (
         <QRCode
             value={value}
-            size={200}
+            size={width * 0.48}
             color={'#333'}
             backgroundColor={'#fff'}
         />

@@ -15,6 +15,9 @@ import { postWithdraw, withdraw } from '../../utils/api';
 import toast from '../../utils/toast';
 import Choice from '../../components/Choice';
 import { BALANCE_RATE } from '../../utils/data';
+import { _debounce } from '../../utils/util';
+import { HomeStartAnimationTime } from '../../utils/animationConfig';
+import Button from '../../components/Button';
 
 const { width } = Dimensions.get('window');
 const { today_income, total_income, balance } = getter(['user.today_income', 'user.total_income', 'user.balance']);
@@ -28,29 +31,51 @@ function WithdrawPage () {
 
     useEffect(() => {
         withdraw().then(r => {
-            if (!r.error && r.data.length) {
-                const { data } = r;
-                setGoods(data);
-                setGoodId(data[0].withdraw_id);
-                setMoney(data[0].money);
+            if (r && !r.error && r.data) {
+                const formatGoods = formatGood(r.data);
+                setGoods(formatGoods);
+                setGoodId(formatGoods[0].withdraw_id);
+                setMoney(formatGoods[0].money);
             }
         });
     }, []);
+    function formatGood (list) {
+        try {
+            return list.filter(item => !(item.is_withdraw && item.all_times === 1));
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    const debounceApiWithdraw = _debounce((callback) => {
+        apiWithdraw(callback);
+    }, 500);
 
-    function apiWithdraw () {
+    function apiWithdraw (callback) {
         postWithdraw(goodId, money, payType).then(r => {
-            if (!r.error) {
-                DeviceEventEmitter.emit('showPop', <Choice info={{
-                    icon: with10,
-                    tips: '提现申请成功，请耐心等待审核。一般1个工作日内审核完成。',
-                    type: 1,
-                    rc: () => {
-                        N.goBack();
-                    },
-                    rt: '我知道了',
-                    fontSize: 15
-                }}/>);
+            try {
+                if (r && !r.error) {
+                    DeviceEventEmitter.emit('showPop', <Choice info={{
+                        icon: with10,
+                        tips: '提现申请成功，请耐心等待审核。一般1个工作日内审核完成。',
+                        type: 1,
+                        rc: () => {
+                            N.goBack();
+                        },
+                        rt: '我知道了',
+                        fontSize: 15
+                    }}/>);
+                } else {
+                    if (r && r.error === 9) { // 未绑定微信
+                        N.replace('WeChatBindPage');
+                    }
+                }
+                callback && callback();
+            } catch (e) {
+                console.log(e);
             }
+            // eslint-disable-next-line handle-callback-err
+        }).catch(err => {
+            callback && callback();
         });
     }
 
@@ -116,19 +141,23 @@ function WithdrawPage () {
                 <Text numberOflines={1} style={styles.text}>7.支付宝账号和姓名必须匹配，否则提现不会到账。</Text>
                 <Text numberOflines={1} style={[styles.text, { paddingBottom: 50 }]}>8.每天每档只能提现一次。</Text>
             </ScrollView>
-            <TouchableOpacity activeOpacity={1} onPress={() => {
-                if (!goodId) {
-                    toast('提现失败!');
-                    return;
+            <Button type={2} name={'立即提现'} onPress={(callback) => {
+                try {
+                    if (!goodId) {
+                        toast('提现失败!');
+                        callback();
+                        return;
+                    }
+                    if (payType === 'wx') {
+                        debounceApiWithdraw(callback);
+                    } else {
+                        N.navigate('WithdrawAliPayPage', { goodId, money });
+                        callback();
+                    }
+                } catch (e) {
+                    console.log(e);
                 }
-                if (payType === 'wx') {
-                    apiWithdraw();
-                } else {
-                    N.navigate('WithdrawAliPayPage', { goodId, money });
-                }
-            }} style={styles.withDrawBtn}>
-                <Text style={styles.withDrawBtnText}>立即提现</Text>
-            </TouchableOpacity>
+            }}/>
         </SafeAreaView>
     );
 }
