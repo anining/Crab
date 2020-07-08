@@ -474,13 +474,14 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
         DeviceEventEmitter.emit('hidePop');
         getTask(platform_category).then(r => {
             if (!r.error) {
-                callback && callback();
                 toast('提交任务成功!自动继续下一个任务!');
                 taskReceiveDetail(r.data.receive_task_id).then(response => {
                     if (response.error) {
                         N.goBack();
                     } else {
                         setDetail(response.data);
+                        callback && callback();
+                        sRef && sRef.scrollTo({ x: 0, y: 0, animated: true });
                     }
                 });
             } else {
@@ -568,7 +569,6 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
         taskSubmit(receive_task_id, { course: localContent.map(item => Object.assign(item, { data: '', mime: '', content: '', label: '', progress: '', type: '' })) }).then(r => {
             if (!r.error) {
                 try {
-                    sRef && sRef.scrollTo({ x: 0, y: 0, animated: true });
                     const { add_balance } = r.data;
                     setSubmits(submits.map(item => Object.assign({ progress: undefined, uri: '', data: '', mime: '' }, item)));
                     U.set(U.view(['user', 'today_pass_num'], store), Number.parseInt(today_pass_num.get()) + 1);
@@ -580,6 +580,7 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
                     N.goBack();
                 }
             } else {
+                sRef && sRef.scrollTo({ x: 0, y: 0, animated: true });
                 callback();
             }
         });
