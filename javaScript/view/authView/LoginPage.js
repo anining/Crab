@@ -13,19 +13,21 @@ import { setter } from '../../utils/store';
 import Button from '../../components/Button';
 import { initNetInfo } from '../../navigation/AppStackNavigator';
 import android from '../../components/Android';
-import { getPath } from '../../global/global';
 import ImageAuto from '../../components/ImageAuto';
-import user14 from '../../assets/icon/user/user14.png';
+import { AppAllPermissionsAndroid, requestPermission } from '../../utils/util';
 
 const { height, width } = Dimensions.get('window');
-
 function LoginPage () {
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('');
     const [codeText, setCodeText] = useState('获取验证码');
     const [agree, setAgree] = useState(true);
     useEffect(() => {
-        _fastLogin();
+        requestPermission(() => {
+            _fastLogin();
+        }, () => {
+            _fastLogin();
+        }, AppAllPermissionsAndroid); // 请求必要权限
     }, []);
 
     async function _fastLogin (showError) {

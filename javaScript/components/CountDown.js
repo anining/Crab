@@ -50,7 +50,7 @@ export default class CountDown extends Component {
         if (this.props.time) {
             try {
                 return (
-                    <View style={[css.flex, css.pr, { height: 30 }, this.props.viewStyle]}>
+                    <View style={[css.flex, css.pr, { height: 30, paddingHorizontal: 5 }, this.props.viewStyle]}>
                         <View style={[css.pa, css.afs, { flex: 1, height: '100%', width: '100%' }]}/>
                         <TextInput disableFullscreenUI={false} style={[{ padding: 0 }, (this.props.style)]} ref={ref => this.secondText = ref} defaultValue={msecsTransform(+new Date(djangoTime(this.props.time)) - (+new Date()))}/>
                         {_if(this.props.millisecond, res =>

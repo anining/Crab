@@ -253,15 +253,15 @@ function transformTime (time) {
 
 export function _copyStr (str) {
     try {
-        if (typeof str === 'string') {
-            Clipboard.setString(str);
+        if (typeof str === 'string' || typeof str === 'number') {
+            Clipboard.setString(str.toString());
             toast('复制成功');
         }
     } catch (e) {
         console.log(e);
     }
 }
-export const AppAllPermissionsAndroid = [PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, PermissionsAndroid.PERMISSIONS.CALL_PHONE];
+export const AppAllPermissionsAndroid = [PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE, PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, PermissionsAndroid.PERMISSIONS.CALL_PHONE];
 function requestPermission (success, denied, PermissionsList = [PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE]) {
     try {
@@ -440,7 +440,8 @@ export function rangeLevel (level, rangeArray) {
         let grade = 1;
         for (let i = 0; i < rangeArray.length; i++) {
             const item = rangeArray[i];
-            if (level < item) {
+            console.log(level, item, '==321');
+            if (level <= item) {
                 grade = i;
                 break;
             }
@@ -448,7 +449,7 @@ export function rangeLevel (level, rangeArray) {
                 grade = i;
             }
         }
-        return grade;
+        return grade || 1;
     } catch (e) {
         return 1;
     }

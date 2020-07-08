@@ -251,8 +251,8 @@ const styles = StyleSheet.create({
         color: '#E13020',
         fontSize: 50,
         fontWeight: '900',
-        lineHeight: width * 0.12,
-        marginBottom: width * 0.15,
+        lineHeight: width * 0.2,
+        marginBottom: width * 0.07,
         marginTop: width * 0.1,
         textAlign: 'center',
         width: '100%'
