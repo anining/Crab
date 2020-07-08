@@ -7,7 +7,7 @@ import toast from '../../utils/toast';
 import task10 from '../../assets/icon/task/task10.png';
 import { N } from '../../utils/router';
 import { giveUp, taskReceive } from '../../utils/api';
-import {_copyStr, djangoTime, transformMoney, transformTime} from '../../utils/util';
+import { _copyStr, djangoTime, transformMoney, transformTime } from '../../utils/util';
 import { task, updateUser } from '../../utils/update';
 import CountDown from '../../components/CountDown';
 
@@ -121,7 +121,7 @@ function RenderItem ({ type, updated_at, receive_task_id, reason, finish_deadlin
     case 1:
         return (
             <>
-                <View style={[css.flex, css.js, styles.viewBottom]}>
+                <View style={styles.viewBottom}>
                     <Text style={styles.deadline}>剩余时间：</Text>
                     <CountDown time={+new Date(djangoTime(finish_deadline))} style={styles.deadline}/>
                 </View>
@@ -184,7 +184,6 @@ const styles = StyleSheet.create({
     deadline: {
         color: '#353535',
         fontSize: 12,
-        lineHeight: 40,
     },
     defaultView: {
         alignItems: 'center',
@@ -238,10 +237,14 @@ const styles = StyleSheet.create({
         maxWidth: 170
     },
     viewBottom: {
+        alignItems: 'center',
         borderBottomColor: '#EDEDED',
         borderBottomWidth: 1,
         borderTopColor: '#EDEDED',
         borderTopWidth: 1,
+        flexDirection: 'row',
+        height: 40,
+        justifyContent: 'flex-start',
         marginTop: 15,
         paddingLeft: 10
     },

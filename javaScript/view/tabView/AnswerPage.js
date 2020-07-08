@@ -32,7 +32,7 @@ import toast from '../../utils/toast';
 
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
 const { width } = Dimensions.get('window');
-const { banner, signConfig, activityObj, openid, authorization, today_task_num, taskPlatform, user_id } = getter(['banner', 'signConfig', 'authorization', 'activityObj', 'user.openid', 'user.today_task_num', 'user.user_id', 'taskPlatform']);
+const { banner, signConfig, activityObj, openid, authorization, today_pass_num, taskPlatform, user_id } = getter(['banner', 'signConfig', 'authorization', 'activityObj', 'user.openid', 'user.today_pass_num', 'user.user_id', 'taskPlatform']);
 const NEW_USER_TASK_TYPE = {
     1: {
         label: '看视频领金币',
@@ -194,7 +194,7 @@ function RenderDaySign ({ signDay, setSignDay }) {
     view.push(
         <View style={[css.flex, css.sp, styles.signAllWrap]} key="RenderDaySign-2">
             <View style={[css.flex, css.fw, styles.signTipsWrap]}>
-                <Text style={[styles.signTipsText, styles.maxSTT]}>完成进度: <Text style={{ color: '#FF6C00' }} karet-lift>{U.ifElse(R.equals(today_task_num, undefined), 0, today_task_num)}</Text>/10</Text>
+                <Text style={[styles.signTipsText, styles.maxSTT]}>完成进度: <Text style={{ color: '#FF6C00' }} karet-lift>{U.ifElse(R.equals(today_pass_num, undefined), 0, today_pass_num)}</Text>/10</Text>
                 <Text style={[styles.signTipsText]}>提交并通过10单任务即可签到</Text>
             </View>
             <Button key={`${signBtnText}${signDay}`} width={120} name={signBtnText} disable={hadSign} shadow={'#ff0008'} onPress={async (callback) => {

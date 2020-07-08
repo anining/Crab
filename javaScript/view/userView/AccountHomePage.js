@@ -8,12 +8,11 @@ import Header from '../../components/Header';
 import Null from '../../components/Null';
 import feed1 from '../../assets/icon/feed/feed1.png';
 import { deleteAccount, putAccount } from '../../utils/api';
-import Clipboard from '@react-native-community/clipboard';
 import toast from '../../utils/toast';
 import { getTaskPlatform, updateAccount } from '../../utils/update';
 import { getter } from '../../utils/store';
 import * as U from 'karet.util';
-import {_copyStr} from '../../utils/util';
+import { _copyStr } from '../../utils/util';
 
 const { width } = Dimensions.get('window');
 const { accounts, taskPlatform } = getter(['accounts', 'taskPlatform']);
@@ -25,6 +24,7 @@ function AccountHomePage (props) {
 
     useEffect(() => {
         updateAccount();
+        getTaskPlatform();
     }, []);
 
     return (
@@ -135,7 +135,7 @@ function RenderBindView () {
                     </TouchableOpacity>
                 </View>
                 <View style={[css.flexRCSB, styles.item, styles.btnView]}>
-                    <TouchableOpacity activeOpacity={1} karet-lift onPress={delClick} style={styles.giveUpBtn}>
+                    <TouchableOpacity activeOpacity={1} karet-lift onPress={updateAccount} style={styles.giveUpBtn}>
                         <Text karet-lift numberOfLines={1} style={styles.bindBtnText }>{U.ifElse(status3, '换号重绑', '刷新状态')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={1} karet-lift onPress={delClick} style={styles.delBtn}>
@@ -144,7 +144,7 @@ function RenderBindView () {
                 </View>
             </View>
         );
-        return <>{U.ifElse(R.equals(is_current, true), U.ifElse(R.equals(status, 1), ifView, elView), undefined)}</>;
+        return <>{U.ifElse(R.equals(status, 1), U.ifElse(R.equals(is_current, true), ifView, undefined), elView)}</>;
     }, accounts);
     return <>{view}</>;
 }

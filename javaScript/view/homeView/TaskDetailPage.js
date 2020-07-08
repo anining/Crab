@@ -470,10 +470,11 @@ function UserPop ({ view }) {
 function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
     const { status, receive_task_id, platform_category } = detail;
 
-    function getApiTask () {
+    function getApiTask (callback) {
         DeviceEventEmitter.emit('hidePop');
         getTask(platform_category).then(r => {
             if (!r.error) {
+                callback && callback();
                 toast('提交任务成功!自动继续下一个任务!');
                 taskReceiveDetail(r.data.receive_task_id).then(response => {
                     if (response.error) {
@@ -482,12 +483,15 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
                         setDetail(response.data);
                     }
                 });
+            } else {
+                toast('暂时没有新的任务!');
+                N.goBack();
             }
         });
     }
 
-    function showPop (type, number) {
-        const [isGet, setIsGet] = useState(true);
+    function showPop (type, number, callback) {
+        const state = U.atom(true);
         let view;
         switch (type) {
         case 1:view = (
@@ -496,8 +500,8 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
                 <Text style={styles.userPopTips}>{number}<Text style={{ fontSize: 20 }}> 金币</Text></Text>
                 <Text style={styles.userPopText}>马上就可以提现啦</Text>
                 <TouchableOpacity style={styles.userPopBtn} onPress={() => {
-                    isGet && getApiTask();
-                    setIsGet(false);
+                    state.get() && getApiTask(callback);
+                    U.set(state, false);
                 }}>
                     <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>继续领钱</Text>
                 </TouchableOpacity>
@@ -509,8 +513,8 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
                 <Text style={[styles.userPopText, { top: '40%' }]}>再做 <Text style={{ color: '#FF3B00', fontSize: 18 }}>{number}单</Text> 就能获得全部奖励啦</Text>
                 <Text style={[styles.userPopText, { top: '50%' }]}>再接再厉哦~</Text>
                 <TouchableOpacity style={styles.userPopBtn} onPress={() => {
-                    isGet && getApiTask();
-                    setIsGet(false);
+                    state.get() && getApiTask(callback);
+                    U.set(state, false);
                 }}>
                     <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>继续领钱</Text>
                 </TouchableOpacity>
@@ -522,7 +526,7 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
                 <Text style={[styles.userPopText, { top: '40%' }]}>你已经获得全部奖励了</Text>
                 <Text style={[styles.userPopText, { top: '50%' }]}>快去提现试试吧~</Text>
                 <TouchableOpacity style={styles.userPopBtn} onPress={() => {
-                    setIsGet(false);
+                    U.set(state, false);
                     DeviceEventEmitter.emit('hidePop');
                     N.navigate('WithdrawPage');
                 }}>
@@ -534,22 +538,22 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
         DeviceEventEmitter.emit('showPop', {
             dom: <UserPop view={view}/>,
             close: () => {
-                isGet && getApiTask();
-                setIsGet(false);
+                state.get() && getApiTask(callback);
+                U.set(state, false);
             }
         });
     }
 
-    function checkWindow (money) {
+    function checkWindow (money, callback) {
         const total = total_task_num.get();
         if (total === 0) {
-            showPop(1, money);
+            showPop(1, money, callback);
         } else if (total === 5) {
-            showPop(2, 10 - total);
+            showPop(2, 10 - total, callback);
         } else if (total === 10) {
-            showPop(3, 0);
+            showPop(3, 0, callback);
         } else {
-            getApiTask();
+            getApiTask(callback);
         }
         updateUser();
     }
@@ -563,14 +567,18 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
         }
         taskSubmit(receive_task_id, { course: localContent.map(item => Object.assign(item, { data: '', mime: '', content: '', label: '', progress: '', type: '' })) }).then(r => {
             if (!r.error) {
-                sRef && sRef.scrollTo({ x: 0, y: 0, animated: true });
-                const { add_balance } = r.data;
-                setSubmits(submits.map(item => Object.assign({ progress: undefined, uri: '', data: '', mime: '' }, item)));
-                U.set(U.view(['user', 'today_pass_num'], store), Number.parseInt(today_pass_num.get()) + 1);
-                // 缓存用于新手福利判断
-                asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
-                checkWindow(add_balance || 0);
-                callback();
+                try {
+                    sRef && sRef.scrollTo({ x: 0, y: 0, animated: true });
+                    const { add_balance } = r.data;
+                    setSubmits(submits.map(item => Object.assign({ progress: undefined, uri: '', data: '', mime: '' }, item)));
+                    U.set(U.view(['user', 'today_pass_num'], store), Number.parseInt(today_pass_num.get()) + 1);
+                    // 缓存用于新手福利判断
+                    asyncStorage.setItem(`NEW_USER_TASK_TYPE3${user_id.get()}`, 'true');
+                    checkWindow(add_balance || 0, callback);
+                } catch (e) {
+                    toast('暂时没有新的任务!');
+                    N.goBack();
+                }
             } else {
                 callback();
             }
