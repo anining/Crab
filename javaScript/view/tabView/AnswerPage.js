@@ -314,7 +314,13 @@ function RenderNewBtn ({ item, _newUserTask }) {
     // 去完成
     case 5:return <Text style={styles.todoTaskText} onPress={ () => {
         if (path === 'TaskDetailPage') {
-            task(1);// 默认选择抖音任务
+            const localTaskPlatform = taskPlatform.get() || [];
+            const local = localTaskPlatform.filter(platform => platform.accounts.length || !platform.need_bind);
+            if (local.length) {
+                task(local[0].platform_category);
+            } else {
+                N.navigate('AccountHomePage');
+            }
         } else {
             N.navigate(path);
         }
