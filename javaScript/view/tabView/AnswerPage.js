@@ -53,6 +53,7 @@ const NEW_USER_TASK_TYPE = {
 
 function AnswerPage () {
     const [signDay, setSignDay] = useState(0);
+    const [isSign, setIsSign] = useState(false);
     const [newUser, setNewUser] = useState([]);
     const [refreshing] = useState(false);
     let reloadEmitter;
@@ -92,7 +93,10 @@ function AnswerPage () {
 
     async function _signLogs () {
         const ret = await signLogs();
-        !ret.error && setSignDay(ret.data.length);
+        if (!ret.error && ret.data.length) {
+            setSignDay(ret.data.length);
+            setIsSign(Boolean(ret.data.filter(item => new Date(item.created_at).getDay() === (new Date().getDay())).length));
+        }
     }
 
     async function _newUserTask () {
@@ -135,7 +139,7 @@ function AnswerPage () {
                         <Slider data={banner.get()} height={width * 0.29} autoplay={true} onPress={item => bannerAction(item.category, item.link, item.title)}/>
                         <View style={styles.answerWrap}>
                             <ComTitle title={'每日签到'} minTitle={<Text style={css.minTitle}>连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text></Text>}/>
-                            <RenderDaySign signDay={signDay} setSignDay={setSignDay}/>
+                            <RenderDaySign isSign={isSign} signDay={signDay} setSignDay={setSignDay}/>
                         </View>
                         <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
                             <ComTitle title={'火爆活动'}/>
@@ -166,12 +170,19 @@ function Reward ({ newUser = [], _newUserTask }) {
     return <></>;
 }
 
-function RenderDaySign ({ signDay, setSignDay }) {
+function RenderDaySign ({ signDay, isSign, setSignDay }) {
     const [signBtnText, setSignBtnText] = useState('签到领钱');
     const [hadSign, setHadSign] = useState(false);
     const view = [];
 
+    useEffect(() => {
+        isSign && setSignBtnText('已签到');
+    }, []);
+
     async function _sign () {
+        if (isSign) {
+            return;
+        }
         const ret = await sign();
         if (ret && !ret.error) {
             if (ret.prop) {
