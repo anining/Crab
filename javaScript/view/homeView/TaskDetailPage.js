@@ -54,9 +54,13 @@ function TaskDetailPage (props) {
     const [submits, setSubmits] = useState([]);
 
     useEffect(() => {
-        const { course } = detail;
+        const { course, status, submit_values = [] } = detail;
         const { submit = [] } = course;
-        setSubmits(submit.map(item => Object.assign({ progress: undefined, uri: '', data: '', mime: '' }, item)));
+        if (status !== 1 && submit_values && submit.length === submit_values.length) {
+            setSubmits(submit.map((item, index) => Object.assign({ progress: undefined, uri: submit_values[index].uri, data: '', mime: '' }, item)));
+        } else {
+            setSubmits(submit.map(item => Object.assign({ progress: undefined, uri: '', data: '', mime: '' }, item)));
+        }
     }, [detail]);
 
     useEffect(() => {
