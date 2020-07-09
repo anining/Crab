@@ -582,7 +582,7 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
                     const { add_balance } = r.data;
                     setSubmits(submits.map(item => Object.assign({ progress: undefined, uri: '', data: '', mime: '' }, item)));
                     U.set(U.view(['user', 'today_pass_num'], store), Number.parseInt(today_pass_num.get()) + 1);
-                    checkWindow(add_balance || 0, callback);
+                    checkWindow(transformMoney(add_balance) || 0, callback);
                 } catch (e) {
                     toast('暂时没有新的任务!');
                     N.goBack();
