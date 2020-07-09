@@ -20,7 +20,7 @@ import { HomeStartAnimationTime } from '../../utils/animationConfig';
 import Button from '../../components/Button';
 
 const { width } = Dimensions.get('window');
-const { today_income, total_income, balance } = getter(['user.today_income', 'user.total_income', 'user.balance']);
+const { today_income, total_income, openid, balance } = getter(['user.today_income', 'user.openid', 'user.total_income', 'user.balance']);
 
 function WithdrawPage (props) {
     const [goodId, setGoodId] = useState();
@@ -158,8 +158,13 @@ function WithdrawPage (props) {
                     if (payType === 'wx') {
                         debounceApiWithdraw(callback);
                     } else {
-                        N.navigate('WithdrawAliPayPage', { goodId, money });
                         callback();
+                        if (openid.get()) {
+                            N.navigate('WithdrawAliPayPage', { goodId, money });
+                        } else {
+                            toast('请绑定微信！');
+                            N.replace('WeChatBindPage');
+                        }
                     }
                 } catch (e) {
                     console.log(e);
