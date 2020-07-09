@@ -121,7 +121,7 @@ function AnswerPage () {
             } catch (e) {
                 console.log(e);
             }
-        }, U.ifElse(R.equals(openid, undefined), false, true));
+        }, U.ifElse(R.equals(openid, null), false, true));
     }
 
     return (
