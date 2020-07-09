@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
+import { css } from '../assets/style/css';
+import ImageAuto from './ImageAuto';
 
 export default class ComTitle extends Component {
     constructor (props) {
@@ -17,7 +19,7 @@ export default class ComTitle extends Component {
 
     render () {
         return (
-            <View style={styles.titleWrap}>
+            <View style={[styles.titleWrap, css.pr]}>
                 <Text style={styles.title}>
                     {this.props.title || '默认标题'}
                     {this.props.minTitle}
@@ -26,6 +28,9 @@ export default class ComTitle extends Component {
                     backgroundColor: this.props.decorateColor || 'rgba(255, 108, 0, .3)',
                     width: this._buildWidth()
                 }]}/>
+                {/* <View> */}
+                {/*    <ImageAuto source={}/> */}
+                {/* </View> */}
             </View>
         );
     }

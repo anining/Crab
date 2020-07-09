@@ -132,34 +132,40 @@ function RenderChild ({ children }) {
 }
 
 function RenderData ({ today, yesterday, total }) {
-    const array = [
-        {
-            label: '今日收徒数据',
-            icon: pupil1,
-            ...today
-        },
-        {
-            label: '昨日收徒数据',
-            icon: pupil2,
-            ...yesterday
-        },
-        {
-            label: '累计收徒数据',
-            icon: pupil3,
-            ...total
-        },
-    ];
-    const view = [];
-    array.forEach(item => {
-        const { children_income, children_num, disciple_income, disciple_num, label, icon } = item;
+    try {
+        const array = [
+            {
+                label: '今日收徒数据',
+                icon: pupil1,
+                ...today
+            },
+            {
+                label: '昨日收徒数据',
+                icon: pupil2,
+                ...yesterday
+            }
+        ];
+        const view = [];
+        array.forEach(item => {
+            const { children_income, children_num, disciple_income, disciple_num, label, icon } = item;
+            view.push(
+                <View style={[css.flex, css.fw, styles.pupilItemWrap]}>
+                    <RenderShareTitle title={label} icon={icon}/>
+                    <RenderForm children_income={children_income} children_num={children_num} disciple_income={disciple_income} disciple_num={disciple_num}/>
+                </View>
+            );
+        });
+        const { sum_children_num, sum_disciple_num, sum_children_income, sum_disciple_income } = total;
         view.push(
             <View style={[css.flex, css.fw, styles.pupilItemWrap]}>
-                <RenderShareTitle title={label} icon={icon}/>
-                <RenderForm children_income={children_income} children_num={children_num} disciple_income={disciple_income} disciple_num={disciple_num}/>
+                <RenderShareTitle title={'累计收徒数据'} icon={pupil3}/>
+                <RenderForm children_income={sum_children_income} children_num={sum_children_num} disciple_income={sum_disciple_income} disciple_num={sum_disciple_num}/>
             </View>
         );
-    });
-    return <>{view}</>;
+        return <>{view}</>;
+    } catch (e) {
+        return <Text/>;
+    }
 }
 
 function RenderShareTitle ({ title, icon, width }) {
@@ -181,8 +187,8 @@ function RenderForm ({ children_income = 0, children_num = 0, disciple_income = 
                 <Text style={styles.fhwText}>徒孙贡献</Text>
             </View>
             <View style={[styles.formLineWrap, css.flex]}>
-                <Text style={styles.fhwLineText}>{children_num}</Text>
-                <Text style={styles.fhwLineText}>{disciple_num}</Text>
+                <Text style={styles.fhwLineText}>{children_num || 0}</Text>
+                <Text style={styles.fhwLineText}>{disciple_num || 0}</Text>
                 <Text style={styles.fhwLineText}>{_toFixed(children_income, 2)}</Text>
                 <Text style={[styles.fhwLineText, { borderRightWidth: 0 }]}>{_toFixed(disciple_income, 2)}</Text>
             </View>

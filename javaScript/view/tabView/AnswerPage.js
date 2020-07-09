@@ -174,9 +174,7 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
     const [hadSign, setHadSign] = useState(false);
     const view = [];
     const nowTime = moment(new Date()).format('MM-DD');
-
     useEffect(() => {
-        isSign && setSignBtnText('已签到');
         if (isSign || (signDayNumber.get() === nowTime)) {
             setSignBtnText('已签到');
             setHadSign(true);
@@ -184,9 +182,6 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
     }, []);
 
     async function _sign (callback) {
-        if (isSign) {
-            return;
-        }
         const ret = await sign();
         callback && callback();
         if (ret && !ret.error) {
