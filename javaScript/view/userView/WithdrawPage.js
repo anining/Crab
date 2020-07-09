@@ -64,14 +64,17 @@ function WithdrawPage (props) {
                         rt: '我知道了',
                         fontSize: 15
                     }}/>);
+                    callback && callback();
                 } else {
+                    callback && callback();
                     if (r && r.error === 9) { // 未绑定微信
+                        toast('请绑定微信！');
                         N.replace('WeChatBindPage');
                     }
                 }
-                callback && callback();
             } catch (e) {
                 console.log(e);
+                callback && callback();
             }
             // eslint-disable-next-line handle-callback-err
         }).catch(err => {

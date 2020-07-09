@@ -48,6 +48,8 @@ function WithdrawAliPayPage (props) {
         }
         postWithdraw(goodId, money, 'ali', number, name).then(r => {
             if (r && !r.error) {
+                asyncStorage.setItem('aliName', name);
+                asyncStorage.setItem('aliNumber', number);
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: with10,
                     tips: '提现申请成功，请耐心等待审核。一般1个工作日内审核完成。',
@@ -56,12 +58,13 @@ function WithdrawAliPayPage (props) {
                     rt: '我知道了',
                     fontSize: 15
                 }}/>);
+                callback && callback();
                 N.navigate('UserPage');
                 updateUser();
+            } else if (r && r.error === 9) {
+                toast('请绑定微信！');
+                N.replace('WeChatBindPage');
             }
-            asyncStorage.setItem('aliName', name);
-            asyncStorage.setItem('aliNumber', number);
-            callback && callback();
         });
     }
 
