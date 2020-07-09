@@ -210,7 +210,7 @@ function UserPage () {
 }
 
 function RenderBind () {
-    const view = U.ifElse(R.equals(openid, undefined), <TouchableOpacity onPress={() => {
+    const view = U.ifElse(R.equals(openid, null), <TouchableOpacity onPress={() => {
         N.navigate('WeChatBindPage');
     }} style={[css.pa, styles.bindBtn]}>
         <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>

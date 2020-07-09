@@ -21,12 +21,11 @@ import { getter, store } from '../../utils/store';
 import * as U from 'karet.util';
 import { useFocusEffect } from '@react-navigation/native';
 import toast from '../../utils/toast';
-import asyncStorage from '../../utils/asyncStorage';
 import { updateUser } from '../../utils/update';
 import Button from '../../components/Button';
 import CountDown from '../../components/CountDown';
 
-const { user_id, total_task_num, today_pass_num, activityObj } = getter(['user.user_id', 'user.total_task_num', 'activityObj', 'user.today_pass_num']);
+const { total_task_num, today_pass_num, activityObj } = getter(['user.total_task_num', 'activityObj', 'user.today_pass_num']);
 const { width } = Dimensions.get('window');
 const MENU_STATUS = {
     1: {
@@ -198,7 +197,7 @@ function EndTimeView ({ detail }) {
             <View style={styles.endTimeViewItem}>
                 <View style={{ flexDirection: 'row' }}>
                     <Text style={{ color: '#fff', fontSize: 16, fontWeight: '500' }}>剩余时间：</Text>
-                    <CountDown time={+new Date(djangoTime(finish_deadline))} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }} key={receive_task_id}/>
+                    <CountDown time={+new Date(djangoTime(finish_deadline))} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }} key={receive_task_id} callback={() => N.goBack()}/>
                 </View>
                 <TouchableOpacity onPress={apiGiveUp} style={styles.giveUpBtn}>
                     <Text style={{ color: '#fff', fontSize: 12, lineHeight: 25, textAlign: 'center' }}>放弃任务</Text>
