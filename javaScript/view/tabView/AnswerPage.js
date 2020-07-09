@@ -57,6 +57,7 @@ function AnswerPage () {
     const [newUser, setNewUser] = useState([]);
     const [refreshing] = useState(false);
     let reloadEmitter;
+    const book = 1;
     let scrollToListener;
     let scrollViewRef;
     !authorization.get() && N.replace('VerificationStackNavigator');
