@@ -239,7 +239,7 @@ export function getTask (platform_category) {
 }
 
 // 提交任务
-export function taskSubmit (receive_task_id, course) {
+export function taskSubmit (receive_task_id, course = []) {
     return transformFetch('POST', '/task/submit', { receive_task_id, course });
 }
 

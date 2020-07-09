@@ -572,7 +572,7 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
             toast('请填写完整的名称和执行图!');
             return;
         }
-        taskSubmit(receive_task_id, { course: localContent.map(item => Object.assign(item, { data: '', mime: '', content: '', label: '', progress: '', type: '' })) }).then(r => {
+        taskSubmit(receive_task_id, localContent.map(item => Object.assign(item, { data: '', mime: '', content: '', label: '', progress: '', type: '' }))).then(r => {
             if (!r.error) {
                 try {
                     const { add_balance } = r.data;
