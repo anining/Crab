@@ -18,7 +18,8 @@ import answer14 from '../../assets/icon/answer/answer14.png';
 import pop5 from '../../assets/icon/pop/pop5.png';
 import pop8 from '../../assets/icon/pop/pop8.png';
 import Shadow from '../../components/Shadow';
-import { _if, _tc, _toFixed, bannerAction, toGoldCoin, transformMoney } from '../../utils/util';
+import moment from 'moment';
+import { _if, _tc, _toFixed, bannerAction, djangoTime, toGoldCoin, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
 import { N } from '../../utils/router';
 import { getter, store } from '../../utils/store';
@@ -32,7 +33,7 @@ import toast from '../../utils/toast';
 
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
 const { width } = Dimensions.get('window');
-const { banner, signConfig, activityObj, openid, authorization, today_pass_num, taskPlatform, user_id } = getter(['banner', 'signConfig', 'authorization', 'activityObj', 'user.openid', 'user.today_pass_num', 'user.user_id', 'taskPlatform']);
+const { banner, signConfig, activityObj, openid, authorization, today_pass_num, taskPlatform, user_id, signDayNumber } = getter(['banner', 'signConfig', 'authorization', 'activityObj', 'user.openid', 'user.today_pass_num', 'user.user_id', 'taskPlatform', 'signDayNumber']);
 const NEW_USER_TASK_TYPE = {
     1: {
         label: '看视频领金币',
@@ -63,6 +64,7 @@ function AnswerPage () {
 
     useEffect(() => {
         init();
+        // DeviceEventEmitter.emit('showPop', <Text>231</Text>);
         reloadEmitter = DeviceEventEmitter.addListener('reloadAnswer', async () => {
             await init();
         });
@@ -174,16 +176,22 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
     const [signBtnText, setSignBtnText] = useState('签到领钱');
     const [hadSign, setHadSign] = useState(false);
     const view = [];
+    const nowTime = moment(new Date()).format('MM-DD');
 
     useEffect(() => {
         isSign && setSignBtnText('已签到');
+        if (isSign || (signDayNumber.get() === nowTime)) {
+            setSignBtnText('已签到');
+            setHadSign(true);
+        }
     }, []);
 
-    async function _sign () {
+    async function _sign (callback) {
         if (isSign) {
             return;
         }
         const ret = await sign();
+        callback && callback();
         if (ret && !ret.error) {
             if (ret.prop) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
@@ -205,6 +213,7 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
             setSignDay(signDay + 1);
             setSignBtnText('已签到');
             setHadSign(true);
+            asyncStorage.setItem('signDayNumber', nowTime);
         } else if (ret.error === 3) {
             setSignBtnText('已签到');
             setHadSign(true);
@@ -221,8 +230,7 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
                 <Text style={[styles.signTipsText]}>提交并通过10单任务即可签到</Text>
             </View>
             <Button key={`${signBtnText}${signDay}`} width={120} name={signBtnText} disable={hadSign} shadow={'#ff0008'} onPress={async (callback) => {
-                await _sign();
-                callback();
+                await _sign(callback);
             }}/>
         </View>
     );
@@ -238,7 +246,7 @@ function RenderSignList ({ signDay }) {
             view.push(
                 <View key={`sign${day}`} style={[css.flex, css.fw, styles.signItemWrap, { backgroundColor: day <= signDay ? '#FF9C00' : '#F0F0F0' }]}>
                     <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', }]}>{_if(item.add_balance, res => transformMoney(res, 0))}</Text>
-                    <ImageAuto source={item.prop ? item.prop.icon : day <= signDay ? answer11 : answer9} width={item.prop ? width * 0.055 : width * 0.07}/>
+                    <ImageAuto key={`${day}img`} source={item.prop ? item.prop.icon : day <= signDay ? answer11 : answer9} width={width * 0.08}/>
                     <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', lineHeight: 18 }]}>{day}天</Text>
                 </View>
             );

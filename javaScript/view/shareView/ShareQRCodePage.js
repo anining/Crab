@@ -13,9 +13,10 @@ import QRCode from 'react-native-qrcode-svg';
 import { getter } from '../../utils/store';
 import * as U from 'karet.util';
 import RNShare from 'react-native-share';
+import { DEVELOPER } from '../../utils/config';
 const { invite_code } = getter(['user.invite_code']);
 const { width } = Dimensions.get('window');
-const URL = 'https://usershare.libratb.com/#/';
+const URL = DEVELOPER === 'Staging' ? 'https://qz.usershare.libratb.com/#/' : 'https://usershare.libratb.com/#/';
 
 function ShareQRCodePage () {
     const view = U.atom([]);

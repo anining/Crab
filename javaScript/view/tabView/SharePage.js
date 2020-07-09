@@ -16,7 +16,6 @@ import share11 from '../../assets/icon/share/share11.png';
 import share12 from '../../assets/icon/share/share12.png';
 import Shadow from '../../components/Shadow';
 import ImageAuto from '../../components/ImageAuto';
-import JRBannerView from '../../components/JRBannerView';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import { N } from '../../utils/router';
