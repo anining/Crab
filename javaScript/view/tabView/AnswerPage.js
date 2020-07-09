@@ -116,6 +116,7 @@ function AnswerPage () {
         const localArray = [false, local1, openid.get(), false];
         const balances = [];
         const types = [];
+        const finish = [];
         const localUserData = [];
         newUserTask().then(ret => {
             if (!ret.error) {
@@ -124,6 +125,7 @@ function AnswerPage () {
                     balances[task_type] = (balances[task_type] || 0) + add_balance;
                     return {
                         task_type,
+                        is_finish,
                         balance: add_balance,
                         id: new_user_task_id,
                         label: NEW_USER_TASK_TYPE[task_type].label,
@@ -135,12 +137,18 @@ function AnswerPage () {
                     };
                 });
                 localData.forEach(item => {
+                    if(!item.is_finish){
+                        finish[item.task_type] = true;
+                    }
                     if (!types[item.task_type]) {
                         types[item.task_type] = true;
                         localUserData.push(Object.assign(item, { balance: balances[item.task_type] }));
                     }
                 });
-                setNewUser(localUserData);
+                setNewUser(localUserData.map(item=>Object.assign(item,{
+                    btnText: finish[item.task_type]?( localArray[item.task_type] ? '领取奖励' : '去完成'): item.btnText ,
+                    btnStatus: finish[item.task_type]?  localArray[item.task_type] ? 2 : 5:item.btnStatus,
+                })));
             }
         });
     }
