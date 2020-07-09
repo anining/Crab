@@ -102,11 +102,16 @@ function AnswerPage () {
     async function _newUserTask () {
         const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
         const localArray = [false, local1, openid.get(), false];
+        const balances = [];
+        const types = [];
+        const localUserData = [];
         newUserTask().then(ret => {
             if (!ret.error) {
                 const localData = ret.data.map(task => {
                     const { add_balance, is_finish, new_user_task_id, task_type } = task;
+                    balances[task_type] = (balances[task_type] || 0) + add_balance;
                     return {
+                        task_type,
                         balance: add_balance,
                         id: new_user_task_id,
                         label: NEW_USER_TASK_TYPE[task_type].label,
@@ -117,7 +122,13 @@ function AnswerPage () {
                         btnStatus: is_finish ? 3 : localArray[task_type] ? 2 : 5,
                     };
                 });
-                setNewUser(localData);
+                localData.forEach(item => {
+                    if (!types[item.task_type]) {
+                        types[item.task_type] = true;
+                        localUserData.push(Object.assign(item, { balance: balances[item.task_type] }));
+                    }
+                });
+                setNewUser(localUserData);
             }
         });
     }
