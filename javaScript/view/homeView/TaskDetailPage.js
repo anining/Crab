@@ -12,7 +12,14 @@ import task17 from '../../assets/icon/task/task17.png';
 import Upload from '../../components/Upload';
 import { N } from '../../utils/router';
 import { activityDetail, getTask, giveUp, taskReceive, taskReceiveDetail, taskSubmit } from '../../utils/api';
-import { djangoTime, getUrl, requestPermission, saveBase64ImageToCameraRoll, transformMoney } from '../../utils/util';
+import {
+    djangoTime,
+    getUrl,
+    requestPermission,
+    saveBase64ImageToCameraRoll,
+    toGoldCoin,
+    transformMoney,
+} from '../../utils/util';
 import { captureRef } from 'react-native-view-shot';
 import Choice from '../../components/Choice';
 import pop3 from '../../assets/icon/pop/pop3.png';
@@ -93,6 +100,7 @@ function TaskDetailPage (props) {
     function refresh () {
         const { receive_task_id } = detail;
         taskReceiveDetail(receive_task_id).then(r => {
+            console.log(r, '===任务详情');
             if (r.error) {
                 N.goBack();
             } else {
@@ -508,7 +516,7 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
         case 1:view = (
             <>
                 <Text style={styles.userPopTitle}>恭喜您，额外获得</Text>
-                <Text style={styles.userPopTips}>{number}<Text style={{ fontSize: 20 }}> 金币</Text></Text>
+                <Text style={styles.userPopTips}>{toGoldCoin(number)}<Text style={{ fontSize: 20 }}> 金币</Text></Text>
                 <Text style={styles.userPopText}>马上就可以提现啦</Text>
                 <TouchableOpacity style={styles.userPopBtn} onPress={() => {
                     state.get() && getApiTask(callback);

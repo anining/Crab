@@ -147,7 +147,7 @@ function AnswerPage () {
     return (
         <SafeAreaView style={[{ flex: 1, paddingTop: 20, backgroundColor: '#fff' }]} >
             <ScrollView style={{ flex: 1, paddingTop: 20 }} ref={ref => {
-                scrollViewRef = ref;
+                ref && (scrollViewRef = ref);
             } } refreshControl={
                 <RefreshControl
                     refreshing={false}
@@ -217,7 +217,7 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
             } else {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: pop5,
-                    tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{transformMoney(ret.data.add_balance)}金币</Text> </Text>,
+                    tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{transformMoney(ret.data.add_balance, 0)}金币</Text> </Text>,
                     minTips: '请在"我的-立即提现-资金记录"查看收益详情',
                     type: 'oneBtn',
                     rt: '我知道了',
@@ -258,7 +258,7 @@ function RenderSignList ({ signDay }) {
             const item = signConfigObj[day];
             view.push(
                 <View key={`sign${day}`} style={[css.flex, css.fw, styles.signItemWrap, { backgroundColor: day <= signDay ? '#FF9C00' : '#F0F0F0' }]}>
-                    <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', }]}>{_if(item.add_balance, res => transformMoney(res, 0))}</Text>
+                    <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', }]}>{_if(item.add_balance, res => transformMoney(res, 0), () => '特权卡')}</Text>
                     <ImageAuto key={`${day}img`} source={item.prop ? item.prop.icon : day <= signDay ? answer11 : answer9} width={width * 0.08}/>
                     <Text style={[styles.signText, { color: day <= signDay ? '#fff' : '#353535', lineHeight: 18 }]}>{day}天</Text>
                 </View>
