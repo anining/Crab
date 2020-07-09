@@ -63,7 +63,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize"
-            android:hardwareAccelerated="false"
+            android:hardwareAccelerated="true"
             android:largeHeap="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
