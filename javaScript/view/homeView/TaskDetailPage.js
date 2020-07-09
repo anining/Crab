@@ -54,9 +54,13 @@ function TaskDetailPage (props) {
     const [submits, setSubmits] = useState([]);
 
     useEffect(() => {
-        const { course } = detail;
+        const { course, status, submit_values = [] } = detail;
         const { submit = [] } = course;
-        setSubmits(submit.map(item => Object.assign({ progress: undefined, uri: '', data: '', mime: '' }, item)));
+        if (status !== 1 && submit_values && submit.length === submit_values.length) {
+            setSubmits(submit.map((item, index) => Object.assign({ progress: undefined, uri: submit_values[index].uri, data: '', mime: '' }, item)));
+        } else {
+            setSubmits(submit.map(item => Object.assign({ progress: undefined, uri: '', data: '', mime: '' }, item)));
+        }
     }, [detail]);
 
     useEffect(() => {
@@ -572,7 +576,7 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
             toast('请填写完整的名称和执行图!');
             return;
         }
-        taskSubmit(receive_task_id, { course: localContent.map(item => Object.assign(item, { data: '', mime: '', content: '', label: '', progress: '', type: '' })) }).then(r => {
+        taskSubmit(receive_task_id, localContent.map(item => Object.assign(item, { data: '', mime: '', content: '', label: '', progress: '', type: '' }))).then(r => {
             if (!r.error) {
                 try {
                     const { add_balance } = r.data;
