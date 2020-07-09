@@ -1,7 +1,19 @@
 import * as React from 'karet';
 import * as R from 'kefir.ramda';
 import { useState } from 'react';
-import { View, SafeAreaView, StyleSheet, ScrollView, ImageBackground, FlatList, Image, Text, TouchableOpacity, Dimensions } from 'react-native';
+import {
+    View,
+    SafeAreaView,
+    StyleSheet,
+    ScrollView,
+    ImageBackground,
+    FlatList,
+    Image,
+    Text,
+    TouchableOpacity,
+    Dimensions,
+    RefreshControl,
+} from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
@@ -127,7 +139,7 @@ const fixedTotalIncome = U.mapValue((res) => {
     return _toFixed(res, 0);
 }, total_income);
 function UserPage () {
-    const [refreshing, setRefreshing] = useState(false);
+    // const [refreshing, setRefreshing] = useState(false);
     !authorization.get() && N.replace('VerificationStackNavigator');
     updateUser();
 
@@ -138,73 +150,75 @@ function UserPage () {
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8', paddingTop: 20 }]}>
-            <FlatList
-                onRefresh={onRefresh}
-                refreshing={refreshing}
-                data={['']}
-                renderItem={() => (
-                    <ScrollView>
-                        <View style={[styles.userDetailView, css.pr]}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <TouchableOpacity style={styles.avatarIconWrap} onPress={() => {
-                                    if (!openid.get()) {
-                                        N.navigate('WeChatBindPage');
-                                    }
-                                }}>
-                                    <Image karet-lift source={U.template({ uri: avatar })} style={styles.avatarIcon}/>
-                                </TouchableOpacity>
-                                <View>
-                                    <View style={styles.userCardTop}>
-                                        <Text karet-lift numberOfLines={1} style={styles.userPhone}>{nickname}</Text>
-                                        <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{phone}</Text>
-                                    </View>
-                                    <TouchableOpacity style={styles.userCardBottom} onPress={() => {
-                                        _copyStr(invite_code.get());
-                                    }}>
-                                        <Text karet-lift numberOfLines={1} style={styles.inviteCode}>邀请码:{invite_code}</Text>
-                                        <View style={styles.copyBtn}>
-                                            <Text style={styles.copyText}>复制</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
+            <ScrollView refreshControl={
+                <RefreshControl
+                    refreshing={false}
+                    onRefresh={() => {
+                        onRefresh();
+                    }}
+                    colors={['#c8b799', '#ffa11b']}
+                    tintColor={'#ffa11b'}
+                    size={10}
+                />
+            }>
+                <View style={[styles.userDetailView, css.pr]}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <TouchableOpacity style={styles.avatarIconWrap} onPress={() => {
+                            if (!openid.get()) {
+                                N.navigate('WeChatBindPage');
+                            }
+                        }}>
+                            <Image karet-lift source={U.template({ uri: avatar })} style={styles.avatarIcon}/>
+                        </TouchableOpacity>
+                        <View>
+                            <View style={styles.userCardTop}>
+                                <Text karet-lift numberOfLines={1} style={styles.userPhone}>{nickname}</Text>
+                                <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{phone}</Text>
                             </View>
-                            <RenderBind />
-                        </View>
-                        <View style={styles.moneyView}>
-                            <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
-                                <View style={styles.moneyViewTop}>
-                                    <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
-                                    <TouchableOpacity activeOpacity={1} onPress={() => {
-                                        N.navigate('WithdrawPage');
-                                    }} style={styles.withDrawBtn}>
-                                        <Text style={{ lineHeight: 30, textAlign: 'center', color: '#fff' }}>立即提现</Text>
-                                    </TouchableOpacity>
+                            <TouchableOpacity style={styles.userCardBottom} onPress={() => {
+                                _copyStr(invite_code.get());
+                            }}>
+                                <Text karet-lift numberOfLines={1} style={styles.inviteCode}>邀请码:{invite_code}</Text>
+                                <View style={styles.copyBtn}>
+                                    <Text style={styles.copyText}>复制</Text>
                                 </View>
-                                <View style={styles.moneyViewBottom}>
-                                    <View style={styles.moneyViewItem}>
-                                        <Text karet-lift style={styles.moneyText}>{fixedBalance}</Text>
-                                        <Text style={styles.moneyTitle}>可提现(金币)</Text>
-                                    </View>
-                                    <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
-                                        <Text karet-lift style={styles.moneyText}>{fixedTodayIncome}</Text>
-                                        <Text style={styles.moneyTitle}>今日收益(金币)</Text>
-                                    </View>
-                                    <View style={styles.moneyViewItem}>
-                                        <Text karet-lift style={styles.moneyText}>{fixedTotalIncome}</Text>
-                                        <Text style={styles.moneyTitle}>总收益(金币)</Text>
-                                    </View>
-                                </View>
-                            </ImageBackground>
+                            </TouchableOpacity>
                         </View>
-                        <View style={styles.myTask}>
-                            <Text style={styles.myTaskTitle}>我的任务</Text>
-                            <RenderTaskMenu />
+                    </View>
+                    <RenderBind />
+                </View>
+                <View style={styles.moneyView}>
+                    <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
+                        <View style={styles.moneyViewTop}>
+                            <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
+                            <TouchableOpacity activeOpacity={1} onPress={() => {
+                                N.navigate('WithdrawPage');
+                            }} style={styles.withDrawBtn}>
+                                <Text style={{ lineHeight: 30, textAlign: 'center', color: '#fff' }}>立即提现</Text>
+                            </TouchableOpacity>
                         </View>
-                        <RenderMenu />
-                    </ScrollView>
-                )}
-                keyExtractor={() => 'flatList'}
-            />
+                        <View style={styles.moneyViewBottom}>
+                            <View style={styles.moneyViewItem}>
+                                <Text karet-lift style={styles.moneyText}>{fixedBalance}</Text>
+                                <Text style={styles.moneyTitle}>可提现(金币)</Text>
+                            </View>
+                            <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
+                                <Text karet-lift style={styles.moneyText}>{fixedTodayIncome}</Text>
+                                <Text style={styles.moneyTitle}>今日收益(金币)</Text>
+                            </View>
+                            <View style={styles.moneyViewItem}>
+                                <Text karet-lift style={styles.moneyText}>{fixedTotalIncome}</Text>
+                                <Text style={styles.moneyTitle}>总收益(金币)</Text>
+                            </View>
+                        </View>
+                    </ImageBackground>
+                </View>
+                <View style={styles.myTask}>
+                    <Text style={styles.myTaskTitle}>我的任务</Text>
+                    <RenderTaskMenu />
+                </View>
+                <RenderMenu />
+            </ScrollView>
         </SafeAreaView>
     );
 }

@@ -126,6 +126,9 @@ function PopupView ({ money }) {
                 N.navigate('AnswerPage');
                 setAndroidTime(() => {
                     DeviceEventEmitter.emit('answerScroll', 'end');
+                    DeviceEventEmitter.emit('comTitlePop', {
+                        key: 'taskTips', str: '任意完成一单任务即可加速领红包~'
+                    });
                 }, 1000);
             }} style={styles.popupViewBtn}/>
         </ImageBackground>

@@ -1,7 +1,19 @@
 import { useState, useEffect } from 'react';
 import * as React from 'karet';
 import * as R from 'kefir.ramda';
-import { Dimensions, Image, SafeAreaView, FlatList, StyleSheet, Text, View, ScrollView, TouchableOpacity, DeviceEventEmitter } from 'react-native';
+import {
+    Dimensions,
+    Image,
+    SafeAreaView,
+    FlatList,
+    StyleSheet,
+    Text,
+    View,
+    ScrollView,
+    TouchableOpacity,
+    DeviceEventEmitter,
+    RefreshControl,
+} from 'react-native';
 import { css } from '../../assets/style/css';
 import Slider from '../../components/Slider';
 import ComTitle from '../../components/ComTitle';
@@ -51,7 +63,6 @@ const NEW_USER_TASK_TYPE = {
         path: 'TaskDetailPage'
     }
 };
-
 function AnswerPage () {
     const [signDay, setSignDay] = useState(0);
     const [isSign, setIsSign] = useState(false);
@@ -61,10 +72,8 @@ function AnswerPage () {
     let scrollToListener;
     let scrollViewRef;
     !authorization.get() && N.replace('VerificationStackNavigator');
-
     useEffect(() => {
         init();
-        // DeviceEventEmitter.emit('showPop', <Text>231</Text>);
         reloadEmitter = DeviceEventEmitter.addListener('reloadAnswer', async () => {
             await init();
         });
@@ -137,31 +146,32 @@ function AnswerPage () {
 
     return (
         <SafeAreaView style={[{ flex: 1, paddingTop: 20, backgroundColor: '#fff' }]} >
-            <FlatList
-                onRefresh={() => {
-                    init();
-                    updateUser();
-                }}
-                refreshing={refreshing}
-                data={['']}
-                renderItem={() => (
-                    <ScrollView style={{ flex: 1, paddingTop: 20 }} ref={ref => { ref && (scrollViewRef = ref); }}>
-                        <Slider data={banner.get()} height={width * 0.29} autoplay={true} onPress={item => bannerAction(item.category, item.link, item.title)}/>
-                        <View style={styles.answerWrap}>
-                            <ComTitle title={'每日签到'} minTitle={<Text style={css.minTitle}>连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text></Text>}/>
-                            <RenderDaySign isSign={isSign} signDay={signDay} setSignDay={setSignDay}/>
-                        </View>
-                        <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
-                            <ComTitle title={'火爆活动'}/>
-                            <RenderActivity />
-                        </View>
-                        <Reward newUser={newUser} _newUserTask={_newUserTask}/>
-                        <RenderTaskView />
-                    </ScrollView>
-                )}
-                keyExtractor={() => 'flatListAnswer'}
-            >
-            </FlatList>
+            <ScrollView style={{ flex: 1, paddingTop: 20 }} ref={ref => {
+                scrollViewRef = ref;
+            } } refreshControl={
+                <RefreshControl
+                    refreshing={false}
+                    onRefresh={() => {
+                        init();
+                        updateUser();
+                    }}
+                    colors={['#c8b799', '#ffa11b']}
+                    tintColor={'#ffa11b'}
+                    size={10}
+                />
+            }>
+                <Slider data={banner.get()} height={width * 0.29} autoplay={true} onPress={item => bannerAction(item.category, item.link, item.title)}/>
+                <View style={styles.answerWrap}>
+                    <ComTitle title={'每日签到'} minTitle={<Text style={css.minTitle}>连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text></Text>}/>
+                    <RenderDaySign isSign={isSign} signDay={signDay} setSignDay={setSignDay}/>
+                </View>
+                <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
+                    <ComTitle title={'火爆活动'}/>
+                    <RenderActivity />
+                </View>
+                <Reward newUser={newUser} _newUserTask={_newUserTask}/>
+                <RenderTaskView />
+            </ScrollView>
         </SafeAreaView>
     );
 }
@@ -363,7 +373,7 @@ function RenderTaskView () {
         <>
             <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
             <View style={[styles.answerWrap, { borderBottomWidth: 20, borderBottomColor: '#f8f8f8' }]}>
-                <ComTitle title={'领金币'}/>
+                <ComTitle title={'领金币'} emitterKey={'taskTips'} canTips={true}/>
                 <RenderList />
             </View>
         </>
