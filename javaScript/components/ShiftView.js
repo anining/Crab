@@ -68,7 +68,6 @@ export default class ShiftView extends Component {
     }
 
     start () {
-        console.log('==============ka开始ka开始ka开始ka开始ka开始=========');
         this._stop = false;
         this.debounceAnimationStart();
     }

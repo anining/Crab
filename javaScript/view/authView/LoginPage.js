@@ -60,6 +60,7 @@ function LoginPage () {
         }
         const r = await apiLogin(phone, code);
         callback();
+        console.log(r, '/??');
         if (r && !r.error) {
             const { access_token, token_type } = r.data;
             setter([['authorization', `${token_type} ${access_token}`]], true);

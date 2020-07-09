@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import { css } from '../../assets/style/css';
 import activity7 from '../../assets/icon/activity/activity7.png';
-import activity8 from '../../assets/icon/activity/activity8.png';
 import Header from '../../components/Header';
 import header3 from '../../assets/icon/header/header3.png';
 import ImageAuto from '../../components/ImageAuto';
@@ -21,9 +20,8 @@ import activity14 from '../../assets/icon/activity/activity14.png';
 import { activityDetail, openRedPackage } from '../../utils/api';
 import { N } from '../../utils/router';
 import { transformTime } from '../../utils/util';
-import { getPath } from '../../global/global';
-import { DEFAULT_USER } from '../../utils/data';
-
+import LottieView from 'lottie-react-native';
+import open from '../../lottie/open';
 const { width } = Dimensions.get('window');
 
 function OpenMoneyPage (props) {
@@ -33,7 +31,7 @@ function OpenMoneyPage (props) {
     const [money, setMoney] = useState(0);
     const [data, setData] = useState({});
     const [totalNum, setTotalNum] = useState(0);
-
+    let LottieViewRef;
     useEffect(() => {
         _showPop();
     }, []);
@@ -46,17 +44,27 @@ function OpenMoneyPage (props) {
     function _showPop () {
         DeviceEventEmitter.emit('showPop', {
             dom: (
-                <TouchableOpacity style={css.pr} onPress={_openRedPackage}>
+                <TouchableOpacity style={[css.pr]} onPress={() => {
+                    LottieViewRef && LottieViewRef.play();
+                }}>
                     <TouchableOpacity style={[styles.redInnerWrap, css.pa, css.flex, css.fw]}>
                         <ImageAuto style={{
-                            width: 64,
-                            borderRadius: 37,
-                        }} source={getPath(['avatar'], DEFAULT_USER)}/>
+                            width: width * 0.2,
+                            borderRadius: width * 0.1,
+                            borderWidth: 1,
+                            borderColor: '#ee894a'
+                        }} source={'http://thirdwx.qlogo.cn/mmopen/vi_32/zs3zkL0WMn83EsmmcbmviabWkITGjct9n4Ms8E5F3QNuiaaEPn0KpxlvxtsCrBibib7pXYtl3Zy4kiaHoviaBJ8xB8dA/132'}/>
                         <Text style={styles.redNameText}>运营商送你一个红包</Text>
                         <Text style={styles.redTipsText}>现在打开</Text>
                         <Text style={styles.redTipsText}>最低20元现金等着你</Text>
+                        <LottieView ref={ref => {
+                            ref && (LottieViewRef = ref);
+                        }} renderMode={'HARDWARE'} style={[css.pa, { width: width, top: '22%' }]}
+                        imageAssetsFolder={'open'} source={open} loop={false} autoPlay={false} speed={2} onAnimationFinish={async () => {
+                            await _openRedPackage();
+                        }}/>
                     </TouchableOpacity>
-                    <ImageAuto width={width * 0.8} source={activity14}/>
+                    <ImageAuto width={width * 0.96} source={activity14}/>
                 </TouchableOpacity>
             ),
         });
@@ -216,10 +224,8 @@ const styles = StyleSheet.create({
     },
     redInnerWrap: {
         flex: 1,
-        overflow: 'hidden',
-        padding: 20,
-        paddingLeft: '13%',
-        width: '100%',
+        paddingTop: width * 0.15,
+        width: '100%'
     },
     redNameText: {
         color: '#FDFAB1',

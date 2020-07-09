@@ -118,6 +118,9 @@ export default class PassGamePage extends Component {
                                 N.navigate('AnswerPage');
                                 setAndroidTime(() => {
                                     DeviceEventEmitter.emit('answerScroll', 'end');
+                                    DeviceEventEmitter.emit('comTitlePop', {
+                                        key: 'taskTips', str: '任意完成一个任务后即可领取双倍奖励~'
+                                    });
                                 }, 1000);
                                 toast('任意完成一个任务后即可领取双倍奖励');
                             }
