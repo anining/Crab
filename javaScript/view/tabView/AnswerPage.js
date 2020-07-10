@@ -112,43 +112,33 @@ function AnswerPage () {
     }
 
     async function _newUserTask () {
-        const local1 = await asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
-        const localArray = [false, local1, openid.get(), false];
         const balances = [];
-        const types = [];
         const finish = [];
+        const types = [];
         const localUserData = [];
         newUserTask().then(ret => {
             if (!ret.error) {
                 const localData = ret.data.map(task => {
-                    const { add_balance, is_finish, new_user_task_id, task_type } = task;
+                    const {add_balance, task_type} = task;
                     balances[task_type] = (balances[task_type] || 0) + add_balance;
-                    return {
-                        task_type,
-                        is_finish,
-                        balance: add_balance,
-                        id: new_user_task_id,
-                        label: NEW_USER_TASK_TYPE[task_type].label,
-                        minTitle: NEW_USER_TASK_TYPE[task_type].label,
-                        icon: NEW_USER_TASK_TYPE[task_type].icon,
-                        path: NEW_USER_TASK_TYPE[task_type].path,
-                        btnText: is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成',
-                        btnStatus: is_finish ? 3 : localArray[task_type] ? 2 : 5,
-                    };
+                    return task;
                 });
                 localData.forEach(item => {
-                    if(!item.is_finish){
-                        finish[item.task_type] = true;
+                    const {is_finish, task_type} = item;
+                    if (!is_finish) {
+                        finish[task_type] = true;
                     }
-                    if (!types[item.task_type]) {
-                        types[item.task_type] = true;
-                        localUserData.push(Object.assign(item, { balance: balances[item.task_type] }));
+                    if (!types[task_type]) {
+                        types[task_type] = true;
+                        localUserData.push(Object.assign(item, {balance: balances[task_type]}));
                     }
                 });
-                setNewUser(localUserData.map(item=>Object.assign(item,{
-                    btnText: finish[item.task_type]?( localArray[item.task_type] ? '领取奖励' : '去完成'): item.btnText ,
-                    btnStatus: finish[item.task_type]?  localArray[item.task_type] ? 2 : 5:item.btnStatus,
-                })));
+                setNewUser(localUserData.map(item=>{
+                    const { task_type} = item;
+                    return Object.assign(item,{
+                        is_finish: !finish[task_type]
+                    })
+                }));
             }
         });
     }
@@ -186,9 +176,7 @@ function AnswerPage () {
 }
 
 function Reward ({ newUser = [], _newUserTask }) {
-    const localNewUser = newUser.filter(item => item.btnStatus !== 3);
-
-    if (localNewUser.length) {
+    if (newUser.filter(item => !item.is_finish).length) {
         return (
             <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
                 <ComTitle title={'新手福利'}/>
@@ -309,18 +297,23 @@ function RenderNewList ({ list = [], _newUserTask }) {
     const view = [];
 
     list.forEach((item, index) => {
-        const { minTitle, btnStatus, icon, balance, label, id } = item;
+        const { new_user_task_id,task_type,add_balance,is_finish} = item;
         view.push(
-            <View style={[styles.answerItemWrap, css.flex, css.sp, { borderBottomWidth: index + 1 >= list.length ? 0 : 1 }]} key={id}>
+            <View style={[styles.answerItemWrap, css.flex, css.sp, { borderBottomWidth: index + 1 >= list.length ? 0 : 1 }]} key={new_user_task_id}>
                 <View style={[css.flex, styles.aiwLeft, css.js]}>
-                    <ImageAuto source={icon} width={40}/>
+                    <ImageAuto source={NEW_USER_TASK_TYPE[task_type].icon} width={40}/>
                     <View style={[css.flex, css.fw, styles.aiwText]}>
                         <View style={[css.flex, css.js, { width: '100%' }]}>
-                            <Text style={[styles.labelText, { width: 'auto' }]} numberOfLines={1}>{label}</Text>
-                            <Text style={styles.labelMoney} numberOfLines={1}> +{_toFixed(toGoldCoin(balance), 0)}</Text>
+                            <Text style={[styles.labelText, { width: 'auto' }]} numberOfLines={1}>{NEW_USER_TASK_TYPE[task_type].label}</Text>
+                            <Text style={styles.labelMoney} numberOfLines={1}> +{_toFixed(toGoldCoin(add_balance), 0)}</Text>
                             <ImageAuto source={answer14} width={20}/>
                         </View>
-                        <Text style={[styles.labelText, styles.labelMinTitle, { color: btnStatus === 5 ? '#999' : '#53C23B' }]} numberOfLines={1}>{minTitle}</Text>
+                        <Text karet-lift style={U.template([styles.labelText, styles.labelMinTitle, { color: U.ifElse(R.equals(
+                          U.mapValue(id=>{
+                              const local1 = asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
+                              const localArray = [false, local1, id, false];
+                              return is_finish ? 3 : localArray[task_type] ? 2 : 5;
+                          },openid), 5), '#999' , '#53C23B') }])} numberOfLines={1}>{NEW_USER_TASK_TYPE[task_type].label}</Text>
                     </View>
                 </View>
                 <RenderNewBtn _newUserTask={_newUserTask} item={item}/>
@@ -331,17 +324,17 @@ function RenderNewList ({ list = [], _newUserTask }) {
 }
 
 function RenderNewBtn ({ item, _newUserTask }) {
-    const { btnStatus, btnText, path, id, balance } = item;
+    const {  is_finish, task_type, new_user_task_id, add_balance } = item;
 
     function getReward () {
-        getNewUserTask(id).then(r => {
+        getNewUserTask(new_user_task_id).then(r => {
             if (!r.error) {
                 _newUserTask();
                 DeviceEventEmitter.emit('showPop',
                     <Choice info={{
                         icon: pop3,
                         tips: '太棒了～',
-                        minTips: `你成功获得${transformMoney(balance, 0)}金币`,
+                        minTips: `你成功获得${transformMoney(add_balance, 0)}金币`,
                         type: 1,
                         rt: '我知道了',
                         fontSize: 15
@@ -350,26 +343,34 @@ function RenderNewBtn ({ item, _newUserTask }) {
         });
     }
 
-    switch (btnStatus) {
-    // 领取奖励
-    case 2:return <Text style={styles.todoTaskText} karet-lift onPress={getReward}>{btnText}</Text>;
-    // 去完成
-    case 5:return <Text style={styles.todoTaskText} onPress={ () => {
-        if (path === 'TaskDetailPage') {
-            const localTaskPlatform = taskPlatform.get() || [];
-            const local = localTaskPlatform.filter(platform => platform.accounts.length || !platform.need_bind);
-            if (local.length) {
-                task(local[0].platform_category);
-            } else {
-                N.navigate('AccountHomePage');
-            }
-        } else {
-            N.navigate(path);
+    const view = U.mapValue(id=>{
+        const local1 = asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
+        const localArray = [false, local1, id, false];
+        const status = is_finish ? 3 : localArray[task_type] ? 2 : 5;
+        const btnText = is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成'
+        const path = NEW_USER_TASK_TYPE[task_type].path;
+        switch (status) {
+            case 2:return <Text style={styles.todoTaskText} onPress={getReward}>{btnText}</Text>;
+            case 5:return (
+              <Text style={styles.todoTaskText} onPress={ () => {
+                  if (path === 'TaskDetailPage') {
+                      const localTaskPlatform = taskPlatform.get() || [];
+                      const local = localTaskPlatform.filter(platform => platform.accounts.length || !platform.need_bind);
+                      if (local.length) {
+                          task(local[0].platform_category);
+                      } else {
+                          N.navigate('AccountHomePage');
+                      }
+                  } else {
+                      N.navigate(path);
+                  }
+              }}>{btnText}</Text>
+            );
+            default:return <Shadow style={styles.todoBtn} color={'#d43912'}><Text style={styles.todoBtnText}>{btnText}</Text></Shadow>;
         }
-    }}>{btnText}</Text>;
-    // 已完成
-    default:return <Shadow style={styles.todoBtn} color={'#d43912'}><Text style={styles.todoBtnText}>{btnText}</Text></Shadow>;
-    }
+    },openid);
+
+    return <>{view}</>;
 }
 
 function RenderTaskView () {
