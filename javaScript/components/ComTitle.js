@@ -65,7 +65,7 @@ export default class ComTitle extends Component {
             <View style={[styles.titleWrap, css.pr]}>
                 <Text style={styles.title}>
                     {this.props.title || '默认标题'}
-                    {this.props.minTitle}
+                    <Text style={{ ...css.sy }}>{this.props.minTitle}</Text>
                 </Text>
                 <View style={[styles.redB, {
                     backgroundColor: this.props.decorateColor || 'rgba(255, 108, 0, .3)',

@@ -337,7 +337,8 @@ const styles = StyleSheet.create({
     inviteCode: {
         color: '#666',
         fontSize: 10,
-        marginRight: 10
+        marginRight: 10,
+        ...css.sy
     },
     menuIcon: {
         height: 20,

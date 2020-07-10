@@ -161,7 +161,7 @@ function AnswerPage () {
             }>
                 <Slider data={banner.get()} height={width * 0.29} autoplay={true} onPress={item => bannerAction(item.category, item.link, item.title)}/>
                 <View style={styles.answerWrap}>
-                    <ComTitle title={'每日签到'} minTitle={<Text style={css.minTitle}>连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text></Text>}/>
+                    <ComTitle title={'每日签到'} minTitle={<Text style={[css.minTitle, css.sy]}>连续签到得 <Text style={[{ color: '#FF6C00' }, css.sy]}>提现免手续费特权卡!</Text></Text>}/>
                     <RenderDaySign isSign={isSign} signDay={signDay} setSignDay={setSignDay}/>
                 </View>
                 <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
@@ -243,7 +243,7 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
         <View style={[css.flex, css.sp, styles.signAllWrap]} key="RenderDaySign-2">
             <View style={[css.flex, css.fw, styles.signTipsWrap]}>
                 <Text style={[styles.signTipsText, styles.maxSTT]}>完成进度: <Text style={{ color: '#FF6C00' }} karet-lift>{U.ifElse(R.equals(today_pass_num, undefined), 0, today_pass_num)}</Text>/10</Text>
-                <Text style={[styles.signTipsText]}>提交并通过10单任务即可签到</Text>
+                <Text style={[styles.signTipsText, { ...css.sy }]}>提交并通过10单任务即可签到</Text>
             </View>
             <Button key={`${signBtnText}${signDay}`} width={120} name={signBtnText} disable={hadSign} shadow={'#ff0008'} onPress={async (callback) => {
                 await _sign(callback);

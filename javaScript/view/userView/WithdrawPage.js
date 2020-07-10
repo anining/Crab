@@ -16,7 +16,6 @@ import toast from '../../utils/toast';
 import Choice from '../../components/Choice';
 import { BALANCE_RATE } from '../../utils/data';
 import { _debounce } from '../../utils/util';
-import { HomeStartAnimationTime } from '../../utils/animationConfig';
 import Button from '../../components/Button';
 
 const { width } = Dimensions.get('window');
@@ -94,17 +93,17 @@ function WithdrawPage (props) {
             <ScrollView style={styles.scrollView}>
                 <ImageBackground source={with1} style={styles.moneyView}>
                     <View style={styles.moneyViewTop}>
-                        <Text karet-lift style={{ fontWeight: '600', fontSize: 31, color: '#fff' }}>{balance}</Text>
-                        <Text style={{ fontSize: 11, color: '#fff' }}>可提现收益(金币)</Text>
+                        <Text karet-lift style={{ fontWeight: '600', fontSize: 30, color: '#fff' }}>{balance}</Text>
+                        <Text style={[{ fontSize: 11, color: '#fff' }, css.sy]}>可提现收益(金币)</Text>
                     </View>
                     <View style={styles.moneyViewBottom}>
                         <View style={[styles.moneyViewItem, { borderRightWidth: 1, borderRightColor: '#FFF' }]}>
                             <Text karet-lift style={{ fontWeight: '800', color: '#fff' }}>{today_income}</Text>
-                            <Text style={{ fontSize: 11, color: '#fff' }}>今日收益(金币)</Text>
+                            <Text style={[{ fontSize: 11, color: '#fff' }, css.sy]}>今日收益(金币)</Text>
                         </View>
                         <View style={styles.moneyViewItem}>
                             <Text karet-lift style={{ fontWeight: '800', color: '#fff' }}>{total_income}</Text>
-                            <Text style={{ fontSize: 11, color: '#fff' }}>总收益(金币)</Text>
+                            <Text style={[{ fontSize: 11, color: '#fff' }, css.sy]}>总收益(金币)</Text>
                         </View>
                     </View>
                 </ImageBackground>
@@ -112,7 +111,7 @@ function WithdrawPage (props) {
                     <View style={styles.goodViewTitle}>
                         <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>提现金额<Text
                             style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text></Text>
-                        <Text style={{ fontSize: 11, color: '#999' }} numberOfLines={1}>连续签到可获取免手续费特权</Text>
+                        <Text style={[{ fontSize: 11, color: '#999' }, css.sy]} numberOfLines={1}>连续签到可获取免手续费特权</Text>
                     </View>
                     <RenderGoodItem goods={goods} setGoodId={setGoodId} goodId={goodId} setMoney={setMoney}/>
                 </View>

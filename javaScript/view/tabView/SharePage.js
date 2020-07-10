@@ -599,6 +599,7 @@ const styles = StyleSheet.create({
     shareInfoTips: {
         color: '#fff',
         fontSize: 10,
+        ...css.sy
     },
     shareNumberText: {
         color: '#FF9431'
@@ -687,6 +688,7 @@ const styles = StyleSheet.create({
         lineHeight: 24,
         textAlign: 'right',
         width: '100%',
+        ...css.sy
     },
     welfareTitleText: {
         color: '#222',
