@@ -1,13 +1,11 @@
 import * as React from 'karet';
 import * as R from 'kefir.ramda';
-import { useState } from 'react';
 import {
     View,
     SafeAreaView,
     StyleSheet,
     ScrollView,
     ImageBackground,
-    FlatList,
     Image,
     Text,
     TouchableOpacity,
@@ -37,6 +35,7 @@ import { getter, clear } from '../../utils/store';
 import * as U from 'karet.util';
 import { updateSecondIncome, updateUser } from '../../utils/update';
 import { _copyStr, _toFixed } from '../../utils/util';
+import LinearGradient from "react-native-linear-gradient";
 import ImageAuto from '../../components/ImageAuto';
 
 const { width } = Dimensions.get('window');
@@ -45,78 +44,78 @@ const MENU_LIST = [
         icon: user17,
         title: '活动中心',
         remark: '超多活动等你参与',
-        path: 'ActivityCenterPage',
+        path: 'ActivityCenterPage'
     },
     {
         icon: user8,
         title: '道具背包',
         remark: '',
-        path: 'CardPackagePage',
+        path: 'CardPackagePage'
     },
     {
         icon: user16,
         title: '生词本',
         remark: '巩固学习的成语',
-        path: 'GlossaryPage',
+        path: 'GlossaryPage'
     },
     {
         icon: user9,
         title: '意见反馈',
         remark: '建议和反馈',
-        path: 'FeedBackPage',
+        path: 'FeedBackPage'
     },
     {
         icon: user10,
         title: '帮助中心',
         remark: '常见问题&加群求助',
-        path: 'HelpCenterPage',
+        path: 'HelpCenterPage'
     },
     {
         icon: user11,
         title: '小黑屋',
         remark: '',
-        path: 'BlackHousePage',
+        path: 'BlackHousePage'
     },
     {
         icon: user15,
         title: '用户协议',
         remark: '',
-        path: 'UserAgreementPage',
+        path: 'UserAgreementPage'
     },
     {
         icon: user14,
         title: '隐私政策',
         remark: '',
-        path: 'PrivacyPolicyPage',
+        path: 'PrivacyPolicyPage'
     },
     {
         icon: user12,
         title: '退出登录',
         remark: '',
-        path: 'VerificationStackNavigator',
-    },
+        path: 'VerificationStackNavigator'
+    }
 ];
 const TASK_MENU = [
     {
         id: 1,
         label: '进行中',
-        icon: user3,
+        icon: user3
     },
     {
         id: 4,
         label: '审核中',
-        icon: user4,
+        icon: user4
     },
     {
         id: 5,
         label: '已通过',
-        icon: user5,
+        icon: user6
     },
     {
         id: 6,
         label: '未通过',
-        icon: user6,
-    },
+        icon: user5
+    }
 ];
 const { today_income, total_income, nickname, authorization, balance, openid, phone, avatar, invite_code, receive_task_status } = getter(['user.red_point.receive_task_status', 'authorization', 'user.today_income', 'user.openid', 'user.nickname', 'user.total_income', 'user.balance', 'user.phone', 'user.avatar', 'user.invite_code']);
 const fixedBalance = U.mapValue((res) => {
@@ -229,12 +228,15 @@ function UserPage () {
 }
 
 function RenderBind () {
-    const view = U.ifElse(R.equals(openid, null), <TouchableOpacity onPress={() => {
-        N.navigate('WeChatBindPage');
-    }} style={[css.pa, styles.bindBtn]}>
-        <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
-        <Text style={styles.bindText}>绑定微信</Text>
-    </TouchableOpacity>, undefined);
+    const view = U.ifElse(R.equals(openid, null), <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[css.pa, styles.bindBtnView]}>
+        <TouchableOpacity onPress={() => {
+            N.navigate('WeChatBindPage');
+        }} style={styles.bindBtn}>
+            <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
+            <Text style={styles.bindText}>绑定微信</Text>
+        </TouchableOpacity>
+    </LinearGradient>, undefined);
+
     return <>{view}</>;
 }
 
@@ -244,13 +246,12 @@ function RenderTaskMenu () {
         const { id, icon, label } = menu;
         // const number = U.mapValue(num => U.ifElse(R.equals(num, undefined), 0, num[id]), receive_task_status);
         view.push(
-            <TouchableOpacity activeOpacity={1} onPress={() => N.navigate('MyTaskPage', { id: index })}
-                style={styles.myTaskBtn} key={id}>
+            <TouchableOpacity activeOpacity={1} onPress={() => N.navigate('MyTaskPage', { id: index })} style={styles.myTaskBtn} key={id}>
                 <Image source={icon} style={styles.myTaskBtnIcon}/>
                 <Text style={styles.myTaskBtnText}>{label}
                     {/* <Text karet-lift style={{ color: '#FF7751' }}> {number}</Text> */}
                 </Text>
-            </TouchableOpacity>,
+            </TouchableOpacity>
         );
     });
     return (
@@ -281,7 +282,7 @@ function RenderMenu () {
                     <Text style={{ fontSize: 13, color: '#999', marginRight: 5, ...css.sy }}>{remark}</Text>
                     <Image source={user13} style={{ height: 13, width: 6, marginHorizontal: 6 }}/>
                 </View>
-            </TouchableOpacity>,
+            </TouchableOpacity>
         );
     });
     return (
@@ -297,27 +298,30 @@ const styles = StyleSheet.create({
         borderRadius: 29,
         borderWidth: 1,
         height: 58,
-        width: 58,
+        width: 58
     },
     avatarIconWrap: {
         marginHorizontal: 15,
+        marginRight:10
     },
-    bindBtn: {
-        alignItems: 'center',
-        backgroundColor: '#FF9C00',
+    bindBtnView: {
         borderBottomLeftRadius: 12,
         borderTopLeftRadius: 12,
-        flexDirection: 'row',
         height: 24,
-        justifyContent: 'center',
         right: 0,
         width: 80,
-        zIndex: 9,
+        zIndex: 9
+    },
+    bindBtn: {
+        flex:1,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center'
     },
     bindText: {
         color: '#fff',
         fontSize: 11,
-        fontWeight: '500',
+        fontWeight: '500'
     },
     btn: {
         alignItems: 'center',
@@ -329,19 +333,20 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginLeft: 15,
         paddingRight: 15,
-        width: width - 10,
+        width: width - 10
 
     },
     copyBtn: {
         backgroundColor: '#FFF4E8',
-        height: 22,
-        width: 35,
+        height: 16,
+        borderRadius:18,
+        alignItems:'center',
+        justifyContent:'center',
+        width: 35
     },
     copyText: {
         color: '#FF6C00',
-        fontSize: 10,
-        lineHeight: 22,
-        textAlign: 'center',
+        fontSize: 10
     },
     inviteCode: {
         color: '#666',
@@ -357,16 +362,16 @@ const styles = StyleSheet.create({
     moneyText: {
         color: '#fff',
         fontSize: 18,
-        fontWeight: '800',
+        fontWeight: '800'
     },
     moneyTitle: {
         color: '#fff',
         fontSize: 12,
-        ...css.sy,
+        ...css.sy
     },
     moneyView: {
         backgroundColor: '#fff',
-        paddingBottom: 10,
+        paddingBottom: 20,
         paddingLeft: 10,
         paddingRight: 10,
         width,
@@ -378,17 +383,17 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingLeft: 12,
         paddingRight: 12,
-        width: '100%',
+        width: '100%'
     },
     moneyViewCenterItem: {
         borderColor: '#FFC924',
         borderLeftWidth: 1,
-        borderRightWidth: 1,
+        borderRightWidth: 1
     },
     moneyViewItem: {
         alignItems: 'center',
         height: '100%',
-        width: '33.333%',
+        width: '33.333%'
     },
     moneyViewTop: {
         alignItems: 'center',
@@ -398,7 +403,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingLeft: 20,
         paddingRight: 20,
-        width: '100%',
+        width: '100%'
     },
     myTask: {
         backgroundColor: '#fff',
@@ -445,7 +450,7 @@ const styles = StyleSheet.create({
         width
     },
     userCardBottom: {
-        alignItems: 'flex-end',
+        alignItems: 'center',
         flexDirection: 'row',
         height: 22,
         justifyContent: 'flex-start',
@@ -454,7 +459,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        marginBottom: 2,
+        marginBottom: 2
     },
     userDetailView: {
         alignItems: 'center',
@@ -467,6 +472,7 @@ const styles = StyleSheet.create({
     userId: {
         color: '#999',
         fontSize: 10,
+        paddingBottom: 5
     },
     userPhone: {
         fontSize: 18,

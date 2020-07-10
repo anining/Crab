@@ -112,6 +112,11 @@ function WithdrawPage (props) {
                         <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>兑换金币<Text
                             style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text></Text>
                         <Text style={[{ fontSize: 10, color: '#999' }, css.sy]} numberOfLines={1}>连续签到可获取免手续费特权</Text>
+                        {/*<View style={{flexDirection:'row',alignItems:'center'}}>*/}
+                        {/*    <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>提现金额</Text>*/}
+                        {/*    <Text style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text>*/}
+                        {/*</View>*/}
+                        {/*<Text style={{ fontSize: 11, color: '#999' }} numberOfLines={1}>连续签到可获取免手续费特权</Text>*/}
                     </View>
                     <RenderGoodItem goods={goods} setGoodId={setGoodId} goodId={goodId} setMoney={setMoney}/>
                 </View>
@@ -241,8 +246,8 @@ const styles = StyleSheet.create({
     },
     goodMoney: {
         color: '#FF6C00',
-        fontSize: 18,
-        fontWeight: '800',
+        fontSize: 17,
+        fontWeight: '500'
     },
     goodView: {
         backgroundColor: '#fff',
