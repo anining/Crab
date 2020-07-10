@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
     },
     popTipsText: {
         color: '#fff',
-        fontSize: 12
+        fontSize: 12,
+        ...css.sy
     },
     popTipsWrap: {
         backgroundColor: 'rgba(0,0,0,.6)',

@@ -119,25 +119,25 @@ function AnswerPage () {
         newUserTask().then(ret => {
             if (!ret.error) {
                 const localData = ret.data.map(task => {
-                    const {add_balance, task_type} = task;
+                    const { add_balance, task_type } = task;
                     balances[task_type] = (balances[task_type] || 0) + add_balance;
                     return task;
                 });
                 localData.forEach(item => {
-                    const {is_finish, task_type} = item;
+                    const { is_finish, task_type } = item;
                     if (!is_finish) {
                         finish[task_type] = true;
                     }
                     if (!types[task_type]) {
                         types[task_type] = true;
-                        localUserData.push(Object.assign(item, {balance: balances[task_type]}));
+                        localUserData.push(Object.assign(item, { balance: balances[task_type] }));
                     }
                 });
-                setNewUser(localUserData.map(item=>{
-                    const { task_type} = item;
-                    return Object.assign(item,{
+                setNewUser(localUserData.map(item => {
+                    const { task_type } = item;
+                    return Object.assign(item, {
                         is_finish: !finish[task_type]
-                    })
+                    });
                 }));
             }
         });
@@ -202,6 +202,7 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
     async function _sign (callback) {
         const ret = await sign();
         callback && callback();
+        console.log(ret, '_sign_sign');
         if (ret && !ret.error) {
             if (ret.prop) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
@@ -227,6 +228,11 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
         } else if (ret.error === 3) {
             setSignBtnText('已签到');
             setHadSign(true);
+        } else if (ret.error === 8) {
+            DeviceEventEmitter.emit('answerScroll', 'end');
+            DeviceEventEmitter.emit('comTitlePop', {
+                key: 'taskTips', str: '完成10个任务后即可签到~'
+            });
         }
     }
 
@@ -297,7 +303,7 @@ function RenderNewList ({ list = [], _newUserTask }) {
     const view = [];
 
     list.forEach((item, index) => {
-        const { new_user_task_id,task_type,add_balance,is_finish} = item;
+        const { new_user_task_id, task_type, add_balance, is_finish } = item;
         view.push(
             <View style={[styles.answerItemWrap, css.flex, css.sp, { borderBottomWidth: index + 1 >= list.length ? 0 : 1 }]} key={new_user_task_id}>
                 <View style={[css.flex, styles.aiwLeft, css.js]}>
@@ -308,12 +314,14 @@ function RenderNewList ({ list = [], _newUserTask }) {
                             <Text style={styles.labelMoney} numberOfLines={1}> +{_toFixed(toGoldCoin(add_balance), 0)}</Text>
                             <ImageAuto source={answer14} width={20}/>
                         </View>
-                        <Text karet-lift style={U.template([styles.labelText, styles.labelMinTitle, { color: U.ifElse(R.equals(
-                          U.mapValue(id=>{
-                              const local1 = asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
-                              const localArray = [false, local1, id, false];
-                              return is_finish ? 3 : localArray[task_type] ? 2 : 5;
-                          },openid), 5), '#999' , '#53C23B') }])} numberOfLines={1}>{NEW_USER_TASK_TYPE[task_type].label}</Text>
+                        <Text karet-lift style={U.template([styles.labelText, styles.labelMinTitle, {
+                            color: U.ifElse(R.equals(
+                                U.mapValue(id => {
+                                    const local1 = asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
+                                    const localArray = [false, local1, id, false];
+                                    return is_finish ? 3 : localArray[task_type] ? 2 : 5;
+                                }, openid), 5), '#999', '#53C23B')
+                        }])} numberOfLines={1}>{NEW_USER_TASK_TYPE[task_type].label}</Text>
                     </View>
                 </View>
                 <RenderNewBtn _newUserTask={_newUserTask} item={item}/>
@@ -324,7 +332,7 @@ function RenderNewList ({ list = [], _newUserTask }) {
 }
 
 function RenderNewBtn ({ item, _newUserTask }) {
-    const {  is_finish, task_type, new_user_task_id, add_balance } = item;
+    const { is_finish, task_type, new_user_task_id, add_balance } = item;
 
     function getReward () {
         getNewUserTask(new_user_task_id).then(r => {
@@ -343,32 +351,32 @@ function RenderNewBtn ({ item, _newUserTask }) {
         });
     }
 
-    const view = U.mapValue(id=>{
+    const view = U.mapValue(id => {
         const local1 = asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
         const localArray = [false, local1, id, false];
         const status = is_finish ? 3 : localArray[task_type] ? 2 : 5;
-        const btnText = is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成'
+        const btnText = is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成';
         const path = NEW_USER_TASK_TYPE[task_type].path;
         switch (status) {
-            case 2:return <Text style={styles.todoTaskText} onPress={getReward}>{btnText}</Text>;
-            case 5:return (
-              <Text style={styles.todoTaskText} onPress={ () => {
-                  if (path === 'TaskDetailPage') {
-                      const localTaskPlatform = taskPlatform.get() || [];
-                      const local = localTaskPlatform.filter(platform => platform.accounts.length || !platform.need_bind);
-                      if (local.length) {
-                          task(local[0].platform_category);
-                      } else {
-                          N.navigate('AccountHomePage');
-                      }
-                  } else {
-                      N.navigate(path);
-                  }
-              }}>{btnText}</Text>
-            );
-            default:return <Shadow style={styles.todoBtn} color={'#d43912'}><Text style={styles.todoBtnText}>{btnText}</Text></Shadow>;
+        case 2:return <Text style={styles.todoTaskText} onPress={getReward}>{btnText}</Text>;
+        case 5:return (
+            <Text style={styles.todoTaskText} onPress={ () => {
+                if (path === 'TaskDetailPage') {
+                    const localTaskPlatform = taskPlatform.get() || [];
+                    const local = localTaskPlatform.filter(platform => platform.accounts.length || !platform.need_bind);
+                    if (local.length) {
+                        task(local[0].platform_category);
+                    } else {
+                        N.navigate('AccountHomePage');
+                    }
+                } else {
+                    N.navigate(path);
+                }
+            }}>{btnText}</Text>
+        );
+        default:return <Shadow style={styles.todoBtn} color={'#d43912'}><Text style={styles.todoBtnText}>{btnText}</Text></Shadow>;
         }
-    },openid);
+    }, openid);
 
     return <>{view}</>;
 }

@@ -14,7 +14,6 @@ import {
     Dimensions,
     RefreshControl,
 } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import user1 from '../../assets/icon/user/user1.png';
@@ -34,11 +33,9 @@ import user15 from '../../assets/icon/user/user15.png';
 import user16 from '../../assets/icon/user/user16.png';
 import user17 from '../../assets/icon/user/user17.png';
 import { getter, clear } from '../../utils/store';
-import toast from '../../utils/toast';
 import * as U from 'karet.util';
 import { updateSecondIncome, updateUser } from '../../utils/update';
 import { _copyStr, _toFixed } from '../../utils/util';
-import ImageAuto from '../../components/ImageAuto';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -173,12 +170,12 @@ function UserPage () {
                         <View>
                             <View style={styles.userCardTop}>
                                 <Text karet-lift numberOfLines={1} style={styles.userPhone}>{nickname}</Text>
-                                <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{phone}</Text>
+                                {/* <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{phone}</Text> */}
                             </View>
                             <TouchableOpacity style={styles.userCardBottom} onPress={() => {
-                                _copyStr(invite_code.get());
+                                _copyStr(phone.get());
                             }}>
-                                <Text karet-lift numberOfLines={1} style={styles.inviteCode}>邀请码:{invite_code}</Text>
+                                <Text karet-lift numberOfLines={1} style={styles.inviteCode}>ID:{phone}</Text>
                                 <View style={styles.copyBtn}>
                                     <Text style={styles.copyText}>复制</Text>
                                 </View>

@@ -1,4 +1,4 @@
-export const DEVELOPER = 'Production'; // 测试 Staging 正式 Production
+export const DEVELOPER = 'Staging'; // 测试 Staging 正式 Production
 export const CONSOLE_LOG = true; // true 代表开启console
 export const UA_ID = 10011;
 export const VERSION_CODE = 100;

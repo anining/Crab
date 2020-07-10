@@ -17,6 +17,7 @@ import * as Animatable from 'react-native-animatable';
 import { getRedPackage, openRedPackage, withdrawLogsLatest } from '../../utils/api';
 import { N } from '../../utils/router';
 import { _toFixed, djangoTime, setAndroidTime } from '../../utils/util';
+import {AnswerPopTipsTime} from '../../utils/animationConfig';
 
 const { width } = Dimensions.get('window');
 
@@ -129,7 +130,7 @@ function PopupView ({ money }) {
                     DeviceEventEmitter.emit('comTitlePop', {
                         key: 'taskTips', str: '任意完成一单任务即可加速领红包~'
                     });
-                }, 1000);
+                }, AnswerPopTipsTime);
             }} style={styles.popupViewBtn}/>
         </ImageBackground>
     );

@@ -14,15 +14,14 @@ import {
 import { css } from '../../assets/style/css';
 import header3 from '../../assets/icon/header/header3.png';
 import ImageAuto from '../../components/ImageAuto';
-import activity6 from '../../assets/icon/activity/activity6.png';
 import Header, { MAIN_HEADER_HEIGHT } from '../../components/Header';
 import { deleteNoteBook, getNoteBook } from '../../utils/api';
 import game65 from '../../assets/icon/game/game65.png';
 import GameDialog from '../../components/GameDialog';
 import IdiomCard from '../../components/IdiomCard';
 import game37 from '../../assets/icon/game/game37.png';
+import game70 from '../../assets/icon/game/game70.png';
 import toast from '../../utils/toast';
-// import {bindData} from '../../global/global';
 const { height, width } = Dimensions.get('window');
 export default class GlossaryPage extends Component {
     constructor (props) {
@@ -61,7 +60,7 @@ export default class GlossaryPage extends Component {
                     view.push(
                         <TouchableOpacity activeOpacity={1} key={`content${index}`} style={[css.flex, styles.idiomItemWrap]} onPress={() => {
                             DeviceEventEmitter.emit('showPop', <GameDialog callback={async () => {
-                                await this._deleteNoteBook(item.idiom.idiom_id);
+                                await this._deleteNoteBook(item.notebook_id);
                             }} btn={'移除生词本'} content={<IdiomCard content={item.idiom.idiom} idiom={item.idiom}/>}/>);
                         }}>
                             <ImageAuto source={game37} style={{ width: 16, marginRight: 5 }}/>
@@ -71,11 +70,17 @@ export default class GlossaryPage extends Component {
                 });
                 return view;
             } else {
-                return <Text style={[styles.emptyText]}>你还没有加入过成语~</Text>;
+                return <View style={[css.flex, css.fw, { flex: 1 }]}>
+                    <ImageAuto source={game70} style={{ width: 160, marginBottom: 30 }}/>
+                    <Text style={[styles.emptyText]}>你还没有加入过成语~</Text>
+                </View>;
             }
         } catch (e) {
             console.log(e);
-            return <Text style={[styles.emptyText]}>你还没有加入过成语~</Text>;
+            return <View style={[css.flex, css.fw, { flex: 1 }]}>
+                <ImageAuto source={game70} style={{ width: 160, marginBottom: 30 }}/>
+                <Text style={[styles.emptyText]}>你还没有加入过成语~</Text>
+            </View>;
         }
     }
 

@@ -30,7 +30,7 @@ import {
 import asyncStorage from '../utils/asyncStorage';
 import CountDown from './CountDown';
 import { updateUser } from '../utils/update';
-import { DelayGetDomeTime, HomeStartAnimationTime } from '../utils/animationConfig';
+import { AnswerPopTipsTime, DelayGetDomeTime, HomeStartAnimationTime } from '../utils/animationConfig';
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
@@ -145,7 +145,7 @@ export default class GameHeader extends Component {
                 DeviceEventEmitter.emit('comTitlePop', {
                     key: 'taskTips', str: '任意完成一单任务即有几率获得能量道具~'
                 });
-            }, 1000);
+            }, AnswerPopTipsTime);
         }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text>系统赠送1个最多同时持有<Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>} icon={game20}/>);
     }
 
