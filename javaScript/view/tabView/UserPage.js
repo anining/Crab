@@ -271,8 +271,8 @@ function RenderMenu () {
                     <Text>{title}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ fontSize: 13, color: '#999', marginRight: 5 }}>{remark}</Text>
-                    <Image source={user13} style={{ height: 13, width: 6 }}/>
+                    <Text style={{ fontSize: 13, color: '#999', marginRight: 5, ...css.sy }}>{remark}</Text>
+                    <Image source={user13} style={{ height: 13, width: 6, marginHorizontal: 6 }}/>
                 </View>
             </TouchableOpacity>
         );
@@ -357,7 +357,8 @@ const styles = StyleSheet.create({
     },
     moneyTitle: {
         color: '#fff',
-        fontSize: 12
+        fontSize: 12,
+        ...css.sy
     },
     moneyView: {
         backgroundColor: '#fff',
@@ -387,6 +388,7 @@ const styles = StyleSheet.create({
     },
     moneyViewTop: {
         alignItems: 'center',
+        // backgroundColor: '#321',
         flexDirection: 'row',
         height: '40%',
         justifyContent: 'space-between',

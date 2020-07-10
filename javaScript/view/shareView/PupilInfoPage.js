@@ -105,7 +105,7 @@ function PupilInfoPage () {
 function RenderChild ({ children }) {
     try {
         const view = [];
-        const { today_income, total_income, children_num, avatar, total_task_num, created_at, nickname, user_id } = children;
+        const { today_contribution, total_contribution, children_num, avatar, total_pass_num, invite_time, nickname, user_id } = children;
         view.push(
             <View style={styles.itemContainer} key={user_id}>
                 <View style={[styles.containerT]}>
@@ -113,15 +113,15 @@ function RenderChild ({ children }) {
                         <Image source={{ uri: avatar }} style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}/>
                         <Text style={{ color: 'rgba(53,53,53,1)', fontWeight: '600', fontSize: 15 }}>{nickname}</Text>
                     </View>
-                    <Text style={{ color: 'rgba(153,153,153,1)', fontSize: 11 }}>收徒时间：{transformTime(created_at)}</Text>
+                    <Text style={{ color: 'rgba(153,153,153,1)', fontSize: 11 }}>收徒时间：{transformTime(invite_time)}</Text>
                 </View>
                 <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
-                    <Text style={{ color: 'rgba(85,85,85,1)' }}>今日贡献：<Text style={{ color: 'rgba(51,51,51,1)' }}>{_toFixed(today_income, 2)}</Text></Text>
-                    <Text style={{ color: 'rgba(85,85,85,1)' }}>累计贡献金币：<Text style={{ color: 'rgba(51,51,51,1)' }}>{_toFixed(total_income, 2)}</Text></Text>
+                    <Text style={{ color: 'rgba(85,85,85,1)' }}>今日贡献：<Text style={{ color: 'rgba(51,51,51,1)' }}>{transformMoney(today_contribution, 2)}</Text></Text>
+                    <Text style={{ color: 'rgba(85,85,85,1)' }}>累计贡献金币：<Text style={{ color: 'rgba(51,51,51,1)' }}>{transformMoney(total_contribution, 2)}</Text></Text>
                 </View>
                 <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
                     <Text style={{ color: 'rgba(85,85,85,1)' }}>他的徒弟总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{children_num}</Text></Text>
-                    <Text style={{ color: 'rgba(85,85,85,1)' }}>他的做单总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{total_task_num}</Text></Text>
+                    <Text style={{ color: 'rgba(85,85,85,1)' }}>他的做单总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{total_pass_num}</Text></Text>
                 </View>
             </View>
         );
@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
         paddingVertical: 15
     },
     teacherWrap: {
-        height: 90,
+        height: width * 0.17,
         paddingHorizontal: 20,
         width: '100%'
     }

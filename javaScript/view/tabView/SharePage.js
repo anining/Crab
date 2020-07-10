@@ -20,10 +20,9 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import { N } from '../../utils/router';
 import { getter } from '../../utils/store';
-import Clipboard from '@react-native-community/clipboard';
 import toast from '../../utils/toast';
 import { awardDetail, getChildAward, getPromoteAward } from '../../utils/api';
-import {_copyStr, _gv, _if} from '../../utils/util';
+import { _copyStr, _gv, _if } from '../../utils/util';
 import answer16 from '../../assets/icon/answer/answer16.png';
 import answer15 from '../../assets/icon/answer/answer15.png';
 
@@ -32,6 +31,7 @@ const SHARE_ITEM_WIDTH = width * 0.9;
 const SHARE_ITEM_RADIUS = 10;
 const WALFARE_ONE_height = 190;
 const WALFARE_TWO_height = 600;
+const WALFARE_TRI_height = 340;
 const cashBack = [{
     title: '徒弟首次提现到账',
     label: '师傅得1元',
@@ -266,12 +266,13 @@ export default class SharePage extends PureComponent {
     static _renderShareTitle (left, right) {
         return (
             <View style={[styles.wShareTitle, css.flexRCSB]}>
-                <View style={[css.flex, css.js, css.pr]}>
+                <View style={[css.flex, css.js, css.pr, { paddingLeft: 10 }]}>
                     <ImageAuto source={share8} style={{
                         width: 20,
                         ...css.pa,
+                        zIndex: -1
                     }}/>
-                    {left || <Text>自定义标题</Text>}
+                    <Text style={[css.pa, { left: 10, zIndex: 10 }]}>{left || <Text>自定义标题</Text>}</Text>
                 </View>
                 {right}
             </View>
@@ -378,7 +379,22 @@ export default class SharePage extends PureComponent {
                                     </View>
                                 </Shadow>
                             </View>
-                            <Image source={share3} style={styles.shareInfoImage}/>
+                            <View style={[styles.welfareItemWrap, css.pr, css.flex]}>
+                                <ImageBackground source={share2} style={[styles.shareTitle, css.flex, css.pa]}>
+                                    <Text style={styles.shareTitleText}>福利三</Text>
+                                </ImageBackground>
+                                <Shadow style={[styles.welfareInner, { height: WALFARE_TRI_height }]}>
+                                    <View style={[styles.welfareInner, { backgroundColor: '#fff', paddingTop: 40, paddingHorizontal: 10, height: WALFARE_TRI_height }]}>
+                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>1.</Text>您直接邀请的用户是您的徒弟,您徒弟邀请的用户是您的徒孙。</Text>
+                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>2.</Text>对于您的徒弟来说,您是师父.对于您的徒孙来说,您是师祖。</Text>
+                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>3.</Text>徒弟提现奖励需要您手动领取，可在“我的 - 提现 - 收益记录”查看收益详情。</Text>
+                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>4.</Text>返佣奖励任务通过后自动到账，可在“我的 - 提现 - 收益记录”查看收益详情。</Text>
+                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>5.</Text>收徒严禁使用任何违规作弊手段,一经发现直接封号处理。</Text>
+                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>6.</Text>活动长期有效,活动解释权归官方所有.</Text>
+                                    </View>
+                                </Shadow>
+                            </View>
+                            <View style={{ height: 20 }}/>
                         </View>
                     </View>
                 </ScrollView>
@@ -584,9 +600,19 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 10,
     },
+    shareNumberText: {
+        color: '#FF9431'
+    },
     shareText: {
         color: '#666',
         fontSize: 12
+    },
+    shareTipsText: {
+        color: '#666',
+        fontSize: 13,
+        lineHeight: 26,
+        paddingHorizontal: '2%',
+        width: '100%'
     },
     shareTitle: {
         height: width * 0.45 * 93 / 522,

@@ -311,7 +311,7 @@ export default class PassGamePage extends Component {
                                         <TouchableOpacity activeOpacity={1} onPress={() => {
                                             N.goBack();
                                         }}>
-                                            <ImageAuto source={game14} style={{ width: 55 }}/>
+                                            <ImageAuto source={game14} style={{ width: 45 }}/>
                                         </TouchableOpacity>
                                         <TouchableOpacity activeOpacity={1} style={[css.flex, styles.continueBtn]} onPress={() => {
                                             if (!this.goingGame) {

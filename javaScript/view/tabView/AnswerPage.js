@@ -486,6 +486,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         paddingLeft: 10,
         width: '100%',
+        ...css.sy,
     },
     KLabelText: {
         color: '#222',
@@ -533,6 +534,7 @@ const styles = StyleSheet.create({
     labelMinTitle: {
         color: '#999',
         fontSize: 11,
+        ...css.sy
     },
     labelMoney: {
         color: '#FF6C00',
