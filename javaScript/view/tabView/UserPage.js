@@ -32,10 +32,12 @@ import user14 from '../../assets/icon/user/user14.png';
 import user15 from '../../assets/icon/user/user15.png';
 import user16 from '../../assets/icon/user/user16.png';
 import user17 from '../../assets/icon/user/user17.png';
+import user18 from '../../assets/icon/user/user18.png';
 import { getter, clear } from '../../utils/store';
 import * as U from 'karet.util';
 import { updateSecondIncome, updateUser } from '../../utils/update';
 import { _copyStr, _toFixed } from '../../utils/util';
+import ImageAuto from '../../components/ImageAuto';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -43,78 +45,78 @@ const MENU_LIST = [
         icon: user17,
         title: '活动中心',
         remark: '超多活动等你参与',
-        path: 'ActivityCenterPage'
+        path: 'ActivityCenterPage',
     },
     {
         icon: user8,
         title: '道具背包',
         remark: '',
-        path: 'CardPackagePage'
+        path: 'CardPackagePage',
     },
     {
         icon: user16,
         title: '生词本',
         remark: '巩固学习的成语',
-        path: 'GlossaryPage'
+        path: 'GlossaryPage',
     },
     {
         icon: user9,
         title: '意见反馈',
         remark: '建议和反馈',
-        path: 'FeedBackPage'
+        path: 'FeedBackPage',
     },
     {
         icon: user10,
         title: '帮助中心',
         remark: '常见问题&加群求助',
-        path: 'HelpCenterPage'
+        path: 'HelpCenterPage',
     },
     {
         icon: user11,
         title: '小黑屋',
         remark: '',
-        path: 'BlackHousePage'
+        path: 'BlackHousePage',
     },
     {
         icon: user15,
         title: '用户协议',
         remark: '',
-        path: 'UserAgreementPage'
+        path: 'UserAgreementPage',
     },
     {
         icon: user14,
         title: '隐私政策',
         remark: '',
-        path: 'PrivacyPolicyPage'
+        path: 'PrivacyPolicyPage',
     },
     {
         icon: user12,
         title: '退出登录',
         remark: '',
-        path: 'VerificationStackNavigator'
-    }
+        path: 'VerificationStackNavigator',
+    },
 ];
 const TASK_MENU = [
     {
         id: 1,
         label: '进行中',
-        icon: user3
+        icon: user3,
     },
     {
         id: 4,
         label: '审核中',
-        icon: user4
+        icon: user4,
     },
     {
         id: 5,
         label: '已通过',
-        icon: user5
+        icon: user5,
     },
     {
         id: 6,
         label: '未通过',
-        icon: user6
-    }
+        icon: user6,
+    },
 ];
 const { today_income, total_income, nickname, authorization, balance, openid, phone, avatar, invite_code, receive_task_status } = getter(['user.red_point.receive_task_status', 'authorization', 'user.today_income', 'user.openid', 'user.nickname', 'user.total_income', 'user.balance', 'user.phone', 'user.avatar', 'user.invite_code']);
 const fixedBalance = U.mapValue((res) => {
@@ -135,6 +137,7 @@ const fixedTotalIncome = U.mapValue((res) => {
     }
     return _toFixed(res, 0);
 }, total_income);
+
 function UserPage () {
     // const [refreshing, setRefreshing] = useState(false);
     !authorization.get() && N.replace('VerificationStackNavigator');
@@ -182,7 +185,7 @@ function UserPage () {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <RenderBind />
+                    <RenderBind/>
                 </View>
                 <View style={styles.moneyView}>
                     <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
@@ -210,11 +213,16 @@ function UserPage () {
                         </View>
                     </ImageBackground>
                 </View>
+                <TouchableOpacity style={[css.flex, styles.shareWrap]} onPress={() => {
+                    N.navigate('SharePage');
+                }}>
+                    <ImageAuto key={'share'} source={user18} width={width * 0.94}/>
+                </TouchableOpacity>
                 <View style={styles.myTask}>
                     <Text style={styles.myTaskTitle}>摸鱼夺宝记录</Text>
-                    <RenderTaskMenu />
+                    <RenderTaskMenu/>
                 </View>
-                <RenderMenu />
+                <RenderMenu/>
             </ScrollView>
         </SafeAreaView>
     );
@@ -236,12 +244,13 @@ function RenderTaskMenu () {
         const { id, icon, label } = menu;
         // const number = U.mapValue(num => U.ifElse(R.equals(num, undefined), 0, num[id]), receive_task_status);
         view.push(
-            <TouchableOpacity activeOpacity={1} onPress={() => N.navigate('MyTaskPage', { id: index })} style={styles.myTaskBtn} key={id}>
+            <TouchableOpacity activeOpacity={1} onPress={() => N.navigate('MyTaskPage', { id: index })}
+                style={styles.myTaskBtn} key={id}>
                 <Image source={icon} style={styles.myTaskBtnIcon}/>
                 <Text style={styles.myTaskBtnText}>{label}
                     {/* <Text karet-lift style={{ color: '#FF7751' }}> {number}</Text> */}
                 </Text>
-            </TouchableOpacity>
+            </TouchableOpacity>,
         );
     });
     return (
@@ -272,7 +281,7 @@ function RenderMenu () {
                     <Text style={{ fontSize: 13, color: '#999', marginRight: 5, ...css.sy }}>{remark}</Text>
                     <Image source={user13} style={{ height: 13, width: 6, marginHorizontal: 6 }}/>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity>,
         );
     });
     return (
@@ -288,10 +297,10 @@ const styles = StyleSheet.create({
         borderRadius: 29,
         borderWidth: 1,
         height: 58,
-        width: 58
+        width: 58,
     },
     avatarIconWrap: {
-        marginHorizontal: 15
+        marginHorizontal: 15,
     },
     bindBtn: {
         alignItems: 'center',
@@ -303,12 +312,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         right: 0,
         width: 80,
-        zIndex: 9
+        zIndex: 9,
     },
     bindText: {
         color: '#fff',
         fontSize: 11,
-        fontWeight: '500'
+        fontWeight: '500',
     },
     btn: {
         alignItems: 'center',
@@ -320,47 +329,47 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginLeft: 15,
         paddingRight: 15,
-        width: width - 10
+        width: width - 10,
 
     },
     copyBtn: {
         backgroundColor: '#FFF4E8',
         height: 22,
-        width: 35
+        width: 35,
     },
     copyText: {
         color: '#FF6C00',
         fontSize: 10,
         lineHeight: 22,
-        textAlign: 'center'
+        textAlign: 'center',
     },
     inviteCode: {
         color: '#666',
         fontSize: 10,
         marginRight: 10,
-        ...css.sy
+        ...css.sy,
     },
     menuIcon: {
         height: 20,
         marginRight: 5,
-        width: 20
+        width: 20,
     },
     moneyText: {
         color: '#fff',
         fontSize: 18,
-        fontWeight: '800'
+        fontWeight: '800',
     },
     moneyTitle: {
         color: '#fff',
         fontSize: 12,
-        ...css.sy
+        ...css.sy,
     },
     moneyView: {
         backgroundColor: '#fff',
-        paddingBottom: 20,
+        paddingBottom: 10,
         paddingLeft: 10,
         paddingRight: 10,
-        width
+        width,
     },
     moneyViewBottom: {
         alignItems: 'center',
@@ -369,17 +378,17 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingLeft: 12,
         paddingRight: 12,
-        width: '100%'
+        width: '100%',
     },
     moneyViewCenterItem: {
         borderColor: '#FFC924',
         borderLeftWidth: 1,
-        borderRightWidth: 1
+        borderRightWidth: 1,
     },
     moneyViewItem: {
         alignItems: 'center',
         height: '100%',
-        width: '33.333%'
+        width: '33.333%',
     },
     moneyViewTop: {
         alignItems: 'center',
@@ -389,26 +398,26 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingLeft: 20,
         paddingRight: 20,
-        width: '100%'
+        width: '100%',
     },
     myTask: {
         backgroundColor: '#fff',
         height: 120,
         marginBottom: 15,
-        marginTop: 15
+        marginTop: 15,
     },
     myTaskBtn: {
         alignItems: 'center',
         height: '100%',
         justifyContent: 'center',
-        width: '25%'
+        width: '25%',
     },
     myTaskBtnIcon: {
         height: 28.5,
-        width: 24 / 25.5 * 28.5
+        width: 24 / 25.5 * 28.5,
     },
     myTaskBtnText: {
-        fontSize: 12
+        fontSize: 12,
     },
     myTaskTitle: {
         color: '#222',
@@ -427,7 +436,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingLeft: 10,
         paddingRight: 10,
-        width: '100%'
+        width: '100%',
+    },
+    shareWrap: {
+        backgroundColor: '#fff',
+        height: width * 0.22,
+        marginTop: 15,
+        width
     },
     userCardBottom: {
         alignItems: 'flex-end',
@@ -439,7 +454,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        marginBottom: 2
+        marginBottom: 2,
     },
     userDetailView: {
         alignItems: 'center',
@@ -447,25 +462,25 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 100,
         justifyContent: 'space-between',
-        width
+        width,
     },
     userId: {
         color: '#999',
-        fontSize: 10
+        fontSize: 10,
     },
     userPhone: {
         fontSize: 18,
         fontWeight: '800',
         marginRight: 10,
-        maxWidth: 120
+        maxWidth: 120,
     },
     withDrawBtn: {
         borderColor: '#fff',
         borderRadius: 18,
         borderWidth: 1,
         height: 30,
-        width: 78
-    }
+        width: 78,
+    },
 });
 
 export default UserPage;

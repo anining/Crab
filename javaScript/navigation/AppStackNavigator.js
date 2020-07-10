@@ -62,6 +62,7 @@ import NoviceVideoPage from '../view/otherView/NoviceVideoPage';
 import MustUpdate from '../components/MustUpdate';
 import WebViewPage from '../view/userView/WebViewPage';
 import MyMedal from '../view/userView/MyMedal';
+import SharePage from '../view/tabView/SharePage';
 
 const Stack = createStackNavigator();
 
@@ -260,6 +261,11 @@ const stackScreens = [
         name: 'MyMedal',
         component: MyMedal,
         title: '我的勋章',
+    },
+    {
+        name: 'SharePage',
+        component: SharePage,
+        title: '我的渔友',
     }
 ];
 

@@ -25,6 +25,8 @@ import { awardDetail, getChildAward, getPromoteAward } from '../../utils/api';
 import { _copyStr, _gv, _if, transformMoney } from '../../utils/util';
 import answer16 from '../../assets/icon/answer/answer16.png';
 import answer15 from '../../assets/icon/answer/answer15.png';
+import header3 from '../../assets/icon/header/header3.png';
+import Header from '../../components/Header';
 
 const { width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
@@ -307,6 +309,7 @@ export default class SharePage extends PureComponent {
         return (
             <SafeAreaView style={css.safeAreaView}>
                 <ScrollView style={styles.scrollWrap}>
+                    <Header color={'#fff'} label={'我的渔友'} style={[{ backgroundColor: 'rgba(0,0,0,0)', borderBottomWidth: 0 }, css.pa]} icon={header3}/>
                     <View source={share1} style={[styles.shareBgWrap, css.pr]}>
                         <ImageAuto source={share1} style={[css.pa, styles.shareBg]}/>
                         <View style={[css.flex, styles.codeWrap, css.auto, css.sp]}>
