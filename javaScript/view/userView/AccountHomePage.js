@@ -13,6 +13,7 @@ import { getTaskPlatform, updateAccount } from '../../utils/update';
 import { getter } from '../../utils/store';
 import * as U from 'karet.util';
 import { _copyStr } from '../../utils/util';
+import Button from "../../components/Button";
 
 const { width } = Dimensions.get('window');
 const { accounts, taskPlatform } = getter(['accounts', 'taskPlatform']);
@@ -135,14 +136,12 @@ function RenderBindView () {
                     </TouchableOpacity>
                 </View>
                 <View style={[css.flexRCSB, styles.item, styles.btnView]}>
-                    <TouchableOpacity activeOpacity={1} karet-lift onPress={() => {
+                    <Button karet-lift name={U.template(U.ifElse(status3, '换号重绑', '刷新状态'))} onPress={callback => {
+                        updateAccount(callback);
                         getTaskPlatform();
-                        updateAccount();
-                    }} style={styles.giveUpBtn}>
-                        <Text karet-lift numberOfLines={1} style={styles.bindBtnText }>{U.ifElse(status3, '换号重绑', '刷新状态')}</Text>
-                    </TouchableOpacity>
+                    }} width={150}/>
                     <TouchableOpacity activeOpacity={1} karet-lift onPress={delClick} style={styles.delBtn}>
-                        <Text numberOfLines={1} style={[styles.bindBtnText, { color: '#FF6C00' }]}>取消绑定</Text>
+                        <Text numberOfLines={1} style={styles.bindBtnText}>取消绑定</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -241,9 +240,9 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     bindBtnText: {
-        color: '#fff',
+        color: '#FF6C00',
         fontSize: 13,
-        lineHeight: 37,
+        lineHeight: 46,
         textAlign: 'center',
     },
     btnView: {
@@ -289,15 +288,9 @@ const styles = StyleSheet.create({
     delBtn: {
         backgroundColor: '#fff',
         borderColor: '#FF6C00',
-        borderRadius: 19,
+        borderRadius: 23,
         borderWidth: 1,
-        height: 37,
-        width: 150
-    },
-    giveUpBtn: {
-        backgroundColor: '#FF3E00',
-        borderRadius: 19,
-        height: 37,
+        height: 46,
         width: 150
     },
     item: {
