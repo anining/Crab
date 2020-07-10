@@ -175,6 +175,7 @@ export const getTaskPlatform = () => {
 };
 function taskDetail (receive_task_id) {
     taskReceiveDetail(receive_task_id).then(r => {
+        console.log(r, '==========taskReceiveDetail');
         if (r.error) {
             toast(r.msg || '当前做任务人数过多,稍后再试');
         } else {
