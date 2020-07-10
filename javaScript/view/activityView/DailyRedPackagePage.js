@@ -88,7 +88,7 @@ function RenderRedItem ({ rule, activityId, detail }) {
             if (!r.error) {
                 detail();
                 const { add_balance } = r.data;
-                DeviceEventEmitter.emit('showPop', { dom: <Popup money={add_balance} twice={level === 6 ? 0 : rule[level - 1].min_add_balance}/> });
+                DeviceEventEmitter.emit('showPop', { dom: <Popup money={add_balance} twice={level === 6 ? 0 : rule[level].min_add_balance}/> });
             }
         });
     }
