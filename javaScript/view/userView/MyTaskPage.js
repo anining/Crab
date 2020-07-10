@@ -76,7 +76,7 @@ function L ({ type, itemHeight }) {
                         <View>
                             <View style={[styles.itemView, { height: itemHeight }]} key={receive_task_id}>
                                 <View style={styles.itemViewTop}>
-                                    <Text style={{ color: '#353535', fontSize: 13, fontWeight: '500' }}>任务类型：{category}</Text>
+                                    <Text style={{ color: '#353535', fontSize: 13, fontWeight: '500' }}>摸鱼夺宝类型：{category}</Text>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                         <Image source={task10} style={{ height: 20, width: 19, marginRight: 5 }}/>
                                         <Text style={{ color: '#FF6C00', fontSize: 19, fontWeight: '600' }}>{transformMoney(money)} <Text style={{ fontSize: 12 }}>金币</Text></Text>
@@ -85,13 +85,13 @@ function L ({ type, itemHeight }) {
                                 <TouchableOpacity activeOpacity={1} style={styles.viewCenter} onPress={() => {
                                     task(null, receive_task_id);
                                 }}>
-                                    <Text style={styles.itemViewTopName} numberOfLines={1}>做单账号：{account}</Text>
-                                    <Text style={{ fontSize: 12, color: '#999' }}>当前账号任务通过率：<Text style={{ color: '#FF6C00' }}>{Number.parseInt(success_rate * 100)}</Text> %</Text>
+                                    <Text style={styles.itemViewTopName} numberOfLines={1}>账号：{account}</Text>
+                                    <Text style={{ fontSize: 12, color: '#999' }}>当前账号参与通过率：<Text style={{ color: '#FF6C00' }}>{Number.parseInt(success_rate * 100)}</Text> %</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity activeOpacity={1} style={styles.itemViewCenter} onPress={() => {
                                     task(null, receive_task_id);
                                 }}>
-                                    <Text style={{ color: '#353535', fontSize: 12 }}>接任务ID：{receive_task_id}</Text>
+                                    <Text style={{ color: '#353535', fontSize: 12 }}>参与ID：{receive_task_id}</Text>
                                     <TouchableOpacity activeOpacity={1} onPress={() => {
                                         _copyStr(receive_task_id);
                                     }} style={styles.copyBtn}>
@@ -128,7 +128,7 @@ function RenderItem ({ type, updated_at, receive_task_id, reason, finish_deadlin
                 <TouchableOpacity onPress={() => {
                     apiGiveUp();
                 }} style={styles.giveUpBtn}>
-                    <Text style={{ fontSize: 15, color: '#FF6C00', lineHeight: 42, textAlign: 'center' }}>放弃任务</Text>
+                    <Text style={{ fontSize: 15, color: '#FF6C00', lineHeight: 42, textAlign: 'center' }}>放弃</Text>
                 </TouchableOpacity>
             </>
         );

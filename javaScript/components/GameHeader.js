@@ -143,10 +143,10 @@ export default class GameHeader extends Component {
             setAndroidTime(() => {
                 DeviceEventEmitter.emit('answerScroll', 'end');
                 DeviceEventEmitter.emit('comTitlePop', {
-                    key: 'taskTips', str: '任意完成一单任务即有几率获得能量道具~'
+                    key: 'taskTips', str: '任意选择一个类型即有几率获得能量道具~'
                 });
             }, AnswerPopTipsTime);
-        }} btn={'做任务获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text>系统赠送1个最多同时持有<Text style={{ color: '#FF6C00' }}>10个</Text> 道具做任务随机产出道具</Text>} icon={game20}/>);
+        }} btn={'摸鱼夺宝获取道具'} tips={<Text>道具每 <Text style={{ color: '#FF6C00' }}>30分钟</Text>系统赠送1个最多同时持有<Text style={{ color: '#FF6C00' }}>10个</Text> 道具摸鱼夺宝随机产出道具</Text>} icon={game20}/>);
     }
 
     getPosition () {

@@ -70,7 +70,7 @@ function RenderSelect () {
 function RenderView () {
     const children = (
         <>
-            <Text style={{ marginTop: 7, marginBottom: 20 }}>快去绑定账号做任务吧～</Text>
+            <Text style={{ marginTop: 7, marginBottom: 20 }}>快去绑定账号摸鱼夺宝吧～</Text>
             <TouchableOpacity activeOpacity={1} onPress={() => { DeviceEventEmitter.emit('showPop', <RenderSelect />); }} style={{ width: 206, height: 44, backgroundColor: '#FF9C00', borderRadius: 22 }}>
                 <Text numberOfLines={1} style={{ color: '#fff', lineHeight: 44, textAlign: 'center', fontSize: 17 }}>添加绑定</Text>
             </TouchableOpacity>
@@ -120,7 +120,7 @@ function RenderBindView () {
                     </TouchableOpacity>
                 </View>
                 <Text numberOfLines={1} style={ styles.successRateText}>当前账号通过率：<Text karet-lift style={ { color: '#FF6C00', fontWeight: '500' }}>{value}%</Text></Text>
-                <Text numberOfLines={3} style={styles.successRateView}>通过率表示您这个账号今日任务通过情况，通过率低代表您的账号可能已经不健康，易导致任务审核不通过，建议绑定其他账号做单.</Text>
+                <Text numberOfLines={3} style={styles.successRateView}>通过率表示您这个账号今日"摸鱼夺宝"通过情况，通过率低代表您的账号可能已经不健康，易导致审核不通过，建议绑定其他账号.</Text>
             </View>
         );
         const elView = (
@@ -187,7 +187,7 @@ function RenderChange ({ label, account_id, platform_category }) {
 
     return (
         <View style={styles.changeView}>
-            <Text style={{ color: '#FF3B00', fontSize: 17, lineHeight: 50, textAlign: 'center', fontWeight: '600' }}>切换做单账号</Text>
+            <Text style={{ color: '#FF3B00', fontSize: 17, lineHeight: 50, textAlign: 'center', fontWeight: '600' }}>切换账号</Text>
             <View style={{ height: 200, width: '100%', marginBottom: 20 }}>
                 <ScrollView>
                     <>{view}</>

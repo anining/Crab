@@ -18,11 +18,11 @@ const STATUS_DATA = [
     },
     {
         id: 1,
-        label: '做单收入'
+        label: '摸鱼夺宝'
     },
     {
         id: 2,
-        label: '收徒奖励'
+        label: '渔友奖励'
     },
     {
         id: 3,
@@ -30,7 +30,7 @@ const STATUS_DATA = [
     },
     {
         id: 4,
-        label: '返佣收益'
+        label: '渔友回馈'
     },
     {
         id: 5,
@@ -38,23 +38,23 @@ const STATUS_DATA = [
     },
     {
         id: 6,
-        label: '兑换退款'
+        label: '兑换失败'
     },
     {
         id: 7,
-        label: '兑换'
+        label: '兑换成功'
     },
     {
         id: 8,
-        label: '签到'
+        label: '签到奖励'
     },
     {
         id: 9,
-        label: '游戏闯关'
+        label: '通关奖励'
     },
     {
         id: 10,
-        label: '每秒奖励'
+        label: '渔船产量'
     }
 ];
 
@@ -68,7 +68,7 @@ function FundingRecordsPage () {
 
     return (
         <SafeAreaView style={css.safeAreaView}>
-            <Header scene={{ descriptor: { options: {} }, route: { name: '资金记录' } }} navigation={N} onPress={() => {
+            <Header scene={{ descriptor: { options: {} }, route: { name: '金币记录' } }} navigation={N} onPress={() => {
                 DeviceEventEmitter.emit('showPop', {
                     dom: <RenderSelect setSource={setSource} source={source}/>,
                     close,

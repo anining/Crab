@@ -89,7 +89,7 @@ const MENU_LIST = [
     },
     {
         icon: user12,
-        title: '切换账号',
+        title: '退出登录',
         remark: '',
         path: 'VerificationStackNavigator'
     }
@@ -211,7 +211,7 @@ function UserPage () {
                     </ImageBackground>
                 </View>
                 <View style={styles.myTask}>
-                    <Text style={styles.myTaskTitle}>我的任务</Text>
+                    <Text style={styles.myTaskTitle}>摸鱼夺宝记录</Text>
                     <RenderTaskMenu />
                 </View>
                 <RenderMenu />

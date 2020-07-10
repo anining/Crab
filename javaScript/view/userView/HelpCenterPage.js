@@ -27,7 +27,7 @@ function HelpCenterPage () {
                     },
                     {
                         id: 3,
-                        title: '做单教程',
+                        title: '参与教程',
                         children: []
                     },
                     {

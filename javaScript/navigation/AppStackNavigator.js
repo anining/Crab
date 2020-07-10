@@ -104,7 +104,7 @@ const stackScreens = [
     {
         name: 'MyTaskPage',
         component: MyTaskPage,
-        title: '我的任务',
+        title: '摸鱼夺宝记录',
     },
     {
         name: 'HelpCenterPage',
@@ -119,7 +119,7 @@ const stackScreens = [
     {
         name: 'FundingRecordsPage',
         component: FundingRecordsPage,
-        title: '资金记录',
+        title: '金币记录',
     },
     {
         name: 'FeedBackRecordsPage',
@@ -204,7 +204,7 @@ const stackScreens = [
     {
         name: 'TaskDetailPage',
         component: TaskDetailPage,
-        title: '任务信息',
+        title: '摸鱼夺宝',
     },
     {
         name: 'ErrorPage',

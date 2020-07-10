@@ -16,8 +16,8 @@ import Shadow from '../../components/Shadow';
 import * as Animatable from 'react-native-animatable';
 import { getRedPackage, openRedPackage, withdrawLogsLatest } from '../../utils/api';
 import { N } from '../../utils/router';
-import { _toFixed, djangoTime, setAndroidTime } from '../../utils/util';
-import {AnswerPopTipsTime} from '../../utils/animationConfig';
+import { _toFixed, djangoTime, setAndroidTime, transformMoney } from '../../utils/util';
+import { AnswerPopTipsTime } from '../../utils/animationConfig';
 
 const { width } = Dimensions.get('window');
 
@@ -85,8 +85,8 @@ function DailyMoneyPage (props) {
                     }}/>
                     <Lamp LampList={withdrawLogs}/>
                     <View style={[css.flex, css.fw, css.pa, styles.redPackageWrap, css.afs]}>
-                        <CountDown time={+new Date(djangoTime(invalid_time))} style={{ color: Number(money) >= 30 ? 'rgba(225,48,32,1)' : '#999', fontSize: 13, lineHeight: 30 }} millisecond={true} tips={Number(money) >= 30 ? '后未兑换现金将失效' : '后现金失效'}/>
-                        <Text style={styles.redMaxText}> {money} <Text style={{ fontSize: 20 }}>元</Text></Text>
+                        <CountDown time={+new Date(djangoTime(invalid_time))} style={{ color: Number(money) >= 30 ? 'rgba(225,48,32,1)' : '#999', fontSize: 13, lineHeight: 30 }} millisecond={true} tips={Number(money) >= 30 ? '后未兑换金币将失效' : '后金币失效'}/>
+                        <Text style={styles.redMaxText}> {transformMoney(money, 4)} <Text style={{ fontSize: 20 }}>金币</Text></Text>
                         <Animatable.View useNativeDriver={true} iterationCount="infinite" animation="pulse" style={[css.auto]}>
                             <Shadow style={[styles.shareBtn]}>
                                 <Text style={styles.shareBtnText} onPress={() => {
@@ -101,7 +101,7 @@ function DailyMoneyPage (props) {
                                 }}>兑换到我的钱包</Text>
                             </Shadow>
                         </Animatable.View>
-                        <Text style={styles.dmMinTips} numberOfLines={1}>满30元既可以兑换到钱包</Text>
+                        <Text style={styles.dmMinTips} numberOfLines={1}>满30w金币既可以兑换到钱包</Text>
                     </View>
                 </ImageBackground>
                 <RenderList history={user_history}/>
@@ -128,7 +128,7 @@ function PopupView ({ money }) {
                 setAndroidTime(() => {
                     DeviceEventEmitter.emit('answerScroll', 'end');
                     DeviceEventEmitter.emit('comTitlePop', {
-                        key: 'taskTips', str: '任意完成一单任务即可加速领红包~'
+                        key: 'taskTips', str: '任意选择一个类型加速累积金币~'
                     });
                 }, AnswerPopTipsTime);
             }} style={styles.popupViewBtn}/>
@@ -150,13 +150,13 @@ function RenderList ({ history }) {
                     <Text numberOfLine={1} style={[styles.riwText, { fontSize: 13 }]}>{label}</Text>
                     <Text numberOfLine={1} style={styles.riwText}>{source}</Text>
                 </View>
-                <Text style={styles.riwMoneyText}>+{add_money}元</Text>
+                <Text style={styles.riwMoneyText}>+{transformMoney(add_money, 4)}金币</Text>
             </View>
         );
     });
     return (
         <View style={styles.recordWrap}>
-            <Text style={styles.recordTitleText}>累计记录 <Text style={styles.rttMinTitle}> 每单任务通过，可以累计额外的金币哦</Text></Text>
+            <Text style={styles.recordTitleText}>累积记录 <Text style={styles.rttMinTitle}> 每次参与"摸鱼夺宝"并审核通过会累积额外金币</Text></Text>
             {view}
         </View>
     );
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     },
     redMaxText: {
         color: '#E13020',
-        fontSize: 50,
+        fontSize: 35,
         fontWeight: '900',
         lineHeight: width * 0.2,
         marginBottom: width * 0.07,
@@ -291,7 +291,8 @@ const styles = StyleSheet.create({
     },
     rttMinTitle: {
         color: '#FAB4AB',
-        fontSize: 12
+        fontSize: 11,
+        ...css.sy
     },
     shareBtn: {
         borderRadius: 22,
