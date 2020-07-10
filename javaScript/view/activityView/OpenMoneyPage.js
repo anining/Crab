@@ -114,7 +114,7 @@ function OpenMoneyPage (props) {
                 <TouchableOpacity style={styles.withdrawBtn} onPress={() => {
                     N.navigate('DailyMoneyPage', { activityId, pageInfo: data });
                 }}>
-                    <Text style={{ fontSize: 16, color: '#fff' }}>立即提现</Text>
+                    <Text style={{ fontSize: 16, color: '#fff' }}>立即兑换</Text>
                 </TouchableOpacity>
             </View>
         );

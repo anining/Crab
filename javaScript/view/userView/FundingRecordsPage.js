@@ -38,11 +38,11 @@ const STATUS_DATA = [
     },
     {
         id: 6,
-        label: '提现退款'
+        label: '兑换退款'
     },
     {
         id: 7,
-        label: '提现'
+        label: '兑换'
     },
     {
         id: 8,

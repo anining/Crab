@@ -517,7 +517,7 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
             <>
                 <Text style={styles.userPopTitle}>恭喜您，额外获得</Text>
                 <Text style={styles.userPopTips}>{toGoldCoin(number)}<Text style={{ fontSize: 20 }}> 金币</Text></Text>
-                <Text style={styles.userPopText}>马上就可以提现啦</Text>
+                <Text style={styles.userPopText}>马上就可以兑换啦</Text>
                 <TouchableOpacity style={styles.userPopBtn} onPress={() => {
                     state.get() && getApiTask(callback);
                     U.set(state, false);
@@ -543,13 +543,13 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
             <>
                 <Text style={styles.userPopTitle}>哇！太厉害了！</Text>
                 <Text style={[styles.userPopText, { top: '40%' }]}>你已经获得全部奖励了</Text>
-                <Text style={[styles.userPopText, { top: '50%' }]}>快去提现试试吧~</Text>
+                <Text style={[styles.userPopText, { top: '50%' }]}>快去兑换试试吧~</Text>
                 <TouchableOpacity style={styles.userPopBtn} onPress={() => {
                     U.set(state, false);
                     DeviceEventEmitter.emit('hidePop');
                     N.navigate('WithdrawPage', { callbackGetTask });
                 }}>
-                    <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>去提现</Text>
+                    <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>去兑换</Text>
                 </TouchableOpacity>
             </>
         );

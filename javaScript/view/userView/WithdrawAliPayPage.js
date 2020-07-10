@@ -52,7 +52,7 @@ function WithdrawAliPayPage (props) {
                 asyncStorage.setItem('aliNumber', number);
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: with10,
-                    tips: '提现申请成功，请耐心等待审核。一般1个工作日内审核完成。',
+                    tips: '兑换申请成功，请耐心等待审核。一般1个工作日内审核完成。',
                     type: 1,
                     rc: () => {},
                     rt: '我知道了',
@@ -71,7 +71,7 @@ function WithdrawAliPayPage (props) {
     return (
         <SafeAreaView style={[css.safeAreaView, css.flexCSB]}>
             <View style={styles.container}>
-                <Text style={styles.moneyTitleText}>你选择提现的金额:<Text style={{ color: '#FF3E00' }}>{money}元</Text></Text>
+                <Text style={styles.moneyTitleText}>你选择兑换的金额:<Text style={{ color: '#FF3E00' }}>{money}元</Text></Text>
                 <View style={styles.inputView}>
                     <Image source={with8} style={{ height: 20, width: 20, marginRight: 5, }} />
                     <Text style={{ fontWeight: '500', fontSize: 14, color: '#353535' }}>支付宝账号：</Text>
@@ -91,13 +91,13 @@ function WithdrawAliPayPage (props) {
                         placeholderTextColor={'#BCBCBC'}
                         onChangeText={name => setName(name)} ref={ref => ref && (aliNameRef = ref)}/>
                 </View>
-                <Crab text="提现说明：" paddingLeft={0}/>
-                <Text style={{ fontSize: 12, color: '#999' }}>1.支付宝账号姓名必须匹配，否则提现不会到账。</Text>
+                <Crab text="兑换说明：" paddingLeft={0}/>
+                <Text style={{ fontSize: 12, color: '#999' }}>1.支付宝账号姓名必须匹配，否则兑换不会到账。</Text>
             </View>
             {/* <TouchableOpacity activeOpacity={1} onPress={withdraw} style={styles.btn}> */}
-            {/*    <Text style={styles.btnText}>提现到支付宝</Text> */}
+            {/*    <Text style={styles.btnText}>兑换到支付宝</Text> */}
             {/* </TouchableOpacity> */}
-            <Button type={2} name={'提现到支付宝'} onPress={(callback) => {
+            <Button type={2} name={'兑换到支付宝'} onPress={(callback) => {
                 withdraw(callback);
             }}/>
         </SafeAreaView>

@@ -69,7 +69,7 @@ export const userDataHtml = `<h1 style="text-align: center; text-indent: 2em; li
 </p>
 <p style="text-indent: 2em; text-align: left; line-height: 1.75em;">
     <span style="text-decoration: underline; font-family: 宋体, SimSun;"><strong><span
-                style="font-family: 宋体, SimSun; text-decoration: underline; font-size: 14px;">在不需要账户的时，用户可以选择注销趣玩赚账户。用户可以通过个人中心联系客服，由客服帮助用户注销账户。用户在申请注销账户前应将账户内的余额提现。注销账户后将不会受理提现申请。</span></strong></span>
+                style="font-family: 宋体, SimSun; text-decoration: underline; font-size: 14px;">在不需要账户的时，用户可以选择注销趣玩赚账户。用户可以通过个人中心联系客服，由客服帮助用户注销账户。用户在申请注销账户前应将账户内的余额兑换。注销账户后将不会受理兑换申请。</span></strong></span>
 </p>
 <h2 style="text-align: left; line-height: 1.75em; text-indent: 0em;">
     <span style="font-size: 24px; font-family: 宋体, SimSun;">五、内容</span>
@@ -133,7 +133,7 @@ export const userDataHtml = `<h1 style="text-align: center; text-indent: 2em; li
 </p>
 <p style="text-indent: 2em; text-align: left; line-height: 1.75em;">
     <span style="text-decoration: underline; font-family: 宋体, SimSun;"><strong><span
-                style="font-family: 宋体, SimSun; text-decoration: underline; font-size: 14px;">用户在平台内赚取的金币，可以通过提现的方式提到用户的微信或者支付宝账户中。</span></strong></span>
+                style="font-family: 宋体, SimSun; text-decoration: underline; font-size: 14px;">用户在平台内赚取的金币，可以通过兑换的方式提到用户的微信或者支付宝账户中。</span></strong></span>
 </p>
 <h2 style="text-align: left; line-height: 1.75em; text-indent: 0em;">
     <span style="font-size: 24px; font-family: 宋体, SimSun;">九、侵权通知</span>

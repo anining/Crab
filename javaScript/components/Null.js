@@ -3,7 +3,7 @@ import { Image, Text, View } from 'react-native';
 import card3 from '../assets/icon/card/card3.png';
 /**
  * 使用说明
- * <Null text="提现说明：" />**/
+ * <Null text="兑换说明：" />**/
 export default function Null ({ text, children }) {
     return (
         <View style={{ flex: 1, alignItems: 'center', paddingTop: 70 }}>

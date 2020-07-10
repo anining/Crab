@@ -187,17 +187,17 @@ function UserPage () {
                 <View style={styles.moneyView}>
                     <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
                         <View style={styles.moneyViewTop}>
-                            <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
+                            <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>我的金币</Text>
                             <TouchableOpacity activeOpacity={1} onPress={() => {
                                 N.navigate('WithdrawPage');
                             }} style={styles.withDrawBtn}>
-                                <Text style={{ lineHeight: 30, textAlign: 'center', color: '#fff' }}>立即提现</Text>
+                                <Text style={{ lineHeight: 30, textAlign: 'center', color: '#fff' }}>立即兑换</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.moneyViewBottom}>
                             <View style={styles.moneyViewItem}>
                                 <Text karet-lift style={styles.moneyText}>{fixedBalance}</Text>
-                                <Text style={styles.moneyTitle}>可提现(金币)</Text>
+                                <Text style={styles.moneyTitle}>可兑换(金币)</Text>
                             </View>
                             <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
                                 <Text karet-lift style={styles.moneyText}>{fixedTodayIncome}</Text>

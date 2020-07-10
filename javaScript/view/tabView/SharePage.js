@@ -33,13 +33,13 @@ const WALFARE_ONE_height = 190;
 const WALFARE_TWO_height = 600;
 const WALFARE_TRI_height = 340;
 const cashBack = [{
-    title: '徒弟首次提现到账',
+    title: '徒弟首次兑换到账',
     label: '师傅得1元',
 }, {
-    title: '徒弟第二次提现到账',
+    title: '徒弟第二次兑换到账',
     label: '师傅得2元',
 }, {
-    title: '徒弟第三次提现到账',
+    title: '徒弟第三次兑换到账',
     label: '师傅得3元',
 }];
 const { invite_code, label, authorization } = getter(['user.invite_code', 'authorization', 'app.label']);
@@ -240,9 +240,9 @@ export default class SharePage extends PureComponent {
                                 );
                             })()}
                         </View>
-                        {<Text numberOfLines={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>{info.min_money}{info.max_money > info.min_money ? `-${info.max_money}` : ''}元</Text>现金红包，永久获得{info.first_rebate * 100 + '%'}徒弟{info.second_rebate * 100 + '%'}徒孙提现返佣。</Text>}
+                        {<Text numberOfLines={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>{info.min_money}{info.max_money > info.min_money ? `-${info.max_money}` : ''}元</Text>现金红包，永久获得{info.first_rebate * 100 + '%'}徒弟{info.second_rebate * 100 + '%'}徒孙兑换返佣。</Text>}
                         {SharePage._renderProgress(validNumber / parseInt(info.need_children_num))}
-                        <Text numberOfLines={1} style={styles.welfareTargetText}>要求{info.need_children_num}徒弟提现，已提现的徒弟 {validNumber}/{info.need_children_num}</Text>
+                        <Text numberOfLines={1} style={styles.welfareTargetText}>要求{info.need_children_num}徒弟兑换，已兑换的徒弟 {validNumber}/{info.need_children_num}</Text>
                     </View>
                 );
             }
@@ -290,7 +290,7 @@ export default class SharePage extends PureComponent {
                             width: width * 0.9 * 0.25,
                             ...css.pa,
                         }}/>
-                        <Text style={[css.pa, styles.cashTitle]}>徒弟第{_if(this.state.detailInfo, res => res.children_withdraw_award_config[index].times, () => 0)}次提现</Text>
+                        <Text style={[css.pa, styles.cashTitle]}>徒弟第{_if(this.state.detailInfo, res => res.children_withdraw_award_config[index].times, () => 0)}次兑换</Text>
                         <Text style={[css.pa, styles.cashLabel]}>师傅得{_if(this.state.detailInfo, res => res.children_withdraw_award_config[index].money, () => 0)}元</Text>
                     </View>
                 );
@@ -338,7 +338,7 @@ export default class SharePage extends PureComponent {
                                     N.navigate('PupilInfoPage');
                                 }}>
                                 <Text numberOfLines={1} style={styles.shareInfoTips}>
-                                    当前提现返佣：徒弟提现返{Number.parseInt(rebate[0] * 100)}%，徒孙提现返{Number.parseInt(rebate[1] * 100)}%
+                                    当前兑换返佣：徒弟兑换返{Number.parseInt(rebate[0] * 100)}%，徒孙兑换返{Number.parseInt(rebate[1] * 100)}%
                                 </Text>
                                 <Text style={styles.tipsBtn}>师徒信息</Text>
                             </TouchableOpacity>
@@ -354,7 +354,7 @@ export default class SharePage extends PureComponent {
                                         paddingTop: 30,
                                         paddingHorizontal: 10,
                                     }]}>
-                                        {SharePage._renderShareTitle(<Text style={styles.wTitleText}>徒弟提现送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>, <TouchableOpacity onPress={this.getReward}><Text style={{ fontSize: 11, color: 'rgba(255,92,34,1)', paddingRight: 15 }}>领取奖励（{awardLength}）</Text></TouchableOpacity>)}
+                                        {SharePage._renderShareTitle(<Text style={styles.wTitleText}>徒弟兑换送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>, <TouchableOpacity onPress={this.getReward}><Text style={{ fontSize: 11, color: 'rgba(255,92,34,1)', paddingRight: 15 }}>领取奖励（{awardLength}）</Text></TouchableOpacity>)}
                                         {this._renderCashBack()}
                                     </View>
                                 </Shadow>
@@ -387,8 +387,8 @@ export default class SharePage extends PureComponent {
                                     <View style={[styles.welfareInner, { backgroundColor: '#fff', paddingTop: 40, paddingHorizontal: 10, height: WALFARE_TRI_height }]}>
                                         <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>1.</Text>您直接邀请的用户是您的徒弟,您徒弟邀请的用户是您的徒孙。</Text>
                                         <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>2.</Text>对于您的徒弟来说,您是师父.对于您的徒孙来说,您是师祖。</Text>
-                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>3.</Text>徒弟提现奖励需要您手动领取，可在“我的 - 提现 - 收益记录”查看收益详情。</Text>
-                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>4.</Text>返佣奖励任务通过后自动到账，可在“我的 - 提现 - 收益记录”查看收益详情。</Text>
+                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>3.</Text>徒弟兑换奖励需要您手动领取，可在“我的 - 兑换 - 收益记录”查看收益详情。</Text>
+                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>4.</Text>返佣奖励任务通过后自动到账，可在“我的 - 兑换 - 收益记录”查看收益详情。</Text>
                                         <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>5.</Text>收徒严禁使用任何违规作弊手段,一经发现直接封号处理。</Text>
                                         <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>6.</Text>活动长期有效,活动解释权归官方所有.</Text>
                                     </View>

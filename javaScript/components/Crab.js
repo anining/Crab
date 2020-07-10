@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import chat2 from '../assets/icon/chat/chat2.png';
 /**
  * 使用说明
- * <Crab text="提现说明：" paddingLeft={0}/>**/
+ * <Crab text="兑换说明：" paddingLeft={0}/>**/
 export default function Crab ({ text, paddingLeft = 20 }) {
     return (
         <View style={[styles.titleView, { paddingLeft, }]}>

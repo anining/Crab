@@ -61,7 +61,7 @@ function DailyMoneyPage (props) {
                 DeviceEventEmitter.emit('showPop', {
                     dom:
                       <ImageBackground source={activity3} style={styles.successPop}>
-                          <Text style={[styles.successPopText, { fontSize: 20, fontWeight: '500', color: 'rgba(232,58,41,1)' }]}>恭喜您，提现成功！</Text>
+                          <Text style={[styles.successPopText, { fontSize: 20, fontWeight: '500', color: 'rgba(232,58,41,1)' }]}>恭喜您，兑换成功！</Text>
                           <Text style={[styles.successPopText, { marginTop: '5%' }]}>现金已存入“我的 - 我的钱包”</Text>
                       </ImageBackground>,
                     close: () => _openRedPackage,
@@ -85,7 +85,7 @@ function DailyMoneyPage (props) {
                     }}/>
                     <Lamp LampList={withdrawLogs}/>
                     <View style={[css.flex, css.fw, css.pa, styles.redPackageWrap, css.afs]}>
-                        <CountDown time={+new Date(djangoTime(invalid_time))} style={{ color: Number(money) >= 30 ? 'rgba(225,48,32,1)' : '#999', fontSize: 13, lineHeight: 30 }} millisecond={true} tips={Number(money) >= 30 ? '后未提现现金将失效' : '后现金失效'}/>
+                        <CountDown time={+new Date(djangoTime(invalid_time))} style={{ color: Number(money) >= 30 ? 'rgba(225,48,32,1)' : '#999', fontSize: 13, lineHeight: 30 }} millisecond={true} tips={Number(money) >= 30 ? '后未兑换现金将失效' : '后现金失效'}/>
                         <Text style={styles.redMaxText}> {money} <Text style={{ fontSize: 20 }}>元</Text></Text>
                         <Animatable.View useNativeDriver={true} iterationCount="infinite" animation="pulse" style={[css.auto]}>
                             <Shadow style={[styles.shareBtn]}>
@@ -98,10 +98,10 @@ function DailyMoneyPage (props) {
                                     } else {
                                         apiRedPackage();
                                     }
-                                }}>提现到我的钱包</Text>
+                                }}>兑换到我的钱包</Text>
                             </Shadow>
                         </Animatable.View>
-                        <Text style={styles.dmMinTips} numberOfLines={1}>满30元既可以提现到钱包</Text>
+                        <Text style={styles.dmMinTips} numberOfLines={1}>满30元既可以兑换到钱包</Text>
                     </View>
                 </ImageBackground>
                 <RenderList history={user_history}/>

@@ -205,7 +205,7 @@ export default class GameHeader extends Component {
                         <TextInput multiline={false} style={[styles.hdnText]} ref={ref => this.secondText = ref} onFocus={() => {
                             this.secondText.blur();
                         }}/>
-                        <Text style={styles.withdrawBtn}>提现</Text>
+                        <Text style={styles.withdrawBtn}>兑换</Text>
                     </View>
                 </EnlargeView>
             </View>;

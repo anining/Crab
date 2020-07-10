@@ -69,7 +69,7 @@ const stackScreens = [
     {
         name: 'WithdrawRecordsPage',
         component: WithdrawRecordsPage,
-        title: '提现记录',
+        title: '兑换记录',
     },
     {
         name: 'WithdrawPage',
@@ -94,7 +94,7 @@ const stackScreens = [
     {
         name: 'WithdrawAliPayPage',
         component: WithdrawAliPayPage,
-        title: '提现到支付宝',
+        title: '兑换到支付宝',
     },
     {
         name: 'WeChatBindPage',

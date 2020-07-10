@@ -161,7 +161,7 @@ function AnswerPage () {
             }>
                 <Slider data={banner.get()} height={width * 0.29} autoplay={true} onPress={item => bannerAction(item.category, item.link, item.title)}/>
                 <View style={styles.answerWrap}>
-                    <ComTitle title={'每日签到'} minTitle={<Text style={[css.minTitle, css.sy]}>连续签到得 <Text style={[{ color: '#FF6C00' }, css.sy]}>提现免手续费特权卡!</Text></Text>}/>
+                    <ComTitle title={'每日签到'} minTitle={<Text style={[css.minTitle, css.sy]}>连续签到得 <Text style={[{ color: '#FF6C00' }, css.sy]}>兑换免手续费特权卡!</Text></Text>}/>
                     <RenderDaySign isSign={isSign} signDay={signDay} setSignDay={setSignDay}/>
                 </View>
                 <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
@@ -208,7 +208,7 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: pop5,
                     tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{ret.prop.label}</Text> </Text>,
-                    minTips: '请在"我的-立即提现-资金记录"查看收益详情',
+                    minTips: '请在"我的-立即兑换-资金记录"查看收益详情',
                     type: 'oneBtn',
                     rt: '我知道了',
                 }}/>);
@@ -216,7 +216,7 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: pop5,
                     tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{transformMoney(ret.data.add_balance, 0)}金币</Text> </Text>,
-                    minTips: '请在"我的-立即提现-资金记录"查看收益详情',
+                    minTips: '请在"我的-立即兑换-资金记录"查看收益详情',
                     type: 'oneBtn',
                     rt: '我知道了',
                 }}/>);

@@ -266,7 +266,7 @@ function ParentView ({ parent, _childDetail }) {
             <ImageBackground source={pupil8} style={[styles.infoHeader, css.pa, { justifyContent: 'space-around' }]}>
                 <RenderShareTitle title="我的师父" icon={pupil5}/>
                 <View style={[css.flexRCSB, styles.bindView, { justifyContent: 'center' }]}>
-                    <Text style={{ fontWeight: '500', color: '#353535' }}>您没有绑定师父！您已提现过一次，不可绑定师父！</Text>
+                    <Text style={{ fontWeight: '500', color: '#353535' }}>您没有绑定师父！您已兑换过一次，不可绑定师父！</Text>
                 </View>
             </ImageBackground>
         );
