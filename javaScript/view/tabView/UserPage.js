@@ -1,20 +1,17 @@
 import * as React from 'karet';
 import * as R from 'kefir.ramda';
-import { useState } from 'react';
 import {
     View,
     SafeAreaView,
     StyleSheet,
     ScrollView,
     ImageBackground,
-    FlatList,
     Image,
     Text,
     TouchableOpacity,
     Dimensions,
     RefreshControl,
 } from 'react-native';
-import Clipboard from '@react-native-community/clipboard';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import user1 from '../../assets/icon/user/user1.png';
@@ -34,11 +31,10 @@ import user15 from '../../assets/icon/user/user15.png';
 import user16 from '../../assets/icon/user/user16.png';
 import user17 from '../../assets/icon/user/user17.png';
 import { getter, clear } from '../../utils/store';
-import toast from '../../utils/toast';
 import * as U from 'karet.util';
 import { updateSecondIncome, updateUser } from '../../utils/update';
 import { _copyStr, _toFixed } from '../../utils/util';
-import ImageAuto from '../../components/ImageAuto';
+import LinearGradient from "react-native-linear-gradient";
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -111,12 +107,12 @@ const TASK_MENU = [
     {
         id: 5,
         label: '已通过',
-        icon: user5
+        icon: user6
     },
     {
         id: 6,
         label: '未通过',
-        icon: user6
+        icon: user5
     }
 ];
 const { today_income, total_income, nickname, authorization, balance, openid, phone, avatar, invite_code, receive_task_status } = getter(['user.red_point.receive_task_status', 'authorization', 'user.today_income', 'user.openid', 'user.nickname', 'user.total_income', 'user.balance', 'user.phone', 'user.avatar', 'user.invite_code']);
@@ -224,12 +220,15 @@ function UserPage () {
 }
 
 function RenderBind () {
-    const view = U.ifElse(R.equals(openid, null), <TouchableOpacity onPress={() => {
-        N.navigate('WeChatBindPage');
-    }} style={[css.pa, styles.bindBtn]}>
-        <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
-        <Text style={styles.bindText}>绑定微信</Text>
-    </TouchableOpacity>, undefined);
+    const view = U.ifElse(R.equals(openid, null), <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[css.pa, styles.bindBtnView]}>
+        <TouchableOpacity  onPress={() => {
+            N.navigate('WeChatBindPage');
+        }} style={styles.bindBtn}>
+            <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
+            <Text style={styles.bindText}>绑定微信</Text>
+        </TouchableOpacity>
+    </LinearGradient>, undefined);
+
     return <>{view}</>;
 }
 
@@ -294,19 +293,22 @@ const styles = StyleSheet.create({
         width: 58
     },
     avatarIconWrap: {
-        marginHorizontal: 15
+        marginHorizontal: 15,
+        marginRight:10
     },
-    bindBtn: {
-        alignItems: 'center',
-        backgroundColor: '#FF9C00',
+    bindBtnView: {
         borderBottomLeftRadius: 12,
         borderTopLeftRadius: 12,
-        flexDirection: 'row',
         height: 24,
-        justifyContent: 'center',
         right: 0,
         width: 80,
         zIndex: 9
+    },
+    bindBtn: {
+        flex:1,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center'
     },
     bindText: {
         color: '#fff',
@@ -328,14 +330,15 @@ const styles = StyleSheet.create({
     },
     copyBtn: {
         backgroundColor: '#FFF4E8',
-        height: 22,
+        height: 16,
+        borderRadius:18,
+        alignItems:'center',
+        justifyContent:'center',
         width: 35
     },
     copyText: {
         color: '#FF6C00',
-        fontSize: 10,
-        lineHeight: 22,
-        textAlign: 'center'
+        fontSize: 10
     },
     inviteCode: {
         color: '#666',
@@ -385,7 +388,7 @@ const styles = StyleSheet.create({
     moneyViewTop: {
         alignItems: 'center',
         flexDirection: 'row',
-        height: '50%',
+        height: '40%',
         justifyContent: 'space-between',
         paddingLeft: 20,
         paddingRight: 20,
@@ -430,7 +433,7 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     userCardBottom: {
-        alignItems: 'flex-end',
+        alignItems: 'center',
         flexDirection: 'row',
         height: 22,
         justifyContent: 'flex-start',
@@ -438,8 +441,7 @@ const styles = StyleSheet.create({
     userCardTop: {
         alignItems: 'flex-end',
         flexDirection: 'row',
-        justifyContent: 'flex-start',
-        marginBottom: 2
+        justifyContent: 'flex-start'
     },
     userDetailView: {
         alignItems: 'center',
@@ -451,7 +453,8 @@ const styles = StyleSheet.create({
     },
     userId: {
         color: '#999',
-        fontSize: 10
+        fontSize: 10,
+        paddingBottom: 5
     },
     userPhone: {
         fontSize: 18,

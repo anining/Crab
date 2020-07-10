@@ -308,13 +308,8 @@ function RenderNewList ({ list = [], _newUserTask }) {
                             <Text style={styles.labelMoney} numberOfLines={1}> +{_toFixed(toGoldCoin(add_balance), 0)}</Text>
                             <ImageAuto source={answer14} width={20}/>
                         </View>
-                        <Text karet-lift style={U.template([styles.labelText, styles.labelMinTitle, { color: U.ifElse(R.equals(
-                          U.mapValue(id=>{
-                              const local1 = asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
-                              const localArray = [false, local1, id, false];
-                              return is_finish ? 3 : localArray[task_type] ? 2 : 5;
-                          },openid), 5), '#999' , '#53C23B') }])} numberOfLines={1}>{NEW_USER_TASK_TYPE[task_type].label}</Text>
-                    </View>
+                        <Text style={[styles.labelText, styles.labelMinTitle, { color: '#999' }]} numberOfLines={1}>{NEW_USER_TASK_TYPE[task_type].label}</Text>
+                     </View>
                 </View>
                 <RenderNewBtn _newUserTask={_newUserTask} item={item}/>
             </View>
@@ -420,16 +415,14 @@ function RenderList () {
     }), taskPlatform);
 
     const view = U.mapElems((item, index) => {
-        const { minTitle, btnStatus, money, label, icon } = U.destructure(item);
+        const { minTitle,  label, icon } = U.destructure(item);
         return (
             <View style={[styles.answerItemWrap, css.flex, css.sp, { borderBottomWidth: index + 1 >= taskPlatform.get().length ? 0 : 1 }]} key={`${index}list`}>
                 <View style={[css.flex, styles.aiwLeft, css.js]}>
                     <Image karet-lift source={U.template({ uri: icon })} style={{ width: 40, height: 40 }}/>
-                    <View style={[css.flex, css.fw, styles.aiwText]}>
-                        <View style={[css.flex, css.js, { width: '100%' }]}>
-                            <Text karet-lift style={styles.KLabelText } numberOfLines={1}>{label}</Text>
-                        </View>
-                        <Text karet-lift style={U.template([styles.KLabelMinTitle, { color: U.ifElse(R.equals(btnStatus, 5), '#999', '#53C23B') }])} numberOfLines={1}>{minTitle}</Text>
+                    <View style={[css.flex, css.fw, styles.aiwText,{  paddingLeft: 0,justifyContent:'flex-start'}]}>
+                        <Text karet-lift style={styles.KLabelText } numberOfLines={1}>{label}</Text>
+                        {U.ifElse(R.equals(minTitle,''),<></>,<Text karet-lift style={styles.KLabelMinTitle} numberOfLines={1}>{minTitle}</Text>)}
                     </View>
                 </View>
                 <RenderBtn item={item}/>
@@ -490,14 +483,13 @@ const styles = StyleSheet.create({
     KLabelMinTitle: {
         color: '#999',
         fontSize: 11,
-        lineHeight: 22,
         textAlign: 'left',
+        paddingLeft: 10,
         width: '100%',
     },
     KLabelText: {
         color: '#222',
-        fontSize: 14,
-        lineHeight: 22,
+        paddingLeft: 10,
         textAlign: 'left',
         width: 'auto'
     },
@@ -549,8 +541,6 @@ const styles = StyleSheet.create({
     },
     labelText: {
         color: '#222',
-        fontSize: 14,
-        lineHeight: 22,
         textAlign: 'left',
         width: '100%',
     },
