@@ -72,5 +72,8 @@ export const css = StyleSheet.create({
     },
     sp: {
         justifyContent: 'space-between',
+    },
+    sy: {
+        fontFamily: 'sy',
     }
 });

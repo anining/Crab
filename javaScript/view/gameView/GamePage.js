@@ -41,7 +41,6 @@ import game20 from '../../assets/icon/game/game20.png';
 import help from '../../lottie/help';
 import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { bindData, getPath } from '../../global/global';
-import { HomeStartAnimationTime } from '../../utils/animationConfig';
 
 const { height, width } = Dimensions.get('window');
 const CANVAS_WIDTH = width - 20;
@@ -50,7 +49,8 @@ const CUBE_WIDTH = Math.floor((CANVAS_WIDTH) / 9);
 const CUBE_HEIGHT = Math.floor((CANVAS_WIDTH) / 9);
 const OVER_SITE_Y = CANVAS_WIDTH + HELP_HEIGHT - CUBE_WIDTH;
 const MAX_LENGTH = 9; // 最大画布长
-const FONT_SIZE = 17;// 字大小
+const FONT_PADDING = 2;
+const FONT_SIZE = 18;// 字大小
 const matrix = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -323,7 +323,7 @@ export default class GamePage extends Component {
                         {_if(keyCoordinate[masterKey], res => {
                             const answerItemInfo = answerObj[res.key];
                             if (answerItemInfo && !answerItemInfo.success && !answerItemInfo.isAwait) {
-                                return <View style={{ width: '100%', height: '100%', padding: 1 }}
+                                return <View style={{ width: '100%', height: '100%', padding: FONT_PADDING }}
                                     key={`GameAnswer${masterKey}`}>
                                     <ImageBackground
                                         source={fillArray[masterKey] ? game61 : selectSite === masterKey ? game62 : game54}
@@ -339,7 +339,7 @@ export default class GamePage extends Component {
                                 const answerItemInfo = answerObj[res.key];
                                 if ((answerItemInfo && answerItemInfo.success) || isCompleted) {
                                     return <EnlargeView ref={ref => this[`enlarge${xIndex}${yIndex}`] = ref}
-                                        style={{ width: '100%', height: '100%', padding: 1, zIndex: 999 }}
+                                        style={{ width: '100%', height: '100%', padding: FONT_PADDING, zIndex: 999 }}
                                         key={`GameWord${masterKey}`}>
                                         <ImageBackground source={game53}
                                             style={[css.flex, { width: '100%', height: '100%' }]}>
@@ -347,7 +347,7 @@ export default class GamePage extends Component {
                                         </ImageBackground>
                                     </EnlargeView>;
                                 } else {
-                                    return <EnlargeView ref={ref => this[`enlarge${xIndex}${yIndex}`] = ref} style={{ width: '100%', height: '100%', padding: 1 }}
+                                    return <EnlargeView ref={ref => this[`enlarge${xIndex}${yIndex}`] = ref} style={{ width: '100%', height: '100%', padding: FONT_PADDING }}
                                         key={`GameWord${masterKey}`}>
                                         <ImageBackground source={game55}
                                             style={[css.flex, { width: '100%', height: '100%' }]}>
