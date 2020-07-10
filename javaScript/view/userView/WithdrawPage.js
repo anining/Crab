@@ -16,7 +16,6 @@ import toast from '../../utils/toast';
 import Choice from '../../components/Choice';
 import { BALANCE_RATE } from '../../utils/data';
 import { _debounce } from '../../utils/util';
-import { HomeStartAnimationTime } from '../../utils/animationConfig';
 import Button from '../../components/Button';
 
 const { width } = Dimensions.get('window');
@@ -94,7 +93,7 @@ function WithdrawPage (props) {
             <ScrollView style={styles.scrollView}>
                 <ImageBackground source={with1} style={styles.moneyView}>
                     <View style={styles.moneyViewTop}>
-                        <Text karet-lift style={{ fontWeight: '600', fontSize: 31, color: '#fff' }}>{balance}</Text>
+                        <Text karet-lift style={{ fontSize: 25, color: '#fff' }}>{balance}</Text>
                         <Text style={{ fontSize: 11, color: '#fff' }}>可提现收益(金币)</Text>
                     </View>
                     <View style={styles.moneyViewBottom}>
@@ -110,8 +109,10 @@ function WithdrawPage (props) {
                 </ImageBackground>
                 <View style={styles.goodView}>
                     <View style={styles.goodViewTitle}>
-                        <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>提现金额<Text
-                            style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text></Text>
+                        <View style={{flexDirection:'row',alignItems:'center'}}>
+                            <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>提现金额</Text>
+                            <Text style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text>
+                        </View>
                         <Text style={{ fontSize: 11, color: '#999' }} numberOfLines={1}>连续签到可获取免手续费特权</Text>
                     </View>
                     <RenderGoodItem goods={goods} setGoodId={setGoodId} goodId={goodId} setMoney={setMoney}/>
@@ -189,7 +190,7 @@ function RenderGoodItem ({ goods, setGoodId, setMoney, goodId }) {
             }} key={withdraw_id} style={[styles.goodItem, { borderColor: value ? '#FF6C00' : '#D0D0D0', backgroundColor: value ? '#FFF5F0' : '#fff' }]}>
                 <RenderGoodOnceView once={!is_withdraw && all_times === 1}/>
                 <Text style={styles.goodMoney}>{good.money}元</Text>
-                <Text style={{ fontSize: 12, color: ext_fee ? '#999' : '#FF6C00', marginTop: 2 }}>{ext_fee ? `手续费：${ext_fee}元` : '免手续费'}</Text>
+                <Text style={{ fontSize: 12, color: ext_fee ? '#999' : '#FF6C00' }}>{ext_fee ? `手续费：${ext_fee}元` : '免手续费'}</Text>
             </TouchableOpacity>,
         );
     });
@@ -242,9 +243,8 @@ const styles = StyleSheet.create({
     },
     goodMoney: {
         color: '#FF6C00',
-        fontSize: 20,
-        fontWeight: '800',
-        marginBottom: 2
+        fontSize: 17,
+        fontWeight: '500'
     },
     goodView: {
         backgroundColor: '#fff',

@@ -14,6 +14,7 @@ import { getter } from '../../utils/store';
 import * as U from 'karet.util';
 import { _copyStr } from '../../utils/util';
 import Button from "../../components/Button";
+import user13 from "../../assets/icon/user/user13.png";
 
 const { width } = Dimensions.get('window');
 const { accounts, taskPlatform } = getter(['accounts', 'taskPlatform']);
@@ -56,7 +57,7 @@ function RenderSelect () {
                 N.navigate('AccountBindPage', { id, label });
             }} style={[styles.selectViewBtn, css.flexRCSB]}>
                 <Text>{label}绑定</Text>
-                <Text>{'>'}</Text>
+                <Image source={user13} style={{ height: 13, width: 6, marginHorizontal: 6 }}/>
             </TouchableOpacity>
         );
     });
@@ -333,7 +334,7 @@ const styles = StyleSheet.create({
     selectViewBtn: {
         borderBottomColor: '#E6E8ED',
         borderBottomWidth: 1,
-        height: 50,
+        height: 55
     },
     successRateText: {
         color: '#353535',

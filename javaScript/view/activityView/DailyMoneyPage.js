@@ -18,7 +18,7 @@ import { getRedPackage, openRedPackage, withdrawLogsLatest } from '../../utils/a
 import { N } from '../../utils/router';
 import { _toFixed, djangoTime, setAndroidTime } from '../../utils/util';
 
-const { width } = Dimensions.get('window');
+const { width,height } = Dimensions.get('window');
 
 function DailyMoneyPage (props) {
     const { activityId = {}, pageInfo } = props.route.params;
@@ -71,7 +71,7 @@ function DailyMoneyPage (props) {
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
-            <ScrollView style={{ flex: 1, backgroundColor: '#EA251E' }}>
+            <ScrollView style={[{ flex: 1, backgroundColor: '#EA251E'},css.pr]}>
                 <ImageBackground source={activity5} style={[styles.dmWrap, css.pr]}>
                     <Header color={'#fff'} label={'天天领现金'} style={{ backgroundColor: 'rgba(0,0,0,0)', borderBottomWidth: 0 }} icon={header3} headerRight={
                         <Text style={{ color: '#fff' }}>活动规则</Text>
@@ -104,7 +104,6 @@ function DailyMoneyPage (props) {
                     </View>
                 </ImageBackground>
                 <RenderList history={user_history}/>
-                <Text style={styles.bottomTips}>参与更多送钱活动~</Text>
             </ScrollView>
         </SafeAreaView>
     );
@@ -154,10 +153,13 @@ function RenderList ({ history }) {
         );
     });
     return (
-        <View style={styles.recordWrap}>
-            <Text style={styles.recordTitleText}>累计记录 <Text style={styles.rttMinTitle}> 每单任务通过，可以累计额外的金币哦</Text></Text>
-            {view}
-        </View>
+      <>
+          <View style={styles.recordWrap}>
+              <Text style={styles.recordTitleText}>累计记录 <Text style={styles.rttMinTitle}> 每单任务通过，可以累计额外的金币哦</Text></Text>
+              {view}
+          </View>
+          <Text style={styles.bottomTips}>参与更多送钱活动~</Text>
+      </>
     );
 }
 
@@ -169,12 +171,12 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     dmMinTips: {
-        color: 'rgba(255,255,255,1)',
+        color: '#fff',
         fontSize: 11,
         marginTop: 10
     },
     dmWrap: {
-        height: 1377 / 1125 * width,
+        height: 2175 / 1125 * width,
         width: width
     },
     lastPop: {
@@ -243,14 +245,16 @@ const styles = StyleSheet.create({
         color: '#FFD9A0',
         fontSize: 16,
         lineHeight: 30,
-        marginBottom: 10
+        marginBottom: 10,
+        borderBottomColor:'#FF966D',
+        borderBottomWidth:1
     },
     recordWrap: {
+        marginTop:-height*.47,
+        marginLeft:'3%',
         backgroundColor: '#F3462D',
-        borderRadius: 4,
-        width: width * 0.94,
-        ...css.auto,
-        marginTop: 20,
+        borderRadius: 8,
+        width: "94%",
         padding: 15
     },
     redMaxText: {
@@ -267,10 +271,9 @@ const styles = StyleSheet.create({
         height: width * 0.74,
         width: width * 0.8,
         ...css.auto,
-        // backgroundColor: 'rgba(0,0,0,.1)',
         left: '50%',
         paddingHorizontal: 10,
-        top: '28%',
+        top: '18%',
         transform: [{ translateX: -width * 0.4 }]
     },
     riwInfoWrap: {
