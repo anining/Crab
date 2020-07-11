@@ -1,6 +1,18 @@
 import * as React from 'karet';
 import { useState, useEffect } from 'react';
-import { SafeAreaView, ScrollView, ImageBackground, TouchableOpacity, Image, StyleSheet, Text, View, Dimensions, DeviceEventEmitter } from 'react-native';
+import {
+    SafeAreaView,
+    ScrollView,
+    ImageBackground,
+    TouchableOpacity,
+    Image,
+    StyleSheet,
+    Text,
+    View,
+    Dimensions,
+    DeviceEventEmitter,
+    InteractionManager,
+} from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import with1 from '../../assets/icon/withdraw/withdraw1.png';
@@ -29,13 +41,15 @@ function WithdrawPage (props) {
     const headerRight = <Text style={{ color: '#FF6C00' }}>金币记录</Text>;
 
     useEffect(() => {
-        withdraw().then(r => {
-            if (r && !r.error && r.data) {
-                const formatGoods = formatGood(r.data);
-                setGoods(formatGoods);
-                setGoodId(formatGoods[0].withdraw_id);
-                setMoney(formatGoods[0].money);
-            }
+        InteractionManager.runAfterInteractions(() => {
+            withdraw().then(r => {
+                if (r && !r.error && r.data) {
+                    const formatGoods = formatGood(r.data);
+                    setGoods(formatGoods);
+                    setGoodId(formatGoods[0].withdraw_id);
+                    setMoney(formatGoods[0].money);
+                }
+            });
         });
     }, []);
     function formatGood (list) {
@@ -112,11 +126,11 @@ function WithdrawPage (props) {
                         <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>兑换金币<Text
                             style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text></Text>
                         <Text style={[{ fontSize: 10, color: '#999' }, css.sy]} numberOfLines={1}>连续签到可获取免手续费特权</Text>
-                        {/*<View style={{flexDirection:'row',alignItems:'center'}}>*/}
-                        {/*    <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>提现金额</Text>*/}
-                        {/*    <Text style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text>*/}
-                        {/*</View>*/}
-                        {/*<Text style={{ fontSize: 11, color: '#999' }} numberOfLines={1}>连续签到可获取免手续费特权</Text>*/}
+                        {/* <View style={{flexDirection:'row',alignItems:'center'}}> */}
+                        {/*    <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>提现金额</Text> */}
+                        {/*    <Text style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text> */}
+                        {/* </View> */}
+                        {/* <Text style={{ fontSize: 11, color: '#999' }} numberOfLines={1}>连续签到可获取免手续费特权</Text> */}
                     </View>
                     <RenderGoodItem goods={goods} setGoodId={setGoodId} goodId={goodId} setMoney={setMoney}/>
                 </View>

@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     DeviceEventEmitter,
     SafeAreaView,
-    ScrollView, UIManager, NativeModules,
+    ScrollView, UIManager, NativeModules, InteractionManager,
 } from 'react-native';
 import { getter, setter } from '../../utils/store';
 import { css } from '../../assets/style/css';
@@ -39,7 +39,7 @@ import GameHeader from '../../components/GameHeader';
 import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { bindData, getGlobal, getPath } from '../../global/global';
 import { avatarProLevelPosition, getGradeConfig, homeProLevelPosition } from '../../utils/levelConfig';
-import {AnswerPopTipsTime, DelayGetDomeTime} from '../../utils/animationConfig';
+import { AnswerPopTipsTime, DelayGetDomeTime } from '../../utils/animationConfig';
 import JRBannerView from '../../components/JRBannerView';
 import android from '../../components/Android';
 
@@ -183,7 +183,9 @@ export default class PassGamePage extends Component {
     }
 
     async componentDidMount () {
-        this._showPop();
+        InteractionManager.runAfterInteractions(() => {
+            this._showPop();
+        });
     }
 
     _renderIdiomList () {

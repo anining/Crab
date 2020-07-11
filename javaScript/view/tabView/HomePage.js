@@ -7,7 +7,7 @@ import {
     View,
     Text,
     TouchableOpacity,
-    DeviceEventEmitter, UIManager,
+    DeviceEventEmitter, UIManager, InteractionManager,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { css } from '../../assets/style/css';
@@ -76,12 +76,14 @@ export default class HomePage extends Component {
         }, HomeDelayMonitorTime);
     }
 
-    async componentDidMount () {
-        proxyRouter(this.props.navigation);
-        this._setDebounce();
-        this.delayEmitter();
-        this.debounceLottieStart();
-        await this._getNoticeNumber();
+    componentDidMount () {
+        InteractionManager.runAfterInteractions(async () => {
+            proxyRouter(this.props.navigation);
+            this._setDebounce();
+            this.delayEmitter();
+            this.debounceLottieStart();
+            await this._getNoticeNumber();
+        });
     }
 
     _debounceStart () {

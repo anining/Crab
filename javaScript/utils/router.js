@@ -1,5 +1,6 @@
 import * as U from 'karet.util';
 import { store } from './store';
+import { InteractionManager } from 'react-native';
 
 class router {
     constructor (navigation, filterRouters, authRouterName) {

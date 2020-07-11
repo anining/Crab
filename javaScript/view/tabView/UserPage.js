@@ -35,7 +35,7 @@ import { getter, clear } from '../../utils/store';
 import * as U from 'karet.util';
 import { updateSecondIncome, updateUser } from '../../utils/update';
 import { _copyStr, _toFixed } from '../../utils/util';
-import LinearGradient from "react-native-linear-gradient";
+import LinearGradient from 'react-native-linear-gradient';
 import ImageAuto from '../../components/ImageAuto';
 
 const { width } = Dimensions.get('window');
@@ -302,7 +302,13 @@ const styles = StyleSheet.create({
     },
     avatarIconWrap: {
         marginHorizontal: 15,
-        marginRight:10
+        marginRight: 10
+    },
+    bindBtn: {
+        alignItems: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center'
     },
     bindBtnView: {
         borderBottomLeftRadius: 12,
@@ -311,12 +317,6 @@ const styles = StyleSheet.create({
         right: 0,
         width: 80,
         zIndex: 9
-    },
-    bindBtn: {
-        flex:1,
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: 'center'
     },
     bindText: {
         color: '#fff',
@@ -337,11 +337,11 @@ const styles = StyleSheet.create({
 
     },
     copyBtn: {
+        alignItems: 'center',
         backgroundColor: '#FFF4E8',
+        borderRadius: 18,
         height: 16,
-        borderRadius:18,
-        alignItems:'center',
-        justifyContent:'center',
+        justifyContent: 'center',
         width: 35
     },
     copyText: {

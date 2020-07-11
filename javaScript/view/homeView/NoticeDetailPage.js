@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, SafeAreaView, ScrollView, Text } from 'react-native';
+import { Dimensions, InteractionManager, SafeAreaView, ScrollView, Text } from 'react-native';
 import { css } from '../../assets/style/css';
 import { putNotice } from '../../utils/api';
 import HTML from 'react-native-render-html';
@@ -11,14 +11,16 @@ export default class NoticeDetailPage extends Component {
         };
     }
 
-    async componentDidMount () {
-        try {
-            if ('notice_id' in this.props.route.params) {
-                await putNotice(this.props.route.params.notice_id);
+    componentDidMount () {
+        InteractionManager.runAfterInteractions(async () => {
+            try {
+                if ('notice_id' in this.props.route.params) {
+                    await putNotice(this.props.route.params.notice_id);
+                }
+            } catch (e) {
+                console.log(e);
             }
-        } catch (e) {
-            console.log(e);
-        }
+        });
     }
 
     render () {

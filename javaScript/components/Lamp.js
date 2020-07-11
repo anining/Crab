@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Animated, StyleSheet, Text, View, Easing, Dimensions, Image, } from 'react-native';
+import { Animated, StyleSheet, Text, View, Easing, Dimensions, Image, InteractionManager } from 'react-native';
 import { css } from '../assets/style/css';
 import PropTypes from 'prop-types';
 import { transformMoney } from '../utils/util';
-const { height, width } = Dimensions.get('window');
 const LAMP_HEIGHT = 28; // 单个高度
 const LAMP_BORDER_RADIUS = 14;
 const LAMP_TIME = 600;
@@ -27,10 +26,12 @@ export default class Lamp extends Component {
         this.animation = null;
     }
 
-    async componentDidMount () {
-        if (this.props.autoPlay) {
-            this.start();
-        }
+    componentDidMount () {
+        InteractionManager.runAfterInteractions(() => {
+            if (this.props.autoPlay) {
+                this.start();
+            }
+        });
     }
 
     componentWillUnmount () {

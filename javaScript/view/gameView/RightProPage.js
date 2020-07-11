@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     DeviceEventEmitter,
     SafeAreaView,
-    ScrollView
+    ScrollView, InteractionManager,
 } from 'react-native';
 import { css } from '../../assets/style/css';
 import header3 from '../../assets/icon/header/header3.png';
@@ -47,8 +47,10 @@ export default class RightProPage extends Component {
         }
     }
 
-    async componentDidMount () {
-        await this._gameErrorLog();
+    componentDidMount () {
+        InteractionManager.runAfterInteractions(async () => {
+            await this._gameErrorLog();
+        });
     }
 
     _renderIdiomList () {

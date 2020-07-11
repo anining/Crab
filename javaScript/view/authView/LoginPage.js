@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, StyleSheet, TouchableOpacity, TextInput, Text, Image, Dimensions } from 'react-native';
+import {
+    SafeAreaView,
+    View,
+    StyleSheet,
+    TouchableOpacity,
+    TextInput,
+    Text,
+    Image,
+    Dimensions,
+    InteractionManager,
+} from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import login1 from '../../assets/icon/login/login1.png';
@@ -23,11 +33,13 @@ function LoginPage () {
     const [codeText, setCodeText] = useState('获取验证码');
     const [agree, setAgree] = useState(true);
     useEffect(() => {
-        requestPermission(() => {
-            _fastLogin();
-        }, () => {
-            _fastLogin();
-        }, AppAllPermissionsAndroid); // 请求必要权限
+        InteractionManager.runAfterInteractions(() => {
+            requestPermission(() => {
+                _fastLogin();
+            }, () => {
+                _fastLogin();
+            }, AppAllPermissionsAndroid); // 请求必要权限
+        });
     }, []);
 
     async function _fastLogin (showError) {

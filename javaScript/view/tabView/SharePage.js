@@ -1,6 +1,18 @@
 import { PureComponent } from 'react';
 import * as React from 'karet';
-import { SafeAreaView, Text, Image, View, Dimensions, ScrollView, StyleSheet, ImageBackground, DeviceEventEmitter, TouchableOpacity } from 'react-native';
+import {
+    SafeAreaView,
+    Text,
+    Image,
+    View,
+    Dimensions,
+    ScrollView,
+    StyleSheet,
+    ImageBackground,
+    DeviceEventEmitter,
+    TouchableOpacity,
+    InteractionManager,
+} from 'react-native';
 import { css } from '../../assets/style/css';
 import share1 from '../../assets/icon/share/share1.png';
 import share2 from '../../assets/icon/share/share2.png';
@@ -185,11 +197,13 @@ export default class SharePage extends PureComponent {
     }
 
     async componentDidMount () {
-        if (authorization.get()) {
-            await this._awardDetail();
-        } else {
-            N.replace('VerificationStackNavigator');
-        }
+        InteractionManager.runAfterInteractions(async () => {
+            if (authorization.get()) {
+                await this._awardDetail();
+            } else {
+                N.replace('VerificationStackNavigator');
+            }
+        });
     }
 
     _renderWelfare () {
