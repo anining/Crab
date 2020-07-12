@@ -2,6 +2,8 @@ package com.rncrab.transmit;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -63,18 +65,19 @@ import java.util.HashMap;
 public class TransmitModule extends ReactContextBaseJavaModule {
     public static ReactContext myContext;
 
-    public TransmitModule(ReactApplicationContext reactContext) {
+    public TransmitModule(@NonNull ReactApplicationContext reactContext) {
         super(reactContext);
         myContext = reactContext;
     }
 
+    @NonNull
     @Override
     public String getName() {
         return "TransmitModule";
     }
 
     @ReactMethod
-    public void promiseGetChannel(final Promise promise) {
+    public void promiseGetChannel(@NonNull final Promise promise) {
         try {
             WritableMap wMap = new WritableNativeMap();
             wMap.putString("channel", CommonUtils.getChannel(myContext));
@@ -85,7 +88,7 @@ public class TransmitModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void promiseGetMobId(Promise promise) {
+    public void promiseGetMobId(@NonNull Promise promise) {
         // 设置场景参数
         HashMap<String, Object> senceParams = new HashMap<String, Object>();
         senceParams.put("key1", "value1");
@@ -115,13 +118,13 @@ public class TransmitModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void policyGrantResult(final Promise promise) {
+    public void policyGrantResult(@NonNull final Promise promise) {
         MobSDK.submitPolicyGrantResult(true, null);
         promise.resolve("已接受协议");
     }
 
     @ReactMethod
-    public void preVerifyLogin(final Promise promise) {
+    public void preVerifyLogin(@NonNull final Promise promise) {
         if (SecVerify.isVerifySupport()) {
             SecVerify.preVerify(new OperationCallback() {
                 @Override
@@ -138,7 +141,7 @@ public class TransmitModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void verifyLogin(final Promise promise) {
+    public void verifyLogin(@NonNull final Promise promise) {
         SecVerify.verify(new VerifyCallback() {
             @Override
             public void onOtherLogin() {
@@ -153,7 +156,7 @@ public class TransmitModule extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onComplete(VerifyResult data) {
+            public void onComplete(@NonNull VerifyResult data) {
                 WritableMap wMap = new WritableNativeMap();
                 wMap.putString("operator", data.getOperator());
                 wMap.putString("opToken", data.getOpToken());
@@ -162,14 +165,14 @@ public class TransmitModule extends ReactContextBaseJavaModule {
             }
 
             @Override
-            public void onFailure(VerifyException e) {
+            public void onFailure(@NonNull VerifyException e) {
                 e.getCause();
                 promise.reject("error", e.getCause());
             }
         });
     }
     @ReactMethod
-    public void getTestDeviceInfo(final Promise promise){
+    public void getTestDeviceInfo(@NonNull final Promise promise){
         WritableMap wMap = new WritableNativeMap();
         try {
             if(myContext != null){

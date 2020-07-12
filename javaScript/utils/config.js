@@ -1,6 +1,11 @@
+import * as DeviceInfo from 'react-native-device-info';
+import { API_URI_OBJ, PRIVATE_KEY_OBJ } from './apiConfig';
+const VERSION_CODE_RegExp = new RegExp(/\./g);
+/**
+ *Production Staging**/
 export const DEVELOPER = 'Staging'; // 测试 Staging 正式 Production
-export const CONSOLE_LOG = false; // true 代表开启console
 export const UA_ID = 10011;
-export const VERSION_CODE = 100;
-export const API_URL = DEVELOPER === 'Production' ? 'https://realman.librags.com/api' : 'https://dev-realman.librags.com/api';
-export const PRIVATE_KEY = DEVELOPER === 'Production' ? 'MPo2O8qZbItk6iEmyeICMOVLVSFAY1QV+uOJTt+Wi4c=' : '80TD9QXUGHOEZLkcmB5h3uSpWvqNlfoM';
+export const API_URL = API_URI_OBJ[DEVELOPER];
+export const PRIVATE_KEY = PRIVATE_KEY_OBJ[DEVELOPER];
+export const VERSION_CODE = parseInt(DeviceInfo.getVersion().replace(VERSION_CODE_RegExp, ''));
+export const SYSTEM_VERSION = parseInt(DeviceInfo.getSystemVersion());

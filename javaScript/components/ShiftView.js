@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
     Dimensions,
     StyleSheet,
@@ -8,21 +8,26 @@ import {
     Animated,
     Easing,
     UIManager,
-    Platform, InteractionManager,
+    Platform, InteractionManager, findNodeHandle
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { css } from '../assets/style/css';
 import { _debounce, _tc, setAndroidTime } from '../utils/util';
-
+import { bindData } from '../global/global';
+import BindingX from 'react-native-bindingx';
+const { height, width, scale } = Dimensions.get('window');
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 /**
  * <ShiftView startSite={[0,0]} endSite={[0,0]} duration={1000} delay={1000}/>
  * **/
-export default class ShiftView extends Component {
+export default class ShiftView extends PureComponent {
     constructor (props) {
         super(props);
+        this.state = {
+            highPerformance: bindData('highPerformance', this)
+        };
         this.animation = null;
         this.callback = this.props.callback;
         this._stop = false;
@@ -36,6 +41,9 @@ export default class ShiftView extends Component {
         this.delay = this.props.delay;
         this.nowTimer1 = null;
         this.nowTimer2 = null;
+        this.debounceAnimationStart = null;
+        this.translateX = this.props.endSite[0] - this.props.startSite[0];
+        this.translateY = this.props.endSite[1] - this.props.startSite[1];
         this.customLayoutAnimation = {
             duration: this.duration,
             create: {
@@ -53,31 +61,45 @@ export default class ShiftView extends Component {
     }
 
     componentDidMount () {
-        InteractionManager.runAfterInteractions(() => {
-            this.autoPlay && this.start();
-            this.debounceAnimationStart = _debounce(() => {
-                this._animationStart();
-            }, 500);
-        });
+        this.debounceAnimationStart = _debounce(() => {
+            this._animationStart();
+        }, 100);
+        this.debounceCallBack = _debounce(() => {
+            this.clearBindTiming();
+            this.callback && this.callback();
+        }, 100);
     }
 
     componentWillMount () {
-        this._stop = true;
-        this.animation && (() => {
-            this.animation.stop();
-            this.animation = null;
-        })();
+        try {
+            this._stop = true;
+            this.animation && (() => {
+                this.animation.stop();
+                this.animation = null;
+            })();
+            this.clearBindTiming();
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     start () {
         this._stop = false;
-        this.debounceAnimationStart();
+        this.debounceAnimationStart && this.debounceAnimationStart();
     }
 
-    _animationStart () {
-        if (!this._stop) {
-            this.nowTimer1 && this.nowTimer1.stop();
-            this.nowTimer2 && this.nowTimer2.stop();
+    clearBindTiming () {
+        this.gesToken && (() => {
+            BindingX.unbind({
+                eventType: 'timing',
+                token: this.gesToken
+            });
+            this.gesToken = null;
+        })();
+    }
+
+    _reactNativeMove () {
+        try {
             this._shiftView && this._shiftView.setNativeProps({
                 style: { left: this.props.endSite[0], top: this.props.endSite[1], opacity: 1 },
             });
@@ -86,15 +108,69 @@ export default class ShiftView extends Component {
                 _tc(() => {
                     this.callback && this.callback();
                 });
-                this._shiftView && this._shiftView.setNativeProps({
-                    style: { left: this.props.startSite[0], top: this.props.startSite[1], opacity: 0 },
-                });
+                if (!this.state.highPerformance) {
+                    this._shiftView && this._shiftView.setNativeProps({
+                        style: { left: this.props.startSite[0], top: this.props.startSite[1], opacity: 0 },
+                    });
+                }
             }, Math.abs(this.duration - 100));
-            if (this.loop && this.duration && !this._stop && this.loopTime) {
-                this.nowTimer2 = setAndroidTime(() => {
-                    !this._stop && this._animationStart();
-                }, this.duration + this.loopTime);
+        } catch (e) {
+            console.log(e, '_reactNativeMove');
+        }
+    }
+
+    androidMove () {
+        try {
+            this.clearBindTiming();
+            const duration = this.duration + 100;
+            const exit = `t>${this.duration}`;
+            const anchor = findNodeHandle(this._shiftView);
+            const gesTokenObj = BindingX.bind(
+                {
+                    eventType: 'timing',
+                    exitExpression: exit,
+                    props: [
+                        {
+                            element: anchor,
+                            property: 'transform.translateX',
+                            expression: `linear(t,0,${this.translateX * scale},${Math.abs(this.duration)})`
+                        },
+                        {
+                            element: anchor,
+                            property: 'transform.translateY',
+                            expression: `linear(t,0,${this.translateY * scale},${Math.abs(this.duration)})`
+                        },
+                        {
+                            element: anchor,
+                            property: 'opacity',
+                            expression: `(t>=${Math.abs(this.duration)})?0:1`,
+                        }
+                    ]
+                }, (e) => {
+                    if (e && (e.state === 'end' || e.state === 'exit')) {
+                        this.debounceCallBack();
+                    }
+                });
+            this.gesToken = gesTokenObj.token;
+        } catch (e) {
+            this._reactNativeMove();
+        }
+    }
+
+    _animationStart () {
+        try {
+            if (!this._stop) {
+                this.nowTimer1 && this.nowTimer1.stop();
+                this.nowTimer2 && this.nowTimer2.stop();
+                this.androidMove();
+                if (this.loop && this.duration && !this._stop && this.loopTime) {
+                    this.nowTimer2 = setAndroidTime(() => {
+                        !this._stop && this._animationStart();
+                    }, this.duration + this.loopTime);
+                }
             }
+        } catch (e) {
+            console.log(e, '_animationStart');
         }
     }
 
@@ -120,9 +196,6 @@ export default class ShiftView extends Component {
             opacity: 0,
             zIndex: 999,
         }]}>
-            {/*    onLayout={(e) => { */}
-            {/*    this.props.onLoad && this.props.onLoad(); */}
-            {/* }} */}
             {this.props.children}
         </View>;
     }

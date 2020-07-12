@@ -6,6 +6,8 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.ReactActivity;
 import com.mob.moblink.MobLink;
 import com.mob.moblink.Scene;
@@ -28,7 +30,7 @@ public class MainActivity extends ReactActivity implements SceneRestorable {
     }
 
     @Override
-    public void onReturnSceneData(Scene scene) {
+    public void onReturnSceneData(@NonNull Scene scene) {
         // 处理场景还原数据, 可以在这里做更新画面等操作
         String value1 = (String) scene.getParams().get("key1");
         String value2 = scene.getPath();

@@ -5,6 +5,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.FilterWord;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
@@ -74,7 +77,7 @@ public class JRadBannerRelativeLayout extends RelativeLayout {
     }
 
     @ReactMethod
-    public void destroy(final Promise promise) {
+    public void destroy(@NonNull final Promise promise) {
         try {
             if (mTTAd != null) {
                 //调用destroy()方法释放
@@ -97,6 +100,7 @@ public class JRadBannerRelativeLayout extends RelativeLayout {
         post(mLayoutRunnable);
     }
 
+    @NonNull
     Runnable mLayoutRunnable = () -> {
         measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY));
@@ -122,7 +126,7 @@ public class JRadBannerRelativeLayout extends RelativeLayout {
             }
 
             @Override
-            public void onNativeExpressAdLoad(List<TTNativeExpressAd> ads) {
+            public void onNativeExpressAdLoad(@Nullable List<TTNativeExpressAd> ads) {
                 if (ads == null || ads.size() == 0) {
                     return;
                 }
@@ -133,7 +137,7 @@ public class JRadBannerRelativeLayout extends RelativeLayout {
             }
 
             //绑定广告行为
-            private void bindAdListener(TTNativeExpressAd ad) {
+            private void bindAdListener(@NonNull TTNativeExpressAd ad) {
                 ad.setExpressInteractionListener(new TTNativeExpressAd.ExpressAdInteractionListener() {
                     @Override
                     public void onAdClicked(View view, int type) {
@@ -207,7 +211,7 @@ public class JRadBannerRelativeLayout extends RelativeLayout {
              * @param ad
              * @param customStyle 是否自定义样式，true:样式自定义
              */
-            private void bindDislike(TTNativeExpressAd ad, boolean customStyle) {
+            private void bindDislike(@NonNull TTNativeExpressAd ad, boolean customStyle) {
                 //使用默认个性化模板中默认dislike弹出样式
                 ad.setDislikeCallback(context.getCurrentActivity(), new TTAdDislike.DislikeInteractionCallback() {
                     @Override

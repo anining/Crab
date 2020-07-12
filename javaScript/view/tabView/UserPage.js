@@ -34,9 +34,10 @@ import user18 from '../../assets/icon/user/user18.png';
 import { getter, clear } from '../../utils/store';
 import * as U from 'karet.util';
 import { updateSecondIncome, updateUser } from '../../utils/update';
-import { _copyStr, _toFixed } from '../../utils/util';
+import { _copyStr, _if, _toFixed, identifyDebugDevelopmentEnvironment } from '../../utils/util';
 import LinearGradient from 'react-native-linear-gradient';
 import ImageAuto from '../../components/ImageAuto';
+import SetPage from '../userView/SetPage';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -88,6 +89,12 @@ const MENU_LIST = [
         remark: '',
         path: 'PrivacyPolicyPage'
     },
+    // {
+    //     icon: user12,
+    //     title: '系统设置',
+    //     remark: '',
+    //     path: 'SetPage'
+    // }
     {
         icon: user12,
         title: '退出登录',
@@ -267,12 +274,13 @@ function RenderMenu () {
         const { title, icon, path, remark } = menu;
         view.push(
             <TouchableOpacity activeOpacity={1} onPress={() => {
-                if (path === 'VerificationStackNavigator') {
-                    clear();
-                    N.replace(menu.path);
-                } else {
-                    N.navigate(menu.path);
-                }
+                // if (path === 'VerificationStackNavigator') {
+                //     clear();
+                //     N.replace(menu.path);
+                // } else {
+                //     N.navigate(menu.path);
+                // }
+                N.navigate(menu.path);
             }} style={styles.btn} key={menu.path}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image source={icon} style={styles.menuIcon}/>
@@ -280,7 +288,7 @@ function RenderMenu () {
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={{ fontSize: 13, color: '#999', marginRight: 5, ...css.sy }}>{remark}</Text>
-                    <Image source={user13} style={{ height: 13, width: 6, marginHorizontal: 6 }}/>
+                    <Image source={user13} style={{ height: 13, width: 6, marginLeft: 10 }}/>
                 </View>
             </TouchableOpacity>
         );
@@ -331,10 +339,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 50,
         justifyContent: 'space-between',
-        marginLeft: 15,
-        paddingRight: 15,
-        width: width - 10
-
+        paddingHorizontal: 15,
+        width: width
     },
     copyBtn: {
         alignItems: 'center',

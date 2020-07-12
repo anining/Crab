@@ -1,4 +1,7 @@
-import { PermissionsAndroid, Linking, Animated, Platform, YellowBox } from 'react-native';
+import {
+    PermissionsAndroid, Linking, Animated, Platform, YellowBox,
+    NativeModules,
+} from 'react-native';
 import { store } from './store';
 import RNFetchBlob from 'rn-fetch-blob';
 import CameraRoll from '@react-native-community/cameraroll';
@@ -6,7 +9,7 @@ import * as U from 'karet.util';
 import { N } from './router';
 import CryptoJS from 'crypto-js';
 import RN_FS from 'react-native-fs';
-import { API_URL, CONSOLE_LOG, PRIVATE_KEY } from './config';
+import { API_URL, PRIVATE_KEY } from './config';
 import { BALANCE_RATE } from './data';
 import { setDefaultGlobal } from '../global/global';
 import Clipboard from '@react-native-community/clipboard';
@@ -37,7 +40,7 @@ export function JsonParse (value, maxNumber = 5) {
 
 export function setConsole () {
     try {
-        if (!CONSOLE_LOG) {
+        if (!identifyDebugDevelopmentEnvironment()) {
             console.log = () => {
             };
         }
@@ -454,6 +457,14 @@ export function rangeLevel (level, rangeArray) {
     } catch (e) {
         return 1;
     }
+}
+/**
+ * 识别开发环境是否是debug开发环境
+ */
+export function identifyDebugDevelopmentEnvironment () {
+    const { scriptURL } = NativeModules.SourceCode;
+    const devEvn = scriptURL.split('&')[1];
+    return devEvn === 'dev=true';
 }
 
 export { getRequestParameter, requestPermission, transformTime, initializationStore, buildStr, parameterTransform, AesDecrypt, transformMoney };

@@ -2,6 +2,7 @@ package com.rncrab.notice;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
@@ -20,7 +21,7 @@ public class NoticeJs {
     public static ReactContext myContext;
 
     //定义发送事件的函数
-    public void sendEvent(ReactContext reactContext, String eventName, @Nullable WritableMap params) {
+    public void sendEvent(@NonNull ReactContext reactContext, @NonNull String eventName, @Nullable WritableMap params) {
         System.out.println("reactContext=" + reactContext);
 
         reactContext
@@ -28,7 +29,7 @@ public class NoticeJs {
                 .emit(eventName, params);
     }
 
-    public void sendMsg(final String msgType, final JSONObject msg) {
+    public void sendMsg(@NonNull final String msgType, final JSONObject msg) {
         new Thread(new Runnable() {
             @Override
             public void run() {

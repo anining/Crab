@@ -1,5 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Image, Linking, Text, BackHandler, Dimensions, View, TouchableOpacity, ImageBackground, StyleSheet, ScrollView, TextInput, DeviceEventEmitter } from 'react-native';
+import {
+    SafeAreaView,
+    Image,
+    Linking,
+    Text,
+    BackHandler,
+    Dimensions,
+    View,
+    TouchableOpacity,
+    ImageBackground,
+    StyleSheet,
+    ScrollView,
+    TextInput,
+    DeviceEventEmitter,
+    InteractionManager,
+} from 'react-native';
 import { css } from '../../assets/style/css';
 import task4 from '../../assets/icon/task/task4.png';
 import task5 from '../../assets/icon/task/task5.png';

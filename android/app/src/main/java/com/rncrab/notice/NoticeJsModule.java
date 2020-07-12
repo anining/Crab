@@ -1,5 +1,7 @@
 package com.rncrab.notice;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -10,12 +12,13 @@ import com.facebook.react.bridge.ReactMethod;
 
 public class NoticeJsModule extends ReactContextBaseJavaModule {
 
-    public NoticeJsModule(ReactApplicationContext reactContext) {
+    public NoticeJsModule(@NonNull ReactApplicationContext reactContext) {
 
         super(reactContext);
         NoticeJs.myContext = reactContext;
     }
 
+    @NonNull
     @Override
     public String getName() {
 

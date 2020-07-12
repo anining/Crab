@@ -63,6 +63,7 @@ import MustUpdate from '../components/MustUpdate';
 import WebViewPage from '../view/userView/WebViewPage';
 import MyMedal from '../view/userView/MyMedal';
 import SharePage from '../view/tabView/SharePage';
+import SetPage from '../view/userView/SetPage';
 
 const Stack = createStackNavigator();
 
@@ -266,6 +267,10 @@ const stackScreens = [
         name: 'SharePage',
         component: SharePage,
         title: '我的渔友',
+    }, {
+        name: 'SetPage',
+        component: SetPage,
+        title: '设置',
     }
 ];
 

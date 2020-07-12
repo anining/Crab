@@ -1,4 +1,6 @@
 package com.rncrab.verify;
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -75,7 +77,7 @@ public class SecVerifyModule extends ReactContextBaseJavaModule {
         //需要在verify之前设置
         SecVerify.OtherOAuthPageCallBack(new OAuthPageEventCallback() {
             @Override
-            public void initCallback(OAuthPageEventResultCallback cb) {
+            public void initCallback(@NonNull OAuthPageEventResultCallback cb) {
                 cb.pageOpenCallback(new PageOpenedCallback() {
                     @Override
                     public void handle() {

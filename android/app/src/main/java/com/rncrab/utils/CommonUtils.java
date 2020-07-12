@@ -5,6 +5,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.facebook.react.bridge.Promise;
 import com.mob.moblink.ActionListener;
 import com.mob.moblink.MobLink;
@@ -19,7 +22,8 @@ import java.util.zip.ZipFile;
 public class CommonUtils {
 
     //获取版本号
-    public static String getVersionName(Context context) {
+    @Nullable
+    public static String getVersionName(@NonNull Context context) {
         PackageManager manager = context.getPackageManager();
         String name = null;
         try {
@@ -32,9 +36,11 @@ public class CommonUtils {
     }
 
     //获取渠道
+    @Nullable
     private static String channel = null;
 
-    public static String getChannel(Context context) {
+    @Nullable
+    public static String getChannel(@NonNull Context context) {
         if (channel != null) {
             return channel;
         }
@@ -72,7 +78,7 @@ public class CommonUtils {
     }
 
 
-    public void getMobId(Promise promise) {
+    public void getMobId(@NonNull Promise promise) {
         // 设置场景参数
         HashMap<String, Object> senceParams = new HashMap<String, Object>();
         senceParams.put("key1", "apk");

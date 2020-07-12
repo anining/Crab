@@ -7,6 +7,9 @@
 package com.rncrab;
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
+
 import com.facebook.flipper.android.AndroidFlipperClient;
 import com.facebook.flipper.android.utils.FlipperUtils;
 import com.facebook.flipper.core.FlipperClient;
@@ -25,7 +28,7 @@ import com.facebook.react.modules.network.NetworkingModule;
 import okhttp3.OkHttpClient;
 
 public class ReactNativeFlipper {
-  public static void initializeFlipper(Context context, ReactInstanceManager reactInstanceManager) {
+  public static void initializeFlipper(@NonNull Context context, @NonNull ReactInstanceManager reactInstanceManager) {
     if (FlipperUtils.shouldEnableFlipper(context)) {
       final FlipperClient client = AndroidFlipperClient.getInstance(context);
 
@@ -39,7 +42,7 @@ public class ReactNativeFlipper {
       NetworkingModule.setCustomClientBuilder(
           new NetworkingModule.CustomClientBuilder() {
             @Override
-            public void apply(OkHttpClient.Builder builder) {
+            public void apply(@NonNull OkHttpClient.Builder builder) {
               builder.addNetworkInterceptor(new FlipperOkhttpInterceptor(networkFlipperPlugin));
             }
           });
@@ -53,7 +56,7 @@ public class ReactNativeFlipper {
         reactInstanceManager.addReactInstanceEventListener(
             new ReactInstanceManager.ReactInstanceEventListener() {
               @Override
-              public void onReactContextInitialized(ReactContext reactContext) {
+              public void onReactContextInitialized(@NonNull ReactContext reactContext) {
                 reactInstanceManager.removeReactInstanceEventListener(this);
                 reactContext.runOnNativeModulesQueueThread(
                     new Runnable() {
