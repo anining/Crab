@@ -239,6 +239,20 @@ function EndTimeView ({ detail }) {
 
 function DetailView ({ refresh, detail }) {
     const { task_category_label, unit_money, nickname, success_rate, status } = detail;
+    if (!nickname) {
+        return (
+            <View style={[styles.taskDetailTop, { borderBottomWidth: 0, height: 150 * 40 / 100, backgroundColor: '#fff', borderRadius: 8, marginTop: 15 }]}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image source={task4} style={{ height: 14, width: 14, marginRight: 5 }}/>
+                    <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>{task_category_label}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image source={task7} style={{ height: 20, width: 19, marginRight: 5 }}/>
+                    <Text style={{ color: '#FF6C00', fontSize: 24 }}>{transformMoney(unit_money, 0)}<Text style={{ fontSize: 14 }}> 金币</Text></Text>
+                </View>
+            </View>
+        );
+    }
     return (
         <View style={styles.taskDetail}>
             <View style={styles.taskDetailTop}>

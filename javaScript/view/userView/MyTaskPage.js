@@ -82,12 +82,7 @@ function L ({ type, itemHeight }) {
                                         <Text style={{ color: '#FF6C00', fontSize: 19, fontWeight: '600' }}>{transformMoney(money)} <Text style={{ fontSize: 12 }}>金币</Text></Text>
                                     </View>
                                 </View>
-                                <TouchableOpacity activeOpacity={1} style={styles.viewCenter} onPress={() => {
-                                    task(null, receive_task_id);
-                                }}>
-                                    <Text style={styles.itemViewTopName} numberOfLines={1}>账号：{account}</Text>
-                                    <Text style={{ fontSize: 12, color: '#999' }}>当前账号参与通过率：<Text style={{ color: '#FF6C00' }}>{Number.parseInt(success_rate * 100)}</Text> %</Text>
-                                </TouchableOpacity>
+                                <RenderAccount success_rate={success_rate} account={account} receive_task_id={receive_task_id}/>
                                 <TouchableOpacity activeOpacity={1} style={styles.itemViewCenter} onPress={() => {
                                     task(null, receive_task_id);
                                 }}>
@@ -105,6 +100,20 @@ function L ({ type, itemHeight }) {
                 }}
             />
         </View>
+    );
+}
+
+function RenderAccount ({ receive_task_id, account, success_rate }) {
+    if (!account) {
+        return <></>;
+    }
+    return (
+        <TouchableOpacity activeOpacity={1} style={styles.viewCenter} onPress={() => {
+            task(null, receive_task_id);
+        }}>
+            <Text style={styles.itemViewTopName} numberOfLines={1}>账号：{account}</Text>
+            <Text style={{ fontSize: 12, color: '#999' }}>当前账号参与通过率：<Text style={{ color: '#FF6C00' }}>{Number.parseInt(success_rate * 100)}</Text> %</Text>
+        </TouchableOpacity>
     );
 }
 
@@ -245,7 +254,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 40,
         justifyContent: 'flex-start',
-        marginTop: 15,
+        marginTop: 5,
         paddingLeft: 10
     },
     viewBottomBtn: {
@@ -255,7 +264,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 50,
         justifyContent: 'space-between',
-        marginTop: 15,
+        marginTop: 5,
         paddingLeft: 10,
         paddingRight: 10
     },
