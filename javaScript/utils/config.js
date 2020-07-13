@@ -9,3 +9,4 @@ export const API_URL = API_URI_OBJ[DEVELOPER];
 export const PRIVATE_KEY = PRIVATE_KEY_OBJ[DEVELOPER];
 export const VERSION_CODE = parseInt(DeviceInfo.getVersion().replace(VERSION_CODE_RegExp, ''));
 export const SYSTEM_VERSION = parseInt(DeviceInfo.getSystemVersion());
+export const REDIRECT_URI = DEVELOPER === 'Staging' ? 'https%3A%2F%2Fstagingb.libratb.com' : 'https%3A%2F%2Fbind.libratb.com';
