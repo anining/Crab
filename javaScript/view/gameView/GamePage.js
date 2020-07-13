@@ -95,6 +95,9 @@ export default class GamePage extends Component {
             this.debounceGameError = _debounce(async (str) => {
                 await gameError(str);// 打错题目
             }, 300); // 防止频繁请求
+            this.debounceUpgradeGameLevel = _debounce(async () => {
+                await this._upgradeGameLevel();// 升级
+            }, 300);
         });
     }
 
@@ -110,9 +113,7 @@ export default class GamePage extends Component {
                         myGradeLevel: getPath(['myGradeLevel'], this.state.user, 1),
                     },
                 });
-            }, 1500);
-        } else {
-            // N.goBack();
+            }, 1200);
         }
     }
 
@@ -396,7 +397,7 @@ export default class GamePage extends Component {
                         this.successNumber++;// 答对次数加1
                         if (this.successNumber >= Object.entries(this.state.answerObj).length) {
                             // 通关逻辑
-                            this._upgradeGameLevel();
+                            this.debounceUpgradeGameLevel();
                         }
                     }
                 }, 64 * moveIndex);

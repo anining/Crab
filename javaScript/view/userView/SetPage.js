@@ -26,7 +26,6 @@ export default class SetPage extends Component {
     }
 
     componentDidMount () {
-        console.log(this.state.highPerformance, 'highPerformancehighPerformance');
         this.debounceSetHigh = _debounce(() => {
             this._setHighPerformance();
         }, 500);

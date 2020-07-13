@@ -38,6 +38,7 @@ import { _copyStr, _if, _toFixed, identifyDebugDevelopmentEnvironment } from '..
 import LinearGradient from 'react-native-linear-gradient';
 import ImageAuto from '../../components/ImageAuto';
 import SetPage from '../userView/SetPage';
+import { VERSION_CODE } from '../../utils/config';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -296,6 +297,7 @@ function RenderMenu () {
     return (
         <View style={{ backgroundColor: '#fff' }}>
             {view}
+            {_if(identifyDebugDevelopmentEnvironment(), res => <Text style={styles.debugText}>测试环境-版本号:{VERSION_CODE}</Text>, () => <Text style={styles.debugText}>趣玩赚-版本号:{VERSION_CODE}</Text>)}
         </View>
     );
 }
@@ -353,6 +355,13 @@ const styles = StyleSheet.create({
     copyText: {
         color: '#FF6C00',
         fontSize: 10
+    },
+    debugText: {
+        color: '#999',
+        fontSize: 12,
+        lineHeight: 40,
+        textAlign: 'center',
+        width
     },
     inviteCode: {
         color: '#666',

@@ -299,18 +299,29 @@ function requestPermission (success, denied, PermissionsList = [PermissionsAndro
 
 // 防抖函数
 export function _debounce (func, wait) {
-    let timeout;
+    // let timeout;
+    // return function () {
+    //     const context = this;
+    //     const args = arguments;
+    //     if (timeout) {
+    //         timeout && timeout.stop();
+    //         timeout = null;
+    //     }
+    //     timeout = setAndroidTime(() => {
+    //         timeout && timeout.stop();
+    //         func.apply(context, args);
+    //     }, wait);
+    // };
+    // 立即执行版本
+    let timerId = null;
+    let flag = true;
     return function () {
-        const context = this;
-        const args = arguments;
-        if (timeout) {
-            timeout && timeout.stop();
-            timeout = null;
+        clearTimeout(timerId);
+        if (flag) {
+            func.apply(this, arguments);
+            flag = false;
         }
-        timeout = setAndroidTime(() => {
-            timeout && timeout.stop();
-            func.apply(context, args);
-        }, wait);
+        timerId = setTimeout(() => { flag = true; }, wait);
     };
 }
 

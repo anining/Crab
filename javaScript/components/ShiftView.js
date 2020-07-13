@@ -65,8 +65,8 @@ export default class ShiftView extends PureComponent {
             this._animationStart();
         }, 100);
         this.debounceCallBack = _debounce(() => {
-            this.clearBindTiming();
             this.callback && this.callback();
+            this.clearBindTiming();
         }, 100);
     }
 
@@ -89,13 +89,20 @@ export default class ShiftView extends PureComponent {
     }
 
     clearBindTiming () {
-        this.gesToken && (() => {
-            BindingX.unbind({
-                eventType: 'timing',
-                token: this.gesToken
+        try {
+            this.gesToken && (() => {
+                BindingX.unbind({
+                    eventType: 'timing',
+                    token: this.gesToken
+                });
+                this.gesToken = null;
+            })();
+            this._shiftView && this._shiftView.setNativeProps({
+                style: { opacity: 0 },
             });
-            this.gesToken = null;
-        })();
+        } catch (e) {
+            console.log(e, 'clearBindTiming');
+        }
     }
 
     _reactNativeMove () {
@@ -108,11 +115,9 @@ export default class ShiftView extends PureComponent {
                 _tc(() => {
                     this.callback && this.callback();
                 });
-                if (!this.state.highPerformance) {
-                    this._shiftView && this._shiftView.setNativeProps({
-                        style: { left: this.props.startSite[0], top: this.props.startSite[1], opacity: 0 },
-                    });
-                }
+                this._shiftView && this._shiftView.setNativeProps({
+                    style: { left: this.props.startSite[0], top: this.props.startSite[1], opacity: 0 },
+                });
             }, Math.abs(this.duration - 100));
         } catch (e) {
             console.log(e, '_reactNativeMove');
@@ -122,8 +127,8 @@ export default class ShiftView extends PureComponent {
     androidMove () {
         try {
             this.clearBindTiming();
-            const duration = this.duration + 100;
-            const exit = `t>${this.duration}`;
+            const duration = Math.abs(this.duration);
+            const exit = `t>${duration}`;
             const anchor = findNodeHandle(this._shiftView);
             const gesTokenObj = BindingX.bind(
                 {
@@ -133,17 +138,17 @@ export default class ShiftView extends PureComponent {
                         {
                             element: anchor,
                             property: 'transform.translateX',
-                            expression: `linear(t,0,${this.translateX * scale},${Math.abs(this.duration)})`
+                            expression: `easeInSine(t,0,${this.translateX * scale},${duration})`
                         },
                         {
                             element: anchor,
                             property: 'transform.translateY',
-                            expression: `linear(t,0,${this.translateY * scale},${Math.abs(this.duration)})`
+                            expression: `easeInSine(t,0,${this.translateY * scale},${duration})`
                         },
                         {
                             element: anchor,
                             property: 'opacity',
-                            expression: `(t>=${Math.abs(this.duration)})?0:1`,
+                            expression: 't<100?t/100*1):1',
                         }
                     ]
                 }, (e) => {
@@ -179,6 +184,7 @@ export default class ShiftView extends PureComponent {
             this._stop = true;
             this.nowTimer1 && this.nowTimer1.stop();
             this.nowTimer2 && this.nowTimer2.stop();
+            this.clearBindTiming();
             this.animation && (() => {
                 this.animation.stop();
                 this.animation = null;
