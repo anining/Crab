@@ -13,8 +13,8 @@ import { getTaskPlatform, updateAccount } from '../../utils/update';
 import { getter } from '../../utils/store';
 import * as U from 'karet.util';
 import { _copyStr } from '../../utils/util';
-import Button from "../../components/Button";
-import user13 from "../../assets/icon/user/user13.png";
+import Button from '../../components/Button';
+import user13 from '../../assets/icon/user/user13.png';
 
 const { width } = Dimensions.get('window');
 const { accounts, taskPlatform } = getter(['accounts', 'taskPlatform']);

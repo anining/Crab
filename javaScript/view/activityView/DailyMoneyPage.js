@@ -16,10 +16,10 @@ import Shadow from '../../components/Shadow';
 import * as Animatable from 'react-native-animatable';
 import { getRedPackage, openRedPackage, withdrawLogsLatest } from '../../utils/api';
 import { N } from '../../utils/router';
-import { _toFixed, djangoTime, setAndroidTime, transformMoney } from '../../utils/util';
+import { _toFixed, djangoTime, setAndroidTime } from '../../utils/util';
 import { AnswerPopTipsTime } from '../../utils/animationConfig';
 
-const { width,height } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 function DailyMoneyPage (props) {
     const { activityId = {}, pageInfo } = props.route.params;
@@ -72,7 +72,7 @@ function DailyMoneyPage (props) {
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
-            <ScrollView style={[{ flex: 1, backgroundColor: '#EA251E'},css.pr]}>
+            <ScrollView style={[{ flex: 1, backgroundColor: '#EA251E' }, css.pr]}>
                 <ImageBackground source={activity5} style={[styles.dmWrap, css.pr]}>
                     <Header color={'#fff'} label={'天天领现金'} style={{ backgroundColor: 'rgba(0,0,0,0)', borderBottomWidth: 0 }} icon={header3} headerRight={
                         <Text style={{ color: '#fff' }}>活动规则</Text>
@@ -156,7 +156,7 @@ function RenderList ({ history }) {
     return (
         <>
             <View style={styles.recordWrap}>
-                <Text style={styles.recordTitleText}>累积记录 <Text style={styles.rttMinTitle}> 每次参与"摸鱼夺宝"并审核通过会累积额外金币</Text></Text>
+                <Text style={styles.recordTitleText}>累计记录 <Text style={styles.rttMinTitle}> 每次参与"摸鱼夺宝"并审核通过会累积额外金币</Text></Text>
                 {view}
             </View>
             <Text style={styles.bottomTips}>参与更多送钱活动~</Text>
@@ -243,20 +243,20 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     recordTitleText: {
+        borderBottomColor: '#FF966D',
+        borderBottomWidth: 1,
         color: '#FFD9A0',
         fontSize: 16,
         lineHeight: 30,
-        marginBottom: 10,
-        borderBottomColor:'#FF966D',
-        borderBottomWidth:1
+        marginBottom: 10
     },
     recordWrap: {
-        marginTop:-height*.47,
-        marginLeft:'3%',
         backgroundColor: '#F3462D',
         borderRadius: 8,
-        width: "94%",
-        padding: 15
+        marginLeft: '3%',
+        marginTop: -height * 0.47,
+        padding: 15,
+        width: '94%'
     },
     redMaxText: {
         color: '#E13020',
@@ -272,7 +272,6 @@ const styles = StyleSheet.create({
         height: width * 0.74,
         width: width * 0.8,
         ...css.auto,
-        // backgroundColor: 'rgba(0,0,0,.1)',
         left: '50%',
         paddingHorizontal: 10,
         top: '18%',

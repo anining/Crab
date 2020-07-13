@@ -304,7 +304,7 @@ function RenderNewList ({ list = [], _newUserTask }) {
     const view = [];
 
     list.forEach((item, index) => {
-        const { new_user_task_id, task_type, add_balance } = item;
+        const { new_user_task_id, task_type, add_balance, is_finish } = item;
         view.push(
             <View style={[styles.answerItemWrap, css.flex, css.sp, { borderBottomWidth: index + 1 >= list.length ? 0 : 1 }]} key={new_user_task_id}>
                 <View style={[css.flex, styles.aiwLeft, css.js]}>
@@ -351,8 +351,7 @@ function RenderNewBtn ({ item, _newUserTask }) {
     }
 
     const view = U.mapValue(id => {
-        const local1 = asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`);
-        const localArray = [false, local1, id, false];
+        const localArray = [false, local, id, false];
         const status = is_finish ? 3 : localArray[task_type] ? 2 : 5;
         const btnText = is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成';
         const path = NEW_USER_TASK_TYPE[task_type].path;

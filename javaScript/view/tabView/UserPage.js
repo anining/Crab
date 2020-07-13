@@ -367,12 +367,12 @@ const styles = StyleSheet.create({
         color: '#666',
         fontSize: 10,
         marginRight: 10,
-        ...css.sy,
+        ...css.sy
     },
     menuIcon: {
         height: 20,
         marginRight: 5,
-        width: 20,
+        width: 20
     },
     moneyText: {
         color: '#fff',
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingLeft: 10,
         paddingRight: 10,
-        width,
+        width
     },
     moneyViewBottom: {
         alignItems: 'center',
@@ -424,20 +424,20 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         height: 120,
         marginBottom: 15,
-        marginTop: 15,
+        marginTop: 15
     },
     myTaskBtn: {
         alignItems: 'center',
         height: '100%',
         justifyContent: 'center',
-        width: '25%',
+        width: '25%'
     },
     myTaskBtnIcon: {
         height: 28.5,
-        width: 24 / 25.5 * 28.5,
+        width: 24 / 25.5 * 28.5
     },
     myTaskBtnText: {
-        fontSize: 12,
+        fontSize: 12
     },
     myTaskTitle: {
         color: '#222',
@@ -473,8 +473,7 @@ const styles = StyleSheet.create({
     userCardTop: {
         alignItems: 'flex-end',
         flexDirection: 'row',
-        justifyContent: 'flex-start',
-        marginBottom: 2
+        justifyContent: 'flex-start'
     },
     userDetailView: {
         alignItems: 'center',
@@ -482,7 +481,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 100,
         justifyContent: 'space-between',
-        width,
+        width
     },
     userId: {
         color: '#999',
@@ -493,15 +492,15 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '800',
         marginRight: 10,
-        maxWidth: 120,
+        maxWidth: 120
     },
     withDrawBtn: {
         borderColor: '#fff',
         borderRadius: 18,
         borderWidth: 1,
         height: 30,
-        width: 78,
-    },
+        width: 78
+    }
 });
 
 export default UserPage;
