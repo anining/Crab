@@ -326,12 +326,8 @@ function RenderNewList ({ list = [], _newUserTask }) {
 }
 
 function RenderNewBtn ({ item, _newUserTask }) {
-    const [local, setLocal] = useState(false);
+    const { new_user_video } = getter(['new_user_video']);
     const { is_finish, task_type, new_user_task_id, add_balance } = item;
-
-    useEffect(() => {
-        asyncStorage.getItem(`NEW_USER_TASK_TYPE1${user_id.get()}`).then(r => setLocal(r));
-    }, []);
 
     function getReward () {
         getNewUserTask(new_user_task_id).then(r => {
@@ -350,31 +346,33 @@ function RenderNewBtn ({ item, _newUserTask }) {
         });
     }
 
-    const view = U.mapValue(id => {
-        const localArray = [false, local, id, false];
-        const status = is_finish ? 3 : localArray[task_type] ? 2 : 5;
-        const btnText = is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成';
-        const path = NEW_USER_TASK_TYPE[task_type].path;
-        switch (status) {
-        case 2:return <Text style={styles.todoTaskText} onPress={getReward}>{btnText}</Text>;
-        case 5:return (
-            <Text style={styles.todoTaskText} onPress={ () => {
-                if (path === 'TaskDetailPage') {
-                    const localTaskPlatform = taskPlatform.get() || [];
-                    const local = localTaskPlatform.filter(platform => platform.accounts.length || !platform.need_bind);
-                    if (local.length) {
-                        task(local[0].platform_category);
+    const view = U.mapValue(id => <>{
+        U.mapValue(v => {
+            const localArray = [false, v, id, false];
+            const status = is_finish ? 3 : localArray[task_type] ? 2 : 5;
+            const btnText = is_finish ? '已完成' : localArray[task_type] ? '领取奖励' : '去完成';
+            const path = NEW_USER_TASK_TYPE[task_type].path;
+            switch (status) {
+            case 2:return <Text style={styles.todoTaskText} onPress={getReward}>{btnText}</Text>;
+            case 5:return (
+                <Text style={styles.todoTaskText} onPress={ () => {
+                    if (path === 'TaskDetailPage') {
+                        const localTaskPlatform = taskPlatform.get() || [];
+                        const local = localTaskPlatform.filter(platform => platform.accounts.length || !platform.need_bind);
+                        if (local.length) {
+                            task(local[0].platform_category);
+                        } else {
+                            N.navigate('AccountHomePage');
+                        }
                     } else {
-                        N.navigate('AccountHomePage');
+                        N.navigate(path);
                     }
-                } else {
-                    N.navigate(path);
-                }
-            }}>{btnText}</Text>
-        );
-        default:return <Shadow style={styles.todoBtn} color={'#d43912'}><Text style={styles.todoBtnText}>{btnText}</Text></Shadow>;
-        }
-    }, openid);
+                }}>{btnText}</Text>
+            );
+            default:return <Shadow style={styles.todoBtn} color={'#d43912'}><Text style={styles.todoBtnText}>{btnText}</Text></Shadow>;
+            }
+        }, new_user_video)
+    }</>, openid);
 
     return <>{view}</>;
 }
