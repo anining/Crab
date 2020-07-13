@@ -43,7 +43,7 @@ import pop3 from '../../assets/icon/pop/pop3.png';
 import { getActivityDetail, getTaskPlatform, task, updateSecondIncome, updateUser } from '../../utils/update';
 import toast from '../../utils/toast';
 
-// btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去做任务6去绑定
+// btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去摸鱼夺宝6去绑定
 const { width } = Dimensions.get('window');
 const { banner, signConfig, activityObj, openid, authorization, today_pass_num, taskPlatform, user_id, signDayNumber } = getter(['banner', 'signConfig', 'authorization', 'activityObj', 'user.openid', 'user.today_pass_num', 'user.user_id', 'taskPlatform', 'signDayNumber']);
 const NEW_USER_TASK_TYPE = {
@@ -53,12 +53,12 @@ const NEW_USER_TASK_TYPE = {
         path: 'NoviceVideoPage'
     },
     2: {
-        label: '绑定账号领金币',
+        label: '绑定微信领金币',
         icon: answer3,
         path: 'WeChatBindPage'
     },
     3: {
-        label: '做任务得奖励',
+        label: '摸鱼夺宝得奖励',
         icon: answer13,
         path: 'TaskDetailPage'
     }
@@ -161,7 +161,7 @@ function AnswerPage () {
             }>
                 <Slider data={banner.get()} height={width * 0.29} autoplay={true} onPress={item => bannerAction(item.category, item.link, item.title)}/>
                 <View style={styles.answerWrap}>
-                    <ComTitle title={'每日签到'} minTitle={<Text style={css.minTitle}>连续签到得 <Text style={{ color: '#FF6C00' }}>提现免手续费特权卡!</Text></Text>}/>
+                    <ComTitle title={'每日签到'} minTitle={<Text style={[css.minTitle, css.sy]}>连续签到得 <Text style={[{ color: '#FF6C00' }, css.sy]}>兑换免手续费特权卡!</Text></Text>}/>
                     <RenderDaySign isSign={isSign} signDay={signDay} setSignDay={setSignDay}/>
                 </View>
                 <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
@@ -188,7 +188,7 @@ function Reward ({ newUser = [], _newUserTask }) {
 }
 
 function RenderDaySign ({ signDay, isSign, setSignDay }) {
-    const [signBtnText, setSignBtnText] = useState('签到领钱');
+    const [signBtnText, setSignBtnText] = useState('签到');
     const [hadSign, setHadSign] = useState(false);
     const view = [];
     const nowTime = moment(new Date()).format('MM-DD');
@@ -207,7 +207,7 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: pop5,
                     tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{ret.prop.label}</Text> </Text>,
-                    minTips: '请在"我的-立即提现-资金记录"查看收益详情',
+                    minTips: '请在"我的-立即兑换-金币记录"查看收益详情',
                     type: 'oneBtn',
                     rt: '我知道了',
                 }}/>);
@@ -215,7 +215,7 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: pop5,
                     tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{transformMoney(ret.data.add_balance, 0)}金币</Text> </Text>,
-                    minTips: '请在"我的-立即提现-资金记录"查看收益详情',
+                    minTips: '请在"我的-立即兑换-金币记录"查看收益详情',
                     type: 'oneBtn',
                     rt: '我知道了',
                 }}/>);
@@ -227,6 +227,11 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
         } else if (ret.error === 3) {
             setSignBtnText('已签到');
             setHadSign(true);
+        } else if (ret.error === 8) {
+            DeviceEventEmitter.emit('answerScroll', 'end');
+            DeviceEventEmitter.emit('comTitlePop', {
+                key: 'taskTips', str: '通过10次"摸鱼夺宝"后即可签到~'
+            });
         }
     }
 
@@ -237,7 +242,7 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
         <View style={[css.flex, css.sp, styles.signAllWrap]} key="RenderDaySign-2">
             <View style={[css.flex, css.fw, styles.signTipsWrap]}>
                 <Text style={[styles.signTipsText, styles.maxSTT]}>完成进度: <Text style={{ color: '#FF6C00' }} karet-lift>{U.ifElse(R.equals(today_pass_num, undefined), 0, today_pass_num)}</Text>/10</Text>
-                <Text style={[styles.signTipsText]}>提交并通过10单任务即可签到</Text>
+                <Text style={[styles.signTipsText, { ...css.sy }]}>通过10次"摸鱼夺宝"即可签到</Text>
             </View>
             <Button key={`${signBtnText}${signDay}`} width={120} name={signBtnText} disable={hadSign} shadow={'#ff0008'} onPress={async (callback) => {
                 await _sign(callback);
@@ -297,7 +302,7 @@ function RenderNewList ({ list = [], _newUserTask }) {
     const view = [];
 
     list.forEach((item, index) => {
-        const { new_user_task_id, task_type, add_balance } = item;
+        const { new_user_task_id, task_type, add_balance, is_finish } = item;
         view.push(
             <View style={[styles.answerItemWrap, css.flex, css.sp, { borderBottomWidth: index + 1 >= list.length ? 0 : 1 }]} key={new_user_task_id}>
                 <View style={[css.flex, styles.aiwLeft, css.js]}>
@@ -382,7 +387,7 @@ function RenderTaskView () {
         <>
             <View style={{ height: 15, backgroundColor: '#f8f8f8' }}/>
             <View style={[styles.answerWrap, { borderBottomWidth: 20, borderBottomColor: '#f8f8f8' }]}>
-                <ComTitle title={'领金币'} emitterKey={'taskTips'} canTips={true}/>
+                <ComTitle title={'摸鱼夺宝'} emitterKey={'taskTips'} canTips={true}/>
                 <RenderList />
             </View>
         </>
@@ -391,21 +396,21 @@ function RenderTaskView () {
 
 function RenderList () {
     function searchAccount (accounts, need_bind) {
-        let name = '绑定做单账号';
+        let name = '绑定账号';
         let btnText = '绑定账号';
         let btnStatus = 6;
         if (need_bind) {
             accounts.forEach(account => {
                 const { is_current, nickname } = account;
                 if (is_current) {
-                    name = `做单账号：${nickname}`;
-                    btnText = '去做任务';
+                    name = `账号：${nickname}`;
+                    btnText = '摸鱼夺宝';
                     btnStatus = 5;
                 }
             });
         } else {
             name = '';
-            btnText = '去做任务';
+            btnText = '摸鱼夺宝';
             btnStatus = 5;
         }
 
@@ -445,16 +450,16 @@ function RenderBtn ({ item }) {
                 if (data.length) {
                     DeviceEventEmitter.emit('showPop', <Choice info={{
                         icon: pop8,
-                        tips: '您有一个任务在进行，最多只能同时领取一个任务！',
-                        rt: '继续任务',
-                        lt: '放弃任务',
+                        tips: '您正在参与摸鱼夺宝',
+                        rt: '继续',
+                        lt: '放弃',
                         rc: () => {
                             task(platform_category);
                         },
                         lc: () => {
                             data.forEach(task => {
                                 giveUp(task.receive_task_id).then(r => {
-                                    !r.error && toast('放弃任务成功!');
+                                    !r.error && toast('放弃成功');
                                 });
                             });
                         }

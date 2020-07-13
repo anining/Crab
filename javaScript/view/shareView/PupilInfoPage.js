@@ -76,7 +76,7 @@ function PupilInfoPage () {
                         </View>
                         <RenderData today={today} yesterday={yesterday} total={total}/>
                         <View style={[styles.pupListWrap, css.flex, css.sp]}>
-                            <RenderShareTitle title="徒弟列表" icon={pupil4} width={200}/>
+                            <RenderShareTitle title="渔友列表" icon={pupil4} width={200}/>
                             {/* <Text style={styles.pupListTips}>总贡献排序</Text> */}
                         </View>
                         <RenderChild children={children}/>
@@ -120,8 +120,8 @@ function RenderChild ({ children }) {
                     <Text style={{ color: 'rgba(85,85,85,1)' }}>累计贡献金币：<Text style={{ color: 'rgba(51,51,51,1)' }}>{transformMoney(total_contribution, 2)}</Text></Text>
                 </View>
                 <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
-                    <Text style={{ color: 'rgba(85,85,85,1)' }}>他的徒弟总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{children_num}</Text></Text>
-                    <Text style={{ color: 'rgba(85,85,85,1)' }}>他的做单总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{total_pass_num}</Text></Text>
+                    <Text style={{ color: 'rgba(85,85,85,1)' }}>他的渔友总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{children_num}</Text></Text>
+                    <Text style={{ color: 'rgba(85,85,85,1)' }}>摸鱼夺宝总数：<Text style={{ color: 'rgba(51,51,51,1)' }}>{total_pass_num}</Text></Text>
                 </View>
             </View>
         );
@@ -181,10 +181,10 @@ function RenderForm ({ children_income = 0, children_num = 0, disciple_income = 
     return (
         <View style={styles.formWrap}>
             <View style={[styles.formHeaderWrap, css.flex]}>
-                <Text style={styles.fhwText}>徒弟人数</Text>
-                <Text style={styles.fhwText}>徒孙人数</Text>
-                <Text style={styles.fhwText}>徒弟贡献</Text>
-                <Text style={styles.fhwText}>徒孙贡献</Text>
+                <Text style={styles.fhwText}>渔友人数</Text>
+                <Text style={styles.fhwText}>渔小友人数</Text>
+                <Text style={styles.fhwText}>渔友贡献</Text>
+                <Text style={styles.fhwText}>渔小友贡献</Text>
             </View>
             <View style={[styles.formLineWrap, css.flex]}>
                 <Text style={styles.fhwLineText}>{children_num || 0}</Text>
@@ -266,7 +266,7 @@ function ParentView ({ parent, _childDetail }) {
             <ImageBackground source={pupil8} style={[styles.infoHeader, css.pa, { justifyContent: 'space-around' }]}>
                 <RenderShareTitle title="我的师父" icon={pupil5}/>
                 <View style={[css.flexRCSB, styles.bindView, { justifyContent: 'center' }]}>
-                    <Text style={{ fontWeight: '500', color: '#353535' }}>您没有绑定师父！您已提现过一次，不可绑定师父！</Text>
+                    <Text style={{ fontWeight: '500', color: '#353535' }}>您没有绑定师父！您已兑换过一次，不可绑定师父！</Text>
                 </View>
             </ImageBackground>
         );

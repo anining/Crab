@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Animated, StyleSheet, Text, View, Easing, Dimensions, Image, } from 'react-native';
 import { css } from '../assets/style/css';
 import PropTypes from 'prop-types';
+import { transformMoney } from '../utils/util';
 const { height, width } = Dimensions.get('window');
 const LAMP_HEIGHT = 28; // 单个高度
 const LAMP_BORDER_RADIUS = 14;
@@ -85,7 +86,7 @@ export default class Lamp extends Component {
                                     lampView.push(
                                         <Text style={[styles.lampItem, {
                                             color: this.color
-                                        }]} key={index} numberOfLines={1} > 恭喜 <Text style={{ color: this.color1 }}> {item.name} </Text>成功领取现金 <Text style={{ color: this.color1 }}> {item.money} 元 </Text></Text>,
+                                        }]} key={index} numberOfLines={1} > 恭喜 <Text style={{ color: this.color1 }}> {item.name} </Text>成功兑换 <Text style={{ color: this.color1 }}> {transformMoney(item.money, 0)}</Text> 金币</Text>,
                                     );
                                 });
                                 return lampView;

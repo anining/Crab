@@ -62,6 +62,7 @@ import NoviceVideoPage from '../view/otherView/NoviceVideoPage';
 import MustUpdate from '../components/MustUpdate';
 import WebViewPage from '../view/userView/WebViewPage';
 import MyMedal from '../view/userView/MyMedal';
+import SharePage from '../view/tabView/SharePage';
 
 const Stack = createStackNavigator();
 
@@ -69,7 +70,7 @@ const stackScreens = [
     {
         name: 'WithdrawRecordsPage',
         component: WithdrawRecordsPage,
-        title: '提现记录',
+        title: '兑换记录',
     },
     {
         name: 'WithdrawPage',
@@ -94,7 +95,7 @@ const stackScreens = [
     {
         name: 'WithdrawAliPayPage',
         component: WithdrawAliPayPage,
-        title: '提现到支付宝',
+        title: '兑换到支付宝',
     },
     {
         name: 'WeChatBindPage',
@@ -104,7 +105,7 @@ const stackScreens = [
     {
         name: 'MyTaskPage',
         component: MyTaskPage,
-        title: '我的任务',
+        title: '摸鱼夺宝记录',
     },
     {
         name: 'HelpCenterPage',
@@ -119,7 +120,7 @@ const stackScreens = [
     {
         name: 'FundingRecordsPage',
         component: FundingRecordsPage,
-        title: '资金记录',
+        title: '金币记录',
     },
     {
         name: 'FeedBackRecordsPage',
@@ -204,7 +205,7 @@ const stackScreens = [
     {
         name: 'TaskDetailPage',
         component: TaskDetailPage,
-        title: '任务信息',
+        title: '摸鱼夺宝',
     },
     {
         name: 'ErrorPage',
@@ -260,6 +261,11 @@ const stackScreens = [
         name: 'MyMedal',
         component: MyMedal,
         title: '我的勋章',
+    },
+    {
+        name: 'SharePage',
+        component: SharePage,
+        title: '我的渔友',
     }
 ];
 

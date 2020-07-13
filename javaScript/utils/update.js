@@ -177,7 +177,7 @@ function taskDetail (receive_task_id) {
     taskReceiveDetail(receive_task_id).then(r => {
         console.log(r, '==========taskReceiveDetail');
         if (r.error) {
-            toast(r.msg || '当前做任务人数过多,稍后再试');
+            toast(r.msg || '当前摸鱼夺宝人数过多,稍后再试');
         } else {
             const { data: detail } = r;
             N.navigate('TaskDetailPage', { detail, account: undefined });
@@ -188,7 +188,7 @@ export function task (category, receive_task_id) {
     if (category) {
         getTask(category).then(r => {
             if (r.error) {
-                toast(r.msg || '当前做任务人数过多,稍后再试');
+                toast(r.msg || '当前摸鱼夺宝人数过多,稍后再试');
                 error === 9 && N.navigate('AccountHomePage');
             } else {
                 taskDetail(r.data.receive_task_id);

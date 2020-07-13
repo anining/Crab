@@ -134,7 +134,7 @@ function Popup ({ money = 0, twice = 0 }) {
         return (
             <ImageBackground source={task11} style={{ height: width * 0.8 * 416 / 322, width: width * 0.8 }}>
                 <Text numberOfLines={1} style={styles.popupTitle}>{money} <Text style={{ fontSize: 18, fontWeight: '400' }}>元</Text></Text>
-                <Text numberOfLines={1} style={styles.popupText}>加油哦！再做10个任务</Text>
+                <Text numberOfLines={1} style={styles.popupText}>加油哦！再参与次摸鱼夺宝</Text>
                 <Text numberOfLines={1} style={styles.popupText}>至少还能再开<Text style={{ color: '#FF3B00' }}>{twice}元</Text></Text>
             </ImageBackground>
         );

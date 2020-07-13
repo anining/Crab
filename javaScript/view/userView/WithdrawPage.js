@@ -15,7 +15,7 @@ import { postWithdraw, withdraw } from '../../utils/api';
 import toast from '../../utils/toast';
 import Choice from '../../components/Choice';
 import { BALANCE_RATE } from '../../utils/data';
-import { _debounce } from '../../utils/util';
+import { _debounce, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
 
 const { width } = Dimensions.get('window');
@@ -26,7 +26,7 @@ function WithdrawPage (props) {
     const [money, setMoney] = useState();
     const [goods, setGoods] = useState([]);
     const [payType, setPayType] = useState('wx');
-    const headerRight = <Text style={{ color: '#FF6C00' }}>资金记录</Text>;
+    const headerRight = <Text style={{ color: '#FF6C00' }}>金币记录</Text>;
 
     useEffect(() => {
         withdraw().then(r => {
@@ -55,7 +55,7 @@ function WithdrawPage (props) {
                 if (r && !r.error) {
                     DeviceEventEmitter.emit('showPop', <Choice info={{
                         icon: with10,
-                        tips: '提现申请成功，请耐心等待审核。一般1个工作日内审核完成。',
+                        tips: '兑换申请成功，请耐心等待审核。一般1个工作日内审核完成。',
                         type: 1,
                         rc: () => {
                             N.goBack();
@@ -94,16 +94,16 @@ function WithdrawPage (props) {
                 <ImageBackground source={with1} style={styles.moneyView}>
                     <View style={styles.moneyViewTop}>
                         <Text karet-lift style={{ fontSize: 25, color: '#fff' }}>{balance}</Text>
-                        <Text style={{ fontSize: 11, color: '#fff' }}>可提现收益(金币)</Text>
+                        <Text style={{ fontSize: 11, color: '#fff' }}>可兑换收益(金币)</Text>
                     </View>
                     <View style={styles.moneyViewBottom}>
                         <View style={[styles.moneyViewItem, { borderRightWidth: 1, borderRightColor: '#FFF' }]}>
                             <Text karet-lift style={{ fontWeight: '800', color: '#fff' }}>{today_income}</Text>
-                            <Text style={{ fontSize: 11, color: '#fff' }}>今日收益(金币)</Text>
+                            <Text style={[{ fontSize: 11, color: '#fff' }, css.sy]}>今日收益(金币)</Text>
                         </View>
                         <View style={styles.moneyViewItem}>
                             <Text karet-lift style={{ fontWeight: '800', color: '#fff' }}>{total_income}</Text>
-                            <Text style={{ fontSize: 11, color: '#fff' }}>总收益(金币)</Text>
+                            <Text style={[{ fontSize: 11, color: '#fff' }, css.sy]}>总收益(金币)</Text>
                         </View>
                     </View>
                 </ImageBackground>
@@ -114,16 +114,19 @@ function WithdrawPage (props) {
                             <Text style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text>
                         </View>
                         <Text style={{ fontSize: 11, color: '#999' }} numberOfLines={1}>连续签到可获取免手续费特权</Text>
+                        <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>兑换金币<Text
+                            style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text></Text>
+                        <Text style={[{ fontSize: 10, color: '#999' }, css.sy]} numberOfLines={1}>连续签到可获取免手续费特权</Text>
                     </View>
                     <RenderGoodItem goods={goods} setGoodId={setGoodId} goodId={goodId} setMoney={setMoney}/>
                 </View>
                 <View style={styles.withDrawView}>
                     <View style={styles.withDrawViewTitle}>
-                        <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>提现到</Text>
+                        <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>兑换到</Text>
                         <TouchableOpacity activeOpacity={1} onPress={() => {
                             N.navigate('WithdrawRecordsPage');
                         }}>
-                            <Text style={{ fontSize: 12, color: '#FF6C00' }}>提现记录</Text>
+                            <Text style={{ fontSize: 12, color: '#FF6C00' }}>兑换记录</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.withDrawType}>
@@ -139,20 +142,20 @@ function WithdrawPage (props) {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <Text numberOfLines={1} style={styles.title}>提现说明：</Text>
-                <Text numberOfLines={1} style={styles.text}>1.提现前请先绑定微信账号，微信账号绑定后不能修改。</Text>
-                <Text numberOflines={1} style={styles.text}>2.1元 = {BALANCE_RATE}金币。通过做单、活动、收徒等获得金币。</Text>
-                <Text numberOflines={1} style={styles.text}>3.首单1元起提；第二单5元起提；之后每单10元起提。</Text>
-                <Text numberOflines={1} style={styles.text}>4.提现审核成功后到账，一般1个工作日内审核完成。</Text>
-                <Text numberOflines={1} style={styles.text}>5.提现审核成功后立即到账，可以在“提现记录”查看提现状态。</Text>
-                <Text numberOflines={1} style={styles.text}>6.如果微信账号不能正常提现，请使用支付账户提现。</Text>
-                <Text numberOflines={1} style={styles.text}>7.支付宝账号和姓名必须匹配，否则提现不会到账。</Text>
-                <Text numberOflines={1} style={[styles.text, { paddingBottom: 50 }]}>8.每天每档只能提现一次。</Text>
+                <Text numberOfLines={1} style={styles.title}>兑换说明：</Text>
+                <Text numberOfLines={1} style={styles.text}>1.兑换前请先绑定微信账号，微信账号绑定后不能修改。</Text>
+                <Text numberOflines={1} style={styles.text}>2.1元 = {BALANCE_RATE}金币。通过"摸鱼夺宝"、活动、渔友等获得金币。</Text>
+                <Text numberOflines={1} style={styles.text}>3.首次1w起兑换；第二次5w金币起；之后每次10w起。</Text>
+                <Text numberOflines={1} style={styles.text}>4.兑换审核成功后到账，一般1个工作日内审核完成。</Text>
+                <Text numberOflines={1} style={styles.text}>5.兑换审核成功后立即到账，可以在“兑换记录”查看兑换状态。</Text>
+                <Text numberOflines={1} style={styles.text}>6.如果微信账号不能正常兑换，请使用支付账户兑换。</Text>
+                <Text numberOflines={1} style={styles.text}>7.支付宝账号和姓名必须匹配，否则兑换不会到账。</Text>
+                <Text numberOflines={1} style={[styles.text, { paddingBottom: 30 }]}>8.每天每档只能兑换一次。</Text>
             </ScrollView>
-            <Button type={2} name={'立即提现'} onPress={(callback) => {
+            <Button type={2} name={'立即兑换'} onPress={(callback) => {
                 try {
                     if (!goodId) {
-                        toast('提现失败!');
+                        toast('兑换失败!');
                         callback();
                         return;
                     }
@@ -189,8 +192,8 @@ function RenderGoodItem ({ goods, setGoodId, setMoney, goodId }) {
                 setMoney(money);
             }} key={withdraw_id} style={[styles.goodItem, { borderColor: value ? '#FF6C00' : '#D0D0D0', backgroundColor: value ? '#FFF5F0' : '#fff' }]}>
                 <RenderGoodOnceView once={!is_withdraw && all_times === 1}/>
-                <Text style={styles.goodMoney}>{good.money}元</Text>
-                <Text style={{ fontSize: 12, color: ext_fee ? '#999' : '#FF6C00' }}>{ext_fee ? `手续费：${ext_fee}元` : '免手续费'}</Text>
+                <Text style={styles.goodMoney}>{transformMoney(good.money, 0)}金币</Text>
+                <Text style={{ fontSize: 10, color: ext_fee ? '#999' : '#FF6C00', ...css.sy }}>{ext_fee ? `手续费：${transformMoney(ext_fee, 0)}金币` : '免手续费'}</Text>
             </TouchableOpacity>,
         );
     });

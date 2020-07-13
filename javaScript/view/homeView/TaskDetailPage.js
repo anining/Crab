@@ -36,7 +36,7 @@ const { total_task_num, today_pass_num, activityObj } = getter(['user.total_task
 const { width } = Dimensions.get('window');
 const MENU_STATUS = {
     1: {
-        text: '提交任务',
+        text: '提交',
         color: '#fff',
         disabled: false
     },
@@ -100,7 +100,6 @@ function TaskDetailPage (props) {
     function refresh () {
         const { receive_task_id } = detail;
         taskReceiveDetail(receive_task_id).then(r => {
-            console.log(r, '===任务详情');
             if (r.error) {
                 N.goBack();
             } else {
@@ -133,8 +132,8 @@ function TaskDetailPage (props) {
                 DeviceEventEmitter.emit('showPop',
                     <Choice info={{
                         icon: pop3,
-                        tips: `再做 ${number} 个任务就可以拆红包了！`,
-                        minTips: '您确定要返回首页(自动放弃任务)吗？',
+                        tips: `再参与 ${number} 次就可以拆红包了`,
+                        minTips: '您确定要返回首页(自动放弃)吗？',
                         lt: '返回首页',
                         lc: () => {
                             giveUp(detail.receive_task_id).then(() => {
@@ -143,7 +142,7 @@ function TaskDetailPage (props) {
                             updateUser();
                             N.goBack();
                         },
-                        rt: '继续任务'
+                        rt: '继续'
                     }} />);
             } else {
                 taskReceive(1, 10, 1).then(() => updateUser());
@@ -156,7 +155,7 @@ function TaskDetailPage (props) {
 
     return (
         <SafeAreaView style={[css.safeAreaView]}>
-            <Header label={'任务信息'} backOnPress={backClick}/>
+            <Header label={'摸鱼夺宝'} backOnPress={backClick}/>
             <ScrollView style={{ backgroundColor: '#F8F8F8' }} ref={r => {
                 r && setSRef(r);
             }}>
@@ -182,13 +181,13 @@ function EndTimeView ({ detail }) {
             dom: <Choice info={{
                 icon: pop3,
                 tips: '赏金近在咫尺啦~',
-                minTips: '确定要放弃任务吗？',
-                lt: '放弃任务',
-                rt: '继续任务',
+                minTips: '确定要放弃吗？',
+                lt: '放弃',
+                rt: '继续',
                 lc: () => {
                     giveUp(receive_task_id).then(r => {
                         if (!r.error) {
-                            toast('放弃任务成功!');
+                            toast('放弃成功!');
                             N.goBack();
                         }
                     });
@@ -212,12 +211,12 @@ function EndTimeView ({ detail }) {
                     <CountDown time={+new Date(djangoTime(finish_deadline))} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }} key={receive_task_id} callback={() => N.goBack()}/>
                 </View>
                 <TouchableOpacity onPress={apiGiveUp} style={styles.giveUpBtn}>
-                    <Text style={{ color: '#fff', fontSize: 12, lineHeight: 25, textAlign: 'center' }}>放弃任务</Text>
+                    <Text style={{ color: '#fff', fontSize: 12, lineHeight: 25, textAlign: 'center' }}>放弃</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.endTimeViewItem}>
                 <Text style={{ color: '#fff', fontSize: 12 }}>审核时间：{AUDIT_TYPE[audit_type] || '普通审核'}</Text>
-                <Text style={{ color: '#fff', fontSize: 12 }}>超时未提交自动放弃任务</Text>
+                <Text style={{ color: '#fff', fontSize: 12 }}>超时未提交自动放弃</Text>
             </View>
         </ImageBackground>
     );
@@ -239,11 +238,11 @@ function DetailView ({ refresh, detail }) {
             </View>
             <View style={styles.taskDetailBottom}>
                 <View style={styles.DetailBV}>
-                    <Text style={{ color: '#222' }}>做单账号：<Text style={{ color: '#262626', fontSize: 14, fontWeight: '500' }}>{nickname}</Text></Text>
-                    <Text style={{ color: '#999', fontSize: 12 }}>账号任务通过率：<Text style={{ color: '#FF6C00', fontSize: 14, fontWeight: '500' }}>{Number.parseInt(success_rate * 100) || 0}%</Text></Text>
+                    <Text style={{ color: '#222' }}>账号：<Text style={{ color: '#262626', fontSize: 14, fontWeight: '500' }}>{nickname}</Text></Text>
+                    <Text style={{ color: '#999', fontSize: 12 }}>账号通过率：<Text style={{ color: '#FF6C00', fontSize: 14, fontWeight: '500' }}>{Number.parseInt(success_rate * 100) || 0}%</Text></Text>
                 </View>
                 <View style={styles.DetailBV}>
-                    <Text style={{ color: '#999', fontSize: 12 }}>通过率低于20%时，建议切换账号做单。</Text>
+                    <Text style={{ color: '#999', fontSize: 12 }}>通过率低于20%时，建议切换账号。</Text>
                     <TouchableOpacity onPress={() => {
                         status === 1 && N.navigate('AccountHomePage', { refresh });
                     }} style={[styles.changeNumber, { borderColor: status === 1 ? '#FF6C00' : '#ABABAB' }]}>
@@ -261,7 +260,7 @@ function ClaimView ({ detail }) {
         <View style={styles.taskClaim}>
             <View style={styles.taskClaimTop}>
                 <Image source={task9} style={{ height: 14, width: 14, marginRight: 5 }}/>
-                <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>做单要求</Text>
+                <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>参与要求</Text>
             </View>
             <Text numberOfLines={1} style={{ lineHeight: 50, paddingLeft: 10, color: '#FF4700' }}>· <Text style={{ color: '#666' }}>{description || '暂无要求'}</Text></Text>
         </View>
@@ -292,7 +291,7 @@ function CourseView ({ setSubmits, submits = [], detail }) {
                 <View style={[styles.taskDetailTop, { height: 52 }]}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Image source={task6} style={{ height: 14, width: 14, marginRight: 5 }}/>
-                        <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>做单教程</Text>
+                        <Text style={{ color: '#222', fontSize: 16, fontWeight: '500' }}>参与教程</Text>
                     </View>
                     <TouchableOpacity onPress={() => {
                         status === 1 && N.navigate('HelpCenterPage');
@@ -487,7 +486,7 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
         DeviceEventEmitter.emit('hidePop');
         getTask(platform_category).then(r => {
             if (!r.error) {
-                toast('提交任务成功!自动继续下一个任务!');
+                toast('提交成功 自动参与下一个');
                 taskReceiveDetail(r.data.receive_task_id).then(response => {
                     if (response.error) {
                         N.goBack();
@@ -498,7 +497,7 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
                     }
                 });
             } else {
-                toast('暂时没有新的任务!');
+                toast('已经没有了');
                 N.goBack();
             }
         });
@@ -517,7 +516,7 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
             <>
                 <Text style={styles.userPopTitle}>恭喜您，额外获得</Text>
                 <Text style={styles.userPopTips}>{toGoldCoin(number)}<Text style={{ fontSize: 20 }}> 金币</Text></Text>
-                <Text style={styles.userPopText}>马上就可以提现啦</Text>
+                <Text style={styles.userPopText}>马上就可以兑换啦</Text>
                 <TouchableOpacity style={styles.userPopBtn} onPress={() => {
                     state.get() && getApiTask(callback);
                     U.set(state, false);
@@ -543,13 +542,13 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
             <>
                 <Text style={styles.userPopTitle}>哇！太厉害了！</Text>
                 <Text style={[styles.userPopText, { top: '40%' }]}>你已经获得全部奖励了</Text>
-                <Text style={[styles.userPopText, { top: '50%' }]}>快去提现试试吧~</Text>
+                <Text style={[styles.userPopText, { top: '50%' }]}>快去兑换试试吧~</Text>
                 <TouchableOpacity style={styles.userPopBtn} onPress={() => {
                     U.set(state, false);
                     DeviceEventEmitter.emit('hidePop');
                     N.navigate('WithdrawPage', { callbackGetTask });
                 }}>
-                    <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>去提现</Text>
+                    <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>去兑换</Text>
                 </TouchableOpacity>
             </>
         );
@@ -590,9 +589,9 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
                     const { add_balance } = r.data;
                     setSubmits(submits.map(item => Object.assign({ progress: undefined, uri: '', data: '', mime: '' }, item)));
                     U.set(U.view(['user', 'today_pass_num'], store), Number.parseInt(today_pass_num.get()) + 1);
-                    checkWindow(transformMoney(add_balance) || 0, callback);
+                    checkWindow(add_balance || 0, callback);
                 } catch (e) {
-                    toast('暂时没有新的任务!');
+                    toast('已经没有了');
                     N.goBack();
                 }
             } else {

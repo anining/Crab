@@ -72,7 +72,7 @@ export function banner () {
     return transformFetch('GET', '/banner');
 }
 
-// 提现商品
+// 兑换商品
 export function withdraw () {
     return transformFetch('GET', '/withdraw');
 }
@@ -87,7 +87,7 @@ export function propLogs (page, size) {
     return transformFetch('GET', '/prop/logs', { page, size });
 }
 
-// 提现
+// 兑换
 export function postWithdraw (withdraw_id, money, withdraw_type, account, name) {
     let data = {
         withdraw_id, money, withdraw_type
@@ -98,12 +98,12 @@ export function postWithdraw (withdraw_id, money, withdraw_type, account, name) 
     return transformFetch('POST', '/withdraw', data);
 }
 
-// 提现列表
+// 兑换列表
 export function withdrawLogs (page, size) {
     return transformFetch('GET', '/withdraw/logs', { page, size });
 }
 
-// 提现跑马灯
+// 兑换跑马灯
 export function withdrawLogsLatest (page = 1, size = 10) {
     return transformFetch('GET', '/withdraw/logs/latest', { page, size });
 }
@@ -173,7 +173,7 @@ export function awardDetail () {
     return transformFetch('GET', '/children/award/detail');
 }
 
-// 领取徒弟提现奖励
+// 领取徒弟兑换奖励
 export function getChildAward () {
     return transformFetch('POST', '/children/award/withdraw');
 }

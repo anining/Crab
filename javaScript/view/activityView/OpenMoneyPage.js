@@ -19,7 +19,7 @@ import ImageAuto from '../../components/ImageAuto';
 import activity14 from '../../assets/icon/activity/activity14.png';
 import { activityDetail, openRedPackage } from '../../utils/api';
 import { N } from '../../utils/router';
-import { transformTime } from '../../utils/util';
+import { transformMoney, transformTime } from '../../utils/util';
 import LottieView from 'lottie-react-native';
 import open from '../../lottie/open';
 const { width } = Dimensions.get('window');
@@ -56,7 +56,7 @@ function OpenMoneyPage (props) {
                         }} source={'http://thirdwx.qlogo.cn/mmopen/vi_32/zs3zkL0WMn83EsmmcbmviabWkITGjct9n4Ms8E5F3QNuiaaEPn0KpxlvxtsCrBibib7pXYtl3Zy4kiaHoviaBJ8xB8dA/132'}/>
                         <Text style={styles.redNameText}>运营商送你一个红包</Text>
                         <Text style={styles.redTipsText}>现在打开</Text>
-                        <Text style={styles.redTipsText}>最低20元现金等着你</Text>
+                        <Text style={styles.redTipsText}>最低20w金币等着你</Text>
                         <LottieView ref={ref => {
                             ref && (LottieViewRef = ref);
                         }} renderMode={'HARDWARE'} style={[css.pa, { width: width, top: '22%' }]}
@@ -108,13 +108,13 @@ function OpenMoneyPage (props) {
                     <Image style={styles.redPackageAvatar} source={{ uri }}/>
                     <Text style={styles.redPackageText}>{title}</Text>
                 </View>
-                <Text style={{ fontSize: 15, color: '#FDEAB9' }}>恭喜您获得现金</Text>
-                <Text style={{ fontWeight: '500', color: 'rgba(254,204,81,1)' }}>¥ <Text
+                <Text style={{ fontSize: 15, color: '#FDEAB9' }}>恭喜您获得</Text>
+                <Text style={{ fontWeight: '500', color: 'rgba(254,204,81,1)' }}><Text
                     style={{ fontSize: 49, fontWeight: '800' }}>{money}W</Text> 金币</Text>
                 <TouchableOpacity style={styles.withdrawBtn} onPress={() => {
                     N.navigate('DailyMoneyPage', { activityId, pageInfo: data });
                 }}>
-                    <Text style={{ fontSize: 16, color: '#fff' }}>立即提现</Text>
+                    <Text style={{ fontSize: 16, color: '#fff' }}>立即兑换</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -152,7 +152,7 @@ function RenderView ({ receivedStatus, pageInfo, totalNum }) {
                         <Text numberOfLines={1}
                             style={{ color: 'rgba(53,53,53,1)', fontSize: 13 }}>{transformTime(created_at)}</Text>
                     </View>
-                    <Text numberOfLines={1} style={{ color: 'rgba(53,53,53,1)', fontSize: 16 }}>{money}元</Text>
+                    <Text numberOfLines={1} style={{ color: 'rgba(53,53,53,1)', fontSize: 16 }}>{transformMoney(money)}金币</Text>
                 </View>
             </View>,
         );

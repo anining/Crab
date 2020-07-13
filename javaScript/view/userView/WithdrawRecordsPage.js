@@ -17,7 +17,7 @@ function WithdrawRecordsPage () {
 
     return (
         <SafeAreaView style={css.safeAreaView}>
-            <Header scene={{ descriptor: { options: {} }, route: { name: '提现记录' } }} navigation={N} onPress={() => {
+            <Header scene={{ descriptor: { options: {} }, route: { name: '兑换记录' } }} navigation={N} onPress={() => {
                 DeviceEventEmitter.emit('showPop', <Image source={with9} style={{ height: width * 0.8 * (1038 / 885), width: width * 0.8 }}/>);
             }} headerRight={headerRight}/>
             <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
@@ -56,14 +56,14 @@ function RenderView ({ status }) {
     case 1:
         return (
             <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-                <Text numberOfLines={1} style={ { color: '#0045FF', fontSize: 15, maxWidth: 180 }}>提现中</Text>
+                <Text numberOfLines={1} style={ { color: '#0045FF', fontSize: 15, maxWidth: 180 }}>兑换中</Text>
                 <Text numberOfLines={1} style={{ color: '#999', fontSize: 12 }}>24小时内审核到账</Text>
             </View>
         );
     case 2:
         return (
             <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-                <Text numberOfLines={1} style={ { color: '#999', fontSize: 11 }}>提现失败(提现账户异常)，金币已退回</Text>
+                <Text numberOfLines={1} style={ { color: '#999', fontSize: 11 }}>兑换失败(兑换账户异常)，金币已退回</Text>
                 <TouchableOpacity activeOpacity={1} onPress={() => {
                     N.navigate('HelpCenterPage');
                 }}>
@@ -74,7 +74,7 @@ function RenderView ({ status }) {
     default:
         return (
             <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-                <Text numberOfLines={1} style={ { color: '#53C23B', fontSize: 15, maxWidth: 180 }}>提现成功</Text>
+                <Text numberOfLines={1} style={ { color: '#53C23B', fontSize: 15, maxWidth: 180 }}>兑换成功</Text>
             </View>
         );
     }

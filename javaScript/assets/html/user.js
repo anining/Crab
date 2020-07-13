@@ -39,7 +39,7 @@ export const userDataHtml = `<h1 style="text-align: center; text-indent: 2em; li
     <span style="font-family: 宋体, SimSun;"><span
             style="font-family: 宋体, SimSun; text-decoration: underline;"><strong><span
                     style="font-family: 宋体, SimSun; text-decoration: underline; font-size: 14px;">除非您已阅读并接受本规则所有条款，否则您无权申请或使用趣玩赚账户。您申请或使用趣玩赚账户的行为即视为您已阅读并同意受本规则的约束。</span></strong></span><span
-            style="font-family: 宋体, SimSun; font-size: 14px;">无论用户以任何方式使用趣玩赚服务，包括但不限于接单任务、浏览信息等，均视为用户已经阅读且接受本协议。届时用户不应以未阅读本协议内容为由，主张本协议无效，或主张撤销本协议。</span></span>
+            style="font-family: 宋体, SimSun; font-size: 14px;">无论用户以任何方式使用趣玩赚服务，包括但不限于浏览信息等，均视为用户已经阅读且接受本协议。届时用户不应以未阅读本协议内容为由，主张本协议无效，或主张撤销本协议。</span></span>
 </p>
 <p style="text-indent: 2em; text-align: left; line-height: 1.75em;">
     <span
@@ -69,7 +69,7 @@ export const userDataHtml = `<h1 style="text-align: center; text-indent: 2em; li
 </p>
 <p style="text-indent: 2em; text-align: left; line-height: 1.75em;">
     <span style="text-decoration: underline; font-family: 宋体, SimSun;"><strong><span
-                style="font-family: 宋体, SimSun; text-decoration: underline; font-size: 14px;">在不需要账户的时，用户可以选择注销趣玩赚账户。用户可以通过个人中心联系客服，由客服帮助用户注销账户。用户在申请注销账户前应将账户内的余额提现。注销账户后将不会受理提现申请。</span></strong></span>
+                style="font-family: 宋体, SimSun; text-decoration: underline; font-size: 14px;">在不需要账户的时，用户可以选择注销趣玩赚账户。用户可以通过个人中心联系客服，由客服帮助用户注销账户。用户在申请注销账户前应将账户内的余额兑换。注销账户后将不会受理兑换申请。</span></strong></span>
 </p>
 <h2 style="text-align: left; line-height: 1.75em; text-indent: 0em;">
     <span style="font-size: 24px; font-family: 宋体, SimSun;">五、内容</span>
@@ -123,7 +123,7 @@ export const userDataHtml = `<h1 style="text-align: center; text-indent: 2em; li
 </h2>
 <p style="text-indent: 2em; text-align: left; line-height: 1.75em;">
     <span
-        style="font-size: 14px; font-family: 宋体, SimSun;">趣玩赚是个对大多数用户免费的兼职信息任务接发平台，但针对趣玩赚的特定服务收费。若用户所使用的服务需支付费用，用户有权决定是否使用并接受该收费服务。趣玩赚上的收费服务以金币计价(1金币等于0.0001元)，定价上可能随时调整。我们将以平台公告的方式，来通知用户收费政策的变更。趣玩赚也可选择在促销或新服务推出时，暂时调整我们的服务收费，该调整于我们公布促销或新服务时开始生效。</span>
+        style="font-size: 14px; font-family: 宋体, SimSun;">趣玩赚是个对大多数用户免费的娱乐小工具，但针对趣玩赚的特定服务收费。若用户所使用的服务需支付费用，用户有权决定是否使用并接受该收费服务。趣玩赚上的收费服务以金币计价(1金币等于0.0001元)，定价上可能随时调整。我们将以平台公告的方式，来通知用户收费政策的变更。趣玩赚也可选择在促销或新服务推出时，暂时调整我们的服务收费，该调整于我们公布促销或新服务时开始生效。</span>
 </p>
 <h2 style="text-align: left; line-height: 1.75em; text-indent: 0em;">
     <span style="font-size: 24px; font-family: 宋体, SimSun;">八、账户余额</span>
@@ -133,7 +133,7 @@ export const userDataHtml = `<h1 style="text-align: center; text-indent: 2em; li
 </p>
 <p style="text-indent: 2em; text-align: left; line-height: 1.75em;">
     <span style="text-decoration: underline; font-family: 宋体, SimSun;"><strong><span
-                style="font-family: 宋体, SimSun; text-decoration: underline; font-size: 14px;">用户在平台内赚取的金币，可以通过提现的方式提到用户的微信或者支付宝账户中。</span></strong></span>
+                style="font-family: 宋体, SimSun; text-decoration: underline; font-size: 14px;">用户在平台内赚取的金币，可以通过兑换的方式提到用户的微信或者支付宝账户中。</span></strong></span>
 </p>
 <h2 style="text-align: left; line-height: 1.75em; text-indent: 0em;">
     <span style="font-size: 24px; font-family: 宋体, SimSun;">九、侵权通知</span>

@@ -34,7 +34,7 @@ function CardPackageRecordsPage () {
                                 </View>
                                 <View style={ [styles.item, styles.itemBottom]}>
                                     <View style={css.flexRCSB}>
-                                        <Text numberOfLines={1} style={[styles.text, { maxWidth: 180 }]}>{is_used ? '道具用途：' : '道具来源：'}{is_used ? usage_range : source === 1 ? '签到' : '提现'}</Text>
+                                        <Text numberOfLines={1} style={[styles.text, { maxWidth: 180 }]}>{is_used ? '道具用途：' : '道具来源：'}{is_used ? usage_range : source === 1 ? '签到' : '兑换'}</Text>
                                         <Text numberOfLines={1} style={styles.text}>使用数量：1</Text>
                                     </View>
                                     <Text numberOfLines={1} style={{ fontSize: 12, color: '#999' }}>获得时间：{transformTime(updated_at)}</Text>

@@ -30,6 +30,7 @@ import user14 from '../../assets/icon/user/user14.png';
 import user15 from '../../assets/icon/user/user15.png';
 import user16 from '../../assets/icon/user/user16.png';
 import user17 from '../../assets/icon/user/user17.png';
+import user18 from '../../assets/icon/user/user18.png';
 import { getter, clear } from '../../utils/store';
 import * as U from 'karet.util';
 import { updateSecondIncome, updateUser } from '../../utils/update';
@@ -88,7 +89,7 @@ const MENU_LIST = [
     },
     {
         icon: user12,
-        title: '切换账号',
+        title: '退出登录',
         remark: '',
         path: 'VerificationStackNavigator'
     }
@@ -134,6 +135,7 @@ const fixedTotalIncome = U.mapValue((res) => {
     }
     return _toFixed(res, 0);
 }, total_income);
+
 function UserPage () {
     // const [refreshing, setRefreshing] = useState(false);
     !authorization.get() && N.replace('VerificationStackNavigator');
@@ -169,34 +171,34 @@ function UserPage () {
                         <View>
                             <View style={styles.userCardTop}>
                                 <Text karet-lift numberOfLines={1} style={styles.userPhone}>{nickname}</Text>
-                                <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{phone}</Text>
+                                {/* <Text karet-lift numberOfLines={1} style={styles.userId}>ID:{phone}</Text> */}
                             </View>
                             <TouchableOpacity style={styles.userCardBottom} onPress={() => {
-                                _copyStr(invite_code.get());
+                                _copyStr(phone.get());
                             }}>
-                                <Text karet-lift numberOfLines={1} style={styles.inviteCode}>邀请码:{invite_code}</Text>
+                                <Text karet-lift numberOfLines={1} style={styles.inviteCode}>ID:{phone}</Text>
                                 <View style={styles.copyBtn}>
                                     <Text style={styles.copyText}>复制</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <RenderBind />
+                    <RenderBind/>
                 </View>
                 <View style={styles.moneyView}>
                     <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
                         <View style={styles.moneyViewTop}>
-                            <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>我的钱包</Text>
+                            <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>我的金币</Text>
                             <TouchableOpacity activeOpacity={1} onPress={() => {
                                 N.navigate('WithdrawPage');
                             }} style={styles.withDrawBtn}>
-                                <Text style={{ lineHeight: 30, textAlign: 'center', color: '#fff' }}>立即提现</Text>
+                                <Text style={{ lineHeight: 30, textAlign: 'center', color: '#fff' }}>立即兑换</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.moneyViewBottom}>
                             <View style={styles.moneyViewItem}>
                                 <Text karet-lift style={styles.moneyText}>{fixedBalance}</Text>
-                                <Text style={styles.moneyTitle}>可提现(金币)</Text>
+                                <Text style={styles.moneyTitle}>可兑换(金币)</Text>
                             </View>
                             <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
                                 <Text karet-lift style={styles.moneyText}>{fixedTodayIncome}</Text>
@@ -209,11 +211,16 @@ function UserPage () {
                         </View>
                     </ImageBackground>
                 </View>
+                <TouchableOpacity style={[css.flex, styles.shareWrap]} onPress={() => {
+                    N.navigate('SharePage');
+                }}>
+                    <ImageAuto key={'share'} source={user18} width={width * 0.94}/>
+                </TouchableOpacity>
                 <View style={styles.myTask}>
-                    <Text style={styles.myTaskTitle}>我的任务</Text>
-                    <RenderTaskMenu />
+                    <Text style={styles.myTaskTitle}>摸鱼夺宝记录</Text>
+                    <RenderTaskMenu/>
                 </View>
-                <RenderMenu />
+                <RenderMenu/>
             </ScrollView>
         </SafeAreaView>
     );
@@ -343,7 +350,8 @@ const styles = StyleSheet.create({
     inviteCode: {
         color: '#666',
         fontSize: 10,
-        marginRight: 10
+        marginRight: 10,
+        ...css.sy
     },
     menuIcon: {
         height: 20,
@@ -362,7 +370,7 @@ const styles = StyleSheet.create({
     },
     moneyView: {
         backgroundColor: '#fff',
-        paddingBottom: 20,
+        paddingBottom: 10,
         paddingLeft: 10,
         paddingRight: 10,
         width
@@ -432,7 +440,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingLeft: 10,
         paddingRight: 10,
-        width: '100%'
+        width: '100%',
+    },
+    shareWrap: {
+        backgroundColor: '#fff',
+        height: width * 0.22,
+        marginTop: 15,
+        width
     },
     userCardBottom: {
         alignItems: 'center',

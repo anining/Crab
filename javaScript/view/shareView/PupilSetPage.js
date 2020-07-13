@@ -64,10 +64,10 @@ function PupilSetPage (props) {
                 <View style={styles.setInfoAllText}>
                     <Crab text="设置说明：" paddingLeft={0}/>
                     <Text style={styles.setLineText}>1.请先填写基本信息，不填展示的信息为空。</Text>
-                    <Text style={styles.setLineText}>2.QQ群勾选徒弟可见，达到要求的徒弟可以一键加群。</Text>
-                    <Text style={styles.setLineText}>3.微信号勾选徒弟可见，达到要求的徒弟可以复制微信并添加微信。</Text>
-                    <Text style={styles.setLineText}>4.勾选并填写邀请人数，徒弟达到邀请人数之后可见基本信息。</Text>
-                    <Text style={styles.setLineText}>5.勾选并填写收益总和，徒弟达到收益总和之后可见基本信息。</Text>
+                    <Text style={styles.setLineText}>2.QQ群勾选渔友可见，达到要求的渔友可以一键加群。</Text>
+                    <Text style={styles.setLineText}>3.微信号勾选渔友可见，达到要求的渔友可以复制微信并添加微信。</Text>
+                    <Text style={styles.setLineText}>4.勾选并填写邀请人数，渔友达到邀请人数之后可见基本信息。</Text>
+                    <Text style={styles.setLineText}>5.勾选并填写收益总和，渔友达到收益总和之后可见基本信息。</Text>
                     <Text style={styles.setLineText}>6.信息可以随时更换，更换信息之后只影响到之后的徒弟。</Text>
                 </View>
             </ScrollView>

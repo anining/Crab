@@ -39,7 +39,7 @@ import GameHeader from '../../components/GameHeader';
 import { updateNextRedLevel, updateUser } from '../../utils/update';
 import { bindData, getGlobal, getPath } from '../../global/global';
 import { avatarProLevelPosition, getGradeConfig, homeProLevelPosition } from '../../utils/levelConfig';
-import { DelayGetDomeTime } from '../../utils/animationConfig';
+import {AnswerPopTipsTime, DelayGetDomeTime} from '../../utils/animationConfig';
 import JRBannerView from '../../components/JRBannerView';
 import android from '../../components/Android';
 
@@ -119,10 +119,9 @@ export default class PassGamePage extends Component {
                                 setAndroidTime(() => {
                                     DeviceEventEmitter.emit('answerScroll', 'end');
                                     DeviceEventEmitter.emit('comTitlePop', {
-                                        key: 'taskTips', str: '任意完成一个任务后即可领取双倍奖励~'
+                                        key: 'taskTips', str: '任意选择一个类型即可领取双倍奖励~'
                                     });
-                                }, 1000);
-                                toast('任意完成一个任务后即可领取双倍奖励');
+                                }, AnswerPopTipsTime);
                             }
                         }}/>
                         <Text style={styles.hdnRedBtnText} onPress={async () => {
