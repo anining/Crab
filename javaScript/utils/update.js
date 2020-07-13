@@ -127,11 +127,26 @@ export const updateApp = () => {
             resolve();
             if (!res.error && res.data) {
                 console.log(res, 'app');
-                setter([['app', (res.data)]], true);
+                setter([['app', formatAppInfo(res.data)]], true);
             }
         }));
     });
 };
+function formatAppInfo (appInfo) {
+    try {
+        if (appInfo.config) {
+            const configObj = {};
+            for (const i in appInfo.config) {
+                const item = appInfo.config[i];
+                configObj[item.key] = item;
+            }
+            appInfo.configObj = configObj;
+        }
+        return appInfo;
+    } catch (e) {
+        return appInfo;
+    }
+}
 
 export const updateBanner = () => {
     return new Promise((resolve, reject) => {

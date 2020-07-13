@@ -156,7 +156,7 @@ function UserPage () {
     }
 
     return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8', paddingTop: 20 }]}>
+        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <ScrollView refreshControl={
                 <RefreshControl
                     refreshing={false}
@@ -168,6 +168,7 @@ function UserPage () {
                     size={10}
                 />
             }>
+                <View style={{ width, height: 30, backgroundColor: '#fff' }}/>
                 <View style={[styles.userDetailView, css.pr]}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <TouchableOpacity style={styles.avatarIconWrap} onPress={() => {

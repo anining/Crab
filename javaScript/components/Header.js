@@ -6,7 +6,7 @@ import { N } from '../utils/router';
 import ImageAuto from './ImageAuto';
 
 const { width } = Dimensions.get('window');
-export const MAIN_HEADER_HEIGHT = 63;
+export const MAIN_HEADER_HEIGHT = 73;
 
 function RenderHeaderRight ({ headerRight, onPress }) {
     if (headerRight) {
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         flexDirection: 'row',
         height: MAIN_HEADER_HEIGHT,
-        paddingTop: 7,
+        paddingTop: 17,
         width
     },
     headerCenter: {

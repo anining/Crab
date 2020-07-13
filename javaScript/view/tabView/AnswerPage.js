@@ -42,6 +42,7 @@ import asyncStorage from '../../utils/asyncStorage';
 import pop3 from '../../assets/icon/pop/pop3.png';
 import { getActivityDetail, getTaskPlatform, task, updateSecondIncome, updateUser } from '../../utils/update';
 import toast from '../../utils/toast';
+import { getGlobal, getPath } from '../../global/global';
 
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去摸鱼夺宝6去绑定
 const { width } = Dimensions.get('window');
@@ -75,12 +76,14 @@ function AnswerPage () {
     !authorization.get() && N.replace('VerificationStackNavigator');
     useEffect(() => {
         InteractionManager.runAfterInteractions(async () => {
-            init();
-            reloadEmitter = DeviceEventEmitter.addListener('reloadAnswer', async () => {
+            _tc(async () => {
                 await init();
-            });
-            scrollToListener = DeviceEventEmitter.addListener('answerScroll', (res) => {
-                viewScroll(res);
+                reloadEmitter = DeviceEventEmitter.addListener('reloadAnswer', async () => {
+                    await init();
+                });
+                scrollToListener = DeviceEventEmitter.addListener('answerScroll', (res) => {
+                    viewScroll(res);
+                });
             });
         });
         return () => {
@@ -146,14 +149,14 @@ function AnswerPage () {
     }
 
     return (
-        <SafeAreaView style={[{ flex: 1, paddingTop: 20, backgroundColor: '#fff' }]} >
-            <ScrollView style={{ flex: 1, paddingTop: 20 }} ref={ref => {
+        <SafeAreaView style={[{ flex: 1, backgroundColor: '#fff' }]} >
+            <ScrollView style={{ flex: 1 }} ref={ref => {
                 ref && (scrollViewRef = ref);
             } } refreshControl={
                 <RefreshControl
                     refreshing={false}
-                    onRefresh={() => {
-                        init();
+                    onRefresh={async () => {
+                        await init();
                         updateUser();
                     }}
                     colors={['#c8b799', '#ffa11b']}
@@ -161,15 +164,16 @@ function AnswerPage () {
                     size={10}
                 />
             }>
+                <View style={{ width, height: 30, backgroundColor: '#fff' }}/>
                 <Slider data={banner.get()} height={width * 0.29} autoplay={true} onPress={item => bannerAction(item.category, item.link, item.title)}/>
                 <View style={styles.answerWrap}>
                     <ComTitle title={'每日签到'} minTitle={<Text style={[css.minTitle, css.sy]}>连续签到得 <Text style={[{ color: '#FF6C00' }, css.sy]}>兑换免手续费特权卡!</Text></Text>}/>
                     <RenderDaySign isSign={isSign} signDay={signDay} setSignDay={setSignDay}/>
                 </View>
-                <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
+                {_if(getPath(['configObj', 'app_other_info', 'value', 'zoneOfAction'], getGlobal('app')), res => <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
                     <ComTitle title={'火爆活动'}/>
-                    <RenderActivity />
-                </View>
+                    <RenderActivity zoneOfAction={res}/>
+                </View>)}
                 <Reward newUser={newUser} _newUserTask={_newUserTask}/>
                 <RenderTaskView />
             </ScrollView>
@@ -278,26 +282,49 @@ function RenderSignList ({ signDay }) {
     }
 }
 
-function RenderActivity () {
-    const view = [];
-    view.push(
-        <TouchableOpacity onPress={() => {
-            _tc(() => N.navigate('DailyRedPackagePage', { activityId: (activityObj.get() || {})[1].activity_id }));
-        }} key={'DailyRedPackagePage'}>
-            <ImageAuto source={answer5} width={width * 0.9 * 0.48}/>
-        </TouchableOpacity>,
-    );
-    view.push(
-        <View style={[css.flex, css.fw, styles.activityRight]} key={'appPage'}>
-            <TouchableOpacity style={styles.arItemWrap} onPress={() => N.navigate('SharePage')} key={'SharePage'}>
-                <ImageAuto source={answer6} width={width * 0.9 * 0.48}/>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.arItemWrap} onPress={getActivityDetail} key={'OpenMoneyPage'}>
-                <ImageAuto source={answer8} width={width * 0.9 * 0.48}/>
-            </TouchableOpacity>
-        </View>,
-    );
-    return <View style={[css.flex, css.sp, { paddingHorizontal: 10 }]} key={'activity'}>{view}</View>;
+function RenderActivity ({ zoneOfAction }) {
+    try {
+        const view = [];
+        const rightView = [];
+        zoneOfAction.forEach((item) => {
+            if (item.direction === 'left') {
+                view.push(
+                    <TouchableOpacity onPress={() => {
+                        if (item.path === 'OpenMoneyPage') {
+                            getActivityDetail();
+                        } else {
+                            _tc(() => N.navigate(item.path, { activityId: item.activity_id }));
+                        }
+                    }} key={item.path}>
+                        <ImageAuto source={item.image} width={width * 0.9 * 0.48}/>
+                    </TouchableOpacity>
+                );
+            }
+        });
+        zoneOfAction.forEach((item) => {
+            if (item.direction === 'right') {
+                rightView.push(
+                    <TouchableOpacity onPress={() => {
+                        if (item.path === 'OpenMoneyPage') {
+                            getActivityDetail();
+                        } else {
+                            _tc(() => N.navigate(item.path, { activityId: item.activity_id }));
+                        }
+                    }} key={item.path}>
+                        <ImageAuto source={item.image} width={width * 0.9 * 0.48}/>
+                    </TouchableOpacity>
+                );
+            }
+        });
+        view.push(
+            <View style={[css.flex, css.fw, styles.activityRight]} key={'appPage'}>
+                {rightView}
+            </View>,
+        );
+        return <View style={[css.flex, css.sp, { paddingHorizontal: 10, paddingTop: 15 }]} key={'activity'}>{view}</View>;
+    } catch (e) {
+        return <Text>{JSON.stringify(e)}</Text>;
+    }
 }
 
 function RenderNewList ({ list = [], _newUserTask }) {

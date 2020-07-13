@@ -79,6 +79,7 @@ export default class GamePage extends Component {
             selectSite: null, // 当前选中坐标,用于选择框位置显示
             fillArray: {}, // 当前已完成的填词,可能对可能错，用于判断交互逻辑
             completedCharacterArray: [], // 已经变成绿色字的数组，不能有交互
+            highPerformance: bindData('highPerformance', this),
         };
         this.successNumber = 0;
         // this.needToAnswer = 0;
@@ -104,6 +105,7 @@ export default class GamePage extends Component {
     async _upgradeGameLevel () {
         const ret = await upgradeGameLevel(JSON.stringify(this.state.gameInfo.content));
         if (ret && !ret.error) {
+            const passTime = this.state.highPerformance ? 800 : 2000;
             setAndroidTime(() => {
                 N.replace('PassGamePage', {
                     info: {
@@ -113,7 +115,7 @@ export default class GamePage extends Component {
                         myGradeLevel: getPath(['myGradeLevel'], this.state.user, 1),
                     },
                 });
-            }, 2000);
+            }, passTime);
         }
     }
 

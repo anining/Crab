@@ -165,7 +165,7 @@ function RenderItem ({ type, updated_at, receive_task_id, reason, finish_deadlin
                 <View style={styles.defaultView}>
                     <Text style={{ color: '#353535', fontSize: 12 }}>未通过原因：<Text style={{ color: '#FF3154' }}>{reason}</Text></Text>
                     <TouchableOpacity onPress={() => {
-                        N.navigate('FeedBackPage');
+                        N.navigate('HelpCenterPage');
                     }} style={styles.answerBtn}>
                         <Text style={styles.feedBtn}>我有疑问</Text>
                     </TouchableOpacity>

@@ -14,14 +14,13 @@ import { getter } from '../../utils/store';
 import * as U from 'karet.util';
 import RNShare from 'react-native-share';
 import { DEVELOPER } from '../../utils/config';
+import { getGlobal, getPath } from '../../global/global';
 const { invite_code } = getter(['user.invite_code']);
 const { width } = Dimensions.get('window');
-const URL = DEVELOPER === 'Production' ? 'https://qz.usershare.libratb.com/#/' : 'https://usershare.libratb.com/#/';
-
+const deUrl = DEVELOPER === 'Production' ? 'https://qz.usershare.libratb.com/#/' : 'https://usershare.libratb.com/#/';
 function ShareQRCodePage () {
     const view = U.atom([]);
     const [capture, setCapture] = useState();
-
     function save (type = 1) {
         const localView = view.get();
         try {
@@ -109,7 +108,7 @@ function Slider ({ view, setCapture }) {
             left: '30.5%',
         }
     ];
-
+    const URL = getPath(['configObj', 'app_other_info', 'value', 'shareUrl'], getGlobal('app'), deUrl);
     return (
         <View>
             <Carousel

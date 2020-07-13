@@ -5,7 +5,7 @@ import { css } from '../../assets/style/css';
 import answer17 from '../../assets/icon/answer/answer17.png';
 import { captureRef } from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
-import { requestPermission } from '../../utils/util';
+import { _if, requestPermission } from '../../utils/util';
 import toast from '../../utils/toast';
 import Crab from '../../components/Crab';
 import QRCode from 'react-native-qrcode-svg';
@@ -61,7 +61,7 @@ function WeChatBindPage () {
         <SafeAreaView style={css.safeAreaView}>
             <ImageBackground source={answer17} style={[styles.image, { position: 'relative' }]} ref={ref => setView(ref)}>
                 <View style={{ position: 'absolute', top: '24.5%', left: '15.5%' }}>
-                    <Render value={value}/>
+                    {_if(value, res => <Render value={res}/>)}
                 </View>
             </ImageBackground>
             <TouchableOpacity onPress={save} style={styles.btn}>
