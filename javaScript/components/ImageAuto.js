@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Dimensions, View } from 'react-native';
+import { Image, Dimensions, View, InteractionManager } from 'react-native';
 import { formatStyle } from '../utils/util';
 import { css } from '../assets/style/css';
 
@@ -21,7 +21,9 @@ export default class ImageAuto extends Component {
     }
 
     componentDidMount () {
-        this._judge();
+        InteractionManager.runAfterInteractions(() => {
+            this._judge();
+        });
     }
 
     _judge () {

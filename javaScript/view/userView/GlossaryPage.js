@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     DeviceEventEmitter,
     SafeAreaView,
-    ScrollView
+    ScrollView, InteractionManager,
 } from 'react-native';
 import { css } from '../../assets/style/css';
 import header3 from '../../assets/icon/header/header3.png';
@@ -32,7 +32,9 @@ export default class GlossaryPage extends Component {
     }
 
     async componentDidMount () {
-        await this._getNoteBook();
+        InteractionManager.runAfterInteractions(async () => {
+            await this._getNoteBook();
+        });
     }
 
     async _getNoteBook () {

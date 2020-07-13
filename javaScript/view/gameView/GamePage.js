@@ -8,7 +8,8 @@ import {
     View,
     TouchableOpacity,
     ImageBackground,
-    Animated, Easing, DeviceEventEmitter,
+    InteractionManager,
+    DeviceEventEmitter,
 } from 'react-native';
 import { N } from '../../utils/router';
 import { css } from '../../assets/style/css';
@@ -87,12 +88,14 @@ export default class GamePage extends Component {
     }
 
     componentDidMount () {
-        this._getGame();
-        updateUser();
-        updateNextRedLevel();
-        this.debounceGameError = _debounce(async (str) => {
-            await gameError(str);// 打错题目
-        }, 300); // 防止频繁请求
+        InteractionManager.runAfterInteractions(() => {
+            this._getGame();
+            updateUser();
+            updateNextRedLevel();
+            this.debounceGameError = _debounce(async (str) => {
+                await gameError(str);// 打错题目
+            }, 300); // 防止频繁请求
+        });
     }
 
     async _upgradeGameLevel () {

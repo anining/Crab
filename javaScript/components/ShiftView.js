@@ -8,7 +8,7 @@ import {
     Animated,
     Easing,
     UIManager,
-    Platform,
+    Platform, InteractionManager,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { css } from '../assets/style/css';
@@ -53,10 +53,12 @@ export default class ShiftView extends Component {
     }
 
     componentDidMount () {
-        this.autoPlay && this.start();
-        this.debounceAnimationStart = _debounce(() => {
-            this._animationStart();
-        }, 500);
+        InteractionManager.runAfterInteractions(() => {
+            this.autoPlay && this.start();
+            this.debounceAnimationStart = _debounce(() => {
+                this._animationStart();
+            }, 500);
+        });
     }
 
     componentWillMount () {

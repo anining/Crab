@@ -36,6 +36,7 @@ import * as U from 'karet.util';
 import { updateSecondIncome, updateUser } from '../../utils/update';
 import { _copyStr, _toFixed } from '../../utils/util';
 import LinearGradient from 'react-native-linear-gradient';
+import ImageAuto from '../../components/ImageAuto';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
     },
     moneyView: {
         backgroundColor: '#fff',
-        paddingBottom: 10,
+        paddingBottom: 20,
         paddingLeft: 10,
         paddingRight: 10,
         width

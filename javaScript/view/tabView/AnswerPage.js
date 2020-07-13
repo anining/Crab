@@ -12,7 +12,7 @@ import {
     ScrollView,
     TouchableOpacity,
     DeviceEventEmitter,
-    RefreshControl,
+    RefreshControl, InteractionManager,
 } from 'react-native';
 import { css } from '../../assets/style/css';
 import Slider from '../../components/Slider';
@@ -74,12 +74,14 @@ function AnswerPage () {
     let scrollViewRef;
     !authorization.get() && N.replace('VerificationStackNavigator');
     useEffect(() => {
-        init();
-        reloadEmitter = DeviceEventEmitter.addListener('reloadAnswer', async () => {
-            await init();
-        });
-        scrollToListener = DeviceEventEmitter.addListener('answerScroll', (res) => {
-            viewScroll(res);
+        InteractionManager.runAfterInteractions(async () => {
+            init();
+            reloadEmitter = DeviceEventEmitter.addListener('reloadAnswer', async () => {
+                await init();
+            });
+            scrollToListener = DeviceEventEmitter.addListener('answerScroll', (res) => {
+                viewScroll(res);
+            });
         });
         return () => {
             reloadEmitter && reloadEmitter.remove();
