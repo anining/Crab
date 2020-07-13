@@ -16,7 +16,7 @@ import Shadow from '../../components/Shadow';
 import * as Animatable from 'react-native-animatable';
 import { getRedPackage, openRedPackage, withdrawLogsLatest } from '../../utils/api';
 import { N } from '../../utils/router';
-import { _toFixed, djangoTime, setAndroidTime } from '../../utils/util';
+import { _toFixed, djangoTime, setAndroidTime, transformMoney } from '../../utils/util';
 import { AnswerPopTipsTime } from '../../utils/animationConfig';
 
 const { width, height } = Dimensions.get('window');
