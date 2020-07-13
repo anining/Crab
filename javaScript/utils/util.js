@@ -227,7 +227,7 @@ export function toGoldCoin (money) {
         if (isNaN(money)) {
             return 0;
         }
-        return (money * BALANCE_RATE);
+        return Number.parseInt(money * BALANCE_RATE);
     } catch (e) {
         return 0;
     }
