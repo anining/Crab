@@ -38,7 +38,7 @@ import { _copyStr, _if, _toFixed, identifyDebugDevelopmentEnvironment } from '..
 import LinearGradient from 'react-native-linear-gradient';
 import ImageAuto from '../../components/ImageAuto';
 import SetPage from '../userView/SetPage';
-import { VERSION_CODE } from '../../utils/config';
+import { SYSTEM_VERSION, VERSION_CODE } from '../../utils/config';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -297,7 +297,7 @@ function RenderMenu () {
     return (
         <View style={{ backgroundColor: '#fff' }}>
             {view}
-            {_if(identifyDebugDevelopmentEnvironment(), res => <Text style={styles.debugText}>测试环境-版本号:{VERSION_CODE}</Text>, () => <Text style={styles.debugText}>趣玩赚-版本号:{VERSION_CODE}</Text>)}
+            {_if(identifyDebugDevelopmentEnvironment(), res => <Text style={styles.debugText}>测试环境-版本号:{VERSION_CODE}-{SYSTEM_VERSION}</Text>, () => <Text style={styles.debugText}>趣玩赚-版本号:{VERSION_CODE}-{SYSTEM_VERSION}</Text>)}
         </View>
     );
 }
