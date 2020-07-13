@@ -158,9 +158,7 @@ export default class GameHeader extends Component {
             const propNumber = getPath(['propNumsObj', '2'], this.state.user, 0);// 游戏道具数量
             return <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
                 {_if(getPath(['last_get_game_prop_time'], this.state.user) && (propNumber < 10), res => {
-                    return <CountDown callback={() => {
-                        updateUser();
-                    }} style={styles.countDownText} viewStyle={{ ...css.pa, ...styles.countDownView }} time={+new Date(djangoTime(getPath(['last_get_game_prop_time'], this.state.user))) + propsTime}/>;
+                    return <CountDown key={`count${getPath(['last_get_game_prop_time'], this.state.user)}`} callback={() => { updateUser(); }} style={styles.countDownText} viewStyle={{ ...css.pa, ...styles.countDownView }} time={+new Date(djangoTime(getPath(['last_get_game_prop_time'], this.state.user))) + propsTime}/>;
                 })}
                 <TouchableOpacity activeOpacity={1} karet-lift style={[styles.headerDataNumber, css.flex, {
                     backgroundColor: this.props.backgroundColor
@@ -229,7 +227,8 @@ const styles = StyleSheet.create({
         bottom: -17,
         fontSize: 10,
         height: 20,
-        left: 50,
+        left: 20,
+        width: 120
     },
     hdnText: {
         // backgroundColor: 'red',

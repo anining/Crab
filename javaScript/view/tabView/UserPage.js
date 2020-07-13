@@ -90,18 +90,18 @@ const MENU_LIST = [
         remark: '',
         path: 'PrivacyPolicyPage'
     },
-    // {
-    //     icon: user12,
-    //     title: '系统设置',
-    //     remark: '',
-    //     path: 'SetPage'
-    // }
     {
         icon: user12,
-        title: '退出登录',
+        title: '更换账号',
         remark: '',
-        path: 'VerificationStackNavigator'
+        path: 'SetPage'
     }
+    // {
+    //     icon: user12,
+    //     title: '退出登录',
+    //     remark: '',
+    //     path: 'VerificationStackNavigator'
+    // }
 ];
 const TASK_MENU = [
     {
@@ -206,15 +206,15 @@ function UserPage () {
                         </View>
                         <View style={styles.moneyViewBottom}>
                             <View style={styles.moneyViewItem}>
-                                <Text karet-lift style={styles.moneyText}>{fixedBalance}</Text>
+                                <Text karet-lift style={styles.moneyText} numberOfLines={1}>{fixedBalance}</Text>
                                 <Text style={styles.moneyTitle}>可兑换(金币)</Text>
                             </View>
                             <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
-                                <Text karet-lift style={styles.moneyText}>{fixedTodayIncome}</Text>
+                                <Text karet-lift style={styles.moneyText} numberOfLines={1}>{fixedTodayIncome}</Text>
                                 <Text style={styles.moneyTitle}>今日收益(金币)</Text>
                             </View>
                             <View style={styles.moneyViewItem}>
-                                <Text karet-lift style={styles.moneyText}>{fixedTotalIncome}</Text>
+                                <Text karet-lift style={styles.moneyText} numberOfLines={1}>{fixedTotalIncome}</Text>
                                 <Text style={styles.moneyTitle}>总收益(金币)</Text>
                             </View>
                         </View>
@@ -297,7 +297,7 @@ function RenderMenu () {
     return (
         <View style={{ backgroundColor: '#fff' }}>
             {view}
-            {_if(identifyDebugDevelopmentEnvironment(), res => <Text style={styles.debugText}>测试环境-版本号:{VERSION_CODE}-{SYSTEM_VERSION}</Text>, () => <Text style={styles.debugText}>趣玩赚-版本号:{VERSION_CODE}-{SYSTEM_VERSION}</Text>)}
+            {/* {_if(identifyDebugDevelopmentEnvironment(), res => <Text style={styles.debugText}>测试环境-版本号:{VERSION_CODE}-{SYSTEM_VERSION}</Text>, () => <Text style={styles.debugText}>趣玩赚-版本号:{VERSION_CODE}</Text>)} */}
         </View>
     );
 }

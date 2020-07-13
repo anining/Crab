@@ -94,10 +94,10 @@ export default class GamePage extends Component {
             updateNextRedLevel();
             this.debounceGameError = _debounce(async (str) => {
                 await gameError(str);// 打错题目
-            }, 300); // 防止频繁请求
+            }, 500); // 防止频繁请求
             this.debounceUpgradeGameLevel = _debounce(async () => {
                 await this._upgradeGameLevel();// 升级
-            }, 300);
+            }, 500);
         });
     }
 
@@ -113,7 +113,7 @@ export default class GamePage extends Component {
                         myGradeLevel: getPath(['myGradeLevel'], this.state.user, 1),
                     },
                 });
-            }, 1200);
+            }, 2000);
         }
     }
 

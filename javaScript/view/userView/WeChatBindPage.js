@@ -9,7 +9,7 @@ import { requestPermission } from '../../utils/util';
 import toast from '../../utils/toast';
 import Crab from '../../components/Crab';
 import QRCode from 'react-native-qrcode-svg';
-import { wxToken } from '../../utils/api';
+import { urlSuo, wxToken } from '../../utils/api';
 import { getter } from '../../utils/store';
 
 const { width } = Dimensions.get('window');
@@ -29,12 +29,16 @@ function WeChatBindPage () {
     useEffect(() => {
         if (token) {
             try {
-                const URI = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx660a4724f56fdba5&redirect_uri=https%3A%2F%2Fbind.libratb.com&response_type=code&scope=snsapi_userinfo&state=${token}#wechat_redirect`;
-                fetch(`http://suo.im/api.htm?url=${encodeURIComponent(URI)}&key=5f02bdbd3a005a7b763779a3@b4689fcc524fcb7f1a12d82a00045579&expireDate=2030-03-31`).then(r => {
-                    r.text().then(response => {
-                        setValue(response);
-                    });
-                });
+                (async () => {
+                    const URI = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx660a4724f56fdba5&redirect_uri=https%3A%2F%2Fbind.libratb.com&response_type=code&scope=snsapi_userinfo&state=${token}#wechat_redirect`;
+                    const ret = await urlSuo(URI);
+                    console.log(ret, '///短网址===');
+                    // fetch(`http://suo.im/api.htm?url=${encodeURIComponent(URI)}&key=5f02bdbd3a005a7b763779a3@b4689fcc524fcb7f1a12d82a00045579&expireDate=2030-03-31`).then(r => {
+                    //     r.text().then(response => {
+                    //         setValue(response);
+                    //     });
+                    // });
+                })();
             } catch (e) {
                 console.log(e);
             }

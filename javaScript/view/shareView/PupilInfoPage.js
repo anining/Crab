@@ -64,7 +64,7 @@ function PupilInfoPage () {
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
-            <Header label={'师徒信息'} onPress={() => { N.navigate('PupilSetPage', { setting }); }} headerRight={<Text style={{ color: '#FF5C22' }}>收徒设置</Text>}/>
+            <Header label={'渔友信息'} onPress={() => { N.navigate('PupilSetPage', { setting }); }} headerRight={<Text style={{ color: '#FF5C22' }}>交友设置</Text>}/>
             <ListGeneral
                 itemHeight={itemHeight}
                 itemMarginTop={itemMarginTop}

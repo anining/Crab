@@ -161,12 +161,12 @@ const stackScreens = [
     {
         name: 'PupilInfoPage',
         component: PupilInfoPage,
-        title: '师徒信息',
+        title: '渔友信息',
     },
     {
         name: 'PupilSetPage',
         component: PupilSetPage,
-        title: '师徒设置',
+        title: '渔友设置',
     },
     {
         name: 'DailyMoneyPage',
@@ -270,7 +270,7 @@ const stackScreens = [
     }, {
         name: 'SetPage',
         component: SetPage,
-        title: '设置',
+        title: '其他设置',
     }
 ];
 

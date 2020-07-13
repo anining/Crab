@@ -165,9 +165,17 @@ export default class ShiftView extends PureComponent {
     _animationStart () {
         try {
             if (!this._stop) {
-                this.nowTimer1 && this.nowTimer1.stop();
-                this.nowTimer2 && this.nowTimer2.stop();
-                this.androidMove();
+                if (!this.state.highPerformance) {
+                    this.nowTimer1 && this.nowTimer1.stop();
+                    this.nowTimer2 && this.nowTimer2.stop();
+                    this.androidMove();
+                } else {
+                    this.nowTimer1 = setAndroidTime(() => {
+                        _tc(() => {
+                            this.callback && this.callback();
+                        });
+                    }, Math.abs(this.duration - 100));
+                }
                 if (this.loop && this.duration && !this._stop && this.loopTime) {
                     this.nowTimer2 = setAndroidTime(() => {
                         !this._stop && this._animationStart();

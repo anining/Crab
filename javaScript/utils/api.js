@@ -330,6 +330,11 @@ export function wxToken () {
 export function choseGetAward (is_double = false) {
     return transformFetch('POST', '/game/level/award', { is_double });
 }
+
+// 短网址
+export function urlSuo (url) {
+    return transformFetch('POST', '/suo', { url });
+}
 // 资金记录
 export function income (page, size, source) {
     let data = {
