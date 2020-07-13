@@ -109,7 +109,7 @@ function WithdrawPage (props) {
                 </ImageBackground>
                 <View style={styles.goodView}>
                     <View style={styles.goodViewTitle}>
-                        <View style={{flexDirection:'row',alignItems:'center'}}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>提现金额</Text>
                             <Text style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text>
                         </View>

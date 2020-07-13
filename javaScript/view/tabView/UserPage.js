@@ -34,7 +34,7 @@ import { getter, clear } from '../../utils/store';
 import * as U from 'karet.util';
 import { updateSecondIncome, updateUser } from '../../utils/update';
 import { _copyStr, _toFixed } from '../../utils/util';
-import LinearGradient from "react-native-linear-gradient";
+import LinearGradient from 'react-native-linear-gradient';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -221,7 +221,7 @@ function UserPage () {
 
 function RenderBind () {
     const view = U.ifElse(R.equals(openid, null), <LinearGradient colors={['#FF9C00', '#FF3E00']} start={{ x: 0, y: 1 }} end={{ x: 1, y: 1 }} style={[css.pa, styles.bindBtnView]}>
-        <TouchableOpacity  onPress={() => {
+        <TouchableOpacity onPress={() => {
             N.navigate('WeChatBindPage');
         }} style={styles.bindBtn}>
             <Image source={user2} style={{ width: 16, height: 13, marginRight: 5 }}/>
@@ -294,7 +294,13 @@ const styles = StyleSheet.create({
     },
     avatarIconWrap: {
         marginHorizontal: 15,
-        marginRight:10
+        marginRight: 10
+    },
+    bindBtn: {
+        alignItems: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center'
     },
     bindBtnView: {
         borderBottomLeftRadius: 12,
@@ -303,12 +309,6 @@ const styles = StyleSheet.create({
         right: 0,
         width: 80,
         zIndex: 9
-    },
-    bindBtn: {
-        flex:1,
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: 'center'
     },
     bindText: {
         color: '#fff',
@@ -329,11 +329,11 @@ const styles = StyleSheet.create({
 
     },
     copyBtn: {
+        alignItems: 'center',
         backgroundColor: '#FFF4E8',
+        borderRadius: 18,
         height: 16,
-        borderRadius:18,
-        alignItems:'center',
-        justifyContent:'center',
+        justifyContent: 'center',
         width: 35
     },
     copyText: {
