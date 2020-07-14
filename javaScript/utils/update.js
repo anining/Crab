@@ -19,6 +19,7 @@ import asyncStorage from './asyncStorage';
 
 import toast from './toast';
 import { N } from './router';
+import android from '../components/Android';
 let nextUpdateUserTime = null; // 下一次更新用户的时间
 let nextUpdateSecondIncomeTime = null; // 下一次获取每秒奖励的时间
 const updateUserRate = 5;
@@ -217,7 +218,6 @@ export const getTaskPlatform = () => {
 };
 function taskDetail (receive_task_id) {
     taskReceiveDetail(receive_task_id).then(r => {
-        console.log(r, '==========taskReceiveDetail');
         if (r.error) {
             toast(r.msg || '当前摸鱼夺宝人数过多,稍后再试');
         } else {
@@ -316,4 +316,19 @@ export function getActivityDetail () {
             }
         }
     });
+}
+
+export function getChannel () {
+    try {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve, reject) => {
+            const ret = await android.promiseGetChannel();
+            if (ret && ret.channel) {
+                setter([['channel', ret.channel]], true);
+            }
+            resolve();
+        });
+    } catch (e) {
+        console.log(e);
+    }
 }

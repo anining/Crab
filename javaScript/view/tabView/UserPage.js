@@ -39,6 +39,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import ImageAuto from '../../components/ImageAuto';
 import SetPage from '../userView/SetPage';
 import { SYSTEM_VERSION, VERSION_CODE } from '../../utils/config';
+import { getGlobal, getPath } from '../../global/global';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -149,7 +150,7 @@ function UserPage () {
     // const [refreshing, setRefreshing] = useState(false);
     !authorization.get() && N.replace('VerificationStackNavigator');
     updateUser();
-
+    const sensitiveList = getPath(['sensitive_list', 'sensitive_list'], getGlobal('app'), {});
     function onRefresh () {
         updateUser();
         updateSecondIncome();
@@ -221,11 +222,11 @@ function UserPage () {
                         </View>
                     </ImageBackground>
                 </View>
-                <TouchableOpacity style={[css.flex, styles.shareWrap]} onPress={() => {
+                {_if(getGlobal('channel') in sensitiveList, res => <Text/>, () => <TouchableOpacity style={[css.flex, styles.shareWrap]} onPress={() => {
                     N.navigate('SharePage');
                 }}>
                     <ImageAuto key={'share'} source={user18} width={width * 0.94}/>
-                </TouchableOpacity>
+                </TouchableOpacity>)}
                 <View style={styles.myTask}>
                     <Text style={styles.myTaskTitle}>摸鱼夺宝记录</Text>
                     <RenderTaskMenu/>

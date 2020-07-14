@@ -41,6 +41,7 @@ import { _tc, initializationStore, setConsole } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
 import Prompt from '../components/Prompt';
 import {
+    getChannel,
     getGradeSetting,
     getSignConfig,
     getTaskPlatform, getWithdrawLatest, updateAccount,
@@ -281,7 +282,7 @@ function setStatusBar () {
 }
 
 export function initNetInfo () {
-    return Promise.all([updateUser(), updateAccount(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome(), updateNextRedLevel(), getWithdrawLatest()]);
+    return Promise.all([updateUser(), updateAccount(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome(), updateNextRedLevel(), getWithdrawLatest(), getChannel()]);
 }
 
 function AppStackNavigator () {

@@ -56,20 +56,21 @@ export default class GameHeader extends Component {
         this.debounceGetCoin = _debounce(async (addIncome) => {
             await this.getCoin(addIncome);
         }, 200);// 内存读取保护
-        this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user));
-        this.nowBalance = getPath(['goldCoin'], this.state.user, 0);
+        this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user), 4);
+        this.nowBalance = parseFloat(getPath(['goldCoin'], this.state.user, 0));
         this.debounceGetCoin();
         this._start = true;
     }
 
-    async getCoin (addIncome = 0) {
+    async getCoin (addIncomeStr = 0) {
         try {
+            const addIncome = parseFloat(addIncomeStr);
             const ret = await asyncStorage.getItem(`${getPath(['phone'], this.state.user)}coin`);
             if (JsonParse(ret) && JsonParse(ret).mastUpdate) {
-                this.nowBalance = JsonParse(ret).coin;
+                this.nowBalance = parseFloat(JsonParse(ret).coin);
             } else {
                 if (JsonParse(ret) && JsonParse(ret).coin) {
-                    this.nowBalance = JsonParse(ret).coin + (+new Date() - JsonParse(ret).time) / 1000 * this.secondIncome + addIncome;
+                    this.nowBalance = parseFloat(JsonParse(ret).coin) + Number((+new Date() - JsonParse(ret).time) / 1000 * this.secondIncome) + addIncome;
                     asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
                         coin: this.nowBalance,
                         time: +new Date()
@@ -90,14 +91,15 @@ export default class GameHeader extends Component {
         this.nowBalance = 0;
     }
 
-    start (addIncome = this.secondIncome, calibration = true) {
+    start (addIncomeStr = this.secondIncome, calibration = true) {
         try {
-            if (this._start && addIncome) {
+            if (this._start && addIncomeStr) {
+                const addIncome = parseFloat(addIncomeStr);
                 this._start = false;
                 this.enlarge && this.enlarge.start();
-                const minAddUnit = parseFloat(addIncome / addFrequency);
+                const minAddUnit = (parseFloat(addIncome) / addFrequency);
                 const baseNowBalance = this.nowBalance;
-                this.nowBalance += parseFloat(addIncome);
+                this.nowBalance = parseFloat(_toFixed(addIncome + this.nowBalance));
                 for (let i = 0; i < addFrequency; i++) {
                     setAndroidTime(async () => {
                         if ((i + 1) === addFrequency) {
@@ -129,7 +131,7 @@ export default class GameHeader extends Component {
                 }
             }
         } catch (e) {
-            console.log(e);
+            console.log(e, 'startstartstart');
         }
     }
 
