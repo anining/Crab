@@ -378,6 +378,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginLeft: '1%',
         marginRight: '1%',
+        overflow: 'hidden',
         position: 'relative',
         width: '48%',
     },

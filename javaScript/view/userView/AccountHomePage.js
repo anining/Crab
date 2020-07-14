@@ -32,10 +32,14 @@ function AccountHomePage (props) {
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <Header karet-lift scene={{ descriptor: { options: {} }, route: { name: '绑定账号' } }} navigation={N} onPress={() => {
-                DeviceEventEmitter.emit('showPop', {
-                    dom: <RenderSelect style={styles.selectView}/>,
-                    close: () => {},
-                });
+                if ((taskPlatform.get() || []).filter(item => item.need_bind).length) {
+                    DeviceEventEmitter.emit('showPop', {
+                        dom: <RenderSelect style={styles.selectView}/>,
+                        close: () => {},
+                    });
+                } else {
+                    toast('暂时不需要绑定任何账号');
+                }
             }} backOnPress={() => {
                 refresh && typeof refresh === 'function' && refresh();
                 N.goBack();
@@ -47,7 +51,7 @@ function AccountHomePage (props) {
 
 function RenderSelect () {
     const view = [];
-    const localArray = taskPlatform.get() || [];
+    const localArray = (taskPlatform.get() || []).filter(item => item.need_bind);
 
     localArray.forEach(item => {
         const { platform_category: id, label } = item;
@@ -72,7 +76,13 @@ function RenderView () {
     const children = (
         <>
             <Text style={{ marginTop: 7, marginBottom: 20 }}>快去绑定账号摸鱼夺宝吧～</Text>
-            <TouchableOpacity activeOpacity={1} onPress={() => { DeviceEventEmitter.emit('showPop', <RenderSelect />); }} style={{ width: 206, height: 44, backgroundColor: '#FF9C00', borderRadius: 22 }}>
+            <TouchableOpacity activeOpacity={1} onPress={() => {
+                if ((taskPlatform.get() || []).filter(item => item.need_bind).length) {
+                    DeviceEventEmitter.emit('showPop', <RenderSelect />);
+                } else {
+                    toast('暂时不需要绑定任何账号');
+                }
+            }} style={{ width: 206, height: 44, backgroundColor: '#FF9C00', borderRadius: 22 }}>
                 <Text numberOfLines={1} style={{ color: '#fff', lineHeight: 44, textAlign: 'center', fontSize: 17 }}>添加绑定</Text>
             </TouchableOpacity>
         </>
