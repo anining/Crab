@@ -57,7 +57,21 @@ function WithdrawRecordsPage () {
 
 function RenderView ({ status, withdraw_type }) {
     switch (status) {
-    case 1:
+    case 2:
+        return (
+            <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
+                <Text numberOfLines={1} style={ { color: '#0045FF', fontSize: 13, maxWidth: 180 }}>兑换中</Text>
+                <Text numberOfLines={1} style={{ color: '#999', fontSize: 12 }}>24小时内审核到账</Text>
+            </View>
+        );
+    case 3:
+        return (
+            <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
+                <Text numberOfLines={1} style={ { color: '#53C23B', fontSize: 13, maxWidth: 180 }}>兑换成功</Text>
+                <Text numberOfLines={1} style={{ color: '#999', fontSize: 12 }}>{WITHDRAW_TYPE[withdraw_type]}</Text>
+            </View>
+        );
+    default:
         return (
             <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
                 <Text numberOfLines={1} style={ { color: '#999', fontSize: 11 }}>兑换失败(兑换账户异常)，金币已退回</Text>
@@ -66,20 +80,6 @@ function RenderView ({ status, withdraw_type }) {
                 }}>
                     <Text numberOfLines={1} style={{ color: '#FA0000', fontSize: 13, padding: 5 }}>我有疑问</Text>
                 </TouchableOpacity>
-            </View>
-        );
-    case 2:
-        return (
-            <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-                <Text numberOfLines={1} style={ { color: '#0045FF', fontSize: 13, maxWidth: 180 }}>兑换中</Text>
-                <Text numberOfLines={1} style={{ color: '#999', fontSize: 12 }}>24小时内审核到账</Text>
-            </View>
-        );
-    default:
-        return (
-            <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-                <Text numberOfLines={1} style={ { color: '#53C23B', fontSize: 13, maxWidth: 180 }}>兑换成功</Text>
-                <Text numberOfLines={1} style={{ color: '#999', fontSize: 12 }}>{WITHDRAW_TYPE[withdraw_type]}</Text>
             </View>
         );
     }
