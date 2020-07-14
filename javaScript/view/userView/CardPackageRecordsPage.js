@@ -8,8 +8,8 @@ import { transformTime } from '../../utils/util';
 const itemHeight = 130;
 const itemMarginTop = 10;
 const PROP_SOURCE = {
-    1: '签到',
-    2: '提现',
+    1: '连续签到',
+    2: '摸鱼夺宝产出',
     3: '系统赠送'
 };
 

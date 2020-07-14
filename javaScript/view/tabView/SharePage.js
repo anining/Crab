@@ -41,6 +41,7 @@ import answer15 from '../../assets/icon/answer/answer15.png';
 import header3 from '../../assets/icon/header/header3.png';
 import Header from '../../components/Header';
 import { getGlobal, getPath } from '../../global/global';
+import { updateUser } from '../../utils/update';
 
 const { width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
@@ -145,6 +146,7 @@ export default class SharePage extends PureComponent {
         } else {
             getPromoteAward(level).then(r => {
                 if (!r.error) {
+                    updateUser();
                     const { add_balance } = r.data;
                     view = (
                         <>
@@ -172,6 +174,7 @@ export default class SharePage extends PureComponent {
         }
         const ret = await getChildAward();
         if (ret && !ret.error) {
+            updateUser();
             this.setState({ awardLength: 0 });
             const { add_balance = 0, children_num = 0 } = ret.data;
             DeviceEventEmitter.emit('showPop', {
