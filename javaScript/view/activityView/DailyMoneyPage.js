@@ -113,7 +113,7 @@ function DailyMoneyPage (props) {
 function PopupView ({ money }) {
     const scale = (Number(money) / 30).toFixed(2);
     const localWidth = width * 0.9 * 0.64 * scale;
-    const localLeft = width * 0.9 * (0.63 * scale + 0.05);
+    const localLeft = width * 0.9 * (0.63 * scale);
     return (
         <ImageBackground source={activity15} style={styles.popupView}>
             <View style={styles.progress} />
@@ -206,15 +206,14 @@ const styles = StyleSheet.create({
         width: 110
     },
     popupView: {
-        height: width * 0.9 * (1035 / 1026),
+        height: width * 0.9 * (1035 / 1092),
         position: 'relative',
-        transform: [{ translateX: -width * 0.05 }],
         width: width * 0.9,
     },
     popupViewBtn: {
         bottom: '15%',
         height: '15%',
-        left: '20%',
+        left: '17%',
         position: 'absolute',
         width: '70%'
     },
@@ -223,7 +222,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         bottom: '40%',
         height: 15,
-        left: width * 0.9 * 0.23,
+        left: width * 0.9 * 0.2,
         position: 'absolute',
         width: width * 0.9 * 0.64,
     },
@@ -232,7 +231,7 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         bottom: '40%',
         height: 15,
-        left: width * 0.9 * 0.23,
+        left: width * 0.9 * 0.2,
         maxWidth: width * 0.9 * 0.64,
         position: 'absolute'
     },

@@ -18,7 +18,7 @@ function WithdrawRecordsPage () {
     return (
         <SafeAreaView style={css.safeAreaView}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '兑换记录' } }} navigation={N} onPress={() => {
-                DeviceEventEmitter.emit('showPop', <Image source={with9} style={{ height: width * 0.8 * (1038 / 885), width: width * 0.8 }}/>);
+                DeviceEventEmitter.emit('showPop', <Image source={with9} style={{ height: width * 0.8 * (1158 / 885), width: width * 0.8 }}/>);
             }} headerRight={headerRight}/>
             <View style={{ flex: 1, backgroundColor: '#F8F8F8' }}>
                 <ListGeneral
