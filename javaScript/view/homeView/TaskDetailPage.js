@@ -719,7 +719,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: 15,
         marginTop: 15,
-        width
+        width: '100%'
     },
     submitBtnText: {
         fontSize: 17,
