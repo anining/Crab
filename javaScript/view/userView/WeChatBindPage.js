@@ -11,6 +11,7 @@ import Crab from '../../components/Crab';
 import QRCode from 'react-native-qrcode-svg';
 import { urlSuo, wxToken } from '../../utils/api';
 import { getter } from '../../utils/store';
+import { REDIRECT_URI } from '../../utils/config';
 
 const { width } = Dimensions.get('window');
 const { avatar, openid } = getter(['user.avatar', 'user.openid', 'user']);
@@ -30,7 +31,7 @@ function WeChatBindPage () {
         if (token) {
             try {
                 (async () => {
-                    const URI = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx660a4724f56fdba5&redirect_uri=https%3A%2F%2Fbind.libratb.com&response_type=code&scope=snsapi_userinfo&state=${token}#wechat_redirect`;
+                    const URI = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx660a4724f56fdba5&redirect_uri=${REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=${token}#wechat_redirect`;
                     const ret = await urlSuo(URI);
                     console.log(ret);
                     if (ret && !ret.error && ret.data.url) {

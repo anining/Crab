@@ -87,7 +87,7 @@ function DailyMoneyPage (props) {
                     <View style={[css.flex, css.fw, css.pa, styles.redPackageWrap, css.afs]}>
                         <CountDown time={+new Date(djangoTime(invalid_time))} style={{ color: Number(money) >= 30 ? 'rgba(225,48,32,1)' : '#999', fontSize: 13, lineHeight: 30 }} millisecond={true} tips={Number(money) >= 30 ? '后未兑换金币将失效' : '后金币失效'}/>
                         <Text style={styles.redMaxText}> {transformMoney(money, 4)} <Text style={{ fontSize: 20 }}>金币</Text></Text>
-                        <Animatable.View useNativeDriver={true} iterationCount="infinite" animation="pulse" style={[css.auto]}>
+                        <Animatable.View useNativeDriver={true} iterationCount="infinite" animation="pulse" style={[{ marginTop: width * 0.06 }, css.auto]}>
                             <Shadow style={[styles.shareBtn]}>
                                 <Text style={styles.shareBtnText} onPress={() => {
                                     if (Number(money) < 30) {
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     dmMinTips: {
         color: '#fff',
         fontSize: 11,
-        marginTop: 10
+        marginTop: 5
     },
     dmWrap: {
         height: 2175 / 1125 * width,
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F3462D',
         borderRadius: 8,
         marginLeft: '3%',
-        marginTop: -height * 0.47,
+        marginTop: -(2175 / 1125 * width) * 0.4,
         padding: 15,
         width: '94%'
     },
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         lineHeight: width * 0.2,
         marginBottom: width * 0.07,
-        marginTop: width * 0.1,
+        marginTop: width * 0.04,
         textAlign: 'center',
         width: '100%'
     },

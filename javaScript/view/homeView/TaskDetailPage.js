@@ -12,8 +12,7 @@ import {
     StyleSheet,
     ScrollView,
     TextInput,
-    DeviceEventEmitter,
-    InteractionManager,
+    DeviceEventEmitter
 } from 'react-native';
 import { css } from '../../assets/style/css';
 import task4 from '../../assets/icon/task/task4.png';
@@ -285,6 +284,9 @@ function DetailView ({ refresh, detail }) {
 
 function ClaimView ({ detail }) {
     const { description } = detail;
+    if (!description) {
+        return <></>;
+    }
     return (
         <View style={styles.taskClaim}>
             <View style={styles.taskClaimTop}>
@@ -744,7 +746,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 8,
         marginTop: 15,
-        minHeight: 350,
         width: '100%'
     },
     taskCourseText: {
