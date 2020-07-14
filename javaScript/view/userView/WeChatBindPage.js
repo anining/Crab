@@ -5,7 +5,7 @@ import { css } from '../../assets/style/css';
 import answer17 from '../../assets/icon/answer/answer17.png';
 import { captureRef } from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
-import { _if, requestPermission } from '../../utils/util';
+import { _if, getUrl, requestPermission } from '../../utils/util';
 import toast from '../../utils/toast';
 import Crab from '../../components/Crab';
 import QRCode from 'react-native-qrcode-svg';
@@ -29,17 +29,20 @@ function WeChatBindPage () {
 
     useEffect(() => {
         if (token) {
+            const URI = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx660a4724f56fdba5&redirect_uri=${REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=${token}#wechat_redirect`;
             try {
                 (async () => {
-                    const URI = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx660a4724f56fdba5&redirect_uri=${REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=${token}#wechat_redirect`;
                     const ret = await urlSuo(URI);
                     console.log(ret);
-                    if (ret && !ret.error && ret.data.url) {
+                    if (ret && !ret.error && getUrl(ret.data.url)) {
                         setValue(ret.data.url);
+                    } else {
+                        setValue(URI);
                     }
                 })();
             } catch (e) {
                 console.log(e);
+                setValue(URI);
             }
         }
     }, [token]);
@@ -69,8 +72,9 @@ function WeChatBindPage () {
             <Crab text="绑定说明："/>
             <Text style={styles.text}>1.保存二维码到本地。</Text>
             <Text style={styles.text}>2.打开微信扫一扫，选择本地图片。</Text>
-            <Text style={styles.text}>3.如果绑定失败，请通过“我的 - 帮助中心”加群联系管理员。</Text>
-            <Text style={styles.text}>4.绑定微信后请刷新“我的”有您的微信昵称即绑定成功。</Text>
+            <Text style={styles.text}>3.绑定页面加载缓慢，需耐心等待一会即可绑定成功。</Text>
+            <Text style={styles.text}>4.如果绑定失败，请通过“我的 - 帮助中心”加群联系管理员。</Text>
+            <Text style={styles.text}>5.绑定微信后请刷新“我的”有您的微信昵称即绑定成功。</Text>
         </SafeAreaView>
     );
 }
