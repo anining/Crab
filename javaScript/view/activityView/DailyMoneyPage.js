@@ -146,7 +146,7 @@ function RenderList ({ history }) {
             <View style={[styles.recordItemWrap, css.flex, css.sp]} key={receive_task_red_package_log_item_id}>
                 <Image source={{ uri: avatar }} style={{ width: 40, height: 40, borderRadius: 20 }}/>
                 <View style={[css.flex, css.fw, styles.riwInfoWrap, css.js]}>
-                    <Text numberOfLine={1} style={[styles.riwText, { fontSize: 13 }]}>{label}</Text>
+                    <Text numberOfLine={1} style={[styles.riwText, { fontSize: 13 }]}>{label || '系统赠送'}</Text>
                     <Text numberOfLine={1} style={styles.riwText}>{source}</Text>
                 </View>
                 <Text style={styles.riwMoneyText}>+{transformMoney(add_money, 4)}金币</Text>
