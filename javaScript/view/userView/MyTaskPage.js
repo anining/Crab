@@ -16,7 +16,7 @@ const HEADER_DATA = [
     {
         tabLabel: '进行中',
         type: 1,
-        itemHeight: 265
+        itemHeight: 215
     },
     {
         tabLabel: '审核中',
