@@ -4,13 +4,11 @@ import { Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, View } from 're
 import { css } from '../../assets/style/css';
 import HTML from 'react-native-render-html';
 import Video from 'react-native-video';
-import asyncStorage from '../../utils/asyncStorage';
 import { getter } from '../../utils/store';
 import { helpCenterDetail } from '../../utils/api';
 import LottieView from 'lottie-react-native';
 import loadingJson from '../../lottie/loading';
 import { _if } from '../../utils/util';
-import { NOVICE_VIDEO } from '../../utils/data';
 import { getPath } from '../../global/global';
 
 const { width } = Dimensions.get('window');

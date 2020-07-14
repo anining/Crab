@@ -47,6 +47,7 @@ function WithdrawAliPayPage (props) {
             return;
         }
         postWithdraw(goodId, money, 'ali', number, name).then(r => {
+            callback && callback();
             if (r && !r.error) {
                 asyncStorage.setItem('aliName', name);
                 asyncStorage.setItem('aliNumber', number);
@@ -58,7 +59,6 @@ function WithdrawAliPayPage (props) {
                     rt: '我知道了',
                     fontSize: 15
                 }}/>);
-                callback && callback();
                 N.navigate('UserPage');
                 updateUser();
                 updateSecondIncome();
