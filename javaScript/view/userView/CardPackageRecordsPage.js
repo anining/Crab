@@ -7,6 +7,11 @@ import { transformTime } from '../../utils/util';
 
 const itemHeight = 130;
 const itemMarginTop = 10;
+const PROP_SOURCE = {
+    1: '签到',
+    2: '提现',
+    3: '系统赠送'
+};
 
 function CardPackageRecordsPage () {
     return (
@@ -20,7 +25,7 @@ function CardPackageRecordsPage () {
                     });
                 }}
                 renderItem={item => {
-                    const { prop_log_id, updated_at, is_used, prop } = item;
+                    const { prop_log_id, source: s, updated_at, is_used, prop } = item;
                     const { label, source, usage_range, icon: uri } = prop;
                     return (
                         <>
@@ -30,14 +35,14 @@ function CardPackageRecordsPage () {
                                         <Image source={{ uri }} style={styles.image} />
                                         <Text numberOfLines={1} style={{ color: '#353535', maxWidth: 130 }}>{label}</Text>
                                     </View>
-                                    <Text numberOfLines={1} style={{ color: item.type === 1 ? '#FF3B00' : '#53C23B' }}>{is_used ? '使用道具' : '获得道具'}</Text>
+                                    <Text numberOfLines={1} style={{ color: is_used ? '#FF3B00' : '#53C23B' }}>{is_used ? '使用道具' : '获得道具'}</Text>
                                 </View>
                                 <View style={ [styles.item, styles.itemBottom]}>
                                     <View style={css.flexRCSB}>
-                                        <Text numberOfLines={1} style={[styles.text, { maxWidth: 180 }]}>{is_used ? '道具用途：' : '道具来源：'}{is_used ? usage_range : source === 1 ? '签到' : '兑换'}</Text>
-                                        <Text numberOfLines={1} style={styles.text}>使用数量：1</Text>
+                                        <Text numberOfLines={1} style={[styles.text, { fontSize: 13 }]}>{is_used ? '道具用途：' : '道具来源：'}{is_used ? usage_range : PROP_SOURCE[s]}</Text>
+                                        <Text numberOfLines={1} style={[styles.text, { fontSize: 12 }]}>使用数量：1</Text>
                                     </View>
-                                    <Text numberOfLines={1} style={{ fontSize: 12, color: '#999' }}>获得时间：{transformTime(updated_at)}</Text>
+                                    <Text numberOfLines={1} style={{ fontSize: 10, color: '#999' }}>获得时间：{transformTime(updated_at)}</Text>
                                 </View>
                             </View>
                         </>
