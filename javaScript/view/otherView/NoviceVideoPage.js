@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, DeviceEventEmitter } from 'react-native';
 import Video from 'react-native-video';
-import { NOVICE_VIDEO } from '../../utils/data';
 import loadingJson from '../../lottie/loading';
 import LottieView from 'lottie-react-native';
 import { css } from '../../assets/style/css';
 import { _if } from '../../utils/util';
-import { bindData } from '../../global/global';
+import { bindData, getGlobal, getPath } from '../../global/global';
 import { N } from '../../utils/router';
 import { setter } from '../../utils/store';
-
+// NOVICE_VIDEO
 export default class NoviceVideoPage extends Component {
     constructor (props) {
         super(props);
@@ -17,6 +16,7 @@ export default class NoviceVideoPage extends Component {
             play: false,
             user: bindData('user', this)
         };
+        this.noviceVideo = getPath(['configObj', 'app_other_info', 'value', 'noviceVideo'], getGlobal('app'), '');
     }
 
     async _end () {
@@ -48,7 +48,7 @@ export default class NoviceVideoPage extends Component {
                     />
                     <Text style={styles.loadingText}>视频正在加载中，请耐心等候...</Text>
                 </View>)}
-                <Video source={{ uri: NOVICE_VIDEO }}
+                <Video source={{ uri: this.noviceVideo }}
                     ref={(ref) => { this.player = ref; }}
                     controls = {true}
                     disableFocus = {true}

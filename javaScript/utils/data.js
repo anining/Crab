@@ -11,5 +11,5 @@ export const DEFAULT_USER = {
     correct_rate: 1,
     defaultInfo: true
 };
-export const NOVICE_VIDEO = 'https://ali.taskpic.libragx.com/AA_QWZ/video/videoNovice.MP4'; // 新手教程视频
+// export const NOVICE_VIDEO = 'https://ali.taskpic.libragx.com/AA_QWZ/video/videoNovice.MP4'; // 新手教程视频
 export const BALANCE_RATE = 10000; // rmb显示金币转换比例

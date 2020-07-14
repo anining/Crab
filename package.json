@@ -11,7 +11,8 @@
     "build": "node ./modify.js;cd ./android;./gradlew assembleRelease;",
     "clear": "sudo react-native clean-project-auto",
     "modify": "node ./modify.js",
-    "codepush": "code-push release-react rnCrab android -d dev --des '全面升级' -m true",
+    "codepush": "code-push release-react crab android -d Production --des '全面升级' -m true",
+    "codepushLogin": "code-push login https://code-push.librags.com",
     "bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res  "
   },
   "dependencies": {

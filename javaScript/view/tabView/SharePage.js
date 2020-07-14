@@ -41,12 +41,13 @@ import answer15 from '../../assets/icon/answer/answer15.png';
 import header3 from '../../assets/icon/header/header3.png';
 import Header from '../../components/Header';
 import { updateUser } from '../../utils/update';
+import { getGlobal, getPath } from '../../global/global';
 
 const { width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
 const SHARE_ITEM_RADIUS = 10;
 const WALFARE_ONE_height = 190;
-const WALFARE_TWO_height = 570;
+const WALFARE_TWO_height = 620;
 const WALFARE_TRI_height = 300;
 const cashBack = [{
     title: '直接渔友首次兑换到账',
@@ -58,11 +59,11 @@ const cashBack = [{
     title: '直接渔友第三次兑换到账',
     label: '师傅得3元',
 }];
-const { invite_code, label, authorization } = getter(['user.invite_code', 'authorization', 'app.label']);
+const { invite_code, authorization } = getter(['user.invite_code', 'authorization']);
 
 function RewardPop ({ view, source }) {
     return (
-        <ImageBackground source={source} style={{ width: width * 0.8, height: width * 0.8 * (1245 / 885), position: 'relative' }}>
+        <ImageBackground source={source} style={{ width: width * 0.75, height: width * 0.75 * (1245 / 885), position: 'relative' }}>
             {view}
         </ImageBackground>
     );
@@ -80,6 +81,7 @@ export default class SharePage extends PureComponent {
         this.getReward = this.getReward.bind(this);
         this.getBigReward = this.getBigReward.bind(this);
         this.renderPop = this.renderPop.bind(this);
+        this.topPusherWx = getPath(['configObj', 'app_other_info', 'value', 'topPusherWx'], getGlobal('app'), '');
     }
 
     async _awardDetail () {
@@ -132,7 +134,7 @@ export default class SharePage extends PureComponent {
                     <Text style={[styles.rewardPopText, { top: '40%' }]}>还有更多的福利机会等着您哟~</Text>
                     <TouchableOpacity style={styles.rewardPopBtn} onPress={() => {
                         DeviceEventEmitter.emit('hidePop');
-                        _copyStr(label.get());
+                        _copyStr(this.topPusherWx);
                     }}>
                         <Text style={{ color: '#8F5806', fontSize: 18, fontWeight: '500' }}>复制微信号</Text>
                     </TouchableOpacity>
@@ -140,7 +142,6 @@ export default class SharePage extends PureComponent {
             );
             DeviceEventEmitter.emit('showPop', {
                 dom: <RewardPop view={view} source={answer15}/>,
-                close: () => { _copyStr(label.get()); }
             });
         } else {
             getPromoteAward(level).then(r => {
@@ -168,7 +169,7 @@ export default class SharePage extends PureComponent {
     async getReward () {
         const { awardLength } = this.state;
         if (!awardLength) {
-            toast('暂时没有奖励可以领取!');
+            toast('暂时没有奖励可以领取');
             return;
         }
         const ret = await getChildAward();
@@ -223,8 +224,8 @@ export default class SharePage extends PureComponent {
             color: '#FF5C22'
         }, {
             icon: share6,
-            text: '加入内部群',
-            color: '#666'
+            text: '领取奖励',
+            color: '#FF5C22'
         }];
         const validNumber = parseInt(_gv(this.state.detailInfo, 'valid_children', 0));
         shareLevel.forEach((item, index) => {
@@ -249,21 +250,23 @@ export default class SharePage extends PureComponent {
                             {(() => {
                                 const { valid_children, detailInfo } = this.state;
                                 const { need_children_num } = info;
-                                if (Number(need_children_num) > Number(valid_children)) {
-                                    return undefined;
-                                }
                                 return (
                                     <TouchableOpacity onPress={() => {
-                                        this.getBigReward(info, item, index);
+                                        // this.getBigReward(info, item, index);
+                                        if (Number(need_children_num) <= Number(valid_children)) {
+                                            this.getBigReward(info, item, index);
+                                        } else {
+                                            toast('你还不满足领取条件');
+                                        }
                                     }}>
                                         <Text style={{ color: item.color }}>{item.text}</Text>
                                     </TouchableOpacity>
                                 );
                             })()}
                         </View>
-                        {<Text numberOfLines={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>{transformMoney(info.min_money, 0)}{info.max_money > info.min_money ? `-${transformMoney(info.max_money, 0)}` : ''}金币</Text>现金红包，获得{info.first_rebate * 100 + '%'}直接渔友{info.second_rebate * 100 + '%'}间接渔友兑换回馈奖励。</Text>}
+                        {<Text numberOfLines={2} style={styles.welfareLabelText}>送<Text style={{ color: '#FF8353' }}>{transformMoney(info.min_money, 0)}{info.max_money > info.min_money ? `-${transformMoney(info.max_money, 0)}` : ''}金币</Text>礼包，获得{info.first_rebate * 100 + '%'}直接渔友{info.second_rebate * 100 + '%'}间接渔友兑换回馈奖励。</Text>}
                         {SharePage._renderProgress(validNumber / parseInt(info.need_children_num))}
-                        {/* <Text numberOfLines={1} style={styles.welfareTargetText}>要求{info.need_children_num}徒弟兑换，已兑换的徒弟 {validNumber}/{info.need_children_num}</Text> */}
+                        <Text numberOfLines={1} style={styles.welfareTargetText}>已兑换的渔友 {validNumber}/{info.need_children_num}</Text>
                     </View>
                 );
             }
@@ -371,7 +374,7 @@ export default class SharePage extends PureComponent {
                                         paddingTop: 30,
                                         paddingHorizontal: 10,
                                     }]}>
-                                        {SharePage._renderShareTitle(<Text style={styles.wTitleText}>渔友兑换送<Text style={{ color: '#FF5C22' }}>6元</Text></Text>, <TouchableOpacity onPress={this.getReward}><Text style={{ fontSize: 11, color: 'rgba(255,92,34,1)', paddingRight: 15 }}>领取奖励（{awardLength}）</Text></TouchableOpacity>)}
+                                        {SharePage._renderShareTitle(<Text style={styles.wTitleText}>渔友兑换送<Text style={{ color: '#FF5C22' }}>6w金币</Text></Text>, <TouchableOpacity onPress={this.getReward}><Text style={{ fontSize: 11, color: 'rgba(255,92,34,1)', paddingRight: 15 }}>领取奖励（{awardLength}）</Text></TouchableOpacity>)}
                                         {this._renderCashBack()}
                                     </View>
                                 </Shadow>
@@ -389,7 +392,7 @@ export default class SharePage extends PureComponent {
                                     }]}>
                                         {SharePage._renderShareTitle(
                                             <Text style={styles.wTitleText} numberOfLines={1}>交渔友抢<Text
-                                                style={{ color: '#FF5C22' }}>1888元</Text>现金红包加<Text
+                                                style={{ color: '#FF5C22' }}>1888w金币</Text>加<Text
                                                 style={{ color: '#FF5C22' }}>15%回馈奖励</Text></Text>,
                                         )}
                                         {this._renderWelfare()}
@@ -398,16 +401,15 @@ export default class SharePage extends PureComponent {
                             </View>
                             <View style={[styles.welfareItemWrap, css.pr, css.flex]}>
                                 <ImageBackground source={share2} style={[styles.shareTitle, css.flex, css.pa]}>
-                                    <Text style={styles.shareTitleText}>福利三</Text>
+                                    <Text style={styles.shareTitleText}>说明</Text>
                                 </ImageBackground>
                                 <Shadow style={[styles.welfareInner, { height: WALFARE_TRI_height }]} color={'#333'} opacity={0.1}>
                                     <View style={[styles.welfareInner, { backgroundColor: '#fff', paddingTop: 40, paddingHorizontal: 10, height: WALFARE_TRI_height }]}>
                                         <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>1.</Text>您直接邀请的用户是您的渔友,您渔友邀请的用户是您的渔小友。</Text>
-                                        {/* <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>2.</Text>对于您的渔友来说,您是师父.对于您的渔小友来说,您是师祖。</Text> */}
-                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>3.</Text>渔友兑换奖励需要您手动领取，可在“我的 - 兑换 - 收益记录”查看收益详情。</Text>
-                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>4.</Text>回馈奖励通过后自动到账，可在“我的 - 兑换 - 收益记录”查看收益详情。</Text>
-                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>5.</Text>交渔友严禁使用任何违规作弊手段,一经发现直接封号处理。</Text>
-                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>6.</Text>活动长期有效,活动解释权归官方所有.</Text>
+                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>2.</Text>渔友兑换奖励需要您手动领取，可在“我的 - 兑换 - 收益记录”查看收益详情。</Text>
+                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>3.</Text>回馈奖励通过后自动到账，可在“我的 - 兑换 - 收益记录”查看收益详情。</Text>
+                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>4.</Text>交渔友严禁使用任何违规作弊手段,一经发现直接封号处理。</Text>
+                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>5.</Text>活动长期有效,活动解释权归官方所有.</Text>
                                     </View>
                                 </Shadow>
                             </View>
@@ -659,7 +661,7 @@ const styles = StyleSheet.create({
         paddingVertical: 3,
     },
     tipsWrap: {
-        marginTop: width * 0.01,
+        // marginTop: width * 0.01,
         overflow: 'hidden',
     },
     wShareTitle: {
@@ -692,7 +694,7 @@ const styles = StyleSheet.create({
     welfareProgressWrap: {
         backgroundColor: '#FFF8E7',
         borderRadius: 6,
-        height: 140,
+        height: 160,
         marginTop: 15,
         overflow: 'hidden',
         padding: 10,

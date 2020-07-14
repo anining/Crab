@@ -234,11 +234,10 @@ const styles = StyleSheet.create({
     },
     hdnText: {
         color: '#ffffff',
-        fontSize: 15,
-        maxWidth: 100,
+        fontSize: 14,
+        maxWidth: 110,
         padding: 0,
-        ...css.gf,
-        textAlign: 'left'
+        ...css.gf
     },
     hdnTextWrap: {
         marginHorizontal: 6,
