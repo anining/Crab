@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#eee',
         borderRadius: 4,
         color: '#353535',
-        fontSize: 14,
+        fontSize: 12,
         overflow: 'hidden',
         paddingHorizontal: 15,
         width: width * 0.9 - 70
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     },
     setLineText: {
         color: '#999',
-        fontSize: 14,
+        fontSize: 12,
         lineHeight: 25,
     },
     setTips: {

@@ -46,7 +46,7 @@ const { width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
 const SHARE_ITEM_RADIUS = 10;
 const WALFARE_ONE_height = 190;
-const WALFARE_TWO_height = 600;
+const WALFARE_TWO_height = 620;
 const WALFARE_TRI_height = 300;
 const cashBack = [{
     title: '直接渔友首次兑换到账',
@@ -658,7 +658,7 @@ const styles = StyleSheet.create({
         paddingVertical: 3,
     },
     tipsWrap: {
-        marginTop: width * 0.01,
+        // marginTop: width * 0.01,
         overflow: 'hidden',
     },
     wShareTitle: {
