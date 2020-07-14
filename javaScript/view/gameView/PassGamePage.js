@@ -96,7 +96,7 @@ export default class PassGamePage extends Component {
             if (this.state.highPerformance) {
                 setAndroidTime(() => {
                     this._hiddenXian();
-                }, 800);
+                }, 1000);
             }
             DeviceEventEmitter.emit('showPop', {
                 dom: <View

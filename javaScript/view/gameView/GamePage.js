@@ -105,7 +105,7 @@ export default class GamePage extends Component {
     async _upgradeGameLevel () {
         const ret = await upgradeGameLevel(JSON.stringify(this.state.gameInfo.content));
         if (ret && !ret.error) {
-            const passTime = this.state.highPerformance ? 800 : 1500;
+            const passTime = this.state.highPerformance ? 800 : 1200;
             setAndroidTime(() => {
                 N.replace('PassGamePage', {
                     info: {
