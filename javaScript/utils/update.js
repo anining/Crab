@@ -23,7 +23,7 @@ import android from '../components/Android';
 let nextUpdateUserTime = null; // 下一次更新用户的时间
 let nextUpdateSecondIncomeTime = null; // 下一次获取每秒奖励的时间
 const updateUserRate = 5;
-const updateSecondIncomeRate = 20;
+const updateSecondIncomeRate = 30;// 每秒奖励间隔
 export const updateUser = (callback) => {
     return new Promise((resolve, reject) => {
         if (!nextUpdateUserTime || (nextUpdateUserTime <= +new Date())) {
