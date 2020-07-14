@@ -6,11 +6,15 @@ import Header from '../../components/Header';
 import { N } from '../../utils/router';
 import { withdrawLogs } from '../../utils/api';
 import with9 from '../../assets/icon/withdraw/withdraw9.png';
-import { _toFixed, transformMoney, transformTime } from '../../utils/util';
+import { _toFixed, transformTime } from '../../utils/util';
 
 const itemHeight = 110;
 const itemMarginTop = 10;
 const { width } = Dimensions.get('window');
+const WITHDRAW_TYPE = {
+    wx: '微信账户',
+    ali: '支付宝账户'
+};
 
 function WithdrawRecordsPage () {
     const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>状态说明</Text>;
@@ -31,7 +35,7 @@ function WithdrawRecordsPage () {
                         });
                     }}
                     renderItem={item => {
-                        const { withdraw_log_id, status, created_at, balance, money } = item;
+                        const { withdraw_log_id, status, created_at, withdraw_type, money } = item;
                         return (
                             <>
                                 <View style={styles.itemView} key={withdraw_log_id}>
@@ -40,7 +44,7 @@ function WithdrawRecordsPage () {
                                         {/* <Text style={{ fontSize: 14, fontWeight: '600' }}>({balance}元)</Text> */}
                                         <Text numberOfLines={1} style={{ fontSize: 18, color: '#FF6C00', fontWeight: '600' }}>{_toFixed(money, 0)}元</Text>
                                     </View>
-                                    <RenderView status={status}/>
+                                    <RenderView status={status} withdraw_type={withdraw_type}/>
                                 </View>
                             </>
                         );
@@ -51,16 +55,9 @@ function WithdrawRecordsPage () {
     );
 }
 
-function RenderView ({ status }) {
+function RenderView ({ status, withdraw_type }) {
     switch (status) {
     case 1:
-        return (
-            <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-                <Text numberOfLines={1} style={ { color: '#0045FF', fontSize: 15, maxWidth: 180 }}>兑换中</Text>
-                <Text numberOfLines={1} style={{ color: '#999', fontSize: 12 }}>24小时内审核到账</Text>
-            </View>
-        );
-    case 2:
         return (
             <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
                 <Text numberOfLines={1} style={ { color: '#999', fontSize: 11 }}>兑换失败(兑换账户异常)，金币已退回</Text>
@@ -71,10 +68,18 @@ function RenderView ({ status }) {
                 </TouchableOpacity>
             </View>
         );
+    case 2:
+        return (
+            <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
+                <Text numberOfLines={1} style={ { color: '#0045FF', fontSize: 13, maxWidth: 180 }}>兑换中</Text>
+                <Text numberOfLines={1} style={{ color: '#999', fontSize: 12 }}>24小时内审核到账</Text>
+            </View>
+        );
     default:
         return (
             <View style={[css.flexRCSB, styles.item, { height: 50 }]}>
-                <Text numberOfLines={1} style={ { color: '#53C23B', fontSize: 15, maxWidth: 180 }}>兑换成功</Text>
+                <Text numberOfLines={1} style={ { color: '#53C23B', fontSize: 13, maxWidth: 180 }}>兑换成功</Text>
+                <Text numberOfLines={1} style={{ color: '#999', fontSize: 12 }}>{WITHDRAW_TYPE[withdraw_type]}</Text>
             </View>
         );
     }
