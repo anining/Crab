@@ -19,7 +19,7 @@ function AccountBindPage (props) {
 
     function apiPostAccount (callback) {
         if (!getUrl(url)) {
-            toast('链接错误!');
+            toast('链接错误');
             callback();
             return;
         }
@@ -27,7 +27,7 @@ function AccountBindPage (props) {
             callback();
             if (!r.error) {
                 updateAccount();
-                toast('绑定操作成功!');
+                toast('绑定操作成功');
                 N.goBack();
             } else {
                 console.log(r);

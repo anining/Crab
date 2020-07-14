@@ -201,7 +201,7 @@ function EndTimeView ({ detail }) {
                 lc: () => {
                     giveUp(receive_task_id).then(r => {
                         if (!r.error) {
-                            toast('放弃成功!');
+                            toast('放弃成功');
                             N.goBack();
                         }
                     });
@@ -371,11 +371,11 @@ function RenderView ({ status, item }) {
                             saveBase64ImageToCameraRoll(uri, () => toast('保存成功,请到相册查看!'), () => toast('保存失败!'));
                         },
                         () => {
-                            toast('保存失败!');
+                            toast('保存失败');
                         },
                     );
                 }, () => {
-                    toast('保存失败!');
+                    toast('保存失败');
                 });
             }
         } catch (e) {

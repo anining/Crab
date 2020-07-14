@@ -63,7 +63,7 @@ function WithdrawAliPayPage (props) {
                 updateUser();
                 updateSecondIncome();
             } else if (r && r.error === 9) {
-                toast('请绑定微信！');
+                toast('请绑定微信');
                 N.replace('WeChatBindPage');
             }
         });

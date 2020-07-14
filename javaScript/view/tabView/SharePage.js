@@ -45,7 +45,7 @@ const { width } = Dimensions.get('window');
 const SHARE_ITEM_WIDTH = width * 0.9;
 const SHARE_ITEM_RADIUS = 10;
 const WALFARE_ONE_height = 190;
-const WALFARE_TWO_height = 600;
+const WALFARE_TWO_height = 570;
 const WALFARE_TRI_height = 300;
 const cashBack = [{
     title: '直接渔友首次兑换到账',
@@ -74,7 +74,7 @@ export default class SharePage extends PureComponent {
             detailInfo: null,
             awardLength: 0,
             valid_children: 0,
-            rebate: [0, 0], // 返佣比例
+            rebate: [0, 0], // 回馈比例
         };
         this.getReward = this.getReward.bind(this);
         this.getBigReward = this.getBigReward.bind(this);
@@ -351,7 +351,7 @@ export default class SharePage extends PureComponent {
                                     N.navigate('PupilInfoPage');
                                 }}>
                                 <Text numberOfLines={1} style={styles.shareInfoTips}>
-                                    当前兑换返佣：渔友兑换返{Number.parseInt(rebate[0] * 100)}%，渔小友兑换返{Number.parseInt(rebate[1] * 100)}%
+                                    当前兑换回馈：渔友兑换返{Number.parseInt(rebate[0] * 100)}%，渔小友兑换返{Number.parseInt(rebate[1] * 100)}%
                                 </Text>
                                 <Text style={styles.tipsBtn}>渔友信息</Text>
                             </TouchableOpacity>
@@ -401,7 +401,7 @@ export default class SharePage extends PureComponent {
                                         <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>1.</Text>您直接邀请的用户是您的渔友,您渔友邀请的用户是您的渔小友。</Text>
                                         {/* <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>2.</Text>对于您的渔友来说,您是师父.对于您的渔小友来说,您是师祖。</Text> */}
                                         <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>3.</Text>渔友兑换奖励需要您手动领取，可在“我的 - 兑换 - 收益记录”查看收益详情。</Text>
-                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>4.</Text>返佣奖励通过后自动到账，可在“我的 - 兑换 - 收益记录”查看收益详情。</Text>
+                                        <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>4.</Text>回馈奖励通过后自动到账，可在“我的 - 兑换 - 收益记录”查看收益详情。</Text>
                                         <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>5.</Text>交渔友严禁使用任何违规作弊手段,一经发现直接封号处理。</Text>
                                         <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>6.</Text>活动长期有效,活动解释权归官方所有.</Text>
                                     </View>
@@ -424,21 +424,21 @@ function Share () {
                 DeviceEventEmitter.emit('hidePop');
             }} style={styles.shareView}>
                 <Image source={share11} style={styles.shareImg}/>
-                <Text style={styles.shareText}>链接收徒</Text>
+                <Text style={styles.shareText}>链接交友</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
                 N.navigate('ShareQRCodePage');
                 DeviceEventEmitter.emit('hidePop');
             }} style={styles.shareView}>
                 <Image source={share10} style={styles.shareImg}/>
-                <Text style={styles.shareText}>二维码收徒</Text>
+                <Text style={styles.shareText}>二维码交友</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
                 _copyStr(invite_code.get());
                 DeviceEventEmitter.emit('hidePop');
             }} style={styles.shareView}>
                 <Image source={share12} style={styles.shareImg}/>
-                <Text style={styles.shareText}>邀请码收徒</Text>
+                <Text style={styles.shareText}>邀请码交友</Text>
             </TouchableOpacity>
         </View>
     );
@@ -688,7 +688,7 @@ const styles = StyleSheet.create({
     welfareProgressWrap: {
         backgroundColor: '#FFF8E7',
         borderRadius: 6,
-        height: 160,
+        height: 140,
         marginTop: 15,
         overflow: 'hidden',
         padding: 10,

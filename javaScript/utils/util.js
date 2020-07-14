@@ -444,7 +444,11 @@ export function setAndroidTime (callback, duration = 1000) {
 
 export function _toFixed (number, num = 2) {
     try {
-        return parseFloat(number).toFixed(num);
+        if (number || number === 0) {
+            return parseFloat(number).toFixed(num);
+        } else {
+            return 0;
+        }
     } catch (e) {
         return 0;
     }

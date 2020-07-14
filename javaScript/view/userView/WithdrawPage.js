@@ -84,7 +84,7 @@ function WithdrawPage (props) {
                 } else {
                     callback && callback();
                     if (r && r.error === 9) { // 未绑定微信
-                        toast('请绑定微信！');
+                        toast('请绑定微信');
                         N.replace('WeChatBindPage');
                     }
                 }
@@ -167,7 +167,7 @@ function WithdrawPage (props) {
             <Button type={2} name={'立即兑换'} onPress={(callback) => {
                 try {
                     if (!goodId) {
-                        toast('兑换失败!');
+                        toast('兑换失败');
                         callback();
                         return;
                     }
@@ -178,7 +178,7 @@ function WithdrawPage (props) {
                         if (openid.get()) {
                             N.navigate('WithdrawAliPayPage', { goodId, money });
                         } else {
-                            toast('请绑定微信！');
+                            toast('请绑定微信');
                             N.replace('WeChatBindPage');
                         }
                     }

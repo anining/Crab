@@ -82,7 +82,7 @@ const stackScreens = [
     {
         name: 'ShareUrlPage',
         component: ShareUrlPage,
-        title: '分享链接收徒',
+        title: '分享链接',
     },
     {
         name: 'ShareQRCodePage',
