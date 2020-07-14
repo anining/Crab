@@ -237,7 +237,7 @@ export function unitConversion (gold, digits = 2) {
         if (isNaN(gold)) {
             return 0;
         }
-        if (gold >= 10000) {
+        if (gold >= 10000 || gold <= -10000) {
             return `${_toFixed(gold / 10000, digits)}w`;
         }
         return _toFixed(gold, digits);
