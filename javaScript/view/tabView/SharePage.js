@@ -171,7 +171,7 @@ export default class SharePage extends PureComponent {
         }
         const ret = await getChildAward();
         if (ret && !ret.error) {
-            this._awardDetail();
+            this.setState({ awardLength: 0 });
             const { add_balance = 0, children_num = 0 } = ret.data;
             DeviceEventEmitter.emit('showPop', {
                 dom:
