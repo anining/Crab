@@ -45,6 +45,7 @@ import toast from '../../utils/toast';
 import { updateUser } from '../../utils/update';
 import Button from '../../components/Button';
 import CountDown from '../../components/CountDown';
+import Clipboard from '@react-native-community/clipboard';
 
 const { total_task_num, today_pass_num, activityObj } = getter(['user.total_task_num', 'activityObj', 'user.today_pass_num']);
 const { width } = Dimensions.get('window');
@@ -462,7 +463,7 @@ function TransformUrlView ({ content, status, label }) {
     if (url) {
         const textArray = content.split(url);
         return (
-            <Text style={styles.taskCourseText}>{label}<Text style={{ color: '#FF6C00' }}>{textArray[0]} <Text onPress={() => {
+            <Text onLongPress={() => { Clipboard.setString((url && url.toString()) || ''); toast('复制成功'); }} style={styles.taskCourseText}>{label}<Text style={{ color: '#FF6C00' }}>{textArray[0]} <Text onPress={() => {
                 try {
                     status === 1 && Linking.openURL(url).then(r => { console.log(r); });
                 } catch (e) {
@@ -472,7 +473,7 @@ function TransformUrlView ({ content, status, label }) {
             }} style={{ color: 'red' }}> {url} </Text> {textArray[1]}</Text></Text>
         );
     } else {
-        return <Text style={styles.taskCourseText}>{label}<Text style={{ color: '#FF6C00' }}>{content}</Text></Text>;
+        return <Text onLongPress={() => { Clipboard.setString((content && content.toString()) || ''); toast('复制成功'); }} style={styles.taskCourseText}>{label}<Text style={{ color: '#FF6C00' }}>{content}</Text></Text>;
     }
 }
 
