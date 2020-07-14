@@ -302,17 +302,20 @@ function RenderActivity ({ zoneOfAction }) {
             }
         });
         zoneOfAction.forEach((item) => {
-            console.log('????===', item, 'zoneOfActionzoneOfActionzoneOfAction');
             if (item.direction === 'right') {
                 rightView.push(
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity style={{
+                        marginBottom: 10
+                    }} onPress={() => {
                         if (item.path === 'OpenMoneyPage') {
                             getActivityDetail();
                         } else {
                             _tc(() => N.navigate(item.path, { activityId: item.activity_id }));
                         }
                     }} key={item.path}>
-                        <ImageAuto source={item.image} width={width * 0.9 * 0.48}/>
+                        <ImageAuto source={item.image} style={{
+                            width: width * 0.9 * 0.48
+                        }}/>
                     </TouchableOpacity>
                 );
             }
@@ -533,7 +536,6 @@ const styles = StyleSheet.create({
         width: 'auto'
     },
     activityRight: {
-        backgroundColor: 'red',
         height: '100%',
         marginLeft: width * 0.9 * 0.05,
         width: width * 0.9 * 0.48

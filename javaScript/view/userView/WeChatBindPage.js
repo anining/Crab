@@ -32,12 +32,10 @@ function WeChatBindPage () {
                 (async () => {
                     const URI = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx660a4724f56fdba5&redirect_uri=https%3A%2F%2Fbind.libratb.com&response_type=code&scope=snsapi_userinfo&state=${token}#wechat_redirect`;
                     const ret = await urlSuo(URI);
-                    console.log(ret, '///短网址===');
-                    // fetch(`http://suo.im/api.htm?url=${encodeURIComponent(URI)}&key=5f02bdbd3a005a7b763779a3@b4689fcc524fcb7f1a12d82a00045579&expireDate=2030-03-31`).then(r => {
-                    //     r.text().then(response => {
-                    //         setValue(response);
-                    //     });
-                    // });
+                    console.log(ret);
+                    if (ret && !ret.error && ret.data.url) {
+                        setValue(ret.data.url);
+                    }
                 })();
             } catch (e) {
                 console.log(e);
