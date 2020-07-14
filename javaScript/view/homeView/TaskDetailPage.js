@@ -304,6 +304,7 @@ function CourseView ({ setSubmits, submits = [], detail }) {
     const { task = [] } = course;
     const submitView = [];
     const taskView = [];
+    let view;
 
     submits.forEach((submit, index) => {
         const { type, label } = submit;
@@ -317,8 +318,8 @@ function CourseView ({ setSubmits, submits = [], detail }) {
     task.forEach(item => {
         taskView.push(<RenderView status={status} key={item.label} item={item}/>);
     });
-    return (
-        <>
+    if (taskView.length) {
+        view = (
             <View style={styles.taskCourse}>
                 <View style={[styles.taskDetailTop, { height: 52 }]}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -335,6 +336,13 @@ function CourseView ({ setSubmits, submits = [], detail }) {
                     {taskView}
                 </View>
             </View>
+        );
+    } else {
+        view = <></>;
+    }
+    return (
+        <>
+            {view}
             <View style={styles.taskUpload}>
                 <View style={[styles.taskDetailTop, { height: 52 }]}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -719,7 +727,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: 15,
         marginTop: 15,
-        width
+        width: '100%'
     },
     submitBtnText: {
         fontSize: 17,
