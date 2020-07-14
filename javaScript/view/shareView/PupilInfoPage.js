@@ -24,6 +24,7 @@ import { task, updateUser } from '../../utils/update';
 import task10 from '../../assets/icon/task/task10.png';
 import ListGeneral from '../../components/ListGeneral';
 import { getPath } from '../../global/global';
+import activity17 from '../../assets/icon/activity/activity17.png';
 
 const { width } = Dimensions.get('window');
 const itemHeight = 135;
@@ -204,27 +205,32 @@ function ParentView ({ parent, _childDetail }) {
             callback();
             return;
         }
-        DeviceEventEmitter.emit('showPop',
-            <Choice info={{
-                icon: pupil12,
-                tips: `确定绑定${inviteCode}为您的师父吗？`,
-                minTips: '绑定成功之后不可更改',
-                lt: '取消',
-                rc: () => {
-                    bindParent(inviteCode).then(r => {
+        DeviceEventEmitter.emit('showPop', {
+            dom:
+                <Choice info={{
+                    icon: pupil12,
+                    tips: `确定绑定${inviteCode}为您的师父吗？`,
+                    minTips: '绑定成功之后不可更改',
+                    lt: '取消',
+                    rc: () => {
+                        bindParent(inviteCode).then(r => {
+                            callback();
+                            if (!r.error) {
+                                toast('绑定师父成功');
+                                setInviteCode('');
+                                _childDetail();
+                            }
+                        });
+                    },
+                    lc: () => {
                         callback();
-                        if (!r.error) {
-                            toast('绑定师父成功');
-                            setInviteCode('');
-                            _childDetail();
-                        }
-                    });
-                },
-                lc: () => {
-                    callback();
-                },
-                rt: '确定'
-            }} />);
+                    },
+                    rt: '确定'
+                }} />,
+            close: () => {
+                callback();
+            },
+        });
     }
 
     if (parent.invite_code) {

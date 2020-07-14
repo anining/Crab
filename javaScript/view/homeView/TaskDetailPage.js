@@ -471,7 +471,7 @@ function TransformUrlView ({ content, status, label }) {
     if (url) {
         const textArray = content.split(url);
         return (
-            <Text onLongPress={() => { Clipboard.setString((url && url.toString()) || ''); toast('复制成功'); }} style={styles.taskCourseText}>{label}<Text style={{ color: '#FF6C00' }}>{textArray[0]} <Text onPress={() => {
+            <Text selectable={true} style={styles.taskCourseText}>{label}<Text style={{ color: '#FF6C00' }}>{textArray[0]} <Text onPress={() => {
                 try {
                     status === 1 && Linking.openURL(url).then(r => { console.log(r); });
                 } catch (e) {
@@ -481,7 +481,7 @@ function TransformUrlView ({ content, status, label }) {
             }} style={{ color: 'red' }}> {url} </Text> {textArray[1]}</Text></Text>
         );
     } else {
-        return <Text onLongPress={() => { Clipboard.setString((content && content.toString()) || ''); toast('复制成功'); }} style={styles.taskCourseText}>{label}<Text style={{ color: '#FF6C00' }}>{content}</Text></Text>;
+        return <Text selectable={true} style={styles.taskCourseText}>{label}<Text style={{ color: '#FF6C00' }}>{content}</Text></Text>;
     }
 }
 
