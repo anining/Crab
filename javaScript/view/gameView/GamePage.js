@@ -105,7 +105,7 @@ export default class GamePage extends Component {
     async _upgradeGameLevel () {
         const ret = await upgradeGameLevel(JSON.stringify(this.state.gameInfo.content));
         if (ret && !ret.error) {
-            const passTime = this.state.highPerformance ? 800 : 2000;
+            const passTime = this.state.highPerformance ? 800 : 1500;
             setAndroidTime(() => {
                 N.replace('PassGamePage', {
                     info: {
@@ -555,9 +555,9 @@ export default class GamePage extends Component {
             const answerObj = this.state.answerObj;
             if (answerObj) {
                 const view = [];
-                // const answerKeyList = [];
-                for (const key in answerObj) {
-                    const item = answerObj[key];
+                const sortAnswerObj = Object.fromEntries(Object.entries(answerObj).sort(() => Math.random() > 0.5 ? 1 : -1));
+                for (const key in sortAnswerObj) {
+                    const item = sortAnswerObj[key];
                     // answerKeyList.push(key);
                     view.push(
                         <TouchableOpacity activeOpacity={1} style={[styles.cubeItemAnswer]} key={`answers${item.key}`}
