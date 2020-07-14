@@ -39,6 +39,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import ImageAuto from '../../components/ImageAuto';
 import SetPage from '../userView/SetPage';
 import { SYSTEM_VERSION, VERSION_CODE } from '../../utils/config';
+import { getGlobal, getPath } from '../../global/global';
 
 const { width } = Dimensions.get('window');
 const MENU_LIST = [
@@ -90,18 +91,18 @@ const MENU_LIST = [
         remark: '',
         path: 'PrivacyPolicyPage'
     },
-    // {
-    //     icon: user12,
-    //     title: '系统设置',
-    //     remark: '',
-    //     path: 'SetPage'
-    // }
     {
         icon: user12,
-        title: '退出登录',
+        title: '更换账号',
         remark: '',
-        path: 'VerificationStackNavigator'
+        path: 'SetPage'
     }
+    // {
+    //     icon: user12,
+    //     title: '退出登录',
+    //     remark: '',
+    //     path: 'VerificationStackNavigator'
+    // }
 ];
 const TASK_MENU = [
     {
@@ -149,14 +150,14 @@ function UserPage () {
     // const [refreshing, setRefreshing] = useState(false);
     !authorization.get() && N.replace('VerificationStackNavigator');
     updateUser();
-
+    const sensitiveList = getPath(['sensitive_list', 'sensitive_list'], getGlobal('app'), {});
     function onRefresh () {
         updateUser();
         updateSecondIncome();
     }
 
     return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8', paddingTop: 20 }]}>
+        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <ScrollView refreshControl={
                 <RefreshControl
                     refreshing={false}
@@ -168,6 +169,7 @@ function UserPage () {
                     size={10}
                 />
             }>
+                <View style={{ width, height: 30, backgroundColor: '#fff' }}/>
                 <View style={[styles.userDetailView, css.pr]}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <TouchableOpacity style={styles.avatarIconWrap} onPress={() => {
@@ -195,7 +197,7 @@ function UserPage () {
                     <RenderBind/>
                 </View>
                 <View style={styles.moneyView}>
-                    <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
+                    <ImageBackground source={user1} style={{ width: width * 0.94, height: width * 0.94 * 405 / 1089, ...css.auto }}>
                         <View style={styles.moneyViewTop}>
                             <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>我的金币</Text>
                             <TouchableOpacity activeOpacity={1} onPress={() => {
@@ -206,25 +208,25 @@ function UserPage () {
                         </View>
                         <View style={styles.moneyViewBottom}>
                             <View style={styles.moneyViewItem}>
-                                <Text karet-lift style={styles.moneyText}>{fixedBalance}</Text>
+                                <Text karet-lift style={styles.moneyText} numberOfLines={1}>{fixedBalance}</Text>
                                 <Text style={styles.moneyTitle}>可兑换(金币)</Text>
                             </View>
                             <View style={[styles.moneyViewItem, styles.moneyViewCenterItem]}>
-                                <Text karet-lift style={styles.moneyText}>{fixedTodayIncome}</Text>
+                                <Text karet-lift style={styles.moneyText} numberOfLines={1}>{fixedTodayIncome}</Text>
                                 <Text style={styles.moneyTitle}>今日收益(金币)</Text>
                             </View>
                             <View style={styles.moneyViewItem}>
-                                <Text karet-lift style={styles.moneyText}>{fixedTotalIncome}</Text>
+                                <Text karet-lift style={styles.moneyText} numberOfLines={1}>{fixedTotalIncome}</Text>
                                 <Text style={styles.moneyTitle}>总收益(金币)</Text>
                             </View>
                         </View>
                     </ImageBackground>
                 </View>
-                <TouchableOpacity style={[css.flex, styles.shareWrap]} onPress={() => {
+                {_if(getGlobal('channel') in sensitiveList, res => <Text/>, () => <TouchableOpacity style={[css.flex, styles.shareWrap]} onPress={() => {
                     N.navigate('SharePage');
                 }}>
                     <ImageAuto key={'share'} source={user18} width={width * 0.94}/>
-                </TouchableOpacity>
+                </TouchableOpacity>)}
                 <View style={styles.myTask}>
                     <Text style={styles.myTaskTitle}>摸鱼夺宝记录</Text>
                     <RenderTaskMenu/>
@@ -297,7 +299,7 @@ function RenderMenu () {
     return (
         <View style={{ backgroundColor: '#fff' }}>
             {view}
-            {_if(identifyDebugDevelopmentEnvironment(), res => <Text style={styles.debugText}>测试环境-版本号:{VERSION_CODE}-{SYSTEM_VERSION}</Text>, () => <Text style={styles.debugText}>趣玩赚-版本号:{VERSION_CODE}-{SYSTEM_VERSION}</Text>)}
+            {/* {_if(identifyDebugDevelopmentEnvironment(), res => <Text style={styles.debugText}>测试环境-版本号:{VERSION_CODE}-{SYSTEM_VERSION}</Text>, () => <Text style={styles.debugText}>趣玩赚-版本号:{VERSION_CODE}</Text>)} */}
         </View>
     );
 }
@@ -337,7 +339,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
         borderBottomColor: '#EDEDED',
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.5,
         flexDirection: 'row',
         height: 50,
         justifyContent: 'space-between',
@@ -386,9 +388,9 @@ const styles = StyleSheet.create({
     },
     moneyView: {
         backgroundColor: '#fff',
-        paddingBottom: 20,
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingBottom: 10,
+        // paddingLeft: 10,
+        // paddingRight: 10,
         width
     },
     moneyViewBottom: {

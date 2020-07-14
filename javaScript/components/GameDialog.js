@@ -22,9 +22,7 @@ export default class GameDialog extends Component {
             </TouchableOpacity>
             {_if(this.props.icon, res => {
                 if (typeof res === 'object') {
-                    return <View style={[css.pa, styles.dialogIconWrap]}>
-                        {this.props.icon}
-                    </View>;
+                    return this.props.icon;
                 } else {
                     return <ImageAuto source={res} style={[css.pa, styles.dialogIcon]}/>;
                 }

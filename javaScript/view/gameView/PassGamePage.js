@@ -26,6 +26,7 @@ import game37 from '../../assets/icon/game/game37.png';
 import game14 from '../../assets/icon/game/game14.png';
 import game16 from '../../assets/icon/game/game16.png';
 import game17 from '../../assets/icon/game/game17.png';
+import game71 from '../../assets/icon/game/game71.png';
 import { HEADER_HEIGHT } from '../tabView/HomePage';
 import LottieView from 'lottie-react-native';
 import chest from '../../lottie/chest';
@@ -42,6 +43,7 @@ import { avatarProLevelPosition, getGradeConfig, homeProLevelPosition } from '..
 import { AnswerPopTipsTime, DelayGetDomeTime } from '../../utils/animationConfig';
 import JRBannerView from '../../components/JRBannerView';
 import android from '../../components/Android';
+import CountDown from '../../components/CountDown';
 
 const { height, width } = Dimensions.get('window');
 export default class PassGamePage extends Component {
@@ -53,6 +55,7 @@ export default class PassGamePage extends Component {
             gradeSetting: bindData('gradeSetting', this),
             nextRedLevel: getGlobal('nextRedLevel'),
             gradeRange: bindData('gradeRange', this),
+            highPerformance: bindData('highPerformance', this),
             gameHeaderPosition: null, // 头部图像视图
             accuracyImagePosition: null // 答题按钮螃蟹视图
         };
@@ -82,18 +85,27 @@ export default class PassGamePage extends Component {
         }
     }
 
+    _hiddenXian () {
+        DeviceEventEmitter.emit('hidePop');
+        this.gameHeader && this.gameHeader.start(toGoldCoin(this.paramsInfo.add_balance), false);// 不教准每秒金币
+        this._isUpgrade();// 这个弹窗完以后，判断是否升级
+    }
+
     _showPop () {
         if (this.paramsInfo && this.paramsInfo.rate <= 1) { // rate 小于等于1是普通宝箱
+            if (this.state.highPerformance) {
+                setAndroidTime(() => {
+                    this._hiddenXian();
+                }, 800);
+            }
             DeviceEventEmitter.emit('showPop', {
                 dom: <View
-                    style={[css.flex, css.pr, css.flex, { transform: [{ translateY: -width * 0.2 }] }]}>
-                    <LottieView ref={ref => this.lottie = ref} key={'chest'} renderMode={'HARDWARE'}
+                    style={[css.flex, css.pr, { transform: [{ translateY: -width * 0.2 }], width: width * 0.8 }]}>
+                    {_if(!this.state.highPerformance, res => <LottieView ref={ref => this.lottie = ref} key={'chest'} renderMode={'HARDWARE'}
                         style={{ width: width * 0.8, height: 'auto' }} imageAssetsFolder={'chest'} source={chest}
                         loop={false} autoPlay={true} speed={1} onAnimationFinish={() => {
-                            DeviceEventEmitter.emit('hidePop');
-                            this.gameHeader && this.gameHeader.start(toGoldCoin(this.paramsInfo.add_balance), false);// 不教准每秒金币
-                            this._isUpgrade();// 这个弹窗完以后，判断是否升级
-                        }}/>
+                            this._hiddenXian();
+                        }}/>, () => <ImageAuto source={game71} style={{ width: width * 0.76, marginBottom: -70 }} key={'ImageAuto2'}/>)}
                     <View style={[styles.passDataNumber, css.flex, css.auto, css.pa, {
                         top: width * 0.8 - 50,
                         left: width * 0.4 - 50,
@@ -145,16 +157,19 @@ export default class PassGamePage extends Component {
             for (let i = 0; i < this.state.gradeRange.length; i++) {
                 const item = this.state.gradeRange[i];
                 if (item && (item === myNowLevel)) {
-                    const nextGradeConfig = getGradeConfig(myGradeLevel);
+                    const myGradeConfig = getGradeConfig(myGradeLevel);
+                    const myNextGradeConfig = getGradeConfig(myGradeLevel + 1);
                     const coinRate = getPath([myGradeLevel + 1, 'incomeRate'], this.state.gradeSetting);
-                    if (nextGradeConfig && coinRate) {
+                    if (myGradeConfig && coinRate) {
                         DeviceEventEmitter.emit('showPop', <GameDialog transparent={true} callback={() => {
                             DeviceEventEmitter.emit('hidePop');
                         }} btn={'知道啦'} content={
                             <View style={[css.flex, css.fw, css.pr]}>
                                 <Text style={[styles.lottieUpgradeText, { fontSize: 20 }]}>恭喜你的渔船升级啦!</Text>
-                                <LottieView key={nextGradeConfig.lottie} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={nextGradeConfig.lottie} source={nextGradeConfig.upgrade} loop={false} autoPlay={true} speed={1}/>
-                                <Text style={[css.pa, styles.lottieUpgradeText]}>当前金币产量<Text style={{ color: '#F9D200' }}>{coinRate}</Text></Text>
+                                {_if(!this.state.highPerformance, res => <LottieView key={myGradeConfig.lottie} renderMode={'HARDWARE'} style={{ width: '100%', height: 'auto' }} imageAssetsFolder={myGradeConfig.lottie} source={myGradeConfig.upgrade} loop={false} autoPlay={true} speed={1}/>, () => {
+                                    return <ImageAuto source={myNextGradeConfig.ship} style={{ width: 140 }}/>;
+                                })}
+                                <Text style={[styles.lottieUpgradeText, !this.state.highPerformance ? css.pa : {}]}>当前金币产量<Text style={{ color: '#F9D200' }}>{coinRate}</Text></Text>
                             </View>
                         }/>);
                     }
@@ -502,7 +517,10 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 14,
         ...css.gf,
-        bottom: 10
+        bottom: 10,
+        marginBottom: 60,
+        textAlign: 'center',
+        width: '100%'
     },
     nextBtnWrap: {
         height: 80,

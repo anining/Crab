@@ -42,16 +42,20 @@ function LoginPage () {
         });
     }, []);
 
+    async function afterLogin (data) {
+        const { access_token, token_type } = data;
+        setter([['authorization', `${token_type} ${access_token}`]], true);
+        await initNetInfo();
+        N.replace('MaterialTopTabNavigator');
+    }
+
     async function _fastLogin (showError) {
         try {
             const ret = await android.verifyLogin();
             if (ret && ret.token && ret.opToken && ret.operator) {
                 const loginRet = await apiLogin(null, null, null, ret.token, ret.opToken, ret.operator);
                 if (loginRet && !loginRet.error) {
-                    const { access_token, token_type } = loginRet.data;
-                    setter([['authorization', `${token_type} ${access_token}`]], true);
-                    await initNetInfo();
-                    N.replace('MaterialTopTabNavigator');
+                    await afterLogin(loginRet.data);
                 } else {
                     toast('登录失败');
                 }
@@ -72,12 +76,8 @@ function LoginPage () {
         }
         const r = await apiLogin(phone, code);
         callback();
-        console.log(r, '/??');
         if (r && !r.error) {
-            const { access_token, token_type } = r.data;
-            setter([['authorization', `${token_type} ${access_token}`]], true);
-            await initNetInfo();
-            N.replace('MaterialTopTabNavigator');
+            await afterLogin(r.data);
         }
     }
 

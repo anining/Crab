@@ -8,6 +8,8 @@ export default class CountDown extends Component {
     // eslint-disable-next-line no-useless-constructor
     constructor (props) {
         super(props);
+        this.timer1 = null;
+        this.timer2 = null;
     }
 
     componentDidMount () {
@@ -16,34 +18,48 @@ export default class CountDown extends Component {
             this.secondText && this.secondText.setNativeProps({
                 text: `${msecsTransform(propsTime - (+new Date()))}`
             });
-        }, this.props.callback, 1000);
+        }, this.props.callback, 1000, this.timer1);
         this.props.millisecond && this.setTime(this.millisecondText && propsTime && propsTime >= +new Date(), () => {
             if (millisecond > 0) { millisecond--; } else { millisecond = 9; }
             this.millisecondText && this.millisecondText.setNativeProps({
                 text: `.${millisecond}`
             });
-        }, null, 100);
+        }, null, 100, this.timer2);
     }
 
-    setTime (ifSentence, ifSentenceDo, callback, time = 1000) {
-        const timer = setAndroidTime(() => {
+    setTime (ifSentence, ifSentenceDo, callback, time = 1000, timer) {
+        timer = setAndroidTime(() => {
             try {
                 if (ifSentence) {
                     ifSentenceDo && ifSentenceDo();
+                    if (timer && timer.stop && typeof timer.stop === 'function') {
+                        timer.stop();
+                        timer = null;
+                    }
                     this.setTime(...arguments);
                 } else {
                     callback && callback();
                     if (timer && timer.stop && typeof timer.stop === 'function') {
                         timer.stop();
+                        timer = null;
                     }
                 }
             } catch (e) {
                 console.log(e);
+                timer = null;
             }
         }, time);
     }
 
     componentWillUnmount () {
+        try {
+            this.timer1 && this.timer1.stop();
+            this.timer1 = null;
+            this.timer2 && this.timer2.stop();
+            this.timer2 = null;
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     render () {

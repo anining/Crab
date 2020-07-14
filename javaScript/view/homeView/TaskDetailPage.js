@@ -201,7 +201,7 @@ function EndTimeView ({ detail }) {
                 lc: () => {
                     giveUp(receive_task_id).then(r => {
                         if (!r.error) {
-                            toast('放弃成功!');
+                            toast('放弃成功');
                             N.goBack();
                         }
                     });
@@ -220,12 +220,12 @@ function EndTimeView ({ detail }) {
     return (
         <ImageBackground source={task12} style={styles.endTimeView}>
             <View style={styles.endTimeViewItem}>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={[{ flexDirection: 'row', marginTop: 5 }]}>
                     <Text style={{ color: '#fff', fontSize: 16, fontWeight: '500' }}>剩余时间：</Text>
                     <CountDown time={+new Date(djangoTime(finish_deadline))} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }} key={receive_task_id} callback={() => N.goBack()}/>
                 </View>
                 <TouchableOpacity onPress={apiGiveUp} style={styles.giveUpBtn}>
-                    <Text style={{ color: '#fff', fontSize: 12, lineHeight: 25, textAlign: 'center' }}>放弃</Text>
+                    <Text style={{ color: '#fff', fontSize: 12, lineHeight: 28, textAlign: 'center' }}>放弃</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.endTimeViewItem}>
@@ -371,11 +371,11 @@ function RenderView ({ status, item }) {
                             saveBase64ImageToCameraRoll(uri, () => toast('保存成功,请到相册查看!'), () => toast('保存失败!'));
                         },
                         () => {
-                            toast('保存失败!');
+                            toast('保存失败');
                         },
                     );
                 }, () => {
-                    toast('保存失败!');
+                    toast('保存失败');
                 });
             }
         } catch (e) {
@@ -672,10 +672,11 @@ const styles = StyleSheet.create({
     },
     giveUpBtn: {
         borderColor: '#fff',
-        borderRadius: 14,
+        borderRadius: 15,
         borderWidth: 1,
-        height: 28,
-        width: 72
+        height: 30,
+        marginTop: 5,
+        width: 80
     },
     input: {
         backgroundColor: '#FFF1E7',

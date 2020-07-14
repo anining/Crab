@@ -6,3 +6,7 @@ export const PRIVATE_KEY_OBJ = {
     Production: 'MPo2O8qZbItk6iEmyeICMOVLVSFAY1QV',
     Staging: '80TD9QXUGHOEZLkcmB5h3uSpWvqNlfoM'
 };
+export const REDIRECT_URI_OBJ = {
+    Production: 'https%3A%2F%2Fbind.libratb.com',
+    Staging: 'https%3A%2F%2Fstagingb.libratb.com'
+};

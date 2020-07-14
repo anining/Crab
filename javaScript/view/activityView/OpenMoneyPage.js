@@ -22,8 +22,8 @@ import { N } from '../../utils/router';
 import { transformMoney, transformTime } from '../../utils/util';
 import LottieView from 'lottie-react-native';
 import open from '../../lottie/open';
+import { getGlobal, getPath } from '../../global/global';
 const { width } = Dimensions.get('window');
-
 function OpenMoneyPage (props) {
     const { activityId } = props.route.params;
     const [receivedStatus, setReceivedStatus] = useState(1);// 0 网络请求中，1没有领取过，2 已经领取过了
@@ -42,6 +42,7 @@ function OpenMoneyPage (props) {
     }
 
     function _showPop () {
+        const operatorAvatar = getPath(['configObj', 'app_other_info', 'value', 'operatorAvatar'], getGlobal('app'));
         DeviceEventEmitter.emit('showPop', {
             dom: (
                 <TouchableOpacity style={[css.pr]} onPress={() => {
@@ -53,7 +54,7 @@ function OpenMoneyPage (props) {
                             borderRadius: width * 0.1,
                             borderWidth: 1,
                             borderColor: '#ee894a'
-                        }} source={'http://thirdwx.qlogo.cn/mmopen/vi_32/zs3zkL0WMn83EsmmcbmviabWkITGjct9n4Ms8E5F3QNuiaaEPn0KpxlvxtsCrBibib7pXYtl3Zy4kiaHoviaBJ8xB8dA/132'}/>
+                        }} source={operatorAvatar}/>
                         <Text style={styles.redNameText}>运营商送你一个红包</Text>
                         <Text style={styles.redTipsText}>现在打开</Text>
                         <Text style={styles.redTipsText}>最低20w金币等着你</Text>

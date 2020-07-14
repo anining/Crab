@@ -79,6 +79,7 @@ export default class GamePage extends Component {
             selectSite: null, // 当前选中坐标,用于选择框位置显示
             fillArray: {}, // 当前已完成的填词,可能对可能错，用于判断交互逻辑
             completedCharacterArray: [], // 已经变成绿色字的数组，不能有交互
+            highPerformance: bindData('highPerformance', this),
         };
         this.successNumber = 0;
         // this.needToAnswer = 0;
@@ -94,16 +95,17 @@ export default class GamePage extends Component {
             updateNextRedLevel();
             this.debounceGameError = _debounce(async (str) => {
                 await gameError(str);// 打错题目
-            }, 300); // 防止频繁请求
+            }, 500); // 防止频繁请求
             this.debounceUpgradeGameLevel = _debounce(async () => {
                 await this._upgradeGameLevel();// 升级
-            }, 300);
+            }, 500);
         });
     }
 
     async _upgradeGameLevel () {
         const ret = await upgradeGameLevel(JSON.stringify(this.state.gameInfo.content));
         if (ret && !ret.error) {
+            const passTime = this.state.highPerformance ? 800 : 1500;
             setAndroidTime(() => {
                 N.replace('PassGamePage', {
                     info: {
@@ -113,7 +115,7 @@ export default class GamePage extends Component {
                         myGradeLevel: getPath(['myGradeLevel'], this.state.user, 1),
                     },
                 });
-            }, 1200);
+            }, passTime);
         }
     }
 
@@ -553,9 +555,9 @@ export default class GamePage extends Component {
             const answerObj = this.state.answerObj;
             if (answerObj) {
                 const view = [];
-                // const answerKeyList = [];
-                for (const key in answerObj) {
-                    const item = answerObj[key];
+                const sortAnswerObj = Object.fromEntries(Object.entries(answerObj).sort(() => Math.random() > 0.5 ? 1 : -1));
+                for (const key in sortAnswerObj) {
+                    const item = sortAnswerObj[key];
                     // answerKeyList.push(key);
                     view.push(
                         <TouchableOpacity activeOpacity={1} style={[styles.cubeItemAnswer]} key={`answers${item.key}`}

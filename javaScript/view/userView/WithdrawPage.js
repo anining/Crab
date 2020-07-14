@@ -29,6 +29,7 @@ import Choice from '../../components/Choice';
 import { BALANCE_RATE } from '../../utils/data';
 import { _debounce, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
+import { updateSecondIncome, updateUser } from '../../utils/update';
 
 const { width } = Dimensions.get('window');
 const { today_income, total_income, openid, balance } = getter(['user.today_income', 'user.openid', 'user.total_income', 'user.balance']);
@@ -77,11 +78,13 @@ function WithdrawPage (props) {
                         rt: '我知道了',
                         fontSize: 15
                     }}/>);
+                    updateUser();
+                    updateSecondIncome();
                     callback && callback();
                 } else {
                     callback && callback();
                     if (r && r.error === 9) { // 未绑定微信
-                        toast('请绑定微信！');
+                        toast('请绑定微信');
                         N.replace('WeChatBindPage');
                     }
                 }
@@ -107,8 +110,6 @@ function WithdrawPage (props) {
             <ScrollView style={styles.scrollView}>
                 <ImageBackground source={with1} style={styles.moneyView}>
                     <View style={styles.moneyViewTop}>
-                        <Text karet-lift style={{ fontWeight: '600', fontSize: 30, color: '#fff' }}>{balance}</Text>
-                        <Text style={[{ fontSize: 11, color: '#fff' }, css.sy]}>可兑换收益(金币)</Text>
                         <Text karet-lift style={{ fontSize: 25, color: '#fff' }}>{balance}</Text>
                         <Text style={{ fontSize: 11, color: '#fff' }}>可兑换收益(金币)</Text>
                     </View>
@@ -125,19 +126,9 @@ function WithdrawPage (props) {
                 </ImageBackground>
                 <View style={styles.goodView}>
                     <View style={styles.goodViewTitle}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>提现金额</Text>
-                            <Text style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text>
-                        </View>
-                        <Text style={{ fontSize: 11, color: '#999' }} numberOfLines={1}>连续签到可获取免手续费特权</Text>
-                        <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>兑换金币<Text
-                            style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text></Text>
-                        <Text style={[{ fontSize: 10, color: '#999' }, css.sy]} numberOfLines={1}>连续签到可获取免手续费特权</Text>
-                        {/* <View style={{flexDirection:'row',alignItems:'center'}}> */}
-                        {/*    <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>提现金额</Text> */}
-                        {/*    <Text style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text> */}
-                        {/* </View> */}
-                        {/* <Text style={{ fontSize: 11, color: '#999' }} numberOfLines={1}>连续签到可获取免手续费特权</Text> */}
+                        <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>兑换金币
+                            <Text style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text></Text>
+                        <Text style={[{ fontSize: 10, color: '#999', marginTop: 6 }, css.sy]} numberOfLines={1}>连续签到可获取免手续费特权</Text>
                     </View>
                     <RenderGoodItem goods={goods} setGoodId={setGoodId} goodId={goodId} setMoney={setMoney}/>
                 </View>
@@ -176,7 +167,7 @@ function WithdrawPage (props) {
             <Button type={2} name={'立即兑换'} onPress={(callback) => {
                 try {
                     if (!goodId) {
-                        toast('兑换失败!');
+                        toast('兑换失败');
                         callback();
                         return;
                     }
@@ -187,7 +178,7 @@ function WithdrawPage (props) {
                         if (openid.get()) {
                             N.navigate('WithdrawAliPayPage', { goodId, money });
                         } else {
-                            toast('请绑定微信！');
+                            toast('请绑定微信');
                             N.replace('WeChatBindPage');
                         }
                     }
@@ -281,6 +272,7 @@ const styles = StyleSheet.create({
     },
     goodViewTitle: {
         alignItems: 'center',
+        // backgroundColor: 'red',
         flexDirection: 'row',
         height: 50,
         justifyContent: 'space-between',

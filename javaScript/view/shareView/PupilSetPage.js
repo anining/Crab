@@ -28,14 +28,19 @@ function PupilSetPage (props) {
     const [totalMoney, setTotalMoney] = useState((setting.need_income && setting.need_income.toString()) || 0);
 
     function save (callback) {
-        childrenSetting(qq, wx, num, totalMoney).then(r => {
+        if (qq && wx) {
+            childrenSetting(qq, wx, num, totalMoney).then(r => {
+                callback();
+                if (!r.error) {
+                    toast('保存成功');
+                    DeviceEventEmitter.emit('reloadChildDetail');
+                    N.goBack();
+                }
+            });
+        } else {
             callback();
-            if (!r.error) {
-                toast('保存成功');
-                DeviceEventEmitter.emit('reloadChildDetail');
-                N.goBack();
-            }
-        });
+            toast('请先完善QQ群与微信信息');
+        }
     }
 
     return (
@@ -54,11 +59,11 @@ function PupilSetPage (props) {
                     </View>
                     <View style={[css.flex, css.sp, styles.inputWrap]}>
                         <Text style={[styles.setInputText]} numberOfLines={1}>邀请人数</Text>
-                        <TextInput style={[styles.setInput]} maxLength={30} value={num} placeholder={'需邀请多少人才展示信息(无要求不填)'} placeholderTextColor={'#BCBCBC'} onChangeText={e => setNum(e)}/>
+                        <TextInput style={[styles.setInput]} maxLength={30} value={num} placeholder={'需邀请多少人才展示信息(无要求不填)'} placeholderTextColor={'#BCBCBC'} onChangeText={e => setNum(e || 0)}/>
                     </View>
                     <View style={[css.flex, css.sp, styles.inputWrap]}>
                         <Text style={[styles.setInputText]} numberOfLines={1}>收益总和</Text>
-                        <TextInput style={[styles.setInput]} maxLength={30} value={totalMoney} placeholder={'需达到多少收益才展示信息(无要求不填)'} placeholderTextColor={'#BCBCBC'} onChangeText={e => setTotalMoney(e)}/>
+                        <TextInput style={[styles.setInput]} maxLength={30} value={totalMoney} placeholder={'需达到多少收益才展示信息(无要求不填)'} placeholderTextColor={'#BCBCBC'} onChangeText={e => setTotalMoney(e || 0)}/>
                     </View>
                 </View>
                 <View style={styles.setInfoAllText}>

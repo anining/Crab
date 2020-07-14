@@ -41,6 +41,7 @@ import {
 } from '../../utils/animationConfig';
 import Button from '../../components/Button';
 import { notice } from '../../utils/api';
+import game4 from '../../assets/icon/game/game4.png';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
@@ -265,7 +266,7 @@ export default class HomePage extends Component {
                                             onPress={() => {
                                                 DeviceEventEmitter.emit('showPop', <GameDialog
                                                     btn={'我知道了'} tips={<Text>
-                                                                  渔船等级越高，产金币越多</Text>}/>);
+                                                                  渔船等级越高，产金币越多</Text>} icon={<ImageBackground source={game4} style={[css.flex, css.pa, styles.gamePassHeader]}><Text style={styles.gamePassText} numberOfLines={1}>产金币速度</Text></ImageBackground>}/>);
                                             }}>
                                             <ImageBackground source={game5}
                                                 style={[css.flex, css.fw, styles.outputWrapImg]}>
@@ -376,6 +377,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         width,
         ...css.gf,
+    },
+    gamePassHeader: {
+        height: width * 0.62 * 291 / 831,
+        left: '50%',
+        paddingBottom: width * 0.1,
+        top: -width * 0.08,
+        transform: [{ translateX: -width * 0.31 }],
+        width: width * 0.62
+    },
+    gamePassText: {
+        color: '#fff',
+        fontSize: 17
     },
     hdnText: {
         color: '#ffffff',

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Text, StyleSheet, View, LayoutAnimation, Platform, UIManager, DeviceEventEmitter, TouchableOpacity } from 'react-native';
 import { css } from '../assets/style/css';
-import ImageAuto from './ImageAuto';
-import activity19 from '../assets/icon/activity/activity19.png';
+import answer2 from '../assets/icon/answer/answer2.png';
+import answer4 from '../assets/icon/answer/answer4.png';
 import PropTypes from 'prop-types';
 import { _if, setAndroidTime } from '../utils/util';
+import LinearGradient from 'react-native-linear-gradient';
+import ImageAuto from './ImageAuto';
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
@@ -42,6 +44,9 @@ export default class ComTitle extends Component {
                             style: { opacity: 1 },
                         });
                         LayoutAnimation.configureNext(this.customLayoutAnimation);
+                        setAndroidTime(() => {
+                            this._clear();
+                        }, 8000);
                     });
                 }
             });
@@ -60,6 +65,17 @@ export default class ComTitle extends Component {
         }
     }
 
+    _clear () {
+        try {
+            this.popTipsWrapRef && this.popTipsWrapRef.setNativeProps({
+                style: { opacity: 0 },
+            });
+            LayoutAnimation.configureNext(this.customLayoutAnimation);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     render () {
         return (
             <View style={[styles.titleWrap, css.pr]}>
@@ -72,13 +88,23 @@ export default class ComTitle extends Component {
                     width: this._buildWidth()
                 }]}/>
                 {_if(this.props.canTips, res => <TouchableOpacity style={[css.pa, styles.popPosition]} onPress={() => {
-                    this.popTipsWrapRef && this.popTipsWrapRef.setNativeProps({
-                        style: { opacity: 0 },
-                    });
-                    LayoutAnimation.configureNext(this.customLayoutAnimation);
+                    this._clear();
                 }}>
                     <View ref={ref => this.popTipsWrapRef = ref} style={[css.flex, styles.popTipsWrap]} >
-                        <ImageAuto source={activity19} style={[{ width: 30 }]}/>
+                        <ImageAuto source={answer4} style={{
+                            width: 60,
+                            ...css.pa,
+                            top: -60 * 90 / 150 * 0.86,
+                            left: '50%',
+                            transform: [{ translateX: -10 }]
+                        }}/>
+                        <ImageAuto source={answer2} style={{
+                            width: 20,
+                            ...css.pa,
+                            top: 28,
+                            left: '88%',
+                            transform: [{ translateX: -10 }]
+                        }}/>
                         <Text style={styles.popTipsText} numberOfLines={1}>{this.state.str}</Text>
                     </View>
                 </TouchableOpacity>)}
@@ -111,11 +137,10 @@ const styles = StyleSheet.create({
         ...css.sy
     },
     popTipsWrap: {
-        backgroundColor: 'rgba(0,0,0,.6)',
+        backgroundColor: '#FFA71C',
         borderRadius: 15,
         height: 30,
         opacity: 0,
-        overflow: 'hidden',
         paddingHorizontal: 10,
         transform: [{ scale: 0.9 }, { translateY: -4 }],
         width: 'auto'

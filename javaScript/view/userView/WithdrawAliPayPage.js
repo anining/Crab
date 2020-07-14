@@ -10,7 +10,7 @@ import toast from '../../utils/toast';
 import Choice from '../../components/Choice';
 import with10 from '../../assets/icon/withdraw/withdraw10.png';
 import asyncStorage from '../../utils/asyncStorage';
-import { updateUser } from '../../utils/update';
+import { updateSecondIncome, updateUser } from '../../utils/update';
 import Button from '../../components/Button';
 
 const { width } = Dimensions.get('window');
@@ -61,8 +61,9 @@ function WithdrawAliPayPage (props) {
                 callback && callback();
                 N.navigate('UserPage');
                 updateUser();
+                updateSecondIncome();
             } else if (r && r.error === 9) {
-                toast('请绑定微信！');
+                toast('请绑定微信');
                 N.replace('WeChatBindPage');
             }
         });

@@ -19,6 +19,7 @@ import asyncStorage from './asyncStorage';
 
 import toast from './toast';
 import { N } from './router';
+import android from '../components/Android';
 let nextUpdateUserTime = null; // 下一次更新用户的时间
 let nextUpdateSecondIncomeTime = null; // 下一次获取每秒奖励的时间
 const updateUserRate = 5;
@@ -30,9 +31,11 @@ export const updateUser = (callback) => {
             user().then(res => _tc(() => {
                 resolve();
                 if (!res.error && res.data) {
-                    console.log(res, 'user');
-                    setter([['user', formatUserInfo(res.data)]], true);
+                    const userInfo = formatUserInfo(res.data);
+                    setter([['user', userInfo]], true);
                     callback && callback();
+                    // 每一次用户更新都去看是否为新用户，记录到已登录的记录列表里面
+                    addAuthorizationList(userInfo);
                 }
             }));
         } else {
@@ -41,6 +44,31 @@ export const updateUser = (callback) => {
         }
     });
 };
+
+function addAuthorizationList (userInfo) {
+    try {
+        const authorization = getGlobal('authorization');
+        const authorizationList = getGlobal('authorizationList');
+        console.log(authorization, userInfo.phone, userInfo.avatar, userInfo.nickname, '====判断是否加入新列表用户');
+        if (!authorizationList || !(userInfo.phone in authorizationList)) {
+            const newObjAuthorizationList = Object.entries({
+                [userInfo.phone]: {
+                    phone: userInfo.phone,
+                    avatar: userInfo.avatar,
+                    nickname: userInfo.nickname,
+                    authorization: authorization,
+                },
+                ...authorizationList,
+            });
+            (newObjAuthorizationList.length > 3) && (newObjAuthorizationList.length = 3);
+            setter([['authorizationList', Object.fromEntries(newObjAuthorizationList)]], true);
+        } else {
+            console.log('已存在该账号', 'addAuthorizationList', authorization, userInfo.phone, userInfo.avatar, userInfo.nickname, '====判断是否加入新列表用户');
+        }
+    } catch (e) {
+        console.log(e, 'addAuthorizationList');
+    }
+}
 export function updateSecondIncome () {
     return new Promise((resolve, reject) => {
         if (!nextUpdateSecondIncomeTime || (nextUpdateSecondIncomeTime <= +new Date())) {
@@ -100,11 +128,26 @@ export const updateApp = () => {
             resolve();
             if (!res.error && res.data) {
                 console.log(res, 'app');
-                setter([['app', (res.data)]], true);
+                setter([['app', formatAppInfo(res.data)]], true);
             }
         }));
     });
 };
+function formatAppInfo (appInfo) {
+    try {
+        if (appInfo.config) {
+            const configObj = {};
+            for (const i in appInfo.config) {
+                const item = appInfo.config[i];
+                configObj[item.key] = item;
+            }
+            appInfo.configObj = configObj;
+        }
+        return appInfo;
+    } catch (e) {
+        return appInfo;
+    }
+}
 
 export const updateBanner = () => {
     return new Promise((resolve, reject) => {
@@ -175,7 +218,6 @@ export const getTaskPlatform = () => {
 };
 function taskDetail (receive_task_id) {
     taskReceiveDetail(receive_task_id).then(r => {
-        console.log(r, '==========taskReceiveDetail');
         if (r.error) {
             toast(r.msg || '当前摸鱼夺宝人数过多,稍后再试');
         } else {
@@ -274,4 +316,19 @@ export function getActivityDetail () {
             }
         }
     });
+}
+
+export function getChannel () {
+    try {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve, reject) => {
+            const ret = await android.promiseGetChannel();
+            if (ret && ret.channel) {
+                setter([['channel', ret.channel]], true);
+            }
+            resolve();
+        });
+    } catch (e) {
+        console.log(e);
+    }
 }

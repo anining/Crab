@@ -15,7 +15,7 @@ export default class Shadow extends Component {
         this.shadowOpt = {
             color: this.props.color || '#333333',
             border: 3,
-            opacity: 0.15,
+            opacity: this.props.opacity || 0.15,
             x: 0,
             y: 0,
             width: formatStyle(this.props.style) ? (formatStyle(this.props.style).width || 100) : 100,

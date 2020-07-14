@@ -29,7 +29,7 @@ function FeedBackPage () {
         feedback(selectId, text, images.map(image => image.uri), phone).then(r => {
             callback();
             if (!r.error) {
-                toast('成功提交问题!');
+                toast('成功提交问题');
                 N.goBack();
             }
         });

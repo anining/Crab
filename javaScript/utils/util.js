@@ -18,7 +18,7 @@ import moment from 'moment';
 
 const initializationStore = keys => {
     const localStore = store.get();
-    keys = [...keys, [{ channel: 'default' }]];
+    keys = [...keys];
     keys.forEach(key => {
         localStore[key[0]] = JsonParse(key[1]);
     });
@@ -222,12 +222,12 @@ function transformMoney (money, digits = 2) {
     }
 }
 
-export function toGoldCoin (money) {
+export function toGoldCoin (money, digits = 0) {
     try {
         if (isNaN(money)) {
             return 0;
         }
-        return Number.parseInt(money * BALANCE_RATE);
+        return _toFixed(money * BALANCE_RATE, digits);
     } catch (e) {
         return 0;
     }
@@ -444,7 +444,11 @@ export function setAndroidTime (callback, duration = 1000) {
 
 export function _toFixed (number, num = 2) {
     try {
-        return Number(number).toFixed(num);
+        if (number || number === 0) {
+            return parseFloat(number).toFixed(num);
+        } else {
+            return 0;
+        }
     } catch (e) {
         return 0;
     }

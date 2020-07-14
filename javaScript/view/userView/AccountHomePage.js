@@ -86,7 +86,7 @@ function RenderBindView () {
         if (status === 3 || must) {
             deleteAccount(account_id).then(r => {
                 if (!r.error) {
-                    toast('操作成功!');
+                    toast('操作成功');
                     updateAccount();
                 }
             });
@@ -158,7 +158,7 @@ function RenderChange ({ label, account_id, platform_category }) {
     function apiPutAccount () {
         putAccount(platform_category, selectId).then(r => {
             if (!r.error) {
-                toast('切换账号绑定成功!');
+                toast('切换账号绑定成功');
                 updateAccount();
                 getTaskPlatform();
             }

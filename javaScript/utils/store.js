@@ -13,6 +13,7 @@ const localStore = {
     gradeRange: null,
     nextRedLevel: null,
     highPerformance: false, // 高性能模式默认关闭
+    authorizationList: null, // 授权登录列表，不用重复调用一键登录产生费用
 };
 const store = U.atom(localStore);
 

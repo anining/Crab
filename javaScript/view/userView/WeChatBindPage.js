@@ -5,11 +5,11 @@ import { css } from '../../assets/style/css';
 import answer17 from '../../assets/icon/answer/answer17.png';
 import { captureRef } from 'react-native-view-shot';
 import CameraRoll from '@react-native-community/cameraroll';
-import { requestPermission } from '../../utils/util';
+import { _if, getUrl, requestPermission } from '../../utils/util';
 import toast from '../../utils/toast';
 import Crab from '../../components/Crab';
 import QRCode from 'react-native-qrcode-svg';
-import { wxToken } from '../../utils/api';
+import { urlSuo, wxToken } from '../../utils/api';
 import { getter } from '../../utils/store';
 import { REDIRECT_URI } from '../../utils/config';
 
@@ -29,15 +29,20 @@ function WeChatBindPage () {
 
     useEffect(() => {
         if (token) {
+            const URI = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx660a4724f56fdba5&redirect_uri=${REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=${token}#wechat_redirect`;
             try {
-                const URI = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx660a4724f56fdba5&redirect_uri=${REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=${token}#wechat_redirect`;
-                fetch(`http://suo.im/api.htm?url=${encodeURIComponent(URI)}&key=5f02bdbd3a005a7b763779a3@b4689fcc524fcb7f1a12d82a00045579&expireDate=2030-03-31`).then(r => {
-                    r.text().then(response => {
-                        setValue(response);
-                    });
-                });
+                (async () => {
+                    const ret = await urlSuo(URI);
+                    console.log(ret);
+                    if (ret && !ret.error && getUrl(ret.data.url)) {
+                        setValue(ret.data.url);
+                    } else {
+                        setValue(URI);
+                    }
+                })();
             } catch (e) {
                 console.log(e);
+                setValue(URI);
             }
         }
     }, [token]);
@@ -58,7 +63,7 @@ function WeChatBindPage () {
         <SafeAreaView style={css.safeAreaView}>
             <ImageBackground source={answer17} style={[styles.image, { position: 'relative' }]} ref={ref => setView(ref)}>
                 <View style={{ position: 'absolute', top: '24.5%', left: '15.5%' }}>
-                    <Render value={value}/>
+                    {_if(value, res => <Render value={res}/>)}
                 </View>
             </ImageBackground>
             <TouchableOpacity onPress={save} style={styles.btn}>
@@ -67,8 +72,9 @@ function WeChatBindPage () {
             <Crab text="绑定说明："/>
             <Text style={styles.text}>1.保存二维码到本地。</Text>
             <Text style={styles.text}>2.打开微信扫一扫，选择本地图片。</Text>
-            <Text style={styles.text}>3.如果绑定失败，请通过“我的 - 帮助中心”加群联系管理员。</Text>
-            <Text style={styles.text}>4.绑定微信后请刷新“我的”有您的微信昵称即绑定成功。</Text>
+            <Text style={styles.text}>3.绑定页面加载缓慢，需耐心等待一会即可绑定成功。</Text>
+            <Text style={styles.text}>4.如果绑定失败，请通过“我的 - 帮助中心”加群联系管理员。</Text>
+            <Text style={styles.text}>5.绑定微信后请刷新“我的”有您的微信昵称即绑定成功。</Text>
         </SafeAreaView>
     );
 }

@@ -64,7 +64,7 @@ function PupilInfoPage () {
 
     return (
         <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
-            <Header label={'师徒信息'} onPress={() => { N.navigate('PupilSetPage', { setting }); }} headerRight={<Text style={{ color: '#FF5C22' }}>收徒设置</Text>}/>
+            <Header label={'渔友信息'} onPress={() => { N.navigate('PupilSetPage', { setting }); }} headerRight={<Text style={{ color: '#FF5C22' }}>交友设置</Text>}/>
             <ListGeneral
                 itemHeight={itemHeight}
                 itemMarginTop={itemMarginTop}
@@ -113,7 +113,7 @@ function RenderChild ({ children }) {
                         <Image source={{ uri: avatar }} style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}/>
                         <Text style={{ color: 'rgba(53,53,53,1)', fontWeight: '600', fontSize: 15 }}>{nickname}</Text>
                     </View>
-                    <Text style={{ color: 'rgba(153,153,153,1)', fontSize: 11 }}>收徒时间：{transformTime(invite_time)}</Text>
+                    <Text style={{ color: 'rgba(153,153,153,1)', fontSize: 11 }}>成为渔友时间：{transformTime(invite_time)}</Text>
                 </View>
                 <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', height: 40 }}>
                     <Text style={{ color: 'rgba(85,85,85,1)' }}>今日贡献：<Text style={{ color: 'rgba(51,51,51,1)' }}>{transformMoney(today_contribution, 2)}</Text></Text>
@@ -135,12 +135,12 @@ function RenderData ({ today, yesterday, total }) {
     try {
         const array = [
             {
-                label: '今日收徒数据',
+                label: '今日渔友数据',
                 icon: pupil1,
                 ...today
             },
             {
-                label: '昨日收徒数据',
+                label: '昨日渔友数据',
                 icon: pupil2,
                 ...yesterday
             }
@@ -158,7 +158,7 @@ function RenderData ({ today, yesterday, total }) {
         const { sum_children_num, sum_disciple_num, sum_children_income, sum_disciple_income } = total;
         view.push(
             <View style={[css.flex, css.fw, styles.pupilItemWrap]}>
-                <RenderShareTitle title={'累计收徒数据'} icon={pupil3}/>
+                <RenderShareTitle title={'累计渔友数据'} icon={pupil3}/>
                 <RenderForm children_income={sum_children_income} children_num={sum_children_num} disciple_income={sum_disciple_income} disciple_num={sum_disciple_num}/>
             </View>
         );
@@ -214,7 +214,7 @@ function ParentView ({ parent, _childDetail }) {
                     bindParent(inviteCode).then(r => {
                         callback();
                         if (!r.error) {
-                            toast('绑定师父成功!');
+                            toast('绑定师父成功');
                             setInviteCode('');
                             _childDetail();
                         }

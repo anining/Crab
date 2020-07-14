@@ -41,6 +41,7 @@ import { _tc, initializationStore, setConsole } from '../utils/util';
 import SplashScreen from 'react-native-splash-screen';
 import Prompt from '../components/Prompt';
 import {
+    getChannel,
     getGradeSetting,
     getSignConfig,
     getTaskPlatform, getWithdrawLatest, updateAccount,
@@ -81,7 +82,7 @@ const stackScreens = [
     {
         name: 'ShareUrlPage',
         component: ShareUrlPage,
-        title: '分享链接收徒',
+        title: '分享链接',
     },
     {
         name: 'ShareQRCodePage',
@@ -161,12 +162,12 @@ const stackScreens = [
     {
         name: 'PupilInfoPage',
         component: PupilInfoPage,
-        title: '师徒信息',
+        title: '渔友信息',
     },
     {
         name: 'PupilSetPage',
         component: PupilSetPage,
-        title: '师徒设置',
+        title: '渔友设置',
     },
     {
         name: 'DailyMoneyPage',
@@ -270,7 +271,7 @@ const stackScreens = [
     }, {
         name: 'SetPage',
         component: SetPage,
-        title: '设置',
+        title: '其他设置',
     }
 ];
 
@@ -281,7 +282,7 @@ function setStatusBar () {
 }
 
 export function initNetInfo () {
-    return Promise.all([updateUser(), updateAccount(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome(), updateNextRedLevel(), getWithdrawLatest()]);
+    return Promise.all([updateUser(), updateAccount(), updateApp(), updateBanner(), updateActivity(), getSignConfig(), getTaskPlatform(), getGradeSetting(), updateSecondIncome(), updateNextRedLevel(), getWithdrawLatest(), getChannel()]);
 }
 
 function AppStackNavigator () {
