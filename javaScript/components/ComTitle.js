@@ -94,15 +94,15 @@ export default class ComTitle extends Component {
                         <ImageAuto source={answer4} style={{
                             width: 60,
                             ...css.pa,
-                            top: -60 * 90 / 150 * 0.88,
+                            top: -60 * 90 / 150 * 0.86,
                             left: '50%',
-                            transform: [{ translateX: -30 }]
+                            transform: [{ translateX: -10 }]
                         }}/>
                         <ImageAuto source={answer2} style={{
                             width: 20,
                             ...css.pa,
-                            top: 30,
-                            left: '50%',
+                            top: 28,
+                            left: '88%',
                             transform: [{ translateX: -10 }]
                         }}/>
                         <Text style={styles.popTipsText} numberOfLines={1}>{this.state.str}</Text>

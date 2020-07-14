@@ -361,7 +361,7 @@ export default class SharePage extends PureComponent {
                                 <ImageBackground source={share2} style={[styles.shareTitle, css.flex, css.pa]}>
                                     <Text style={styles.shareTitleText}>福利一</Text>
                                 </ImageBackground>
-                                <Shadow style={styles.welfareInner}>
+                                <Shadow style={styles.welfareInner} color={'#333'} opacity={0.1}>
                                     <View style={[styles.welfareInner, css.flex, css.fw, css.sp, {
                                         backgroundColor: '#fff',
                                         paddingTop: 30,
@@ -376,7 +376,7 @@ export default class SharePage extends PureComponent {
                                 <ImageBackground source={share2} style={[styles.shareTitle, css.flex, css.pa]}>
                                     <Text style={styles.shareTitleText}>福利二</Text>
                                 </ImageBackground>
-                                <Shadow style={[styles.welfareInner, { height: WALFARE_TWO_height }]}>
+                                <Shadow style={[styles.welfareInner, { height: WALFARE_TWO_height }]} color={'#333'} opacity={0.1}>
                                     <View style={[styles.welfareInner, {
                                         backgroundColor: '#fff',
                                         paddingTop: 30,
@@ -396,7 +396,7 @@ export default class SharePage extends PureComponent {
                                 <ImageBackground source={share2} style={[styles.shareTitle, css.flex, css.pa]}>
                                     <Text style={styles.shareTitleText}>福利三</Text>
                                 </ImageBackground>
-                                <Shadow style={[styles.welfareInner, { height: WALFARE_TRI_height }]}>
+                                <Shadow style={[styles.welfareInner, { height: WALFARE_TRI_height }]} color={'#333'} opacity={0.1}>
                                     <View style={[styles.welfareInner, { backgroundColor: '#fff', paddingTop: 40, paddingHorizontal: 10, height: WALFARE_TRI_height }]}>
                                         <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>1.</Text>您直接邀请的用户是您的渔友,您渔友邀请的用户是您的渔小友。</Text>
                                         {/* <Text numberOfLines={2} style={styles.shareTipsText}><Text style={styles.shareNumberText}>2.</Text>对于您的渔友来说,您是师父.对于您的渔小友来说,您是师祖。</Text> */}

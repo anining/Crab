@@ -302,6 +302,7 @@ function RenderActivity ({ zoneOfAction }) {
             }
         });
         zoneOfAction.forEach((item) => {
+            console.log('????===', item, 'zoneOfActionzoneOfActionzoneOfAction');
             if (item.direction === 'right') {
                 rightView.push(
                     <TouchableOpacity onPress={() => {
@@ -453,7 +454,7 @@ function RenderList () {
     const view = U.mapElems((item, index) => {
         const { minTitle, label, icon } = U.destructure(item);
         return (
-            <View style={[styles.answerItemWrap, css.flex, css.sp, { borderBottomWidth: index + 1 >= taskPlatform.get().length ? 0 : 1 }]} key={`${index}list`}>
+            <View style={[styles.answerItemWrap, css.flex, css.sp, { borderBottomWidth: index + 1 >= taskPlatform.get().length ? 0 : 0.5 }]} key={`${index}list`}>
                 <View style={[css.flex, styles.aiwLeft, css.js]}>
                     <Image karet-lift source={U.template({ uri: icon })} style={{ width: 40, height: 40 }}/>
                     <View style={[css.flex, css.fw, styles.aiwText, { paddingLeft: 0, justifyContent: 'flex-start' }]}>
@@ -523,6 +524,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         width: '100%',
         ...css.sy,
+        marginTop: -6
     },
     KLabelText: {
         color: '#222',
@@ -531,8 +533,10 @@ const styles = StyleSheet.create({
         width: 'auto'
     },
     activityRight: {
+        backgroundColor: 'red',
         height: '100%',
         marginLeft: width * 0.9 * 0.05,
+        width: width * 0.9 * 0.48
     },
     aiwLeft: {
         height: '100%',
@@ -542,12 +546,13 @@ const styles = StyleSheet.create({
     aiwText: {
         height: '100%',
         overflow: 'hidden',
+        paddingBottom: 5,
         paddingLeft: 10,
-        width: width * 0.9 - 120,
+        width: width * 0.9 - 120
     },
     answerItemWrap: {
         borderBottomColor: '#EDEDED',
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.5,
         height: 65,
         paddingHorizontal: 10,
         width: width * 0.9,
@@ -570,7 +575,8 @@ const styles = StyleSheet.create({
     labelMinTitle: {
         color: '#999',
         fontSize: 11,
-        ...css.sy
+        ...css.sy,
+        marginTop: -10
     },
     labelMoney: {
         color: '#FF6C00',

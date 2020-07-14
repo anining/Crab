@@ -197,7 +197,7 @@ function UserPage () {
                     <RenderBind/>
                 </View>
                 <View style={styles.moneyView}>
-                    <ImageBackground source={user1} style={{ width: width - 20, height: (width - 20) * 405 / 1089 }}>
+                    <ImageBackground source={user1} style={{ width: width * 0.94, height: width * 0.94 * 405 / 1089, ...css.auto }}>
                         <View style={styles.moneyViewTop}>
                             <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>我的金币</Text>
                             <TouchableOpacity activeOpacity={1} onPress={() => {
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
         borderBottomColor: '#EDEDED',
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.5,
         flexDirection: 'row',
         height: 50,
         justifyContent: 'space-between',
@@ -388,9 +388,9 @@ const styles = StyleSheet.create({
     },
     moneyView: {
         backgroundColor: '#fff',
-        paddingBottom: 20,
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingBottom: 10,
+        // paddingLeft: 10,
+        // paddingRight: 10,
         width
     },
     moneyViewBottom: {

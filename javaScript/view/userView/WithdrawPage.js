@@ -29,7 +29,7 @@ import Choice from '../../components/Choice';
 import { BALANCE_RATE } from '../../utils/data';
 import { _debounce, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
-import {updateSecondIncome, updateUser} from '../../utils/update';
+import { updateSecondIncome, updateUser } from '../../utils/update';
 
 const { width } = Dimensions.get('window');
 const { today_income, total_income, openid, balance } = getter(['user.today_income', 'user.openid', 'user.total_income', 'user.balance']);
@@ -126,9 +126,9 @@ function WithdrawPage (props) {
                 </ImageBackground>
                 <View style={styles.goodView}>
                     <View style={styles.goodViewTitle}>
-                        <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>兑换金币<Text
-                            style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text></Text>
-                        <Text style={[{ fontSize: 10, color: '#999' }, css.sy]} numberOfLines={1}>连续签到可获取免手续费特权</Text>
+                        <Text style={{ fontSize: 18, fontWeight: '600', color: '#222' }}>兑换金币
+                            <Text style={{ fontSize: 11, fontWeight: '500', color: '#FF6C00' }}> （1元 = {BALANCE_RATE}金币）</Text></Text>
+                        <Text style={[{ fontSize: 10, color: '#999', marginTop: 6 }, css.sy]} numberOfLines={1}>连续签到可获取免手续费特权</Text>
                     </View>
                     <RenderGoodItem goods={goods} setGoodId={setGoodId} goodId={goodId} setMoney={setMoney}/>
                 </View>
@@ -272,6 +272,7 @@ const styles = StyleSheet.create({
     },
     goodViewTitle: {
         alignItems: 'center',
+        // backgroundColor: 'red',
         flexDirection: 'row',
         height: 50,
         justifyContent: 'space-between',
