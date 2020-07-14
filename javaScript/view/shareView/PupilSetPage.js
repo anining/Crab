@@ -28,7 +28,7 @@ function PupilSetPage (props) {
     const [totalMoney, setTotalMoney] = useState((setting.need_income && setting.need_income.toString()) || 0);
 
     function save (callback) {
-        if (qq && wx) {
+        if (qq && wx && !isNaN(num) && !isNaN(totalMoney)) {
             childrenSetting(qq, wx, num, totalMoney).then(r => {
                 callback();
                 if (!r.error) {
@@ -39,7 +39,7 @@ function PupilSetPage (props) {
             });
         } else {
             callback();
-            toast('请先完善QQ群与微信信息');
+            toast('请填写正确的信息');
         }
     }
 
