@@ -393,6 +393,7 @@ const transformFetch = async (method, url, data = {}) => {
                 } catch (e) {
                     loadingEnd = true;
                     resolve({ error: 998, msg: '请求失败,请重新登录' });
+                    toast('请求失败,请重新登录');
                 }
             })
         ]);
