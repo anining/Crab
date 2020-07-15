@@ -209,10 +209,10 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
         const ret = await sign();
         callback && callback();
         if (ret && !ret.error) {
-            if (ret.prop) {
+            if (ret.data.prop) {
                 DeviceEventEmitter.emit('showPop', <Choice info={{
                     icon: pop5,
-                    tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{ret.prop.label}</Text> </Text>,
+                    tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{ret.data.prop.label}</Text> </Text>,
                     minTips: '请在"我的-立即兑换-金币记录"查看收益详情',
                     type: 'oneBtn',
                     rt: '我知道了',
