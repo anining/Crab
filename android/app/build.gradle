@@ -163,7 +163,7 @@ android {
         resConfigs "zh"
         ndk {
             // 选择要添加的对应 cpu 类型的 .so 库，多个abi以“,”分隔。
-            abiFilters "armeabi-v7a"
+            abiFilters "armeabi-v7a", "x86"
             // 可指定的值为 "armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4
         }
     }
@@ -172,7 +172,7 @@ android {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
             universalApk true  // If true, also generate a universal APK
-            include "armeabi-v7a"
+            include "armeabi-v7a", "x86"
         }
     }
     signingConfigs {

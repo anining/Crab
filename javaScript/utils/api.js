@@ -388,19 +388,18 @@ const transformFetch = async (method, url, data = {}) => {
                         }
                         resolve(localDate);
                     } else {
-                        resolve({ error: 999, msg: '请求失败,请重新登录' });
+                        resolve({ error: 999, msg: '请求失败' });
                     }
                     loadingEnd = true;
                 } catch (e) {
                     loadingEnd = true;
-                    resolve({ error: 998, msg: '请求失败,请重新登录' });
-                    toast('请求失败,请重新登录');
+                    resolve({ error: 998, msg: '请求失败' });
                 }
             })
         ]);
     } catch (e) {
         console.log(e);
-        resolve({ error: 997, msg: '请求失败,请重新登录' });
+        resolve({ error: 997, msg: '请求失败' });
     }
 };
 const device_sys = Platform.OS === 'ios' ? 2 : 1; // 3.h5 1.android 2.ios
