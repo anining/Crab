@@ -377,8 +377,6 @@ const transformFetch = async (method, url, data = {}) => {
                 try {
                     const FETCH_DATA = await fetch(parameterTransform(method, url, formatDataRet), request);
                     const DATA_TEXT = await FETCH_DATA.text();
-                    console.log(FETCH_DATA);
-                    console.log(DATA_TEXT);
                     const localDate = DEVELOPER === 'Production' ? JsonParse(AesDecrypt(DATA_TEXT)) : JsonParse(DATA_TEXT);
                     if (localDate.error && localDate.error !== Forbidden) {
                         toast(localDate.msg);
@@ -389,18 +387,18 @@ const transformFetch = async (method, url, data = {}) => {
                         }
                         resolve(localDate);
                     } else {
-                        resolve({ error: 999, msg: '请求失败' });
+                        resolve({ error: 999, msg: '请求失败,请重新登录' });
                     }
                     loadingEnd = true;
                 } catch (e) {
                     loadingEnd = true;
-                    resolve({ error: 999, msg: '请求失败' });
+                    resolve({ error: 998, msg: '请求失败,请重新登录' });
                 }
             })
         ]);
     } catch (e) {
         console.log(e);
-        resolve({ error: 999, msg: '请求失败' });
+        resolve({ error: 997, msg: '请求失败,请重新登录' });
     }
 };
 const device_sys = Platform.OS === 'ios' ? 2 : 1; // 3.h5 1.android 2.ios

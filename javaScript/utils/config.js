@@ -3,7 +3,7 @@ import { API_URI_OBJ, PRIVATE_KEY_OBJ, REDIRECT_URI_OBJ } from './apiConfig';
 const VERSION_CODE_RegExp = new RegExp(/\./g);
 /**
  *Production Staging**/
-export const DEVELOPER = 'Staging'; // 测试 Staging 正式 Production
+export const DEVELOPER = 'Production'; // 测试 Staging 正式 Production
 export const UA_ID = 10011;
 export const API_URL = API_URI_OBJ[DEVELOPER];
 export const PRIVATE_KEY = PRIVATE_KEY_OBJ[DEVELOPER]; // 网络接口请求key

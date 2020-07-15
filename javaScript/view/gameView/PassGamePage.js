@@ -61,6 +61,7 @@ export default class PassGamePage extends Component {
         };
         this.goingGame = false; // 是否去往goingGame
         this.paramsInfo = this.props.route.params.info;
+        this.sensitiveList = getPath(['sensitive_list', 'sensitive_list'], getGlobal('app'), {});
     }
 
     static async _addNoteBook (str) {
@@ -358,7 +359,7 @@ export default class PassGamePage extends Component {
                             </View>
                         </View>
                     </ScrollView>
-                    <JRBannerView style={styles.adStyle}/>
+                    {_if(getGlobal('channel') in this.sensitiveList, res => <Text/>, () => <JRBannerView style={styles.adStyle}/>)}
                 </SafeAreaView>;
             }
         } catch (e) {
