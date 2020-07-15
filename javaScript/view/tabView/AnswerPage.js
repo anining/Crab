@@ -206,38 +206,42 @@ function RenderDaySign ({ signDay, isSign, setSignDay }) {
     }, []);
 
     async function _sign (callback) {
-        const ret = await sign();
-        callback && callback();
-        if (ret && !ret.error) {
-            if (ret.data.prop) {
-                DeviceEventEmitter.emit('showPop', <Choice info={{
-                    icon: pop5,
-                    tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{ret.data.prop.label}</Text> </Text>,
-                    minTips: '请在"我的-立即兑换-金币记录"查看收益详情',
-                    type: 'oneBtn',
-                    rt: '我知道了',
-                }}/>);
-            } else {
-                DeviceEventEmitter.emit('showPop', <Choice info={{
-                    icon: pop5,
-                    tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{transformMoney(ret.data.add_balance, 0)}金币</Text> </Text>,
-                    minTips: '请在"我的-立即兑换-金币记录"查看收益详情',
-                    type: 'oneBtn',
-                    rt: '我知道了',
-                }}/>);
+        try {
+            const ret = await sign();
+            callback && callback();
+            if (ret && !ret.error) {
+                if (ret.data && ret.data.prop) {
+                    DeviceEventEmitter.emit('showPop', <Choice info={{
+                        icon: pop5,
+                        tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{ret.data.prop.label}</Text> </Text>,
+                        minTips: '请在"我的-立即兑换-金币记录"查看收益详情',
+                        type: 'oneBtn',
+                        rt: '我知道了',
+                    }}/>);
+                } else {
+                    DeviceEventEmitter.emit('showPop', <Choice info={{
+                        icon: pop5,
+                        tips: <Text>签到成功! 您成功获得<Text style={{ color: '#FF6C00' }}>{transformMoney(ret.data.add_balance, 0)}金币</Text> </Text>,
+                        minTips: '请在"我的-立即兑换-金币记录"查看收益详情',
+                        type: 'oneBtn',
+                        rt: '我知道了',
+                    }}/>);
+                }
+                setSignDay(signDay + 1);
+                setSignBtnText('已签到');
+                setHadSign(true);
+                asyncStorage.setItem('signDayNumber', nowTime);
+            } else if (ret.error === 3) {
+                setSignBtnText('已签到');
+                setHadSign(true);
+            } else if (ret.error === 8) {
+                DeviceEventEmitter.emit('answerScroll', 'end');
+                DeviceEventEmitter.emit('comTitlePop', {
+                    key: 'taskTips', str: '通过10次"摸鱼夺宝"后即可签到~'
+                });
             }
-            setSignDay(signDay + 1);
-            setSignBtnText('已签到');
-            setHadSign(true);
-            asyncStorage.setItem('signDayNumber', nowTime);
-        } else if (ret.error === 3) {
-            setSignBtnText('已签到');
-            setHadSign(true);
-        } else if (ret.error === 8) {
-            DeviceEventEmitter.emit('answerScroll', 'end');
-            DeviceEventEmitter.emit('comTitlePop', {
-                key: 'taskTips', str: '通过10次"摸鱼夺宝"后即可签到~'
-            });
+        } catch (e) {
+            console.log(e);
         }
     }
 
