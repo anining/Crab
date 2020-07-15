@@ -14,8 +14,9 @@ import ImageAuto from '../../components/ImageAuto';
 import CountDown from '../../components/CountDown';
 import { N } from '../../utils/router';
 import { activityDetail, getReceiveTaskAward } from '../../utils/api';
-import { transformMoney } from '../../utils/util';
+import { setAndroidTime, toGoldCoin, transformMoney } from '../../utils/util';
 import { getter } from '../../utils/store';
+import { AnswerPopTipsTime } from '../../utils/animationConfig';
 
 const { width } = Dimensions.get('window');
 const { today_pass_num, activityObj } = getter(['user.today_pass_num', 'activityObj']);
@@ -84,11 +85,12 @@ function RenderRedItem ({ rule, activityId, detail }) {
     const view = [];
 
     function ReceiveTaskAward (level) {
+        const need = level === 6 ? 0 : rule[level].need_task_num - (today_pass_num.get() || 0);
         getReceiveTaskAward(level, activityId).then(r => {
             if (!r.error) {
                 detail();
                 const { add_balance } = r.data;
-                DeviceEventEmitter.emit('showPop', { dom: <Popup money={add_balance} twice={level === 6 ? 0 : rule[level].min_add_balance}/> });
+                DeviceEventEmitter.emit('showPop', { dom: <Popup money={add_balance} twice={level === 6 ? 0 : rule[level].min_add_balance} need={need >= 0 ? need : 0}/> });
             }
         });
     }
@@ -99,6 +101,14 @@ function RenderRedItem ({ rule, activityId, detail }) {
             <TouchableOpacity activeOpacity={1} onPress={() => {
                 if (!isOpen && Number(need_task_num) <= Number(today_pass_num.get())) {
                     ReceiveTaskAward(level);
+                } else {
+                    N.navigate('AnswerPage');
+                    setAndroidTime(() => {
+                        DeviceEventEmitter.emit('answerScroll', 'end');
+                        DeviceEventEmitter.emit('comTitlePop', {
+                            key: 'taskTips', str: '任意选择一个类型即可领取双倍奖励~'
+                        });
+                    }, AnswerPopTipsTime);
                 }
             }} key={need_task_num} >
                 <RenderBg isOpen={isOpen} last={level === rule.length} min_add_balance={min_add_balance} today_pass_num={today_pass_num} need_task_num={need_task_num}/>
@@ -129,19 +139,19 @@ function RenderBg ({ isOpen, last, today_pass_num, need_task_num, min_add_balanc
     );
 }
 
-function Popup ({ money = 0, twice = 0 }) {
+function Popup ({ money = 0, twice = 0, need }) {
     if (twice) {
         return (
             <ImageBackground source={task11} style={{ height: width * 0.8 * 416 / 322, width: width * 0.8 }}>
-                <Text numberOfLines={1} style={styles.popupTitle}>{money} <Text style={{ fontSize: 18, fontWeight: '400' }}>元</Text></Text>
-                <Text numberOfLines={1} style={styles.popupText}>加油哦！再参与次摸鱼夺宝</Text>
-                <Text numberOfLines={1} style={styles.popupText}>至少还能再开<Text style={{ color: '#FF3B00' }}>{twice}元</Text></Text>
+                <Text numberOfLines={1} style={styles.popupTitle}>{toGoldCoin(money)} <Text style={{ fontSize: 18, fontWeight: '400' }}>金币</Text></Text>
+                <Text numberOfLines={1} style={styles.popupText}>加油哦！再参与<Text style={{ color: '#FF3B00' }}>{need}次</Text>摸鱼夺宝</Text>
+                <Text numberOfLines={1} style={styles.popupText}>至少还能再开<Text style={{ color: '#FF3B00' }}>{toGoldCoin(twice)}金币</Text></Text>
             </ImageBackground>
         );
     } else {
         return (
             <ImageBackground source={task11} style={{ height: width * 0.8 * 416 / 322, width: width * 0.8 }}>
-                <Text numberOfLines={1} style={styles.popupTitle}>{money} <Text style={{ fontSize: 18, fontWeight: '400' }}>元</Text></Text>
+                <Text numberOfLines={1} style={styles.popupTitle}>{toGoldCoin(money)} <Text style={{ fontSize: 18, fontWeight: '400' }}>金币</Text></Text>
                 <Text numberOfLines={1} style={styles.popupText}>您太棒了！</Text>
                 <Text numberOfLines={1} style={styles.popupText}>您打开了今天的全部红包！</Text>
                 <Text numberOfLines={1} style={styles.popupText}>快去参加其他活动吧~</Text>
