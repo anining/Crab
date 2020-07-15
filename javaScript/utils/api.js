@@ -352,13 +352,14 @@ const transformFetch = async (method, url, data = {}) => {
         const formatDataRet = await formatData(data);
         const TIME_STAMP = Math.round(Date.now() / 1000).toString();
         const POST_DATA = JSON.stringify(formatDataRet);
-        const HEADER = new Headers({
-            authorization: JsonParse(getGlobal('authorization')),
+        let HEADER = {
             'x-uaid': UA_ID,
             'x-timestamp': TIME_STAMP,
             'x-signature': CryptoJS.HmacSHA256(((method === 'GET' || method === 'DELETE') ? buildStr(formatDataRet) : POST_DATA) + '.' + TIME_STAMP, PRIVATE_KEY).toString(),
-        });
-        const request = { method, headers: HEADER };
+        };
+        const authorization = JsonParse(getGlobal('authorization'));
+        authorization && (HEADER = Object.assign(HEADER, { authorization }));
+        const request = { method, headers: new Headers(HEADER) };
         (method === 'POST' || method === 'PUT') && (request.body = POST_DATA);
         let loadingEnd = false; // 是否执行完成
         return Promise.race([
