@@ -27,7 +27,7 @@ import { N, proxyRouter } from '../../utils/router';
 import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
 import { _debounce, _if, setAndroidTime } from '../../utils/util';
-import {updateNextRedLevel, updateSecondIncome, updateUser} from '../../utils/update';
+import { updateNextRedLevel, updateSecondIncome, updateUser } from '../../utils/update';
 import { getter } from '../../utils/store';
 import GameHeader from '../../components/GameHeader';
 import { bindData, getPath } from '../../global/global';
@@ -159,7 +159,7 @@ export default class HomePage extends Component {
 
     async _getNoticeNumber () {
         try {
-            const ret = await notice(1, 1);
+            const ret = await notice(1, 10);
             if (ret && !ret.error && ret.data) {
                 this.setState({
                     unreadNumber: getPath(['unread_num'], ret.data)
