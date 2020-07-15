@@ -106,7 +106,7 @@ function RenderRedItem ({ rule, activityId, detail }) {
                     setAndroidTime(() => {
                         DeviceEventEmitter.emit('answerScroll', 'end');
                         DeviceEventEmitter.emit('comTitlePop', {
-                            key: 'taskTips', str: '任意选择一个类型即可领取双倍奖励~'
+                            key: 'taskTips', str: '完成任务领取更多红包~'
                         });
                     }, AnswerPopTipsTime);
                 }
