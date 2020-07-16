@@ -284,6 +284,7 @@ export default class HomePage extends Component {
                                     {/* NoticePage */}
                                     <TouchableOpacity activeOpacity={1} style={[css.pa, styles.noticeIcon]}
                                         onPress={() => {
+                                            DeviceEventEmitter.emit('stopLottie');
                                             N.navigate('NoticePage');
                                             this.setState({ unreadNumber: 0 });
                                         }}>

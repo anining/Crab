@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, SafeAreaView, Image, Text, StyleSheet, View } from 'react-native';
+import { TouchableOpacity, SafeAreaView, Image, Text, StyleSheet, View, InteractionManager } from 'react-native';
 import { css } from '../../assets/style/css';
 import ListGeneral from '../../components/ListGeneral';
 import { notice } from '../../utils/api';
@@ -36,10 +36,12 @@ export default class NoticePage extends Component {
                         itemHeight={itemHeight}
                         itemMarginTop={itemMarginTop}
                         getList={async (page, num, callback) => {
-                            notice(page, num).then(r => {
-                                if (r && !r.error) {
-                                    callback(r.data.notices);
-                                }
+                            InteractionManager.runAfterInteractions(() => {
+                                notice(page, num).then(r => {
+                                    if (r && !r.error) {
+                                        callback(r.data.notices);
+                                    }
+                                });
                             });
                         }}
                         renderItem={item => {

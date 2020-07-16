@@ -5,7 +5,7 @@ import {
     StyleSheet,
     View,
     UIManager,
-    Platform, TouchableOpacity, DeviceEventEmitter, Text, TextInput,
+    Platform, TouchableOpacity, DeviceEventEmitter, Text, TextInput, InteractionManager,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { css } from '../assets/style/css';
@@ -53,13 +53,15 @@ export default class GameHeader extends Component {
     }
 
     async componentDidMount () {
-        this.debounceGetCoin = _debounce(async (addIncome) => {
-            await this.getCoin(addIncome);
-        }, 200);// 内存读取保护
-        this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user), 4);
-        this.nowBalance = parseFloat(getPath(['goldCoin'], this.state.user, 0));
-        this.debounceGetCoin();
-        this._start = true;
+        InteractionManager.runAfterInteractions(() => {
+            this.debounceGetCoin = _debounce(async (addIncome) => {
+                await this.getCoin(addIncome);
+            }, 200);// 内存读取保护
+            this.secondIncome = toGoldCoin(getPath(['myGrade', 'second_income'], this.state.user), 4);
+            this.nowBalance = parseFloat(getPath(['goldCoin'], this.state.user, 0));
+            this.debounceGetCoin();
+            this._start = true;
+        });
     }
 
     async getCoin (addIncomeStr = 0) {
@@ -93,43 +95,45 @@ export default class GameHeader extends Component {
 
     start (addIncomeStr = this.secondIncome, calibration = true) {
         try {
-            if (this._start && addIncomeStr) {
-                const addIncome = parseFloat(addIncomeStr);
-                this._start = false;
-                this.enlarge && this.enlarge.start();
-                const minAddUnit = (parseFloat(addIncome) / addFrequency);
-                const baseNowBalance = this.nowBalance;
-                this.nowBalance = parseFloat(_toFixed(addIncome + this.nowBalance));
-                for (let i = 0; i < addFrequency; i++) {
-                    setAndroidTime(async () => {
-                        if ((i + 1) === addFrequency) {
-                            // 最后一次加的时候存入内存
-                            this._start = true;
-                            this.secondText && this.secondText.setNativeProps({
-                                text: `${_toFixed(this.nowBalance, 4)}`
-                            });
-                            if ((this.secondIncome !== addIncome) && calibration) {
-                                this.debounceGetCoin(addIncome);
-                            }
-                            if ((this.secondIncome !== addIncome)) {
-                                this.writeTimes = maxWriteTimes;
-                            }
-                            if (this.writeTimes >= maxWriteTimes) {
-                                asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
-                                    coin: this.nowBalance,
-                                    time: +new Date()
+            InteractionManager.runAfterInteractions(() => {
+                if (this._start && addIncomeStr) {
+                    const addIncome = parseFloat(addIncomeStr);
+                    this._start = false;
+                    this.enlarge && this.enlarge.start();
+                    const minAddUnit = (parseFloat(addIncome) / addFrequency);
+                    const baseNowBalance = this.nowBalance;
+                    this.nowBalance = parseFloat(_toFixed(addIncome + this.nowBalance));
+                    for (let i = 0; i < addFrequency; i++) {
+                        setAndroidTime(async () => {
+                            if ((i + 1) === addFrequency) {
+                                // 最后一次加的时候存入内存
+                                this._start = true;
+                                this.secondText && this.secondText.setNativeProps({
+                                    text: `${_toFixed(this.nowBalance, 4)}`
                                 });
-                                this.writeTimes = 0;
+                                if ((this.secondIncome !== addIncome) && calibration) {
+                                    this.debounceGetCoin(addIncome);
+                                }
+                                if ((this.secondIncome !== addIncome)) {
+                                    this.writeTimes = maxWriteTimes;
+                                }
+                                if (this.writeTimes >= maxWriteTimes) {
+                                    asyncStorage.setItem(`${getPath(['phone'], this.state.user)}coin`, {
+                                        coin: this.nowBalance,
+                                        time: +new Date()
+                                    });
+                                    this.writeTimes = 0;
+                                }
+                                this.writeTimes++;
+                            } else {
+                                this.secondText && this.secondText.setNativeProps({
+                                    text: `${_toFixed(baseNowBalance + minAddUnit * i, 4)}`
+                                });
                             }
-                            this.writeTimes++;
-                        } else {
-                            this.secondText && this.secondText.setNativeProps({
-                                text: `${_toFixed(baseNowBalance + minAddUnit * i, 4)}`
-                            });
-                        }
-                    }, 50 * i);
+                        }, 50 * i);
+                    }
                 }
-            }
+            });
         } catch (e) {
             console.log(e, 'startstartstart');
         }
@@ -189,6 +193,7 @@ export default class GameHeader extends Component {
                         backgroundColor: this.props.backgroundColor
                     }]}>
                         <TouchableOpacity activeOpacity={1} style={[css.pa, styles.topHDN]} onPress={() => {
+                            DeviceEventEmitter.emit('stopLottie');
                             N.navigate('WithdrawPage');
                         }}/>
                         <ImageAuto key={'game22'} source={game22} width={33} onLayout={(e) => {
