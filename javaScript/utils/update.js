@@ -230,7 +230,6 @@ export function task (category, receive_task_id) {
     if (category) {
         getTask(category).then(r => {
             if (r.error) {
-                toast(r.msg || '当前摸鱼夺宝人数过多,稍后再试');
                 error === 9 && N.navigate('AccountHomePage');
             } else {
                 taskDetail(r.data.receive_task_id);

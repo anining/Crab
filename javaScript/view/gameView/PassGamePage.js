@@ -30,20 +30,17 @@ import game71 from '../../assets/icon/game/game71.png';
 import { HEADER_HEIGHT } from '../tabView/HomePage';
 import LottieView from 'lottie-react-native';
 import chest from '../../lottie/chest';
-import PropTypes from 'prop-types';
 import { _if, _toFixed, setAndroidTime, toGoldCoin, transformMoney } from '../../utils/util';
 import ShiftView from '../../components/ShiftView';
 import IdiomCard from '../../components/IdiomCard';
 import { addNoteBook, choseGetAward } from '../../utils/api';
 import toast from '../../utils/toast';
 import GameHeader from '../../components/GameHeader';
-import { updateNextRedLevel, updateUser } from '../../utils/update';
+import { updateNextRedLevel } from '../../utils/update';
 import { bindData, getGlobal, getPath } from '../../global/global';
-import { avatarProLevelPosition, getGradeConfig, homeProLevelPosition } from '../../utils/levelConfig';
+import { getGradeConfig } from '../../utils/levelConfig';
 import { AnswerPopTipsTime, DelayGetDomeTime } from '../../utils/animationConfig';
 import JRBannerView from '../../components/JRBannerView';
-import android from '../../components/Android';
-import CountDown from '../../components/CountDown';
 
 const { height, width } = Dimensions.get('window');
 export default class PassGamePage extends Component {
