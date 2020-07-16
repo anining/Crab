@@ -12,6 +12,7 @@ import {
     Dimensions,
     DeviceEventEmitter,
     InteractionManager,
+    BackHandler,
 } from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
@@ -30,6 +31,7 @@ import { BALANCE_RATE } from '../../utils/data';
 import { _debounce, transformMoney } from '../../utils/util';
 import Button from '../../components/Button';
 import { updateSecondIncome, updateUser } from '../../utils/update';
+import { useFocusEffect } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 const { today_income, total_income, openid, balance } = getter(['user.today_income', 'user.openid', 'user.total_income', 'user.balance']);
@@ -53,6 +55,16 @@ function WithdrawPage (props) {
             });
         });
     }, []);
+
+    useFocusEffect(() => {
+        const onBackPress = () => {
+            const { callbackGetTask } = props.route.params;
+            callbackGetTask && typeof callbackGetTask === 'function' && callbackGetTask();
+        };
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+        return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    });
+
     function formatGood (list) {
         try {
             return list.filter(item => !(item.is_withdraw && item.all_times === 1));
