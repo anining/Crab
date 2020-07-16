@@ -56,15 +56,6 @@ function WithdrawPage (props) {
         });
     }, []);
 
-    useFocusEffect(() => {
-        const onBackPress = () => {
-            const { callbackGetTask } = props.route.params;
-            callbackGetTask && typeof callbackGetTask === 'function' && callbackGetTask();
-        };
-        BackHandler.addEventListener('hardwareBackPress', onBackPress);
-        return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    });
-
     function formatGood (list) {
         try {
             return list.filter(item => !(item.is_withdraw && item.all_times === 1));
@@ -115,8 +106,6 @@ function WithdrawPage (props) {
             <Header scene={{ descriptor: { options: {} }, route: { name: '我的收益' } }} navigation={N} onPress={() => {
                 N.navigate('FundingRecordsPage');
             }} backOnPress={() => {
-                const { callbackGetTask } = props.route.params;
-                callbackGetTask && typeof callbackGetTask === 'function' && callbackGetTask();
                 N.goBack();
             }} headerRight={headerRight}/>
             <ScrollView style={styles.scrollView}>

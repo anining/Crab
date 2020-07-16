@@ -522,23 +522,23 @@ function UserPop ({ view }) {
 function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
     const { status, receive_task_id, platform_category } = detail;
 
-    function getApiTask (callback) {
+    function getApiTask (callback, isBack = true) {
         DeviceEventEmitter.emit('hidePop');
         getTask(platform_category).then(r => {
+            callback && callback();
             if (!r.error) {
-                toast('提交成功 自动参与下一个');
+                isBack && toast('提交成功 自动参与下一个');
                 taskReceiveDetail(r.data.receive_task_id).then(response => {
                     if (response.error) {
                         N.goBack();
                     } else {
                         setDetail(response.data);
-                        callback && callback();
                         sRef && sRef.scrollTo({ x: 0, y: 0, animated: true });
                     }
                 });
             } else {
                 toast('已经没有了');
-                N.goBack();
+                isBack && N.goBack();
             }
         });
     }
@@ -546,10 +546,6 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
     function showPop (type, number, callback) {
         const state = U.atom(true);
         let view;
-
-        function callbackGetTask () {
-            getApiTask(callback);
-        }
 
         switch (type) {
         case 1:view = (
@@ -586,7 +582,8 @@ function Btn ({ sRef, detail, setDetail, setSubmits, submits }) {
                 <TouchableOpacity style={styles.userPopBtn} onPress={() => {
                     U.set(state, false);
                     DeviceEventEmitter.emit('hidePop');
-                    N.navigate('WithdrawPage', { callbackGetTask });
+                    N.navigate('WithdrawPage');
+                    getApiTask(callback, false);
                 }}>
                     <Text style={{ color: '#E14000', fontSize: 22, fontWeight: '500' }}>去兑换</Text>
                 </TouchableOpacity>
