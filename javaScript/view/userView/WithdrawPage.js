@@ -111,7 +111,7 @@ function WithdrawPage (props) {
                 <ImageBackground source={with1} style={styles.moneyView}>
                     <View style={styles.moneyViewTop}>
                         <Text karet-lift style={{ fontSize: 25, color: '#fff' }}>{balance}</Text>
-                        <Text style={{ fontSize: 11, color: '#fff' }}>可兑换收益(金币)</Text>
+                        <Text style={[{ fontSize: 11, color: '#fff' }, css.sy]}>可兑换收益(金币)</Text>
                     </View>
                     <View style={styles.moneyViewBottom}>
                         <View style={[styles.moneyViewItem, { borderRightWidth: 1, borderRightColor: '#FFF' }]}>
