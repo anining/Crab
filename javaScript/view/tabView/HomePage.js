@@ -88,17 +88,23 @@ export default class HomePage extends Component {
     }
 
     _debounceStart () {
-        this.debounceHomeStart();
-        this.debounceLottieStart();
+        InteractionManager.runAfterInteractions(() => {
+            this.debounceHomeStart();
+            this.debounceLottieStart();
+        });
     }
 
     _setDebounce () {
         this.debounceHomeStart = _debounce(() => {
-            this._homeStart();
-        }, HomeStartAnimationTime); // 动画开始时间分离
+            setAndroidTime(() => {
+                this._homeStart();
+            }, HomeStartAnimationTime);
+        }, 500); // 动画开始时间分离
         this.debounceLottieStart = _debounce(() => {
-            this._lottieStart();
-        }, HomeLottieStartTime);// _lottieStart动画开始时间分离
+            setAndroidTime(() => {
+                this._lottieStart();
+            }, HomeLottieStartTime);
+        }, 500);// _lottieStart动画开始时间分离
     }
 
     _getPosition (callback) {

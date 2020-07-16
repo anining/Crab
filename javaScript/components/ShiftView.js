@@ -164,24 +164,26 @@ export default class ShiftView extends PureComponent {
 
     _animationStart () {
         try {
-            if (!this._stop) {
-                if (!this.state.highPerformance) {
-                    this.nowTimer1 && this.nowTimer1.stop();
-                    this.nowTimer2 && this.nowTimer2.stop();
-                    this.androidMove();
-                } else {
-                    this.nowTimer1 = setAndroidTime(() => {
-                        _tc(() => {
-                            this.callback && this.callback();
-                        });
-                    }, Math.abs(this.duration - 100));
+            InteractionManager.runAfterInteractions(() => {
+                if (!this._stop) {
+                    if (!this.state.highPerformance) {
+                        this.nowTimer1 && this.nowTimer1.stop();
+                        this.nowTimer2 && this.nowTimer2.stop();
+                        this.androidMove();
+                    } else {
+                        this.nowTimer1 = setAndroidTime(() => {
+                            _tc(() => {
+                                this.callback && this.callback();
+                            });
+                        }, Math.abs(this.duration - 100));
+                    }
+                    if (this.loop && this.duration && !this._stop && this.loopTime) {
+                        this.nowTimer2 = setAndroidTime(() => {
+                            !this._stop && this._animationStart();
+                        }, this.duration + this.loopTime);
+                    }
                 }
-                if (this.loop && this.duration && !this._stop && this.loopTime) {
-                    this.nowTimer2 = setAndroidTime(() => {
-                        !this._stop && this._animationStart();
-                    }, this.duration + this.loopTime);
-                }
-            }
+            });
         } catch (e) {
             console.log(e, '_animationStart');
         }
@@ -190,9 +192,9 @@ export default class ShiftView extends PureComponent {
     stop () {
         try {
             this._stop = true;
+            this.clearBindTiming();
             this.nowTimer1 && this.nowTimer1.stop();
             this.nowTimer2 && this.nowTimer2.stop();
-            this.clearBindTiming();
             this.animation && (() => {
                 this.animation.stop();
                 this.animation = null;

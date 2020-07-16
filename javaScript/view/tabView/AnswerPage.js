@@ -93,13 +93,15 @@ function AnswerPage () {
     }, []);
 
     function viewScroll (res) {
-        if (scrollViewRef && res) {
-            if (res === 'end') {
-                scrollViewRef.scrollToEnd({ animated: true, duration: 500 });
-            } else {
-                scrollViewRef.scrollTo(0, res, true);
+        InteractionManager.runAfterInteractions(() => {
+            if (scrollViewRef && res) {
+                if (res === 'end') {
+                    scrollViewRef.scrollToEnd({ animated: true, duration: 500 });
+                } else {
+                    scrollViewRef.scrollTo(0, res, true);
+                }
             }
-        }
+        });
     }
 
     async function init () {
