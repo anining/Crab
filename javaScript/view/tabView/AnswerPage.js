@@ -481,7 +481,7 @@ function RenderList () {
 
 function RenderBtn ({ item }) {
     function check (platform_category) {
-        taskReceive(1, 10, 1).then(r => {
+        taskReceive(1, 1, 1).then(r => {
             if (!r.error) {
                 const { data } = r;
                 if (data.length) {

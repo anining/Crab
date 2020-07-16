@@ -31,14 +31,13 @@ import user15 from '../../assets/icon/user/user15.png';
 import user16 from '../../assets/icon/user/user16.png';
 import user17 from '../../assets/icon/user/user17.png';
 import user18 from '../../assets/icon/user/user18.png';
-import { getter, clear } from '../../utils/store';
+import { getter } from '../../utils/store';
 import * as U from 'karet.util';
 import { updateSecondIncome, updateUser } from '../../utils/update';
-import { _copyStr, _if, _toFixed, identifyDebugDevelopmentEnvironment } from '../../utils/util';
+import { _copyStr, _if, _toFixed } from '../../utils/util';
 import LinearGradient from 'react-native-linear-gradient';
 import ImageAuto from '../../components/ImageAuto';
 import SetPage from '../userView/SetPage';
-import { SYSTEM_VERSION, VERSION_CODE } from '../../utils/config';
 import { getGlobal, getPath } from '../../global/global';
 
 const { width } = Dimensions.get('window');
