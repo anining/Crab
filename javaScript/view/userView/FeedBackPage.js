@@ -103,7 +103,7 @@ function RenderImage ({ images }) {
             <Image key={image.data + Date.now()} style={styles.image} source={{ uri: `data:${image.mime};base64,${image.data}` }} />
         );
     });
-    return <>{imageView}</>;
+    return <>{ ...imageView }</>;
 }
 
 const styles = StyleSheet.create({
