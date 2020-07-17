@@ -18,9 +18,9 @@ Text.defaultProps = Object.assign({}, Text.defaultProps, {
 const sourceRenderText = Text.render;
 const sourceRenderTextInput = TextInput.render;
 const sourceRenderTouchable = TouchableOpacity.render;
-Text.render = function render (props, ref) {
-    return sourceRenderText.apply(this, [{ ...props, style: [{ fontFamily: 'sy-bold' }, props.style] }, ref]);
-}; // 全局修改字体
+// Text.render = function render (props, ref) {
+//     return sourceRenderText.apply(this, [{ ...props, style: [{ fontFamily: 'sy-bold' }, props.style] }, ref]);
+// }; // 全局修改字体
 TextInput.render = function render (props, ref) {
     return sourceRenderTextInput.apply(this, [{ ...props, style: [{ fontFamily: 'sy-bold' }, props.style] }, ref]);
 }; // 全局修改字体
