@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CodePushServerUrl</key>
+	<string>https://code-push.librags.com</string>
+	<key>CodePushDeploymentKey</key>
+	<string>yBATHbE7eIJYHhMxlnECSwAwaOwx4ksvOXqog</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
