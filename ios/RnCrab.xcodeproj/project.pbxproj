@@ -19,6 +19,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* RnCrabTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RnCrabTests.m */; };
 		62B8015B1FA53D432EA81F6C /* libPods-RnCrab-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7017FA294766A24565EAC91D /* libPods-RnCrab-tvOSTests.a */; };
+		7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */; };
 		C8CA8B175426FCDE1852D4AE /* libPods-RnCrab.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D113F76FCBA4C41CC9EA5E7 /* libPods-RnCrab.a */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +60,7 @@
 		4819C90315A4AB855752E52E /* Pods-RnCrab-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab-tvOS.release.xcconfig"; path = "Target Support Files/Pods-RnCrab-tvOS/Pods-RnCrab-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		497C34D63405242BF7B6F886 /* Pods-RnCrab-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-RnCrab-tvOS/Pods-RnCrab-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		7017FA294766A24565EAC91D /* libPods-RnCrab-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RnCrab-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		87EF91E4DD86E56B41F1AD65 /* Pods-RnCrab.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab.debug.xcconfig"; path = "Target Support Files/Pods-RnCrab/Pods-RnCrab.debug.xcconfig"; sourceTree = "<group>"; };
 		923661A58EB69694B38CE233 /* Pods-RnCrab-RnCrabTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab-RnCrabTests.release.xcconfig"; path = "Target Support Files/Pods-RnCrab-RnCrabTests/Pods-RnCrab-RnCrabTests.release.xcconfig"; sourceTree = "<group>"; };
 		B068ABE282EC40D6D12E3AD3 /* Pods-RnCrab-RnCrabTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab-RnCrabTests.debug.xcconfig"; path = "Target Support Files/Pods-RnCrab-RnCrabTests/Pods-RnCrab-RnCrabTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */,
 			);
 			name = RnCrab;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
