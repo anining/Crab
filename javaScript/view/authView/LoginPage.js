@@ -27,6 +27,7 @@ import ImageAuto from '../../components/ImageAuto';
 import { AppAllPermissionsAndroid, requestPermission } from '../../utils/util';
 
 const { height, width } = Dimensions.get('window');
+
 function LoginPage () {
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('');
