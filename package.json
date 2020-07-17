@@ -13,7 +13,8 @@
     "modify": "node ./modify.js",
     "codepush": "code-push release-react crab android -d Production --des '全面升级' -m true",
     "codepushLogin": "code-push login https://code-push.librags.com",
-    "bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res  "
+    "bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res  ",
+    "bundle-ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output release_ios/main.jsbundle --assets-dest release_ios/"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.11.0",
