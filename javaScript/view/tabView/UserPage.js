@@ -1,6 +1,5 @@
 import * as React from 'karet';
 import * as R from 'kefir.ramda';
-
 import {
     View,
     SafeAreaView,
