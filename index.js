@@ -21,9 +21,9 @@ const sourceRenderTouchable = TouchableOpacity.render;
 // Text.render = function render (props, ref) {
 //     return sourceRenderText.apply(this, [{ ...props, style: [{ fontFamily: 'sy-bold' }, props.style] }, ref]);
 // }; // 全局修改字体
-TextInput.render = function render (props, ref) {
-    return sourceRenderTextInput.apply(this, [{ ...props, style: [{ fontFamily: 'sy-bold' }, props.style] }, ref]);
-}; // 全局修改字体
+// TextInput.render = function render (props, ref) {
+//     return sourceRenderTextInput.apply(this, [{ ...props, style: [{ fontFamily: 'sy-bold' }, props.style] }, ref]);
+// }; // 全局修改字体
 TouchableOpacity.render = function render (props, ref) {
     return sourceRenderTouchable.apply(this, [{ ...props, activeOpacity: 1 }, ref]);
 };
