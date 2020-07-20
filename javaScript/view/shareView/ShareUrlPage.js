@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Share, Text, TouchableOpacity, StyleSheet, View, TextInput } from 'react-native';
+import { SafeAreaView, Share, Text, TouchableOpacity, Dimensions, StyleSheet, View, TextInput } from 'react-native';
 import { css } from '../../assets/style/css';
 import { childrenLink } from '../../utils/api';
 import { _copyStr } from '../../utils/util';
+
+const { width } = Dimensions.get('window');
 
 function ShareUrlPage () {
     const [links, setLink] = useState([]);
@@ -61,7 +63,7 @@ function ShareUrlPage () {
         );
     });
 
-    return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FF9C00', padding: 15 }]}>{view}</SafeAreaView>;
+    return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FF9C00' }]}>{view}</SafeAreaView>;
 }
 
 const styles = StyleSheet.create({
@@ -75,11 +77,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 10,
         height: 120,
-        marginBottom: 15,
+        marginLeft: 15,
+        marginRight: 15,
+        marginTop: 15,
         paddingLeft: 10,
         paddingRight: 10,
         paddingTop: 5,
-        width: '100%'
+        width: width - 30,
     },
     lBtn: {
         alignItems: 'center',
