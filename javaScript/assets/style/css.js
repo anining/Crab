@@ -46,7 +46,7 @@ export const css = StyleSheet.create({
         flexWrap: 'wrap'
     },
     gf: {
-        // fontFamily: 'sy-bold',
+        fontFamily: 'GenSenMaruGothicTW-Bold-TTF',
     },
     header: {
         height: 63,
@@ -74,6 +74,6 @@ export const css = StyleSheet.create({
         justifyContent: 'space-between',
     },
     sy: {
-        // fontFamily: 'sy',
+        fontFamily: 'GenSenMaruGothicTW-Regular-TTF',
     }
 });

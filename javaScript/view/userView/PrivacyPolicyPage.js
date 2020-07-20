@@ -3,9 +3,8 @@ import { Dimensions, SafeAreaView, ScrollView } from 'react-native';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import { privacyDataHtml } from '../../assets/html/privacy';
-import HTML from 'react-native-render-html';
-
-const { width } = Dimensions.get('window');
+import HTMLView from 'react-native-htmlview';
+import { trimNewLines } from '../../utils/util';
 
 function PrivacyPolicyPage () {
     useEffect(() => {
@@ -14,7 +13,7 @@ function PrivacyPolicyPage () {
     return (
         <SafeAreaView style={[css.safeAreaView, css.RichText]}>
             <ScrollView>
-                {/* <HTML html={privacyDataHtml} imagesMaxWidth={width} tagsStyles={{ p: { lineHeight: 24 } }}/> */}
+                <HTMLView value={trimNewLines(privacyDataHtml)} stylesheet={{ p: { lineHeight: 24 } }}/>
             </ScrollView>
         </SafeAreaView>
     );

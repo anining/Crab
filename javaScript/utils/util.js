@@ -152,6 +152,11 @@ export function _if (value, callback, elseCallBack) {
     }
 }
 
+export function trimNewLines (text) {
+    if (!text) return;
+    return text.replace(/(\r\n|\n|\r)/gm, '');
+}
+
 export function saveBase64ImageToCameraRoll (base64Img, success, fail) {
     try {
         const dirs = Platform.OS === 'ios' ? RN_FS.LibraryDirectoryPath : RN_FS.ExternalDirectoryPath; // 外部文件，共享目录的绝对路径（仅限android）

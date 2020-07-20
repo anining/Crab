@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
 import { SafeAreaView, Dimensions, ScrollView } from 'react-native';
-import HTML from 'react-native-render-html';
+import HTMLView from 'react-native-htmlview';
 import { css } from '../../assets/style/css';
 import { N } from '../../utils/router';
 import { userDataHtml } from '../../assets/html/user';
-
-const { width } = Dimensions.get('window');
+import { trimNewLines } from '../../utils/util';
 
 function UserAgreementPage () {
     useEffect(() => {
         // N.replace('WebViewPage', { url: userDataHtml, title: '用户协议' });
     }, []);
+
     return (
         <SafeAreaView style={[css.safeAreaView, css.RichText]}>
             <ScrollView>
-                {/* <HTML html={userDataHtml} imagesMaxWidth={width} tagsStyles={{ p: { lineHeight: 24 } }}/> */}
+                <HTMLView value={trimNewLines(userDataHtml)} stylesheet={{ p: { lineHeight: 24 } }}/>
             </ScrollView>
         </SafeAreaView>
     );
