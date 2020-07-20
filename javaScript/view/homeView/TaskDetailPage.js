@@ -169,7 +169,7 @@ function TaskDetailPage (props) {
     }
 
     return (
-        <SafeAreaView style={[css.safeAreaView]}>
+        <View style={[css.safeAreaView]}>
             <Header label={'摸鱼夺宝'} backOnPress={backClick}/>
             <ScrollView style={{ backgroundColor: '#F8F8F8' }} ref={r => {
                 r && setSRef(r);
@@ -182,7 +182,7 @@ function TaskDetailPage (props) {
                     <Btn setSubmits={setSubmits} submits={submits} sRef={sRef} detail={detail} setDetail={setDetail}/>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }
 

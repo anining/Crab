@@ -61,7 +61,7 @@ function DailyRedPackagePage (props) {
     }
 
     return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
+        <View style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
             <ScrollView style={[{ flex: 1, backgroundColor: '#FF6123', ...css.pr }]}>
                 <ImageAuto source={activity8} style={{ width: width, ...css.pa, zIndex: -1 }}/>
                 <Header color={'#fff'} label={'天天领红包'} style={{ backgroundColor: 'rgba(0,0,0,0)', borderBottomWidth: 0 }} icon={header3}/>
@@ -77,7 +77,7 @@ function DailyRedPackagePage (props) {
                 <ImageAuto source={activity13} style={{ width: width * 0.94, ...css.auto }}/>
                 <View style={{ height: 20 }}/>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }
 

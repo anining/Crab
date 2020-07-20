@@ -64,7 +64,7 @@ function PupilInfoPage () {
     }
 
     return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
+        <View style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
             <Header label={'渔友信息'} onPress={() => { N.navigate('PupilSetPage', { setting }); }} headerRight={<Text style={{ color: '#FF5C22' }}>交友设置</Text>}/>
             <ListGeneral
                 itemHeight={itemHeight}
@@ -99,7 +99,7 @@ function PupilInfoPage () {
                     </View>;
                 }}
             />
-        </SafeAreaView>
+        </View>
     );
 }
 

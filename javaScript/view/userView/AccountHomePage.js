@@ -30,7 +30,7 @@ function AccountHomePage (props) {
     }, []);
 
     return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
+        <View style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <Header karet-lift scene={{ descriptor: { options: {} }, route: { name: '绑定账号' } }} navigation={N} onPress={() => {
                 if ((taskPlatform.get() || []).filter(item => item.need_bind).length) {
                     DeviceEventEmitter.emit('showPop', {
@@ -45,7 +45,7 @@ function AccountHomePage (props) {
                 N.goBack();
             }} headerRight={U.ifElse(R.equals(length, 0), undefined, headerRight)}/>
             <RenderView/>
-        </SafeAreaView>
+        </View>
     );
 }
 

@@ -15,7 +15,7 @@ const PROP_SOURCE = {
 
 function CardPackageRecordsPage () {
     return (
-        <SafeAreaView style={[css.safeAreaView, { paddingLeft: 15, paddingRight: 15, flex: 1, backgroundColor: '#F8F8F8' }]}>
+        <SafeAreaView style={[css.safeAreaView, { flex: 1, backgroundColor: '#F8F8F8' }]}>
             <ListGeneral
                 itemHeight={itemHeight}
                 itemMarginTop={itemMarginTop}
@@ -75,7 +75,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 8,
         height: itemHeight,
-        marginTop: itemMarginTop
+        marginLeft: 15,
+        marginRight: 15,
+        marginTop: itemMarginTop,
     },
     text: {
         color: '#353535',

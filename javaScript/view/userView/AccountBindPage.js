@@ -36,7 +36,7 @@ function AccountBindPage (props) {
     }
 
     return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
+        <View style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <Header scene={{ descriptor: { options: {} }, route: { name: label } }} navigation={N}/>
             <View style={{ flex: 1, justifyContent: 'space-between' }}>
                 <View style={styles.container}>
@@ -65,7 +65,7 @@ function AccountBindPage (props) {
                     apiPostAccount(callback);
                 }}/>
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 

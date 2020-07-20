@@ -21,10 +21,10 @@ function CardPackagePage () {
     }, []);
 
     return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
+        <View style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '道具背包' } }} navigation={N} onPress={() => N.navigate('CardPackageRecordsPage')} headerRight={headerRight}/>
             <RenderView cards={cards} item={item} setItem={setItem}/>
-        </SafeAreaView>
+        </View>
     );
 }
 

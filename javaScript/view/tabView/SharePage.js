@@ -329,7 +329,7 @@ export default class SharePage extends PureComponent {
     render () {
         const { rebate, awardLength } = this.state;
         return (
-            <SafeAreaView style={css.safeAreaView}>
+            <View style={css.safeAreaView}>
                 <ScrollView style={styles.scrollWrap}>
                     <Header color={'#fff'} label={'我的渔友'} style={[{ backgroundColor: 'rgba(0,0,0,0)', borderBottomWidth: 0 }, css.pa]} icon={header3}/>
                     <View style={[styles.shareBgWrap, css.pr]}>
@@ -417,7 +417,7 @@ export default class SharePage extends PureComponent {
                         </View>
                     </View>
                 </ScrollView>
-            </SafeAreaView>
+            </View>
         );
     }
 }

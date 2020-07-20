@@ -79,7 +79,7 @@ export default class RightProPage extends Component {
 
     render () {
         return (
-            <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
+            <View style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
                 <Header color={'#fff'} label={'答题正确率'} style={[{ backgroundColor: '#FED465', borderBottomWidth: 0 }]} icon={header3}/>
                 <ScrollView style={{ flex: 1 }}>
                     <View style={[css.flex, css.fw, styles.rpPageWrap]}>
@@ -122,7 +122,7 @@ export default class RightProPage extends Component {
                         {this._renderIdiomList()}
                     </View>
                 </ScrollView>
-            </SafeAreaView>
+            </View>
         );
     }
 }

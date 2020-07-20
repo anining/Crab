@@ -102,7 +102,7 @@ function WithdrawPage (props) {
     }
 
     return (
-        <SafeAreaView style={css.safeAreaView}>
+        <View style={css.safeAreaView}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '我的收益' } }} navigation={N} onPress={() => {
                 N.navigate('FundingRecordsPage');
             }} backOnPress={() => {
@@ -187,7 +187,7 @@ function WithdrawPage (props) {
                     console.log(e);
                 }
             }}/>
-        </SafeAreaView>
+        </View>
     );
 }
 

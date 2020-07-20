@@ -88,7 +88,7 @@ export default class GlossaryPage extends Component {
 
     render () {
         return (
-            <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
+            <View style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
                 <Header color={'#fff'} label={'生词本'} style={[{ backgroundColor: '#FED465', borderBottomWidth: 0 }, css.pa]} icon={header3}/>
                 <ImageBackground source={game65} style={[styles.glossaryWrap, css.pr]}>
                     <ScrollView style={[css.pa, styles.glossaryInnerBox]}>
@@ -97,7 +97,7 @@ export default class GlossaryPage extends Component {
                         </View>
                     </ScrollView>
                 </ImageBackground>
-            </SafeAreaView>
+            </View>
         );
     }
 }

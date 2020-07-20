@@ -14,7 +14,7 @@ function UserAgreementPage () {
     return (
         <SafeAreaView style={[css.safeAreaView, css.RichText]}>
             <ScrollView>
-                <HTML html={userDataHtml} imagesMaxWidth={width} tagsStyles={{ p: { lineHeight: 24 } }}/>
+                {/* <HTML html={userDataHtml} imagesMaxWidth={width} tagsStyles={{ p: { lineHeight: 24 } }}/> */}
             </ScrollView>
         </SafeAreaView>
     );

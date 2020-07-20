@@ -29,7 +29,7 @@ export default class NoticePage extends Component {
 
     render () {
         return (
-            <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
+            <View style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
                 <Header color={'#fff'} label={'系统通知'} style={[{ backgroundColor: '#FED465', borderBottomWidth: 0 }]} icon={header3}/>
                 <View style={{ paddingLeft: 15, paddingRight: 15, flex: 1 }}>
                     <ListGeneral
@@ -71,7 +71,7 @@ export default class NoticePage extends Component {
                         }}
                     />
                 </View>
-            </SafeAreaView>
+            </View>
         );
     }
 }

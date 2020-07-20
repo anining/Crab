@@ -11,7 +11,7 @@ const { width } = Dimensions.get('window');
 
 function MyMedal () {
     return (
-        <ScrollView>
+        <View>
             <ImageBackground source={medal1} style={styles.container} >
                 <Header color={'#fff'} label={'五彩勋章'} style={[{ backgroundColor: 'rgba(0,0,0,0)', borderBottomWidth: 0 }, css.pa]} icon={header3}/>
                 <Text style={{ flex: 1 }} onPress={() => {
@@ -22,7 +22,7 @@ function MyMedal () {
                     toast('活动暂未开启，敬请期待');
                 }}>合成</Text>
             </ImageBackground>
-        </ScrollView>
+        </View>
     );
 }
 

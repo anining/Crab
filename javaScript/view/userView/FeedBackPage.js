@@ -36,7 +36,7 @@ function FeedBackPage () {
     }
 
     return (
-        <SafeAreaView style={[css.safeAreaView, css.pr, { backgroundColor: '#F8F8F8' }]}>
+        <View style={[css.safeAreaView, css.pr, { backgroundColor: '#F8F8F8' }]}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '意见反馈' } }} navigation={N} onPress={() => N.navigate('FeedBackRecordsPage')} headerRight={headerRight}/>
             <View style={styles.container}>
                 <View style={styles.selectView}>
@@ -81,7 +81,7 @@ function FeedBackPage () {
                     apiFeedback(callback);
                 }}/>
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 

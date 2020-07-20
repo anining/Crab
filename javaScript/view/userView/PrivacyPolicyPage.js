@@ -14,7 +14,7 @@ function PrivacyPolicyPage () {
     return (
         <SafeAreaView style={[css.safeAreaView, css.RichText]}>
             <ScrollView>
-                <HTML html={privacyDataHtml} imagesMaxWidth={width} tagsStyles={{ p: { lineHeight: 24 } }}/>
+                {/* <HTML html={privacyDataHtml} imagesMaxWidth={width} tagsStyles={{ p: { lineHeight: 24 } }}/> */}
             </ScrollView>
         </SafeAreaView>
     );

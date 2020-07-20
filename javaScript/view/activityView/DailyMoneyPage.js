@@ -71,7 +71,7 @@ function DailyMoneyPage (props) {
     }
 
     return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
+        <View style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
             <ScrollView style={[{ flex: 1, backgroundColor: '#EA251E' }, css.pr]}>
                 <ImageBackground source={activity5} style={[styles.dmWrap, css.pr]}>
                     <Header color={'#fff'} label={'天天领现金'} style={{ backgroundColor: 'rgba(0,0,0,0)', borderBottomWidth: 0 }} icon={header3} headerRight={
@@ -106,7 +106,7 @@ function DailyMoneyPage (props) {
                 </ImageBackground>
                 <RenderList history={user_history}/>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }
 

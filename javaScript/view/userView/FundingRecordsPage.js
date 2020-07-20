@@ -67,7 +67,7 @@ function FundingRecordsPage () {
     }
 
     return (
-        <SafeAreaView style={css.safeAreaView}>
+        <View style={css.safeAreaView}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '金币记录' } }} navigation={N} onPress={() => {
                 DeviceEventEmitter.emit('showPop', {
                     dom: <RenderSelect setSource={setSource} source={source}/>,
@@ -104,7 +104,7 @@ function FundingRecordsPage () {
                     }}
                 />
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 

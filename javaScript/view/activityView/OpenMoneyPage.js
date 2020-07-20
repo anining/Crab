@@ -122,7 +122,7 @@ function OpenMoneyPage (props) {
     }
 
     return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
+        <View style={[css.safeAreaView, { backgroundColor: '#f8f8f8' }]}>
             <ScrollView style={[{ flex: 1, backgroundColor: '#f8f8f8' }]}>
                 <ImageBackground source={activity7} style={styles.dmWrap}>
                     <Header color={'#fff'} label={'天天领现金'}
@@ -132,7 +132,7 @@ function OpenMoneyPage (props) {
                 </ImageBackground>
                 <RenderView receivedStatus={receivedStatus} pageInfo={pageInfo} totalNum={totalNum}/>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }
 

@@ -20,7 +20,7 @@ function WithdrawRecordsPage () {
     const headerRight = <Text style={{ color: '#FF6C00', fontSize: 14 }}>状态说明</Text>;
 
     return (
-        <SafeAreaView style={css.safeAreaView}>
+        <View style={css.safeAreaView}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '兑换记录' } }} navigation={N} onPress={() => {
                 DeviceEventEmitter.emit('showPop', <Image source={with9} style={{ height: width * 0.8 * (1158 / 885), width: width * 0.8 }}/>);
             }} headerRight={headerRight}/>
@@ -51,7 +51,7 @@ function WithdrawRecordsPage () {
                     }}
                 />
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 
