@@ -100,10 +100,10 @@ function RenderImage ({ images }) {
     const imageView = [];
     images.forEach(image => {
         imageView.push(
-            <Image key={image.data + Date.now()} style={styles.image} source={{ uri: `data:${image.mime};base64,${image.data}` }} />
+            <Image key={image.data + Date.now()} style={styles.image} source={{ uri: image.uri }} />
         );
     });
-    return <>{ ...imageView }</>;
+    return <>{ imageView }</>;
 }
 
 const styles = StyleSheet.create({
