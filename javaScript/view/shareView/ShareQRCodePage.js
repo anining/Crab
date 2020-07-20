@@ -15,26 +15,34 @@ import * as U from 'karet.util';
 import RNShare from 'react-native-share';
 import { DEVELOPER } from '../../utils/config';
 import { getGlobal, getPath } from '../../global/global';
+import CameraRoll from '@react-native-community/cameraroll';
+
 const { invite_code } = getter(['user.invite_code']);
 const { width } = Dimensions.get('window');
 const deUrl = DEVELOPER === 'Production' ? 'https://qz.usershare.libratb.com/#/' : 'https://usershare.libratb.com/#/';
+
 function ShareQRCodePage () {
     const view = U.atom([]);
     const [capture, setCapture] = useState();
+
     function save (type = 1) {
         const localView = view.get();
         try {
             if (capture) {
-                requestPermission(() => {
-                    captureRef(localView[capture.currentIndex], {
-                        format: 'jpg',
-                        quality: 1.0,
-                        result: 'base64'
-                    }).then(
-                        uri => {
-                            if (type === 1) {
-                                saveBase64ImageToCameraRoll(uri, () => toast('保存成功,请到相册查看'), () => toast('保存失败'));
-                            } else {
+                if (type === 1) {
+                    captureRef(localView[capture.currentIndex], { format: 'jpg', quality: 1.0 }).then(uri => {
+                        CameraRoll.saveToCameraRoll(uri)
+                            .then(() => toast('保存成功,请到相册查看'))
+                            .catch(() => toast('保存失败'));
+                    }, () => () => toast('保存失败'));
+                } else {
+                    requestPermission(() => {
+                        captureRef(localView[capture.currentIndex], {
+                            format: 'jpg',
+                            quality: 1.0,
+                            result: 'base64'
+                        }).then(
+                            uri => {
                                 RNShare.open({
                                     title: '趣玩赚',
                                     message: '趣玩赚',
@@ -42,15 +50,15 @@ function ShareQRCodePage () {
                                 }).catch(err => {
                                     console.log(err);
                                 });
-                            }
-                        },
-                        () => {
-                            toast('失败,captureRef错误');
-                        },
-                    );
-                }, () => {
-                    toast('失败,权限不足');
-                });
+                            },
+                            () => {
+                                toast('失败,captureRef错误');
+                            },
+                        );
+                    }, () => {
+                        toast('失败,权限不足');
+                    });
+                }
             }
         } catch (e) {
             toast('失败,error');

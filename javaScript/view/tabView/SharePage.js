@@ -607,7 +607,8 @@ const styles = StyleSheet.create({
     },
     shareImg: {
         height: 35,
-        width: 35
+        marginBottom: 10,
+        width: 35,
     },
     shareInfoImage: {
         height: width * 0.93 * 951 / 1065,
