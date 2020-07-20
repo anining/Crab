@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Share, Text, TouchableOpacity, Dimensions, StyleSheet, View, TextInput } from 'react-native';
+import { SafeAreaView, ScrollView, Share, Text, TouchableOpacity, Dimensions, StyleSheet, View, TextInput } from 'react-native';
 import { css } from '../../assets/style/css';
 import { childrenLink } from '../../utils/api';
 import { _copyStr } from '../../utils/util';
@@ -63,7 +63,7 @@ function ShareUrlPage () {
         );
     });
 
-    return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FF9C00' }]}>{view}</SafeAreaView>;
+    return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FF9C00' }]}><ScrollView>{view}</ScrollView></SafeAreaView>;
 }
 
 const styles = StyleSheet.create({

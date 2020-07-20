@@ -19,6 +19,8 @@
 		7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */; };
 		77E9BE7924C56C5D00396CF6 /* GenSenMaruGothicTW-Regular-TTF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7724C56C5C00396CF6 /* GenSenMaruGothicTW-Regular-TTF.ttf */; };
 		77E9BE7A24C56C5D00396CF6 /* GenSenMaruGothicTW-Bold-TTF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7824C56C5D00396CF6 /* GenSenMaruGothicTW-Bold-TTF.ttf */; };
+		77E9BE7D24C586F600396CF6 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7B24C586F600396CF6 /* main.jsbundle */; };
+		77E9BE7E24C586F600396CF6 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7C24C586F600396CF6 /* assets */; };
 		C8CA8B175426FCDE1852D4AE /* libPods-RnCrab.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D113F76FCBA4C41CC9EA5E7 /* libPods-RnCrab.a */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +59,8 @@
 		7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		77E9BE7724C56C5C00396CF6 /* GenSenMaruGothicTW-Regular-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GenSenMaruGothicTW-Regular-TTF.ttf"; sourceTree = "<group>"; };
 		77E9BE7824C56C5D00396CF6 /* GenSenMaruGothicTW-Bold-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GenSenMaruGothicTW-Bold-TTF.ttf"; sourceTree = "<group>"; };
+		77E9BE7B24C586F600396CF6 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = ../release_ios/main.jsbundle; sourceTree = "<group>"; };
+		77E9BE7C24C586F600396CF6 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../release_ios/assets; sourceTree = "<group>"; };
 		87EF91E4DD86E56B41F1AD65 /* Pods-RnCrab.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab.debug.xcconfig"; path = "Target Support Files/Pods-RnCrab/Pods-RnCrab.debug.xcconfig"; sourceTree = "<group>"; };
 		E177922F4B638473A036A7C7 /* Pods-RnCrab.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab.release.xcconfig"; path = "Target Support Files/Pods-RnCrab/Pods-RnCrab.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -159,6 +163,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				77E9BE7C24C586F600396CF6 /* assets */,
+				77E9BE7B24C586F600396CF6 /* main.jsbundle */,
 				13B07FAE1A68108700A75B9A /* RnCrab */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RnCrabTests */,
@@ -273,6 +279,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 84UJY6943A;
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -321,7 +328,9 @@
 			files = (
 				7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */,
 				77E9BE7A24C56C5D00396CF6 /* GenSenMaruGothicTW-Bold-TTF.ttf in Resources */,
+				77E9BE7E24C586F600396CF6 /* assets in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				77E9BE7D24C586F600396CF6 /* main.jsbundle in Resources */,
 				77E9BE7924C56C5D00396CF6 /* GenSenMaruGothicTW-Regular-TTF.ttf in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -357,7 +366,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -546,6 +555,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 84UJY6943A;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -553,12 +563,13 @@
 				);
 				INFOPLIST_FILE = RnCrab/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.prismslight.crab;
 				PRODUCT_NAME = RnCrab;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -573,14 +584,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 84UJY6943A;
 				INFOPLIST_FILE = RnCrab/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.prismslight.crab;
 				PRODUCT_NAME = RnCrab;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -721,7 +734,8 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -781,7 +795,8 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
