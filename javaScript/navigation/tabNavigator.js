@@ -68,7 +68,6 @@ function TabNavigator ({ navigation }) {
                 labelStyle: { fontSize: 10, marginTop: -5 },
                 // 标签栏的样式
                 style: {
-                    height: 50,
                     borderTopWidth: 1,
                     borderTopColor: '#efefef',
                 },
