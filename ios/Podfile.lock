@@ -361,7 +361,9 @@ PODS:
   - RNSVG (12.1.0):
     - React
   - SSZipArchive (2.2.3)
-  - TOCropViewController (2.5.3)
+  - TOCropViewController (2.5.4)
+  - UMCCommon (7.1.0)
+  - UMCCommonLog (2.0.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -439,6 +441,8 @@ DEPENDENCIES:
   - RNShare (from `../node_modules/react-native-share`)
   - RNSpringScrollView (from `../node_modules/react-native-spring-scrollview/ios`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - UMCCommon
+  - UMCCommonLog
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -458,6 +462,8 @@ SPEC REPOS:
     - OpenSSL-Universal
     - SSZipArchive
     - TOCropViewController
+    - UMCCommon
+    - UMCCommonLog
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -629,10 +635,12 @@ SPEC CHECKSUMS:
   RNSpringScrollView: 8b0af44fda8b131d845b93bf5b1d0710152e4e61
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
-  TOCropViewController: 20a14b6a7a098308bf369e7c8d700dc983a974e6
+  TOCropViewController: 2a1ae1242600b1f2d996fd91a5268b2309a33b5c
+  UMCCommon: 4e80f93492d300245683236668763dc5d0b04dbd
+  UMCCommonLog: 9b7ddde5d14a52fc1986ba5ac3121b8b2f433638
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 87a24555decdf1e4c20bf2a2bde15f89cf67b7ea
+PODFILE CHECKSUM: 6358ab10b1119642752f577fcdfd39d81e5ebdd6
 
 COCOAPODS: 1.9.1

@@ -4,6 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <CodePush/CodePush.h>
+#import <UMCommon/UMCommon.h>
 
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
@@ -36,7 +37,8 @@ static void InitializeFlipper(UIApplication *application) {
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"RnCrab"
                                             initialProperties:nil];
-
+  //UM
+  [UMConfigure initWithAppkey:@"5f156502978eea08cad1f5b2" channel:@"crab-ios"];
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
