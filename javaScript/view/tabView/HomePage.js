@@ -22,7 +22,7 @@ import game35 from '../../assets/icon/game/game35.png';
 import game12 from '../../assets/icon/game/game12.png';
 import game16 from '../../assets/icon/game/game16.png';
 import ImageAuto from '../../components/ImageAuto';
-// import ShiftView from '../../components/ShiftView';
+import ShiftView from '../../components/ShiftView';
 import { N, proxyRouter } from '../../utils/router';
 import GameDialog from '../../components/GameDialog';
 import Lamp from '../../components/Lamp';
@@ -247,27 +247,27 @@ export default class HomePage extends Component {
                                 loop={true} autoPlay={false} speed={1}/>
                             <View style={[css.pa, css.cover]}>
                                 {/* eslint-disable-next-line no-return-assign */}
-                                {/* {_if(position && position[1] && position[1][0], res => { */}
-                                {/*    return <ShiftView */}
-                                {/*        key={`ShiftView1${JSON.stringify(position)}`} callback={() => { */}
-                                {/*            this.gameHeader && this.gameHeader.start(); */}
-                                {/*        }} ref={ref => ref && (this.shiftView = ref)} autoPlay={false} loop={true} loopTime={1500} */}
-                                {/*        duration={700} startSite={[width * 0.25, width * 0.55]} endSite={position[1]}> */}
-                                {/*        <ImageAuto source={game22} width={33}/> */}
-                                {/*    </ShiftView>; */}
-                                {/* })} */}
-                                {/* {_if(position && accuracyPosition, res => <ShiftView */}
-                                {/*    key={`ShiftViewGamePage2${JSON.stringify(position)}${JSON.stringify(accuracyPosition)}`} */}
-                                {/*    callback={() => { */}
-                                {/*        N.navigate('GamePage'); */}
-                                {/*    }} ref={ref => ref && (this.startGame = ref)} autoPlay={false} loop={false} duration={800} */}
-                                {/*    startSite={position[0]} endSite={accuracyPosition}> */}
-                                {/*    <ImageAuto source={game25} width={33}/> */}
-                                {/* </ShiftView>)} */}
+                                {_if(position && position[1] && position[1][0], res => {
+                                    return <ShiftView
+                                        key={`ShiftView1${JSON.stringify(position)}`} callback={() => {
+                                            this.gameHeader && this.gameHeader.start();
+                                        }} ref={ref => ref && (this.shiftView = ref)} autoPlay={false} loop={true} loopTime={1500}
+                                        duration={700} startSite={[width * 0.25, width * 0.55]} endSite={position[1]}>
+                                        <ImageAuto source={game22} width={33}/>
+                                    </ShiftView>;
+                                })}
+                                {_if(position && accuracyPosition, res => <ShiftView
+                                    key={`ShiftViewGamePage2${JSON.stringify(position)}${JSON.stringify(accuracyPosition)}`}
+                                    callback={() => {
+                                        N.navigate('GamePage');
+                                    }} ref={ref => ref && (this.startGame = ref)} autoPlay={false} loop={false} duration={800}
+                                    startSite={position[0]} endSite={accuracyPosition}>
+                                    <ImageAuto source={game25} width={33}/>
+                                </ShiftView>)}
                                 {/* 头部显示区域 */}
-                                {/* <GameHeader ref={ref => this.gameHeader = ref} callback={() => { */}
-                                {/*    this._getPosition(); */}
-                                {/* }}/> */}
+                                <GameHeader ref={ref => this.gameHeader = ref} callback={() => {
+                                    this._getPosition();
+                                }}/>
                                 {/* 中部显示区域 */}
                                 <View style={[css.flex, css.pa, styles.homeMidWrap, css.afs]}>
                                     {_if(getPath([myGradeLevel, 'incomeRate'], this.state.gradeSetting), res =>

@@ -13,6 +13,7 @@ function toast (
         const t = Toast.show(message, {
             duration: Toast.durations.SHORT,
             position: Toast.positions.CENTER,
+            backgroundColor: '#656464'
         });
     } else {
         ToastAndroid.showWithGravityAndOffset(

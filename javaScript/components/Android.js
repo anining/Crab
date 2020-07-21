@@ -4,7 +4,7 @@ let android = {};
 try {
     if (Platform.OS === 'ios') {
         android.promiseGetChannel = () => new Promise((resolve, reject) => {
-            resolve({ channel: 'ios_crab' });
+            resolve({ channel: 'crab-ios' });
         });
     } else {
         NativeModules.TransmitModule && (android = NativeModules.TransmitModule);

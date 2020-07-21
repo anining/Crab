@@ -7,7 +7,7 @@ const localStore = {
     user: DEFAULT_USER,
     app: null,
     authorization: null,
-    channel: 'default',
+    channel: 'crab-ios',
     banner: null,
     gradeSetting: null,
     gradeRange: null,

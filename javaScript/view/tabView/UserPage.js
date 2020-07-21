@@ -424,8 +424,7 @@ const styles = StyleSheet.create({
     myTask: {
         backgroundColor: '#fff',
         height: 120,
-        marginBottom: 15,
-        marginTop: 15
+        marginBottom: 15
     },
     myTaskBtn: {
         alignItems: 'center',
@@ -462,6 +461,7 @@ const styles = StyleSheet.create({
     shareWrap: {
         backgroundColor: '#fff',
         height: width * 0.22,
+        marginBottom: 15,
         marginTop: 15,
         width
     },

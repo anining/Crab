@@ -111,30 +111,11 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */; };
-		77E9BE7D24C586F600396CF6 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7B24C586F600396CF6 /* main.jsbundle */; };
 		EA49EFC2600762232FE2BD2C /* libPods-RnCrab.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D113F76FCBA4C41CC9EA5E7 /* libPods-RnCrab.a */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		0407759924C5A57D00F3C909 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0407759424C5A57700F3C909 /* CodePush.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = CodePush;
-		};
-		0407759B24C5A57D00F3C909 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0407759424C5A57700F3C909 /* CodePush.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F886647B1F4ADB500036D01B;
-			remoteInfo = "CodePush-tvOS";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		0407759424C5A57700F3C909 /* CodePush.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CodePush.xcodeproj; path = "../node_modules/react-native-code-push/ios/CodePush.xcodeproj"; sourceTree = "<group>"; };
 		0407759E24C5A5B800F3C909 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		0413CEE824C704E7007DCB26 /* whole7_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole7_2.png; path = ../android/app/src/main/assets/whole7/whole7_2.png; sourceTree = "<group>"; };
 		043EFFE124C6ECE600BA0680 /* GenSenMaruGothicTW-Regular-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GenSenMaruGothicTW-Regular-TTF.ttf"; path = "../android/app/src/main/assets/fonts/GenSenMaruGothicTW-Regular-TTF.ttf"; sourceTree = "<group>"; };
@@ -246,7 +227,6 @@
 		0482D05524C6FD8F0059EA33 /* whole7_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole7_0.png; path = ../android/app/src/main/assets/whole7/whole7_0.png; sourceTree = "<group>"; };
 		0482D05624C6FD8F0059EA33 /* whole7_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole7_5.png; path = ../android/app/src/main/assets/whole7/whole7_5.png; sourceTree = "<group>"; };
 		0482D05724C6FD8F0059EA33 /* whole7_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole7_1.png; path = ../android/app/src/main/assets/whole7/whole7_1.png; sourceTree = "<group>"; };
-		0485E1DF24C6F7EF00046CEE /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../android/app/src/main/assets; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RnCrab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RnCrab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RnCrab/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RnCrab/AppDelegate.m; sourceTree = "<group>"; };
@@ -256,7 +236,6 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = RnCrab/main.m; sourceTree = "<group>"; };
 		2D113F76FCBA4C41CC9EA5E7 /* libPods-RnCrab.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RnCrab.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		77E9BE7B24C586F600396CF6 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = ../release_ios/main.jsbundle; sourceTree = "<group>"; };
 		87EF91E4DD86E56B41F1AD65 /* Pods-RnCrab.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab.debug.xcconfig"; path = "Target Support Files/Pods-RnCrab/Pods-RnCrab.debug.xcconfig"; sourceTree = "<group>"; };
 		E177922F4B638473A036A7C7 /* Pods-RnCrab.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab.release.xcconfig"; path = "Target Support Files/Pods-RnCrab/Pods-RnCrab.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -275,15 +254,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0407759524C5A57700F3C909 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				0407759A24C5A57D00F3C909 /* libCodePush.a */,
-				0407759C24C5A57D00F3C909 /* libCodePush.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		0482CFA624C6FBB30059EA33 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -439,7 +409,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				0407759424C5A57700F3C909 /* CodePush.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -448,8 +417,6 @@
 			isa = PBXGroup;
 			children = (
 				0482CFA624C6FBB30059EA33 /* Resources */,
-				0485E1DF24C6F7EF00046CEE /* assets */,
-				77E9BE7B24C586F600396CF6 /* main.jsbundle */,
 				13B07FAE1A68108700A75B9A /* RnCrab */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -518,35 +485,12 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 0407759524C5A57700F3C909 /* Products */;
-					ProjectRef = 0407759424C5A57700F3C909 /* CodePush.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* RnCrab */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		0407759A24C5A57D00F3C909 /* libCodePush.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libCodePush.a;
-			remoteRef = 0407759924C5A57D00F3C909 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		0407759C24C5A57D00F3C909 /* libCodePush.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libCodePush.a;
-			remoteRef = 0407759B24C5A57D00F3C909 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {
@@ -654,7 +598,6 @@
 				0482CFA524C6FA330059EA33 /* GenSenMaruGothicTW-Bold-TTF.ttf in Resources */,
 				7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				77E9BE7D24C586F600396CF6 /* main.jsbundle in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -777,6 +720,7 @@
 					"$(inherited)",
 					"FB_SONARKIT_ENABLED=1",
 				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = RnCrab/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.0;
@@ -801,6 +745,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 84UJY6943A;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = RnCrab/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.0;
