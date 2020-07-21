@@ -189,14 +189,18 @@ export default class GameHeader extends Component {
                     </View>
                     <ImageAuto source={game31} width={22}/>
                 </TouchableOpacity>
-                {_if(getGlobal('channel') in sensitiveList, res => <Text/>, () => <EnlargeView ref={ref => this.enlarge = ref}>
+                <EnlargeView ref={ref => this.enlarge = ref}>
                     <View style={[styles.headerDataNumber, css.flex, css.sp, css.pr, {
                         width: 190,
                         backgroundColor: this.props.backgroundColor
                     }]}>
                         <TouchableOpacity activeOpacity={1} style={[css.pa, styles.topHDN]} onPress={() => {
-                            DeviceEventEmitter.emit('stopLottie');
-                            N.navigate('WithdrawPage');
+                            if (getGlobal('channel') in sensitiveList) {
+                                N.navigate('AnswerPage');
+                            } else {
+                                DeviceEventEmitter.emit('stopLottie');
+                                N.navigate('WithdrawPage');
+                            }
                         }}/>
                         <ImageAuto key={'game22'} source={game22} width={33} onLayout={(e) => {
                             const target = e.target;
@@ -212,9 +216,9 @@ export default class GameHeader extends Component {
                         <TextInput multiline={false} style={[styles.hdnText]} ref={ref => this.secondText = ref} onFocus={() => {
                             this.secondText.blur();
                         }}/>
-                        <Text style={styles.withdrawBtn}>兑换</Text>
+                        {_if(getGlobal('channel') in sensitiveList, res => <Text style={styles.withdrawBtn}>加速</Text>, () => <Text style={styles.withdrawBtn}>兑换</Text>)}
                     </View>
-                </EnlargeView>)}
+                </EnlargeView>
             </View>;
         }
     }

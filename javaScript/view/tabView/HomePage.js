@@ -43,6 +43,7 @@ import Button from '../../components/Button';
 import { notice } from '../../utils/api';
 import game4 from '../../assets/icon/game/game4.png';
 import user18 from '../../assets/icon/user/user18.png';
+import ShiftView from '../../components/ShiftView';
 
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;

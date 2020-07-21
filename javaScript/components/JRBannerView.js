@@ -8,4 +8,4 @@ const iface = {
     },
 };
 
-module.exports = androidIface;
+module.exports = iface;

@@ -171,7 +171,7 @@ function AnswerPage () {
                 <View style={{ width, height: 30, backgroundColor: '#fff' }}/>
                 <Slider data={banner.get()} height={width * 0.29} autoplay={true} onPress={item => bannerAction(item.category, item.link, item.title)}/>
                 <View style={styles.answerWrap}>
-                    <ComTitle title={'每日签到'} minTitle={<Text style={[css.minTitle, css.sy]}>连续签到得 <Text style={[{ color: '#FF6C00' }, css.sy]}>兑换免手续费特权卡!</Text></Text>}/>
+                    <ComTitle title={'每日签到'} minTitle={_if(getGlobal('channel') in sensitiveList, res => <Text/>, () => res => <Text style={[css.minTitle, css.sy]}>连续签到得 <Text style={[{ color: '#FF6C00' }, css.sy]}>兑换免手续费特权卡!</Text></Text>)}/>
                     <RenderDaySign isSign={isSign} signDay={signDay} setSignDay={setSignDay}/>
                 </View>
                 {_if(getGlobal('channel') in sensitiveList, res => <Text/>, () => _if(getPath(['configObj', 'app_other_info', 'value', 'zoneOfAction'], getGlobal('app')), res => <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
@@ -341,7 +341,7 @@ function RenderActivity ({ zoneOfAction }) {
 
 function RenderNewList ({ list = [], _newUserTask }) {
     const view = [];
-
+    const sensitiveList = getPath(['sensitive_list', 'sensitive_list'], getGlobal('app'), {});
     list.forEach((item, index) => {
         const { new_user_task_id, task_type, add_balance, is_finish } = item;
         view.push(
@@ -351,8 +351,8 @@ function RenderNewList ({ list = [], _newUserTask }) {
                     <View style={[css.flex, css.fw, styles.aiwText]}>
                         <View style={[css.flex, css.js, { width: '100%' }]}>
                             <Text style={[styles.labelText, { width: 'auto' }]} numberOfLines={1}>{NEW_USER_TASK_TYPE[task_type].label}</Text>
-                            <Text style={styles.labelMoney} numberOfLines={1}> +{_toFixed(toGoldCoin(add_balance), 0)}</Text>
-                            <ImageAuto source={answer14} width={20}/>
+                            {_if(getGlobal('channel') in sensitiveList, res => <Text/>, () => <Text style={styles.labelMoney} numberOfLines={1}> +{_toFixed(toGoldCoin(add_balance), 0)}</Text>)}
+                            {_if(getGlobal('channel') in sensitiveList, res => <Text/>, () => <ImageAuto source={answer14} width={20}/>)}
                         </View>
                         <Text style={[styles.labelText, styles.labelMinTitle, { color: '#999' }]} numberOfLines={1}>{NEW_USER_TASK_TYPE[task_type].label}</Text>
                     </View>
