@@ -8,4 +8,4 @@ const iface = {
     },
 };
 
-module.exports = requireNativeComponent('jrbanner', iface);
+module.exports = androidIface;

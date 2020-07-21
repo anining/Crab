@@ -14,10 +14,11 @@ import PropTypes from 'prop-types';
 import { css } from '../assets/style/css';
 import { _debounce, _tc, setAndroidTime } from '../utils/util';
 import { bindData } from '../global/global';
-import BindingX from 'react-native-bindingx';
+let BindingX;
 const { height, width, scale } = Dimensions.get('window');
 if (Platform.OS === 'android') {
     UIManager.setLayoutAnimationEnabledExperimental(true);
+    BindingX = require('react-native-bindingx');
 }
 /**
  * <ShiftView startSite={[0,0]} endSite={[0,0]} duration={1000} delay={1000}/>
@@ -90,7 +91,7 @@ export default class ShiftView extends PureComponent {
 
     clearBindTiming () {
         try {
-            this.gesToken && (() => {
+            BindingX && this.gesToken && (() => {
                 BindingX.unbind({
                     eventType: 'timing',
                     token: this.gesToken
@@ -126,37 +127,41 @@ export default class ShiftView extends PureComponent {
 
     androidMove () {
         try {
-            this.clearBindTiming();
-            const duration = Math.abs(this.duration);
-            const exit = `t>${duration}`;
-            const anchor = findNodeHandle(this._shiftView);
-            const gesTokenObj = BindingX.bind(
-                {
-                    eventType: 'timing',
-                    exitExpression: exit,
-                    props: [
-                        {
-                            element: anchor,
-                            property: 'transform.translateX',
-                            expression: `easeInSine(t,0,${this.translateX * scale},${duration})`
-                        },
-                        {
-                            element: anchor,
-                            property: 'transform.translateY',
-                            expression: `easeInSine(t,0,${this.translateY * scale},${duration})`
-                        },
-                        {
-                            element: anchor,
-                            property: 'opacity',
-                            expression: 't<100?t/100*1):1',
+            if (BindingX) {
+                this.clearBindTiming();
+                const duration = Math.abs(this.duration);
+                const exit = `t>${duration}`;
+                const anchor = findNodeHandle(this._shiftView);
+                const gesTokenObj = BindingX.bind(
+                    {
+                        eventType: 'timing',
+                        exitExpression: exit,
+                        props: [
+                            {
+                                element: anchor,
+                                property: 'transform.translateX',
+                                expression: `easeInSine(t,0,${this.translateX * scale},${duration})`
+                            },
+                            {
+                                element: anchor,
+                                property: 'transform.translateY',
+                                expression: `easeInSine(t,0,${this.translateY * scale},${duration})`
+                            },
+                            {
+                                element: anchor,
+                                property: 'opacity',
+                                expression: 't<100?t/100*1):1',
+                            }
+                        ]
+                    }, (e) => {
+                        if (e && (e.state === 'end' || e.state === 'exit')) {
+                            this.debounceCallBack();
                         }
-                    ]
-                }, (e) => {
-                    if (e && (e.state === 'end' || e.state === 'exit')) {
-                        this.debounceCallBack();
-                    }
-                });
-            this.gesToken = gesTokenObj.token;
+                    });
+                this.gesToken = gesTokenObj.token;
+            } else {
+                this._reactNativeMove();
+            }
         } catch (e) {
             this._reactNativeMove();
         }

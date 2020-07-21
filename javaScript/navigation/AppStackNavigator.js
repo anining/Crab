@@ -53,11 +53,9 @@ import {
     updateUser,
 } from '../utils/update';
 import OpenMoneyPage from '../view/activityView/OpenMoneyPage';
-// import GamePage from '../view/gameView/GamePage';
 import NoticeDetailPage from '../view/homeView/NoticeDetailPage';
 import ShareUrlPage from '../view/shareView/ShareUrlPage';
 import ShareQRCodePage from '../view/shareView/ShareQRCodePage';
-// import PassGamePage from '../view/gameView/PassGamePage';
 import RightProPage from '../view/gameView/RightProPage';
 import NoviceVideoPage from '../view/otherView/NoviceVideoPage';
 import MustUpdate from '../components/MustUpdate';
@@ -65,6 +63,8 @@ import WebViewPage from '../view/userView/WebViewPage';
 import MyMedal from '../view/userView/MyMedal';
 import SharePage from '../view/tabView/SharePage';
 import SetPage from '../view/userView/SetPage';
+import GamePage from '../view/gameView/GamePage';
+import PassGamePage from '../view/gameView/PassGamePage';
 
 const Stack = createStackNavigator();
 
@@ -234,16 +234,16 @@ const stackScreens = [
         component: ActivityCenterPage,
         title: '活动中心',
     },
-    // {
-    //     name: 'GamePage',
-    //     component: GamePage,
-    //     title: '答题',
-    // },
-    // {
-    //     name: 'PassGamePage',
-    //     component: PassGamePage,
-    //     title: '答题结算',
-    // },
+    {
+        name: 'GamePage',
+        component: GamePage,
+        title: '答题',
+    },
+    {
+        name: 'PassGamePage',
+        component: PassGamePage,
+        title: '答题结算',
+    },
     {
         name: 'RightProPage',
         component: RightProPage,
