@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CodePushDeploymentKey</key>
 	<string>yBATHbE7eIJYHhMxlnECSwAwaOwx4ksvOXqog</string>
 	<key>CodePushServerUrl</key>
@@ -44,9 +44,9 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>访问地理位置用以体验完整的APP流程</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>访问相册用以体验完整的APP流程</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>GenSenMaruGothicTW-Bold-TTF.ttf</string>

@@ -48,7 +48,7 @@ function OpenMoneyPage (props) {
                 <TouchableOpacity style={[css.pr]} onPress={() => {
                     LottieViewRef && LottieViewRef.play();
                 }}>
-                    <TouchableOpacity style={[styles.redInnerWrap, css.pa, css.flex, css.fw]}>
+                    <View style={[styles.redInnerWrap, css.pa, css.flex, css.fw]}>
                         <ImageAuto style={{
                             width: width * 0.2,
                             borderRadius: width * 0.1,
@@ -60,11 +60,11 @@ function OpenMoneyPage (props) {
                         <Text style={styles.redTipsText}>最低20w金币等着你</Text>
                         <LottieView ref={ref => {
                             ref && (LottieViewRef = ref);
-                        }} renderMode={'HARDWARE'} style={[css.pa, { width: width, top: '22%' }]}
+                        }} renderMode={'HARDWARE'} style={[css.pa, { width: width * 0.6, top: '30%' }]}
                         imageAssetsFolder={'open'} source={open} loop={false} autoPlay={false} speed={2} onAnimationFinish={async () => {
                             await _openRedPackage();
                         }}/>
-                    </TouchableOpacity>
+                    </View>
                     <ImageAuto width={width * 0.96} source={activity14}/>
                 </TouchableOpacity>
             ),
