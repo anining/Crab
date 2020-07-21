@@ -136,6 +136,7 @@
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		0407759424C5A57700F3C909 /* CodePush.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CodePush.xcodeproj; path = "../node_modules/react-native-code-push/ios/CodePush.xcodeproj"; sourceTree = "<group>"; };
 		0407759E24C5A5B800F3C909 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		0413CEE824C704E7007DCB26 /* whole7_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole7_2.png; path = ../android/app/src/main/assets/whole7/whole7_2.png; sourceTree = "<group>"; };
 		043EFFE124C6ECE600BA0680 /* GenSenMaruGothicTW-Regular-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GenSenMaruGothicTW-Regular-TTF.ttf"; path = "../android/app/src/main/assets/fonts/GenSenMaruGothicTW-Regular-TTF.ttf"; sourceTree = "<group>"; };
 		043EFFE224C6ECE600BA0680 /* GenSenMaruGothicTW-Bold-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GenSenMaruGothicTW-Bold-TTF.ttf"; path = "../android/app/src/main/assets/fonts/GenSenMaruGothicTW-Bold-TTF.ttf"; sourceTree = "<group>"; };
 		0482CF9224C6FA090059EA33 /* whole1_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_0.png; path = ../android/app/src/main/assets/whole1/whole1_0.png; sourceTree = "<group>"; };
@@ -245,7 +246,6 @@
 		0482D05524C6FD8F0059EA33 /* whole7_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole7_0.png; path = ../android/app/src/main/assets/whole7/whole7_0.png; sourceTree = "<group>"; };
 		0482D05624C6FD8F0059EA33 /* whole7_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole7_5.png; path = ../android/app/src/main/assets/whole7/whole7_5.png; sourceTree = "<group>"; };
 		0482D05724C6FD8F0059EA33 /* whole7_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole7_1.png; path = ../android/app/src/main/assets/whole7/whole7_1.png; sourceTree = "<group>"; };
-		0482D06124C6FD9D0059EA33 /* whole7_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whole7_2.png; sourceTree = "<group>"; };
 		0485E1DF24C6F7EF00046CEE /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../android/app/src/main/assets; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RnCrab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RnCrab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RnCrab/AppDelegate.h; sourceTree = "<group>"; };
@@ -288,7 +288,7 @@
 			isa = PBXGroup;
 			children = (
 				0482D05224C6FD8F0059EA33 /* whole7_2.png */,
-				0482D06124C6FD9D0059EA33 /* whole7_2.png */,
+				0413CEE824C704E7007DCB26 /* whole7_2.png */,
 				0482D05524C6FD8F0059EA33 /* whole7_0.png */,
 				0482D05024C6FD8E0059EA33 /* whole7_3.png */,
 				0482D04F24C6FD8E0059EA33 /* whole7_4.png */,
@@ -553,6 +553,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0482D05B24C6FD8F0059EA33 /* whole7_2.png in Resources */,
 				0482D04624C6FD840059EA33 /* whole6_0.png in Resources */,
 				0482D05A24C6FD8F0059EA33 /* whole7_7.png in Resources */,
 				0482D04724C6FD840059EA33 /* whole6_3.png in Resources */,
@@ -571,7 +572,6 @@
 				0482D03724C6FD770059EA33 /* whole5_3.png in Resources */,
 				0482D03824C6FD770059EA33 /* whole5_7.png in Resources */,
 				0482D05824C6FD8F0059EA33 /* whole7_4.png in Resources */,
-				0482D05B24C6FD8F0059EA33 /* whole7_2.png in Resources */,
 				0482D03924C6FD770059EA33 /* whole5_6.png in Resources */,
 				0482D03A24C6FD770059EA33 /* whole5_5.png in Resources */,
 				0482D03B24C6FD770059EA33 /* whole5_4.png in Resources */,
