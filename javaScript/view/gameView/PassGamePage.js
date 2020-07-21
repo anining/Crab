@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     DeviceEventEmitter,
     SafeAreaView,
-    ScrollView, UIManager, NativeModules, InteractionManager,
+    ScrollView, UIManager, NativeModules, InteractionManager, Platform,
 } from 'react-native';
 import { getter, setter } from '../../utils/store';
 import { css } from '../../assets/style/css';
@@ -40,7 +40,10 @@ import { updateNextRedLevel } from '../../utils/update';
 import { bindData, getGlobal, getPath } from '../../global/global';
 import { getGradeConfig } from '../../utils/levelConfig';
 import { AnswerPopTipsTime, DelayGetDomeTime } from '../../utils/animationConfig';
-import JRBannerView from '../../components/JRBannerView';
+let JRBannerView = () => <Text/>;
+if (Platform.OS === 'android') {
+    JRBannerView = require('../../components/JRBannerView');
+}
 
 const { height, width } = Dimensions.get('window');
 export default class PassGamePage extends Component {
@@ -356,12 +359,14 @@ export default class PassGamePage extends Component {
                             </View>
                         </View>
                     </ScrollView>
-                    {_if(getGlobal('channel') in this.sensitiveList, res => <Text/>, () => <JRBannerView style={styles.adStyle}/>)}
+                    {_if(JRBannerView && getGlobal('channel') in this.sensitiveList, res => <Text/>, () => <JRBannerView style={styles.adStyle}/>)}
                 </SafeAreaView>;
+            } else {
+                return <Text/>;
             }
         } catch (e) {
             console.log(e);
-            return null;
+            return <Text/>;
         }
     }
 }
