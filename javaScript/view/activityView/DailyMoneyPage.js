@@ -85,7 +85,7 @@ function DailyMoneyPage (props) {
                     }}/>
                     <Lamp LampList={withdrawLogs}/>
                     <View style={[css.flex, css.fw, css.pa, styles.redPackageWrap, css.afs]}>
-                        <CountDown time={+new Date(djangoTime(invalid_time))} style={{ color: Number(money) >= 30 ? 'rgba(225,48,32,1)' : '#999', fontSize: 13, lineHeight: 30 }} millisecond={true} tips={Number(money) >= 30 ? '后未兑换金币将失效' : '后金币失效'}/>
+                        <CountDown time={+new Date(djangoTime(invalid_time))} style={{ color: Number(money) >= 30 ? 'rgba(225,48,32,1)' : '#999', fontSize: 13 }} millisecond={true} tips={Number(money) >= 30 ? ' 后未兑换金币将失效' : ' 后金币失效'}/>
                         <Text style={styles.redMaxText}> {transformMoney(money, 4)} <Text style={{ fontSize: 20 }}>金币</Text></Text>
                         <Animatable.View useNativeDriver={true} iterationCount="infinite" animation="pulse" style={[{ marginTop: width * 0.06 }, css.auto]}>
                             <Shadow style={[styles.shareBtn]}>
