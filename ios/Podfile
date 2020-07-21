@@ -80,11 +80,6 @@ target 'RnCrab' do
   # UM
   pod 'UMCCommon'
 
-  target 'RnCrabTests' do
-    inherit! :complete
-    # Pods for testing
-  end
-
   use_native_modules!
 
   # Enables Flipper.
@@ -94,14 +89,5 @@ target 'RnCrab' do
   add_flipper_pods!
   post_install do |installer|
     flipper_post_install(installer)
-  end
-end
-
-target 'RnCrab-tvOS' do
-  # Pods for RnCrab-tvOS
-
-  target 'RnCrab-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
   end
 end

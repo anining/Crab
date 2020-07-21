@@ -7,47 +7,59 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* RnCrabTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RnCrabTests.m */; };
-		0A64688A047F6CE0CC174DE1 /* libPods-RnCrab-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EF8C7DA8C90C23206933D84A /* libPods-RnCrab-tvOS.a */; };
-		107EEBF4602F6851BDB37C47 /* libPods-RnCrab-RnCrabTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6D3E647CB69A5667208EE0 /* libPods-RnCrab-RnCrabTests.a */; };
+		0482CF9A24C6FA090059EA33 /* whole1_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9224C6FA090059EA33 /* whole1_0.png */; };
+		0482CF9B24C6FA090059EA33 /* whole1_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9324C6FA090059EA33 /* whole1_3.png */; };
+		0482CF9C24C6FA090059EA33 /* whole1_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9424C6FA090059EA33 /* whole1_4.png */; };
+		0482CF9D24C6FA090059EA33 /* whole1_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9524C6FA090059EA33 /* whole1_5.png */; };
+		0482CF9E24C6FA090059EA33 /* whole1_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9624C6FA090059EA33 /* whole1_2.png */; };
+		0482CF9F24C6FA090059EA33 /* whole1_7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9724C6FA090059EA33 /* whole1_7.jpg */; };
+		0482CFA024C6FA090059EA33 /* whole1_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9824C6FA090059EA33 /* whole1_6.png */; };
+		0482CFA124C6FA090059EA33 /* whole1_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9924C6FA090059EA33 /* whole1_1.png */; };
+		0482CFA424C6FA330059EA33 /* GenSenMaruGothicTW-Regular-TTF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0482CFA224C6FA330059EA33 /* GenSenMaruGothicTW-Regular-TTF.ttf */; };
+		0482CFA524C6FA330059EA33 /* GenSenMaruGothicTW-Bold-TTF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0482CFA324C6FA330059EA33 /* GenSenMaruGothicTW-Bold-TTF.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2DCD954D1E0B4F2C00145EB5 /* RnCrabTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RnCrabTests.m */; };
-		62B8015B1FA53D432EA81F6C /* libPods-RnCrab-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7017FA294766A24565EAC91D /* libPods-RnCrab-tvOSTests.a */; };
 		7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */; };
-		77E9BE7924C56C5D00396CF6 /* GenSenMaruGothicTW-Regular-TTF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7724C56C5C00396CF6 /* GenSenMaruGothicTW-Regular-TTF.ttf */; };
-		77E9BE7A24C56C5D00396CF6 /* GenSenMaruGothicTW-Bold-TTF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7824C56C5D00396CF6 /* GenSenMaruGothicTW-Bold-TTF.ttf */; };
-		C8CA8B175426FCDE1852D4AE /* libPods-RnCrab.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D113F76FCBA4C41CC9EA5E7 /* libPods-RnCrab.a */; };
+		77E9BE7D24C586F600396CF6 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7B24C586F600396CF6 /* main.jsbundle */; };
+		EA49EFC2600762232FE2BD2C /* libPods-RnCrab.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D113F76FCBA4C41CC9EA5E7 /* libPods-RnCrab.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		00E356F41AD99517003FC87E /* PBXContainerItemProxy */ = {
+		0407759924C5A57D00F3C909 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = RnCrab;
+			containerPortal = 0407759424C5A57700F3C909 /* CodePush.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = CodePush;
 		};
-		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
+		0407759B24C5A57D00F3C909 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
-			remoteInfo = "RnCrab-tvOS";
+			containerPortal = 0407759424C5A57700F3C909 /* CodePush.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F886647B1F4ADB500036D01B;
+			remoteInfo = "CodePush-tvOS";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0030F91974EF011515FB2806 /* Pods-RnCrab-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-RnCrab-tvOSTests/Pods-RnCrab-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00E356EE1AD99517003FC87E /* RnCrabTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RnCrabTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* RnCrabTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RnCrabTests.m; sourceTree = "<group>"; };
+		0407759424C5A57700F3C909 /* CodePush.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CodePush.xcodeproj; path = "../node_modules/react-native-code-push/ios/CodePush.xcodeproj"; sourceTree = "<group>"; };
+		0407759E24C5A5B800F3C909 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		043EFFE124C6ECE600BA0680 /* GenSenMaruGothicTW-Regular-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GenSenMaruGothicTW-Regular-TTF.ttf"; path = "../android/app/src/main/assets/fonts/GenSenMaruGothicTW-Regular-TTF.ttf"; sourceTree = "<group>"; };
+		043EFFE224C6ECE600BA0680 /* GenSenMaruGothicTW-Bold-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GenSenMaruGothicTW-Bold-TTF.ttf"; path = "../android/app/src/main/assets/fonts/GenSenMaruGothicTW-Bold-TTF.ttf"; sourceTree = "<group>"; };
+		0482CF9224C6FA090059EA33 /* whole1_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_0.png; path = ../android/app/src/main/assets/whole1/whole1_0.png; sourceTree = "<group>"; };
+		0482CF9324C6FA090059EA33 /* whole1_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_3.png; path = ../android/app/src/main/assets/whole1/whole1_3.png; sourceTree = "<group>"; };
+		0482CF9424C6FA090059EA33 /* whole1_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_4.png; path = ../android/app/src/main/assets/whole1/whole1_4.png; sourceTree = "<group>"; };
+		0482CF9524C6FA090059EA33 /* whole1_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_5.png; path = ../android/app/src/main/assets/whole1/whole1_5.png; sourceTree = "<group>"; };
+		0482CF9624C6FA090059EA33 /* whole1_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_2.png; path = ../android/app/src/main/assets/whole1/whole1_2.png; sourceTree = "<group>"; };
+		0482CF9724C6FA090059EA33 /* whole1_7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = whole1_7.jpg; path = ../android/app/src/main/assets/whole1/whole1_7.jpg; sourceTree = "<group>"; };
+		0482CF9824C6FA090059EA33 /* whole1_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_6.png; path = ../android/app/src/main/assets/whole1/whole1_6.png; sourceTree = "<group>"; };
+		0482CF9924C6FA090059EA33 /* whole1_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_1.png; path = ../android/app/src/main/assets/whole1/whole1_1.png; sourceTree = "<group>"; };
+		0482CFA224C6FA330059EA33 /* GenSenMaruGothicTW-Regular-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GenSenMaruGothicTW-Regular-TTF.ttf"; path = "../android/app/src/main/assets/fonts/GenSenMaruGothicTW-Regular-TTF.ttf"; sourceTree = "<group>"; };
+		0482CFA324C6FA330059EA33 /* GenSenMaruGothicTW-Bold-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GenSenMaruGothicTW-Bold-TTF.ttf"; path = "../android/app/src/main/assets/fonts/GenSenMaruGothicTW-Bold-TTF.ttf"; sourceTree = "<group>"; };
+		0485E1DF24C6F7EF00046CEE /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../android/app/src/main/assets; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RnCrab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RnCrab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RnCrab/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RnCrab/AppDelegate.m; sourceTree = "<group>"; };
@@ -55,84 +67,39 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = RnCrab/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RnCrab/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = RnCrab/main.m; sourceTree = "<group>"; };
-		2865F87F3CA6CB680656D5F0 /* Pods-RnCrab-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-RnCrab-tvOSTests/Pods-RnCrab-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		2D02E47B1E0B4A5D006451C7 /* RnCrab-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RnCrab-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D02E4901E0B4A5D006451C7 /* RnCrab-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RnCrab-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D113F76FCBA4C41CC9EA5E7 /* libPods-RnCrab.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RnCrab.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4819C90315A4AB855752E52E /* Pods-RnCrab-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab-tvOS.release.xcconfig"; path = "Target Support Files/Pods-RnCrab-tvOS/Pods-RnCrab-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		497C34D63405242BF7B6F886 /* Pods-RnCrab-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-RnCrab-tvOS/Pods-RnCrab-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		7017FA294766A24565EAC91D /* libPods-RnCrab-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RnCrab-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		77E9BE7724C56C5C00396CF6 /* GenSenMaruGothicTW-Regular-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GenSenMaruGothicTW-Regular-TTF.ttf"; sourceTree = "<group>"; };
-		77E9BE7824C56C5D00396CF6 /* GenSenMaruGothicTW-Bold-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GenSenMaruGothicTW-Bold-TTF.ttf"; sourceTree = "<group>"; };
+		77E9BE7B24C586F600396CF6 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = ../release_ios/main.jsbundle; sourceTree = "<group>"; };
 		87EF91E4DD86E56B41F1AD65 /* Pods-RnCrab.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab.debug.xcconfig"; path = "Target Support Files/Pods-RnCrab/Pods-RnCrab.debug.xcconfig"; sourceTree = "<group>"; };
-		923661A58EB69694B38CE233 /* Pods-RnCrab-RnCrabTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab-RnCrabTests.release.xcconfig"; path = "Target Support Files/Pods-RnCrab-RnCrabTests/Pods-RnCrab-RnCrabTests.release.xcconfig"; sourceTree = "<group>"; };
-		B068ABE282EC40D6D12E3AD3 /* Pods-RnCrab-RnCrabTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab-RnCrabTests.debug.xcconfig"; path = "Target Support Files/Pods-RnCrab-RnCrabTests/Pods-RnCrab-RnCrabTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E177922F4B638473A036A7C7 /* Pods-RnCrab.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab.release.xcconfig"; path = "Target Support Files/Pods-RnCrab/Pods-RnCrab.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		EF8C7DA8C90C23206933D84A /* libPods-RnCrab-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RnCrab-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FA6D3E647CB69A5667208EE0 /* libPods-RnCrab-RnCrabTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RnCrab-RnCrabTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		00E356EB1AD99517003FC87E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				107EEBF4602F6851BDB37C47 /* libPods-RnCrab-RnCrabTests.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C8CA8B175426FCDE1852D4AE /* libPods-RnCrab.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2D02E4781E0B4A5D006451C7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0A64688A047F6CE0CC174DE1 /* libPods-RnCrab-tvOS.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2D02E48D1E0B4A5D006451C7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				62B8015B1FA53D432EA81F6C /* libPods-RnCrab-tvOSTests.a in Frameworks */,
+				EA49EFC2600762232FE2BD2C /* libPods-RnCrab.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* RnCrabTests */ = {
+		0407759524C5A57700F3C909 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* RnCrabTests.m */,
-				00E356F01AD99517003FC87E /* Supporting Files */,
+				0407759A24C5A57D00F3C909 /* libCodePush.a */,
+				0407759C24C5A57D00F3C909 /* libCodePush.a */,
 			);
-			path = RnCrabTests;
-			sourceTree = "<group>";
-		};
-		00E356F01AD99517003FC87E /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				00E356F11AD99517003FC87E /* Info.plist */,
-			);
-			name = "Supporting Files";
+			name = Products;
 			sourceTree = "<group>";
 		};
 		13B07FAE1A68108700A75B9A /* RnCrab */ = {
 			isa = PBXGroup;
 			children = (
-				77E9BE7824C56C5D00396CF6 /* GenSenMaruGothicTW-Bold-TTF.ttf */,
-				77E9BE7724C56C5C00396CF6 /* GenSenMaruGothicTW-Regular-TTF.ttf */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -150,12 +117,6 @@
 			children = (
 				87EF91E4DD86E56B41F1AD65 /* Pods-RnCrab.debug.xcconfig */,
 				E177922F4B638473A036A7C7 /* Pods-RnCrab.release.xcconfig */,
-				B068ABE282EC40D6D12E3AD3 /* Pods-RnCrab-RnCrabTests.debug.xcconfig */,
-				923661A58EB69694B38CE233 /* Pods-RnCrab-RnCrabTests.release.xcconfig */,
-				497C34D63405242BF7B6F886 /* Pods-RnCrab-tvOS.debug.xcconfig */,
-				4819C90315A4AB855752E52E /* Pods-RnCrab-tvOS.release.xcconfig */,
-				0030F91974EF011515FB2806 /* Pods-RnCrab-tvOSTests.debug.xcconfig */,
-				2865F87F3CA6CB680656D5F0 /* Pods-RnCrab-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -163,12 +124,12 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				043EFFE224C6ECE600BA0680 /* GenSenMaruGothicTW-Bold-TTF.ttf */,
+				043EFFE124C6ECE600BA0680 /* GenSenMaruGothicTW-Regular-TTF.ttf */,
+				0407759E24C5A5B800F3C909 /* libz.tbd */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D113F76FCBA4C41CC9EA5E7 /* libPods-RnCrab.a */,
-				FA6D3E647CB69A5667208EE0 /* libPods-RnCrab-RnCrabTests.a */,
-				EF8C7DA8C90C23206933D84A /* libPods-RnCrab-tvOS.a */,
-				7017FA294766A24565EAC91D /* libPods-RnCrab-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -176,6 +137,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0407759424C5A57700F3C909 /* CodePush.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -183,9 +145,20 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				0482CFA324C6FA330059EA33 /* GenSenMaruGothicTW-Bold-TTF.ttf */,
+				0482CFA224C6FA330059EA33 /* GenSenMaruGothicTW-Regular-TTF.ttf */,
+				0482CF9224C6FA090059EA33 /* whole1_0.png */,
+				0482CF9924C6FA090059EA33 /* whole1_1.png */,
+				0482CF9624C6FA090059EA33 /* whole1_2.png */,
+				0482CF9324C6FA090059EA33 /* whole1_3.png */,
+				0482CF9424C6FA090059EA33 /* whole1_4.png */,
+				0482CF9524C6FA090059EA33 /* whole1_5.png */,
+				0482CF9824C6FA090059EA33 /* whole1_6.png */,
+				0482CF9724C6FA090059EA33 /* whole1_7.jpg */,
+				0485E1DF24C6F7EF00046CEE /* assets */,
+				77E9BE7B24C586F600396CF6 /* main.jsbundle */,
 				13B07FAE1A68108700A75B9A /* RnCrab */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* RnCrabTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				2B25AC2C8A38EE11A7820660 /* Pods */,
@@ -199,9 +172,6 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* RnCrab.app */,
-				00E356EE1AD99517003FC87E /* RnCrabTests.xctest */,
-				2D02E47B1E0B4A5D006451C7 /* RnCrab-tvOS.app */,
-				2D02E4901E0B4A5D006451C7 /* RnCrab-tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -209,26 +179,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* RnCrabTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "RnCrabTests" */;
-			buildPhases = (
-				4FDB00B9480886C4DD080C5D /* [CP] Check Pods Manifest.lock */,
-				00E356EA1AD99517003FC87E /* Sources */,
-				00E356EB1AD99517003FC87E /* Frameworks */,
-				00E356EC1AD99517003FC87E /* Resources */,
-				4E82710DE92EB9AC07B13AFB /* [CP] Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				00E356F51AD99517003FC87E /* PBXTargetDependency */,
-			);
-			name = RnCrabTests;
-			productName = RnCrabTests;
-			productReference = 00E356EE1AD99517003FC87E /* RnCrabTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		13B07F861A680F5B00A75B9A /* RnCrab */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "RnCrab" */;
@@ -239,7 +189,7 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				035740E15B06360AFF0FE046 /* [CP] Copy Pods Resources */,
+				E411FBCB321F5162428C6205 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -250,45 +200,6 @@
 			productReference = 13B07F961A680F5B00A75B9A /* RnCrab.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E47A1E0B4A5D006451C7 /* RnCrab-tvOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "RnCrab-tvOS" */;
-			buildPhases = (
-				F621005E4D52A02859279802 /* [CP] Check Pods Manifest.lock */,
-				FD10A7F122414F3F0027D42C /* Start Packager */,
-				2D02E4771E0B4A5D006451C7 /* Sources */,
-				2D02E4781E0B4A5D006451C7 /* Frameworks */,
-				2D02E4791E0B4A5D006451C7 /* Resources */,
-				2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "RnCrab-tvOS";
-			productName = "RnCrab-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* RnCrab-tvOS.app */;
-			productType = "com.apple.product-type.application";
-		};
-		2D02E48F1E0B4A5D006451C7 /* RnCrab-tvOSTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "RnCrab-tvOSTests" */;
-			buildPhases = (
-				AC5A3430D1F76871F35AE273 /* [CP] Check Pods Manifest.lock */,
-				2D02E48C1E0B4A5D006451C7 /* Sources */,
-				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
-				2D02E48E1E0B4A5D006451C7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
-			);
-			name = "RnCrab-tvOSTests";
-			productName = "RnCrab-tvOSTests";
-			productReference = 2D02E4901E0B4A5D006451C7 /* RnCrab-tvOSTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -297,22 +208,9 @@
 			attributes = {
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
-					00E356ED1AD99517003FC87E = {
-						CreatedOnToolsVersion = 6.2;
-						TestTargetID = 13B07F861A680F5B00A75B9A;
-					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 84UJY6943A;
 						LastSwiftMigration = 1120;
-					};
-					2D02E47A1E0B4A5D006451C7 = {
-						CreatedOnToolsVersion = 8.2.1;
-						ProvisioningStyle = Automatic;
-					};
-					2D02E48F1E0B4A5D006451C7 = {
-						CreatedOnToolsVersion = 8.2.1;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 2D02E47A1E0B4A5D006451C7;
 					};
 				};
 			};
@@ -327,48 +225,55 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 0407759524C5A57700F3C909 /* Products */;
+					ProjectRef = 0407759424C5A57700F3C909 /* CodePush.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* RnCrab */,
-				00E356ED1AD99517003FC87E /* RnCrabTests */,
-				2D02E47A1E0B4A5D006451C7 /* RnCrab-tvOS */,
-				2D02E48F1E0B4A5D006451C7 /* RnCrab-tvOSTests */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		00E356EC1AD99517003FC87E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
+/* Begin PBXReferenceProxy section */
+		0407759A24C5A57D00F3C909 /* libCodePush.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libCodePush.a;
+			remoteRef = 0407759924C5A57D00F3C909 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		0407759C24C5A57D00F3C909 /* libCodePush.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libCodePush.a;
+			remoteRef = 0407759B24C5A57D00F3C909 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				77E9BE7A24C56C5D00396CF6 /* GenSenMaruGothicTW-Bold-TTF.ttf in Resources */,
-				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				0482CFA424C6FA330059EA33 /* GenSenMaruGothicTW-Regular-TTF.ttf in Resources */,
+				0482CFA524C6FA330059EA33 /* GenSenMaruGothicTW-Bold-TTF.ttf in Resources */,
+				0482CF9A24C6FA090059EA33 /* whole1_0.png in Resources */,
+				0482CF9B24C6FA090059EA33 /* whole1_3.png in Resources */,
+				0482CF9C24C6FA090059EA33 /* whole1_4.png in Resources */,
+				0482CF9D24C6FA090059EA33 /* whole1_5.png in Resources */,
+				0482CF9E24C6FA090059EA33 /* whole1_2.png in Resources */,
+				0482CF9F24C6FA090059EA33 /* whole1_7.jpg in Resources */,
+				0482CFA024C6FA090059EA33 /* whole1_6.png in Resources */,
+				0482CFA124C6FA090059EA33 /* whole1_1.png in Resources */,
 				7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */,
-				77E9BE7924C56C5D00396CF6 /* GenSenMaruGothicTW-Regular-TTF.ttf in Resources */,
+				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				77E9BE7D24C586F600396CF6 /* main.jsbundle in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2D02E4791E0B4A5D006451C7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2D02E48E1E0B4A5D006451C7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,82 +293,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
-		};
-		035740E15B06360AFF0FE046 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-RnCrab/Pods-RnCrab-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewControllerBundle.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TOCropViewControllerBundle.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RnCrab/Pods-RnCrab-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bundle React Native Code And Images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		4E82710DE92EB9AC07B13AFB /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-RnCrab-RnCrabTests/Pods-RnCrab-RnCrabTests-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewControllerBundle.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TOCropViewControllerBundle.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RnCrab-RnCrabTests/Pods-RnCrab-RnCrabTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4FDB00B9480886C4DD080C5D /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-RnCrab-RnCrabTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
 		};
 		8CBE58DE9B1055078384A349 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -487,48 +316,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AC5A3430D1F76871F35AE273 /* [CP] Check Pods Manifest.lock */ = {
+		E411FBCB321F5162428C6205 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
+				"${PODS_ROOT}/Target Support Files/Pods-RnCrab/Pods-RnCrab-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker/QBImagePicker.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController/TOCropViewControllerBundle.bundle",
 			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-RnCrab-tvOSTests-checkManifestLockResult.txt",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TOCropViewControllerBundle.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F621005E4D52A02859279802 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-RnCrab-tvOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RnCrab/Pods-RnCrab-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -550,36 +355,9 @@
 			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		FD10A7F122414F3F0027D42C /* Start Packager */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Start Packager";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		00E356EA1AD99517003FC87E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				00E356F31AD99517003FC87E /* RnCrabTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		13B07F871A680F5B00A75B9A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -589,37 +367,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2D02E4771E0B4A5D006451C7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */,
-				2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2D02E48C1E0B4A5D006451C7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2DCD954D1E0B4F2C00145EB5 /* RnCrabTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* RnCrab */;
-			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
-		};
-		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2D02E47A1E0B4A5D006451C7 /* RnCrab-tvOS */;
-			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		13B07FB11A68108700A75B9A /* LaunchScreen.xib */ = {
@@ -634,49 +382,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		00E356F61AD99517003FC87E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B068ABE282EC40D6D12E3AD3 /* Pods-RnCrab-RnCrabTests.debug.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = RnCrabTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RnCrab.app/RnCrab";
-			};
-			name = Debug;
-		};
-		00E356F71AD99517003FC87E /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 923661A58EB69694B38CE233 /* Pods-RnCrab-RnCrabTests.release.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = RnCrabTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RnCrab.app/RnCrab";
-			};
-			name = Release;
-		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 87EF91E4DD86E56B41F1AD65 /* Pods-RnCrab.debug.xcconfig */;
@@ -726,116 +431,6 @@
 				PRODUCT_NAME = RnCrab;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Release;
-		};
-		2D02E4971E0B4A5E006451C7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 497C34D63405242BF7B6F886 /* Pods-RnCrab-tvOS.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "RnCrab-tvOS/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.RnCrab-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
-			};
-			name = Debug;
-		};
-		2D02E4981E0B4A5E006451C7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4819C90315A4AB855752E52E /* Pods-RnCrab-tvOS.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "RnCrab-tvOS/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.RnCrab-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
-			};
-			name = Release;
-		};
-		2D02E4991E0B4A5E006451C7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0030F91974EF011515FB2806 /* Pods-RnCrab-tvOSTests.debug.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "RnCrab-tvOSTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.RnCrab-tvOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RnCrab-tvOS.app/RnCrab-tvOS";
-				TVOS_DEPLOYMENT_TARGET = 10.1;
-			};
-			name = Debug;
-		};
-		2D02E49A1E0B4A5E006451C7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2865F87F3CA6CB680656D5F0 /* Pods-RnCrab-tvOSTests.release.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "RnCrab-tvOSTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.RnCrab-tvOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RnCrab-tvOS.app/RnCrab-tvOS";
-				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Release;
 		};
@@ -957,38 +552,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "RnCrabTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				00E356F61AD99517003FC87E /* Debug */,
-				00E356F71AD99517003FC87E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "RnCrab" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "RnCrab-tvOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2D02E4971E0B4A5E006451C7 /* Debug */,
-				2D02E4981E0B4A5E006451C7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "RnCrab-tvOSTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2D02E4991E0B4A5E006451C7 /* Debug */,
-				2D02E49A1E0B4A5E006451C7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
