@@ -1,5 +1,6 @@
 import React from 'react';
 import { ToastAndroid, Alert, Platform } from 'react-native';
+import Toast from 'react-native-root-toast';
 
 function toast (
     message = '',
@@ -9,7 +10,10 @@ function toast (
     xOffset = 0,
 ) {
     if (Platform.OS === 'ios') {
-        Alert.alert('', message);
+        const t = Toast.show(message, {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.CENTER,
+        });
     } else {
         ToastAndroid.showWithGravityAndOffset(
             message,

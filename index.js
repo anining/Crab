@@ -3,10 +3,13 @@
  */
 
 import 'react-native-gesture-handler';
+import React from 'react';
 import { AppRegistry, Text, TextInput, TouchableOpacity } from 'react-native';
 import AppStackNavigator from './javaScript/navigation/AppStackNavigator';
 import { name as appName } from './app.json';
 import { enableScreens } from 'react-native-screens';
+import { RootSiblingParent } from 'react-native-root-siblings';
+
 enableScreens();
 // 禁止字体因为系统的缩放而缩放
 TextInput.defaultProps = Object.assign({}, TextInput.defaultProps, {
@@ -27,4 +30,9 @@ TextInput.render = function render (props, ref) {
 TouchableOpacity.render = function render (props, ref) {
     return sourceRenderTouchable.apply(this, [{ ...props, activeOpacity: 1 }, ref]);
 };
-AppRegistry.registerComponent(appName, () => AppStackNavigator);
+
+function App () {
+    return <RootSiblingParent><AppStackNavigator /></RootSiblingParent>;
+}
+
+AppRegistry.registerComponent(appName, () => App);
