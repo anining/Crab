@@ -196,7 +196,7 @@ function UserPage () {
                     <RenderBind/>
                 </View>
                 <View style={styles.moneyView}>
-                    <ImageBackground source={user1} style={{ width: width * 0.94, height: width * 0.94 * 405 / 1089, ...css.auto }}>
+                    {_if(getGlobal('channel') in sensitiveList, res => <></>, () => <ImageBackground source={user1} style={{ width: width * 0.94, height: width * 0.94 * 405 / 1089, ...css.auto }}>
                         <View style={styles.moneyViewTop}>
                             <Text style={{ color: '#fff', fontSize: 18, fontWeight: '600' }}>我的金币</Text>
                             <TouchableOpacity activeOpacity={1} onPress={() => {
@@ -219,7 +219,7 @@ function UserPage () {
                                 <Text style={styles.moneyTitle}>总收益(金币)</Text>
                             </View>
                         </View>
-                    </ImageBackground>
+                    </ImageBackground>)}
                 </View>
                 {_if(getGlobal('channel') in sensitiveList, res => <Text/>, () => <TouchableOpacity style={[css.flex, styles.shareWrap]} onPress={() => {
                     N.navigate('SharePage');

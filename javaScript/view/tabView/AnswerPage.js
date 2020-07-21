@@ -43,18 +43,19 @@ import pop3 from '../../assets/icon/pop/pop3.png';
 import { getActivityDetail, getTaskPlatform, task, updateSecondIncome, updateUser } from '../../utils/update';
 import toast from '../../utils/toast';
 import { getGlobal, getPath } from '../../global/global';
+import user18 from '../../assets/icon/user/user18.png';
 
 // btnStatus: 状态: 1进行中2待领取3已完成4敬请期待5去摸鱼夺宝6去绑定
 const { width } = Dimensions.get('window');
 const { banner, signConfig, activityObj, openid, authorization, today_pass_num, taskPlatform, user_id, signDayNumber } = getter(['banner', 'signConfig', 'authorization', 'activityObj', 'user.openid', 'user.today_pass_num', 'user.user_id', 'taskPlatform', 'signDayNumber']);
 const NEW_USER_TASK_TYPE = {
     1: {
-        label: '看视频领金币',
+        label: '看视频得奖励',
         icon: answer1,
         path: 'NoviceVideoPage'
     },
     2: {
-        label: '绑定微信领金币',
+        label: '绑定微信得奖励',
         icon: answer3,
         path: 'WeChatBindPage'
     },
@@ -69,6 +70,7 @@ function AnswerPage () {
     const [isSign, setIsSign] = useState(false);
     const [newUser, setNewUser] = useState([]);
     const [refreshing] = useState(false);
+    const sensitiveList = getPath(['sensitive_list', 'sensitive_list'], getGlobal('app'), {});
     let reloadEmitter;
     const book = 1;
     let scrollToListener;
@@ -172,10 +174,10 @@ function AnswerPage () {
                     <ComTitle title={'每日签到'} minTitle={<Text style={[css.minTitle, css.sy]}>连续签到得 <Text style={[{ color: '#FF6C00' }, css.sy]}>兑换免手续费特权卡!</Text></Text>}/>
                     <RenderDaySign isSign={isSign} signDay={signDay} setSignDay={setSignDay}/>
                 </View>
-                {_if(getPath(['configObj', 'app_other_info', 'value', 'zoneOfAction'], getGlobal('app')), res => <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
+                {_if(getGlobal('channel') in sensitiveList, res => <Text/>, () => _if(getPath(['configObj', 'app_other_info', 'value', 'zoneOfAction'], getGlobal('app')), res => <View style={[styles.answerWrap, { borderTopWidth: 15, borderTopColor: '#f8f8f8' }]}>
                     <ComTitle title={'火爆活动'}/>
                     <RenderActivity zoneOfAction={res}/>
-                </View>)}
+                </View>))}
                 <Reward newUser={newUser} _newUserTask={_newUserTask}/>
                 <RenderTaskView />
             </ScrollView>

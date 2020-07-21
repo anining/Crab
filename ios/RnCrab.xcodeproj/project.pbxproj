@@ -22,8 +22,6 @@
 		7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */; };
 		77E9BE7924C56C5D00396CF6 /* GenSenMaruGothicTW-Regular-TTF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7724C56C5C00396CF6 /* GenSenMaruGothicTW-Regular-TTF.ttf */; };
 		77E9BE7A24C56C5D00396CF6 /* GenSenMaruGothicTW-Bold-TTF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7824C56C5D00396CF6 /* GenSenMaruGothicTW-Bold-TTF.ttf */; };
-		77E9BE7D24C586F600396CF6 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7B24C586F600396CF6 /* main.jsbundle */; };
-		77E9BE7E24C586F600396CF6 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7C24C586F600396CF6 /* assets */; };
 		C8CA8B175426FCDE1852D4AE /* libPods-RnCrab.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D113F76FCBA4C41CC9EA5E7 /* libPods-RnCrab.a */; };
 /* End PBXBuildFile section */
 
@@ -67,8 +65,6 @@
 		7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		77E9BE7724C56C5C00396CF6 /* GenSenMaruGothicTW-Regular-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GenSenMaruGothicTW-Regular-TTF.ttf"; sourceTree = "<group>"; };
 		77E9BE7824C56C5D00396CF6 /* GenSenMaruGothicTW-Bold-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GenSenMaruGothicTW-Bold-TTF.ttf"; sourceTree = "<group>"; };
-		77E9BE7B24C586F600396CF6 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = ../release_ios/main.jsbundle; sourceTree = "<group>"; };
-		77E9BE7C24C586F600396CF6 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../release_ios/assets; sourceTree = "<group>"; };
 		87EF91E4DD86E56B41F1AD65 /* Pods-RnCrab.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab.debug.xcconfig"; path = "Target Support Files/Pods-RnCrab/Pods-RnCrab.debug.xcconfig"; sourceTree = "<group>"; };
 		923661A58EB69694B38CE233 /* Pods-RnCrab-RnCrabTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab-RnCrabTests.release.xcconfig"; path = "Target Support Files/Pods-RnCrab-RnCrabTests/Pods-RnCrab-RnCrabTests.release.xcconfig"; sourceTree = "<group>"; };
 		B068ABE282EC40D6D12E3AD3 /* Pods-RnCrab-RnCrabTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab-RnCrabTests.debug.xcconfig"; path = "Target Support Files/Pods-RnCrab-RnCrabTests/Pods-RnCrab-RnCrabTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -187,8 +183,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				77E9BE7C24C586F600396CF6 /* assets */,
-				77E9BE7B24C586F600396CF6 /* main.jsbundle */,
 				13B07FAE1A68108700A75B9A /* RnCrab */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RnCrabTests */,
@@ -355,11 +349,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */,
 				77E9BE7A24C56C5D00396CF6 /* GenSenMaruGothicTW-Bold-TTF.ttf in Resources */,
-				77E9BE7E24C586F600396CF6 /* assets in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				77E9BE7D24C586F600396CF6 /* main.jsbundle in Resources */,
+				7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */,
 				77E9BE7924C56C5D00396CF6 /* GenSenMaruGothicTW-Regular-TTF.ttf in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);

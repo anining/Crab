@@ -17,7 +17,7 @@ import game25 from '../assets/icon/game/game25.png';
 import game31 from '../assets/icon/game/game31.png';
 import EnlargeView from './EnlargeView';
 import game22 from '../assets/icon/game/game22.png';
-import { bindData, getPath } from '../global/global';
+import { bindData, getGlobal, getPath } from '../global/global';
 import {
     _debounce,
     _if,
@@ -31,6 +31,7 @@ import asyncStorage from '../utils/asyncStorage';
 import CountDown from './CountDown';
 import { updateUser } from '../utils/update';
 import { AnswerPopTipsTime, DelayGetDomeTime, HomeStartAnimationTime } from '../utils/animationConfig';
+import user18 from '../assets/icon/user/user18.png';
 export const HEADER_HEIGHT = 70;
 const MID_HEIGHT = 300;
 const { height, width } = Dimensions.get('window');
@@ -162,6 +163,7 @@ export default class GameHeader extends Component {
     render () {
         if (this.state.user) {
             const propNumber = getPath(['propNumsObj', '2'], this.state.user, 0);// 游戏道具数量
+            const sensitiveList = getPath(['sensitive_list', 'sensitive_list'], getGlobal('app'), {});
             return <View style={[css.flex, css.pa, styles.homeHeaderWrap, css.sp]}>
                 {_if(getPath(['last_get_game_prop_time'], this.state.user) && (propNumber < 10), res => {
                     return <CountDown key={`count${getPath(['last_get_game_prop_time'], this.state.user)}`} callback={() => { updateUser(); }} style={styles.countDownText} viewStyle={{ ...css.pa, ...styles.countDownView }} time={+new Date(djangoTime(getPath(['last_get_game_prop_time'], this.state.user))) + propsTime}/>;
@@ -187,7 +189,7 @@ export default class GameHeader extends Component {
                     </View>
                     <ImageAuto source={game31} width={22}/>
                 </TouchableOpacity>
-                <EnlargeView ref={ref => this.enlarge = ref}>
+                {_if(getGlobal('channel') in sensitiveList, res => <Text/>, () => <EnlargeView ref={ref => this.enlarge = ref}>
                     <View style={[styles.headerDataNumber, css.flex, css.sp, css.pr, {
                         width: 190,
                         backgroundColor: this.props.backgroundColor
@@ -212,7 +214,7 @@ export default class GameHeader extends Component {
                         }}/>
                         <Text style={styles.withdrawBtn}>兑换</Text>
                     </View>
-                </EnlargeView>
+                </EnlargeView>)}
             </View>;
         }
     }
