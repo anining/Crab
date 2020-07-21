@@ -7,13 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0482CF9A24C6FA090059EA33 /* whole1_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9224C6FA090059EA33 /* whole1_0.png */; };
+		0482CF9B24C6FA090059EA33 /* whole1_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9324C6FA090059EA33 /* whole1_3.png */; };
+		0482CF9C24C6FA090059EA33 /* whole1_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9424C6FA090059EA33 /* whole1_4.png */; };
+		0482CF9D24C6FA090059EA33 /* whole1_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9524C6FA090059EA33 /* whole1_5.png */; };
+		0482CF9E24C6FA090059EA33 /* whole1_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9624C6FA090059EA33 /* whole1_2.png */; };
+		0482CF9F24C6FA090059EA33 /* whole1_7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9724C6FA090059EA33 /* whole1_7.jpg */; };
+		0482CFA024C6FA090059EA33 /* whole1_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9824C6FA090059EA33 /* whole1_6.png */; };
+		0482CFA124C6FA090059EA33 /* whole1_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CF9924C6FA090059EA33 /* whole1_1.png */; };
+		0482CFA424C6FA330059EA33 /* GenSenMaruGothicTW-Regular-TTF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0482CFA224C6FA330059EA33 /* GenSenMaruGothicTW-Regular-TTF.ttf */; };
+		0482CFA524C6FA330059EA33 /* GenSenMaruGothicTW-Bold-TTF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0482CFA324C6FA330059EA33 /* GenSenMaruGothicTW-Bold-TTF.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */; };
 		77E9BE7D24C586F600396CF6 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7B24C586F600396CF6 /* main.jsbundle */; };
-		77E9BE7E24C586F600396CF6 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 77E9BE7C24C586F600396CF6 /* assets */; };
+		EA49EFC2600762232FE2BD2C /* libPods-RnCrab.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D113F76FCBA4C41CC9EA5E7 /* libPods-RnCrab.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +49,17 @@
 		0407759E24C5A5B800F3C909 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		043EFFE124C6ECE600BA0680 /* GenSenMaruGothicTW-Regular-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GenSenMaruGothicTW-Regular-TTF.ttf"; path = "../android/app/src/main/assets/fonts/GenSenMaruGothicTW-Regular-TTF.ttf"; sourceTree = "<group>"; };
 		043EFFE224C6ECE600BA0680 /* GenSenMaruGothicTW-Bold-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GenSenMaruGothicTW-Bold-TTF.ttf"; path = "../android/app/src/main/assets/fonts/GenSenMaruGothicTW-Bold-TTF.ttf"; sourceTree = "<group>"; };
+		0482CF9224C6FA090059EA33 /* whole1_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_0.png; path = ../android/app/src/main/assets/whole1/whole1_0.png; sourceTree = "<group>"; };
+		0482CF9324C6FA090059EA33 /* whole1_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_3.png; path = ../android/app/src/main/assets/whole1/whole1_3.png; sourceTree = "<group>"; };
+		0482CF9424C6FA090059EA33 /* whole1_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_4.png; path = ../android/app/src/main/assets/whole1/whole1_4.png; sourceTree = "<group>"; };
+		0482CF9524C6FA090059EA33 /* whole1_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_5.png; path = ../android/app/src/main/assets/whole1/whole1_5.png; sourceTree = "<group>"; };
+		0482CF9624C6FA090059EA33 /* whole1_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_2.png; path = ../android/app/src/main/assets/whole1/whole1_2.png; sourceTree = "<group>"; };
+		0482CF9724C6FA090059EA33 /* whole1_7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = whole1_7.jpg; path = ../android/app/src/main/assets/whole1/whole1_7.jpg; sourceTree = "<group>"; };
+		0482CF9824C6FA090059EA33 /* whole1_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_6.png; path = ../android/app/src/main/assets/whole1/whole1_6.png; sourceTree = "<group>"; };
+		0482CF9924C6FA090059EA33 /* whole1_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whole1_1.png; path = ../android/app/src/main/assets/whole1/whole1_1.png; sourceTree = "<group>"; };
+		0482CFA224C6FA330059EA33 /* GenSenMaruGothicTW-Regular-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GenSenMaruGothicTW-Regular-TTF.ttf"; path = "../android/app/src/main/assets/fonts/GenSenMaruGothicTW-Regular-TTF.ttf"; sourceTree = "<group>"; };
+		0482CFA324C6FA330059EA33 /* GenSenMaruGothicTW-Bold-TTF.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GenSenMaruGothicTW-Bold-TTF.ttf"; path = "../android/app/src/main/assets/fonts/GenSenMaruGothicTW-Bold-TTF.ttf"; sourceTree = "<group>"; };
+		0485E1DF24C6F7EF00046CEE /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../android/app/src/main/assets; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RnCrab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RnCrab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RnCrab/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RnCrab/AppDelegate.m; sourceTree = "<group>"; };
@@ -49,7 +70,6 @@
 		2D113F76FCBA4C41CC9EA5E7 /* libPods-RnCrab.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RnCrab.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		77E9BE7B24C586F600396CF6 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = ../release_ios/main.jsbundle; sourceTree = "<group>"; };
-		77E9BE7C24C586F600396CF6 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../release_ios/assets; sourceTree = "<group>"; };
 		87EF91E4DD86E56B41F1AD65 /* Pods-RnCrab.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab.debug.xcconfig"; path = "Target Support Files/Pods-RnCrab/Pods-RnCrab.debug.xcconfig"; sourceTree = "<group>"; };
 		E177922F4B638473A036A7C7 /* Pods-RnCrab.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab.release.xcconfig"; path = "Target Support Files/Pods-RnCrab/Pods-RnCrab.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -61,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA49EFC2600762232FE2BD2C /* libPods-RnCrab.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,7 +145,17 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				77E9BE7C24C586F600396CF6 /* assets */,
+				0482CFA324C6FA330059EA33 /* GenSenMaruGothicTW-Bold-TTF.ttf */,
+				0482CFA224C6FA330059EA33 /* GenSenMaruGothicTW-Regular-TTF.ttf */,
+				0482CF9224C6FA090059EA33 /* whole1_0.png */,
+				0482CF9924C6FA090059EA33 /* whole1_1.png */,
+				0482CF9624C6FA090059EA33 /* whole1_2.png */,
+				0482CF9324C6FA090059EA33 /* whole1_3.png */,
+				0482CF9424C6FA090059EA33 /* whole1_4.png */,
+				0482CF9524C6FA090059EA33 /* whole1_5.png */,
+				0482CF9824C6FA090059EA33 /* whole1_6.png */,
+				0482CF9724C6FA090059EA33 /* whole1_7.jpg */,
+				0485E1DF24C6F7EF00046CEE /* assets */,
 				77E9BE7B24C586F600396CF6 /* main.jsbundle */,
 				13B07FAE1A68108700A75B9A /* RnCrab */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -229,8 +260,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0482CFA424C6FA330059EA33 /* GenSenMaruGothicTW-Regular-TTF.ttf in Resources */,
+				0482CFA524C6FA330059EA33 /* GenSenMaruGothicTW-Bold-TTF.ttf in Resources */,
+				0482CF9A24C6FA090059EA33 /* whole1_0.png in Resources */,
+				0482CF9B24C6FA090059EA33 /* whole1_3.png in Resources */,
+				0482CF9C24C6FA090059EA33 /* whole1_4.png in Resources */,
+				0482CF9D24C6FA090059EA33 /* whole1_5.png in Resources */,
+				0482CF9E24C6FA090059EA33 /* whole1_2.png in Resources */,
+				0482CF9F24C6FA090059EA33 /* whole1_7.jpg in Resources */,
+				0482CFA024C6FA090059EA33 /* whole1_6.png in Resources */,
+				0482CFA124C6FA090059EA33 /* whole1_1.png in Resources */,
 				7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */,
-				77E9BE7E24C586F600396CF6 /* assets in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				77E9BE7D24C586F600396CF6 /* main.jsbundle in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
