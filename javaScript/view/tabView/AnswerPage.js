@@ -647,6 +647,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         height: 26,
         lineHeight: 26,
+        overflow: 'hidden',
         textAlign: 'center',
         width: '100%',
     },
@@ -658,6 +659,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         height: 26,
         lineHeight: 26,
+        overflow: 'hidden',
         textAlign: 'center',
         width: 70,
     }

@@ -25,6 +25,7 @@ import { initNetInfo } from '../../navigation/AppStackNavigator';
 import android from '../../components/Android';
 import ImageAuto from '../../components/ImageAuto';
 import { AppAllPermissionsAndroid, requestPermission } from '../../utils/util';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const { height, width } = Dimensions.get('window');
 
@@ -104,7 +105,7 @@ function LoginPage () {
     }
 
     return (
-        <SafeAreaView style={css.safeAreaView}>
+        <KeyboardAwareScrollView keyboardShouldPersistTaps={'handled'} style={css.safeAreaView}>
             <View style={styles.container}>
                 <Text style={styles.title}>账号登录</Text>
                 <View style={[css.flexRowCenterStart, styles.inputTitle]}>
@@ -166,7 +167,7 @@ function LoginPage () {
                     </TouchableOpacity>
                 </View>
             </View>
-        </SafeAreaView>
+        </KeyboardAwareScrollView>
     );
 }
 
@@ -181,6 +182,7 @@ const styles = StyleSheet.create({
         width: '32%',
     },
     codeInput: {
+        color: '#3D3D3D',
         width: '60%',
     },
     codeText: {
@@ -241,6 +243,7 @@ const styles = StyleSheet.create({
     phoneInput: {
         borderBottomColor: '#eee',
         borderBottomWidth: 1,
+        color: '#3D3D3D',
         fontSize: 15,
         height: 42,
         width: '100%',

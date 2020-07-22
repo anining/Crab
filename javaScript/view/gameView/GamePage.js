@@ -614,7 +614,7 @@ export default class GamePage extends Component {
                 }
             }, 200);
         }, R.path(['3'], propNumsObj));
-        return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
+        return <View style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
             <View style={[styles.gameHeader, css.flex, css.sp]}>
                 <TouchableOpacity activeOpacity={1} onPress={() => {
                     N.goBack();
@@ -682,7 +682,7 @@ export default class GamePage extends Component {
             <View style={[css.flex, styles.answerWrap, css.js, css.pr]}>
                 {this._renderAnswer()}
             </View>
-        </SafeAreaView>;
+        </View>;
     }
 }
 const styles = StyleSheet.create({

@@ -302,7 +302,7 @@ export default class PassGamePage extends Component {
         try {
             if (this.state.user && this.state.gradeSetting && this.state.nextRedLevel && this.state.gradeRange) {
                 const accuracyPosition = this.state.accuracyImagePosition;
-                return <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
+                return <View style={[css.safeAreaView, { backgroundColor: '#FED465' }]}>
                     <ScrollView style={{ flex: 1 }}>
                         {/* 头部显示区域 */}
                         <GameHeader ref={ref => this.gameHeader = ref} backgroundColor={'rgba(0,0,0,.3)'}/>
@@ -360,7 +360,7 @@ export default class PassGamePage extends Component {
                         </View>
                     </ScrollView>
                     {_if(JRBannerView && getGlobal('channel') in this.sensitiveList, res => <Text/>, () => <JRBannerView style={styles.adStyle}/>)}
-                </SafeAreaView>;
+                </View>;
             } else {
                 return <Text/>;
             }

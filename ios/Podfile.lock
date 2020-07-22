@@ -362,7 +362,7 @@ PODS:
     - React
   - SSZipArchive (2.2.3)
   - TOCropViewController (2.5.4)
-  - UMCCommon (7.1.0)
+  - UMCCommon (7.1.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -633,7 +633,7 @@ SPEC CHECKSUMS:
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   TOCropViewController: 2a1ae1242600b1f2d996fd91a5268b2309a33b5c
-  UMCCommon: 4e80f93492d300245683236668763dc5d0b04dbd
+  UMCCommon: f455f92c125342e360d6ad9eafe484945351eeb5
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

@@ -156,7 +156,7 @@ function UserPage () {
     }
 
     return (
-        <SafeAreaView style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
+        <View style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <ScrollView refreshControl={
                 <RefreshControl
                     refreshing={false}
@@ -232,7 +232,7 @@ function UserPage () {
                 </View>
                 <RenderMenu/>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }
 

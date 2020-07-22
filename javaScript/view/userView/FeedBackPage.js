@@ -9,6 +9,7 @@ import { N } from '../../utils/router';
 import { feedback } from '../../utils/api';
 import toast from '../../utils/toast';
 import Button from '../../components/Button';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const { width } = Dimensions.get('window');
 
@@ -36,7 +37,7 @@ function FeedBackPage () {
     }
 
     return (
-        <View style={[css.safeAreaView, css.pr, { backgroundColor: '#F8F8F8' }]}>
+        <KeyboardAwareScrollView keyboardShouldPersistTaps={'handled'} style={[css.safeAreaView, { backgroundColor: '#F8F8F8' }]}>
             <Header scene={{ descriptor: { options: {} }, route: { name: '意见反馈' } }} navigation={N} onPress={() => N.navigate('FeedBackRecordsPage')} headerRight={headerRight}/>
             <View style={styles.container}>
                 <View style={styles.selectView}>
@@ -76,12 +77,12 @@ function FeedBackPage () {
                     placeholderTextColor={'#999'}
                     onChangeText={phone => setPhone(phone)}/>
             </View>
-            <View style={[styles.btn, css.pa, { bottom: 0 }]}>
+            <View style={[styles.btn]}>
                 <Button name="提交反馈" onPress={callback => {
                     apiFeedback(callback);
                 }}/>
             </View>
-        </View>
+        </KeyboardAwareScrollView>
     );
 }
 

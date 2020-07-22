@@ -46,6 +46,7 @@ import { updateUser } from '../../utils/update';
 import Button from '../../components/Button';
 import CountDown from '../../components/CountDown';
 import Clipboard from '@react-native-community/clipboard';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const { total_task_num, today_pass_num, activityObj } = getter(['user.total_task_num', 'activityObj', 'user.today_pass_num']);
 const { width } = Dimensions.get('window');
@@ -169,7 +170,7 @@ function TaskDetailPage (props) {
     }
 
     return (
-        <View style={[css.safeAreaView]}>
+        <KeyboardAwareScrollView keyboardShouldPersistTaps={'handled'} style={[css.safeAreaView]}>
             <Header label={'摸鱼夺宝'} backOnPress={backClick}/>
             <ScrollView style={{ backgroundColor: '#F8F8F8' }} ref={r => {
                 r && setSRef(r);
@@ -182,7 +183,7 @@ function TaskDetailPage (props) {
                     <Btn setSubmits={setSubmits} submits={submits} sRef={sRef} detail={detail} setDetail={setDetail}/>
                 </View>
             </ScrollView>
-        </View>
+        </KeyboardAwareScrollView>
     );
 }
 
@@ -221,7 +222,7 @@ function EndTimeView ({ detail }) {
     return (
         <ImageBackground source={task12} style={styles.endTimeView}>
             <View style={styles.endTimeViewItem}>
-                <View style={[{ flexDirection: 'row', marginTop: 5 }]}>
+                <View style={[{ flexDirection: 'row', marginTop: 5, alignItems: 'center' }]}>
                     <Text style={{ color: '#fff', fontSize: 16, fontWeight: '500' }}>剩余时间：</Text>
                     <CountDown time={+new Date(djangoTime(finish_deadline))} style={{ color: '#FF6C00', fontSize: 16, fontWeight: '500' }} key={receive_task_id} callback={() => N.goBack()}/>
                 </View>
@@ -687,6 +688,7 @@ const styles = StyleSheet.create({
     input: {
         backgroundColor: '#FFF1E7',
         borderRadius: 8,
+        color: '#3D3D3D',
         height: 44,
         marginBottom: 10,
         marginTop: 10,

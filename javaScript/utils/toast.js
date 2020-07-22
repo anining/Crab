@@ -13,7 +13,11 @@ function toast (
         const t = Toast.show(message, {
             duration: Toast.durations.SHORT,
             position: Toast.positions.CENTER,
-            backgroundColor: '#656464'
+            backgroundColor: 'rgba(0,0,0,.7)',
+            textColor: '#fff',
+            textStyle: {
+                fontSize: 12
+            }
         });
     } else {
         ToastAndroid.showWithGravityAndOffset(
