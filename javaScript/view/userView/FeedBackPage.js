@@ -100,11 +100,12 @@ function RenderSelectView ({ select }) {
 function RenderImage ({ images }) {
     const imageView = [];
     images.forEach(image => {
+        const { uri } = image;
         imageView.push(
-            <Image key={image.data + Date.now()} style={styles.image} source={{ uri: image.uri }} />
+            <Image key={uri} style={styles.image} source={{ uri: uri }} />
         );
     });
-    return <>{ imageView }</>;
+    return <>{imageView}</>;
 }
 
 const styles = StyleSheet.create({
