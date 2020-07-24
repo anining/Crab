@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-    SafeAreaView,
     Image,
     Linking,
     Text,
@@ -30,7 +29,6 @@ import {
     djangoTime,
     getUrl,
     requestPermission,
-    saveBase64ImageToCameraRoll,
     toGoldCoin,
     transformMoney,
 } from '../../utils/util';
@@ -45,8 +43,10 @@ import toast from '../../utils/toast';
 import { updateUser } from '../../utils/update';
 import Button from '../../components/Button';
 import CountDown from '../../components/CountDown';
-import Clipboard from '@react-native-community/clipboard';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import ImageAuto from '../../components/ImageAuto';
+import answer4 from '../../assets/icon/answer/answer4.png';
+import CameraRoll from '@react-native-community/cameraroll';
 
 const { total_task_num, today_pass_num, activityObj } = getter(['user.total_task_num', 'activityObj', 'user.today_pass_num']);
 const { width } = Dimensions.get('window');
@@ -315,9 +315,8 @@ function CourseView ({ setSubmits, submits = [], detail }) {
             submitView.push(<RenderInput submits={submits} index={index} status={status} setSubmits={setSubmits} item={submit} key={label}/>);
         }
     });
-
-    task.forEach(item => {
-        taskView.push(<RenderView status={status} key={item.label} item={item}/>);
+    task.forEach((item, index) => {
+        taskView.push(<RenderView status={status} key={`rv${index}`} localKey={`rv${index}`} item={item}/>);
     });
     if (taskView.length) {
         view = (
@@ -364,7 +363,7 @@ function CourseView ({ setSubmits, submits = [], detail }) {
     );
 }
 
-function RenderView ({ status, item }) {
+function RenderView ({ status, localKey, item }) {
     const { type, label, content } = item;
     const [view, setView] = useState();
 
@@ -374,16 +373,14 @@ function RenderView ({ status, item }) {
                 requestPermission(() => {
                     captureRef(view, {
                         format: 'jpg',
-                        quality: 1.0,
-                        result: 'base64'
-                    }).then(
-                        uri => {
-                            saveBase64ImageToCameraRoll(uri, () => toast('保存成功,请到相册查看!'), () => toast('保存失败!'));
-                        },
-                        () => {
-                            toast('保存失败');
-                        },
-                    );
+                        quality: 1.0
+                    }).then(uri => {
+                        CameraRoll.saveToCameraRoll(uri)
+                            .then(() => toast('保存成功,请到相册查看'))
+                            .catch(() => toast('保存失败'));
+                    }, () => {
+                        toast('保存失败');
+                    });
                 }, () => {
                     toast('保存失败');
                 });
@@ -409,28 +406,35 @@ function RenderView ({ status, item }) {
                 }}>打开该应用</Text>
             </>
         );
-    }
-    return (
-        <>
-            <Text style={styles.taskCourseText}>{label}</Text>
-            <TouchableOpacity onPress={() => {
-                if (status === 1) {
-                    DeviceEventEmitter.emit('showPop', {
-                        dom: <Image source={{ uri: content }} style={[styles.saveBtn, { width: 312, height: 398, backgroundColor: '#fff' }]}/>,
-                        close: () => {}
-                    });
-                }
-            }} style={{ marginTop: 10, marginBottom: 10 }}>
-                <ImageBackground source={{ uri: content }} style={styles.saveBtn} ref={ref => setView(ref)}>
+    } else if (type === 'image') {
+        return (
+            <>
+                <Text style={styles.taskCourseText}>{label}</Text>
+                <TouchableOpacity onPress={() => {
+                    if (status === 1) {
+                        DeviceEventEmitter.emit('showPop', {
+                            dom: <ImageAuto key={JSON.stringify(content) + 'dom1'} source={content} style={[styles.saveBtn, { width: width * 0.8 }]}/>,
+                            close: () => {}
+                        });
+                    }
+                }} style={{ marginTop: 10, marginBottom: 10, minWidth: 156, minHeight: 200, position: 'relative' }}>
+                    <ImageAuto key={JSON.stringify(content)} source={content} style={{
+                        borderColor: '#E1E1E1',
+                        borderRadius: 6,
+                        backgroundColor: '#fff',
+                        borderWidth: 1,
+                        width: 156,
+                    }} ref={ref => setView(ref)}/>
                     <TouchableOpacity onPress={() => {
                         status === 1 && save();
-                    }} style={{ marginBottom: '10%' }}>
+                    }} style={{ bottom: '10%', left: 156 / 4, position: 'absolute' }}>
                         <Text style={styles.saveBtnText}>保存图片</Text>
                     </TouchableOpacity>
-                </ImageBackground>
-            </TouchableOpacity>
-        </>
-    );
+                </TouchableOpacity>
+            </>
+        );
+    }
+    return <></>;
 }
 
 function RenderInput ({ index, status, item, setSubmits, submits = [] }) {

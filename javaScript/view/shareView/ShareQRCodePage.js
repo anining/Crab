@@ -6,7 +6,7 @@ import share13 from '../../assets/icon/share/share13.png';
 import share14 from '../../assets/icon/share/share14.png';
 import share15 from '../../assets/icon/share/share15.png';
 import share16 from '../../assets/icon/share/share16.png';
-import { requestPermission, saveBase64ImageToCameraRoll } from '../../utils/util';
+import { requestPermission } from '../../utils/util';
 import { captureRef } from 'react-native-view-shot';
 import toast from '../../utils/toast';
 import QRCode from 'react-native-qrcode-svg';
