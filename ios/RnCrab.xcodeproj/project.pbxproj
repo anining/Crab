@@ -111,6 +111,8 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7714C8DF24C17F0000E2A733 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */; };
+		773280B924CE6E5A00D97967 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 773280B724CE6E5A00D97967 /* main.jsbundle */; };
+		773280BA24CE6E5A00D97967 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 773280B824CE6E5A00D97967 /* assets */; };
 		EA49EFC2600762232FE2BD2C /* libPods-RnCrab.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D113F76FCBA4C41CC9EA5E7 /* libPods-RnCrab.a */; };
 /* End PBXBuildFile section */
 
@@ -236,6 +238,8 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = RnCrab/main.m; sourceTree = "<group>"; };
 		2D113F76FCBA4C41CC9EA5E7 /* libPods-RnCrab.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RnCrab.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7714C8DE24C17F0000E2A733 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		773280B724CE6E5A00D97967 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = ../release_ios/main.jsbundle; sourceTree = "<group>"; };
+		773280B824CE6E5A00D97967 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../release_ios/assets; sourceTree = "<group>"; };
 		87EF91E4DD86E56B41F1AD65 /* Pods-RnCrab.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab.debug.xcconfig"; path = "Target Support Files/Pods-RnCrab/Pods-RnCrab.debug.xcconfig"; sourceTree = "<group>"; };
 		E177922F4B638473A036A7C7 /* Pods-RnCrab.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RnCrab.release.xcconfig"; path = "Target Support Files/Pods-RnCrab/Pods-RnCrab.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -416,6 +420,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				773280B824CE6E5A00D97967 /* assets */,
+				773280B724CE6E5A00D97967 /* main.jsbundle */,
 				0482CFA624C6FBB30059EA33 /* Resources */,
 				13B07FAE1A68108700A75B9A /* RnCrab */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -562,6 +568,7 @@
 				0482CFE924C6FD050059EA33 /* upgrade6_1.png in Resources */,
 				0482CFEA24C6FD050059EA33 /* upgrade6_0.png in Resources */,
 				0482CFE524C6FCEE0059EA33 /* upgrade5_1.png in Resources */,
+				773280BA24CE6E5A00D97967 /* assets in Resources */,
 				0482CFE624C6FCEE0059EA33 /* upgrade5_0.png in Resources */,
 				0482CFE124C6FCB50059EA33 /* upgrade4_0.png in Resources */,
 				0482CFE224C6FCB50059EA33 /* upgrade4_1.png in Resources */,
@@ -591,6 +598,7 @@
 				0482CFB424C6FC490059EA33 /* chest_2.png in Resources */,
 				0482CFAE24C6FC2E0059EA33 /* activity2_0.png in Resources */,
 				0482CFAA24C6FC170059EA33 /* activity1_2.png in Resources */,
+				773280B924CE6E5A00D97967 /* main.jsbundle in Resources */,
 				0482CFAB24C6FC170059EA33 /* activity1_0.png in Resources */,
 				0482CFAC24C6FC170059EA33 /* activity1_1.png in Resources */,
 				0482CFA424C6FA330059EA33 /* GenSenMaruGothicTW-Regular-TTF.ttf in Resources */,
@@ -713,7 +721,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 20200727;
 				DEVELOPMENT_TEAM = 84UJY6943A;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -729,7 +737,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.prismslight.crab;
+				PRODUCT_BUNDLE_IDENTIFIER = com.prismslight.crab.ios;
 				PRODUCT_NAME = RnCrab;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -743,7 +751,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 20200727;
 				DEVELOPMENT_TEAM = 84UJY6943A;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = RnCrab/Info.plist;
@@ -754,7 +762,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.prismslight.crab;
+				PRODUCT_BUNDLE_IDENTIFIER = com.prismslight.crab.ios;
 				PRODUCT_NAME = RnCrab;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
